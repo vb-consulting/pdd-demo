@@ -1,0 +1,68 @@
+﻿@model ExternalLoginPartial
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <partial name="_ThemeLink" />
+    <title>Talking to @Model?.ExternalType ...</title>
+</head>
+<body>
+    <script>
+    (async function () {
+        function paramsToObject(search) {
+            const hashes = search.slice(search.indexOf('?') + 1).split('&')
+            const params = {}
+            hashes.map(hash => {
+                const [key, val] = hash.split('=');
+                if (key && val) {
+                    params[key] = decodeURIComponent(val);
+                }
+            })
+            return params
+        }
+        let params = paramsToObject(window.location.search);
+        if (!Object.keys(params).length) {
+            sessionStorage.setItem("@Keys.StateKey", "@Model?.State");
+            sessionStorage.setItem("@Keys.ParamsKey", JSON.stringify(params));
+            document.location = "@Html.Raw(Model?.AuthUrl)";
+        } else {
+
+            const state = sessionStorage.getItem("@Keys.StateKey");
+            params = Object.assign(params, JSON.parse(sessionStorage.getItem("@Keys.ParamsKey") == null ? {} : sessionStorage.getItem("@Keys.ParamsKey")));
+            sessionStorage.removeItem("@Keys.StateKey");
+            if (!params.error && params.state !== state) {
+                params.error = "invalid code";
+            }
+            if (params.error) {
+                sessionStorage.setItem("@PDDWebApp.Pages.Consts.ErrorKey", params.error);
+                document.location = "@Urls.ErrorUrl";
+                return;
+            }
+            params["timezone"] = window.Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
+            const response = await fetch("@Model?.LoginUrl", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(params)
+            });
+            if (!response.ok) {
+                sessionStorage.setItem("@PDDWebApp.Pages.Consts.ErrorKey", await response.text());
+                document.location = "@Urls.ErrorUrl";
+                return;
+            }
+
+            //
+            // set other custom sessions
+            //
+            document.location = "@Urls.IndexUrl";
+        }
+    })();
+    </script>
+    <partial name="_Loading" />
+</body>
+</html>

@@ -1,2 +1,3 @@
-# postgresql-driven-development-demo
-PostgreSQL Driven Development Demo Web Application With PgRoutiner, .NET and Svelte
+# PDDDemo
+
+PostgreSQL Driven Development Demo Web Application With .NET6, PgRoutiner and Svelte.
