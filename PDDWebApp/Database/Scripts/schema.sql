@@ -155,6 +155,7 @@ CREATE TABLE public.people (
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     name_normalized character varying NOT NULL,
+    gender character(1) NOT NULL,
     email character varying,
     linkedin character varying,
     twitter character varying,
@@ -164,8 +165,17 @@ CREATE TABLE public.people (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL,
-    modified_by bigint DEFAULT 1 NOT NULL
+    modified_by bigint DEFAULT 1 NOT NULL,
+    CONSTRAINT people_gender_check CHECK (((gender = 'M'::bpchar) OR (gender = 'F'::bpchar)))
 );
+--
+-- Name: COLUMN people.name_normalized; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name in lowercase';
+--
+-- Name: COLUMN people.gender; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.people.gender IS 'M or F';
 --
 -- Name: people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --

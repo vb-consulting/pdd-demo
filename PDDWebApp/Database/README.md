@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-06T15:49:11.9423555+02:00`
+- Local time stamp: `2022-07-06T16:07:22.2426148+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -107,7 +107,8 @@
 | <a id="user-content-public-people-id" href="#public-people-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-first_name" href="#public-people-first_name">#</a>`first_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."first_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-last_name" href="#public-people-last_name">#</a>`last_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."last_name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name in lowercase<!-- end --> |
+| <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` | CHECK (gender = 'M'::bpchar OR gender = 'F'::bpchar) | `character(1)` | **NO** |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
 | <a id="user-content-public-people-email" href="#public-people-email">#</a>`email` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."email" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-linkedin" href="#public-people-linkedin">#</a>`linkedin` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-twitter" href="#public-people-twitter">#</a>`twitter` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."twitter" is @until-end-tag; --><!-- end --> |
