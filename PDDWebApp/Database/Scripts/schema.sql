@@ -117,6 +117,26 @@ CREATE TABLE public.countries (
     culture character varying
 );
 --
+-- Name: COLUMN countries.code; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.countries.code IS 'Contry ISO 3166 numeric code.';
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.countries.iso2 IS 'Contry ISO 3166 alpha-2 code.';
+--
+-- Name: COLUMN countries.iso3; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.countries.iso3 IS 'Contry ISO 3166 alpha-3 code.';
+--
+-- Name: COLUMN countries.name_normalized; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.countries.name_normalized IS 'Name in lowercase.';
+--
+-- Name: COLUMN countries.culture; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.countries.culture IS 'The CultureInfo class specifies a unique name for each culture, based on RFC 4646. The name is a combination of an ISO 639 two-letter lowercase culture code associated with a language and an ISO 3166 two-letter uppercase subculture code associated with a country or region. ';
+--
 -- Name: employee_records; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.employee_records (

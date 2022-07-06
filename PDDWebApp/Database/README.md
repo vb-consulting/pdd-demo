@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-05-01T14:56:00.8262036+02:00`
+- Local time stamp: `2022-07-06T15:49:11.9423555+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -72,12 +72,12 @@
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
-| <a id="user-content-public-countries-code" href="#public-countries-code">#</a>`code` | **PK** | `smallint` | **NO** |  | <!-- comment on column "public"."countries"."code" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-iso2" href="#public-countries-iso2">#</a>`iso2` |  | `character(2)` | **NO** |  | <!-- comment on column "public"."countries"."iso2" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-iso3" href="#public-countries-iso3">#</a>`iso3` |  | `character(3)` | **NO** |  | <!-- comment on column "public"."countries"."iso3" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-countries-code" href="#public-countries-code">#</a>`code` | **PK** | `smallint` | **NO** |  | <!-- comment on column "public"."countries"."code" is @until-end-tag; -->Contry ISO 3166 numeric code.<!-- end --> |
+| <a id="user-content-public-countries-iso2" href="#public-countries-iso2">#</a>`iso2` |  | `character(2)` | **NO** |  | <!-- comment on column "public"."countries"."iso2" is @until-end-tag; -->Contry ISO 3166 alpha-2 code.<!-- end --> |
+| <a id="user-content-public-countries-iso3" href="#public-countries-iso3">#</a>`iso3` |  | `character(3)` | **NO** |  | <!-- comment on column "public"."countries"."iso3" is @until-end-tag; -->Contry ISO 3166 alpha-3 code.<!-- end --> |
 | <a id="user-content-public-countries-name" href="#public-countries-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-culture" href="#public-countries-culture">#</a>`culture` |  | `character varying` | YES |  | <!-- comment on column "public"."countries"."culture" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->Name in lowercase.<!-- end --> |
+| <a id="user-content-public-countries-culture" href="#public-countries-culture">#</a>`culture` |  | `character varying` | YES |  | <!-- comment on column "public"."countries"."culture" is @until-end-tag; -->The CultureInfo class specifies a unique name for each culture, based on RFC 4646. The name is a combination of an ISO 639 two-letter lowercase culture code associated with a language and an ISO 3166 two-letter uppercase subculture code associated with a country or region. <!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
