@@ -5,7 +5,7 @@ CREATE TABLE public.companies (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name character varying NOT NULL,
     name_normalized character varying NOT NULL,
-    email character varying,
+    web character varying,
     linkedin character varying,
     tweeter character varying,
     company_line character varying,

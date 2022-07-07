@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-06T16:07:22.2426148+02:00`
+- Local time stamp: `2022-07-07T12:59:21.9077136+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -9,6 +9,7 @@
 - Table [`public.areas`](#table-publicareas)
 - Table [`public.companies`](#table-publiccompanies)
 - Table [`public.company_areas`](#table-publiccompany_areas)
+- Table [`public.company_reviews`](#table-publiccompany_reviews)
 - Table [`public.countries`](#table-publiccountries)
 - Table [`public.employee_records`](#table-publicemployee_records)
 - Table [`public.people`](#table-publicpeople)
@@ -38,7 +39,7 @@
 | <a id="user-content-public-companies-id" href="#public-companies-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-name" href="#public-companies-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."companies"."name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-email" href="#public-companies-email">#</a>`email` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."email" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-companies-web" href="#public-companies-web">#</a>`web` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."web" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-linkedin" href="#public-companies-linkedin">#</a>`linkedin` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-tweeter" href="#public-companies-tweeter">#</a>`tweeter` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."tweeter" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-company_line" href="#public-companies-company_line">#</a>`company_line` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."company_line" is @until-end-tag; --><!-- end --> |
@@ -62,6 +63,24 @@
 | <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-areas-id) `areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_at" href="#public-company_areas-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_areas"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_by" href="#public-company_areas-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_areas"."created_by" is @until-end-tag; --><!-- end --> |
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Table `public.company_reviews`
+
+<!-- comment on table "public"."company_reviews" is @until-end-tag; -->
+<!-- end -->
+
+| Column |             | Type | Nullable | Default | Comment |
+| ------ | ----------- | -----| -------- | ------- | ------- |
+| <a id="user-content-public-company_reviews-id" href="#public-company_reviews-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-person_id" href="#public-company_reviews-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."company_reviews"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-review" href="#public-company_reviews-review">#</a>`review` |  | `character varying` | **NO** |  | <!-- comment on column "public"."company_reviews"."review" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-rate" href="#public-company_reviews-rate">#</a>`rate` | CHECK (rate IS NULL OR rate > 0 AND rate <= 5) | `smallint` | YES |  | <!-- comment on column "public"."company_reviews"."rate" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-created_at" href="#public-company_reviews-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_reviews"."created_at" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-modified_at" href="#public-company_reviews-modified_at">#</a>`modified_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_reviews"."modified_at" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-created_by" href="#public-company_reviews-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_reviews"."created_by" is @until-end-tag; --><!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
@@ -89,7 +108,7 @@
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`**, **IDX** | `smallint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_started_at" href="#public-employee_records-employment_started_at">#</a>`employment_started_at` |  | `date` | **NO** |  | <!-- comment on column "public"."employee_records"."employment_started_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_ended_at" href="#public-employee_records-employment_ended_at">#</a>`employment_ended_at` |  | `date` | YES |  | <!-- comment on column "public"."employee_records"."employment_ended_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-created_at" href="#public-employee_records-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."employee_records"."created_at" is @until-end-tag; --><!-- end --> |
