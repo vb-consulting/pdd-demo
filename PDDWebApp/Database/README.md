@@ -1,31 +1,46 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-07T12:59:21.9077136+02:00`
+- Local time stamp: `2022-07-09T10:57:48.2961573+02:00`
 - Schema: public
 
 ## Table of Contents
 
-- Table [`public.areas`](#table-publicareas)
+- Table [`public.business_areas`](#table-publicbusiness_areas)
+- Table [`public.business_roles`](#table-publicbusiness_roles)
 - Table [`public.companies`](#table-publiccompanies)
 - Table [`public.company_areas`](#table-publiccompany_areas)
 - Table [`public.company_reviews`](#table-publiccompany_reviews)
 - Table [`public.countries`](#table-publiccountries)
 - Table [`public.employee_records`](#table-publicemployee_records)
 - Table [`public.people`](#table-publicpeople)
+- Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
 ## Tables
 
-### Table `public.areas`
+### Table `public.business_areas`
 
-<!-- comment on table "public"."areas" is @until-end-tag; -->
+<!-- comment on table "public"."business_areas" is @until-end-tag; -->
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
-| <a id="user-content-public-areas-id" href="#public-areas-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."areas"."id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-areas-name" href="#public-areas-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."areas"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-areas-name_normalized" href="#public-areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."areas"."name_normalized" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_areas-id" href="#public-business_areas-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_areas-name" href="#public-business_areas-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."business_areas"."name" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; --><!-- end --> |
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Table `public.business_roles`
+
+<!-- comment on table "public"."business_roles" is @until-end-tag; -->
+<!-- end -->
+
+| Column |             | Type | Nullable | Default | Comment |
+| ------ | ----------- | -----| -------- | ------- | ------- |
+| <a id="user-content-public-business_roles-id" href="#public-business_roles-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_roles-name" href="#public-business_roles-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."business_roles"."name" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; --><!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
@@ -60,7 +75,7 @@
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-company_areas-company_id" href="#public-company_areas-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_areas"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-areas-id) `areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-business_areas-id) `business_areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_at" href="#public-company_areas-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_areas"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_by" href="#public-company_areas-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_areas"."created_by" is @until-end-tag; --><!-- end --> |
 
@@ -127,17 +142,30 @@
 | <a id="user-content-public-people-first_name" href="#public-people-first_name">#</a>`first_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."first_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-last_name" href="#public-people-last_name">#</a>`last_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."last_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name in lowercase<!-- end --> |
-| <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` | CHECK (gender = 'M'::bpchar OR gender = 'F'::bpchar) | `character(1)` | **NO** |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
+| <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` |  | `USER-DEFINED` | YES |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
 | <a id="user-content-public-people-email" href="#public-people-email">#</a>`email` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."email" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-linkedin" href="#public-people-linkedin">#</a>`linkedin` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-twitter" href="#public-people-twitter">#</a>`twitter` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."twitter" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-people-phone" href="#public-people-phone">#</a>`phone` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."phone" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-birth" href="#public-people-birth">#</a>`birth` |  | `date` | YES |  | <!-- comment on column "public"."people"."birth" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-country" href="#public-people-country">#</a>`country` | **FK [➝](#public-countries-code) `countries.code`** | `smallint` | YES |  | <!-- comment on column "public"."people"."country" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-created_at" href="#public-people-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."people"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-modified_at" href="#public-people-modified_at">#</a>`modified_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."people"."modified_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-created_by" href="#public-people-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."people"."created_by" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-modified_by" href="#public-people-modified_by">#</a>`modified_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."people"."modified_by" is @until-end-tag; --><!-- end --> |
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Table `public.person_roles`
+
+<!-- comment on table "public"."person_roles" is @until-end-tag; -->
+<!-- end -->
+
+| Column |             | Type | Nullable | Default | Comment |
+| ------ | ----------- | -----| -------- | ------- | ------- |
+| <a id="user-content-public-person_roles-person_id" href="#public-person_roles-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."person_roles"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-role_id" href="#public-person_roles-role_id">#</a>`role_id` | **PK**, **FK [➝](#public-business_roles-id) `business_roles.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."person_roles"."role_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-created_at" href="#public-person_roles-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."person_roles"."created_at" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-created_by" href="#public-person_roles-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."person_roles"."created_by" is @until-end-tag; --><!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
@@ -155,6 +183,7 @@
 | <a id="user-content-public-users-providers" href="#public-users-providers">#</a>`providers` |  | `ARRAY` | **NO** | `'{}'::character varying[]` | <!-- comment on column "public"."users"."providers" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-timezone" href="#public-users-timezone">#</a>`timezone` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."timezone" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-culture" href="#public-users-culture">#</a>`culture` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."culture" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-users-person_id" href="#public-users-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."users"."person_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-lockout_end" href="#public-users-lockout_end">#</a>`lockout_end` |  | `timestamp with time zone` | YES |  | <!-- comment on column "public"."users"."lockout_end" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-created_at" href="#public-users-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."users"."created_at" is @until-end-tag; --><!-- end --> |
 

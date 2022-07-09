@@ -41,12 +41,16 @@ Console.WriteLine("Done!");
 
 NormOptions.Configure(options =>
 {
-    //options.CommandCommentHeader.Enabled = true;
+    options.CommandCommentHeader.Enabled = true;
+    options.CommandCommentHeader.IncludeCallerInfo = false;
+    options.CommandCommentHeader.IncludeCommandAttributes = false;
+    options.CommandCommentHeader.IncludeTimestamp = false;
+    options.CommandCommentHeader.IncludeParameters = true;
     options.DbCommandCallback = cmd => Console.WriteLine(cmd.CommandText);
 });
 using var connection = new NpgsqlConnection(connectionString);
 
-var countries = connection.Read<short>("select code from countries").ToArray();
+var countries = connection.Read<short>("select code from countries where culture is not null").ToArray();
 var areas = connection.Read<short>("select id from areas").ToArray();
 
 const int peopleCount = 50000;

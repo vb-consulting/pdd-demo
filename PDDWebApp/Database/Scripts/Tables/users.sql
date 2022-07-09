@@ -9,8 +9,10 @@ CREATE TABLE public.users (
     providers character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     timezone character varying NOT NULL,
     culture character varying NOT NULL,
+    person_id bigint,
     lockout_end timestamp with time zone,
-    created_at timestamp with time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE
 );
 
 CREATE UNIQUE INDEX idx_users_email ON public.users USING btree (email);

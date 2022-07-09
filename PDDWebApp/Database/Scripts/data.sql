@@ -16,21 +16,42 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 --
--- Data for Name: areas; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: business_areas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (1, 'General', 'general');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (2, 'Enterprise', 'enterprise');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (3, 'Fintech', 'fintech');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (4, 'Mobility', 'mobility');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (5, 'Insurtech', 'insurtech');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (6, 'Big Data', 'big data');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (7, 'Healthcare', 'healthcare');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (8, 'Manufacturing', 'manufacturing');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (9, 'Hardware', 'hardware');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (10, 'Proptech', 'proptech');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (11, 'AI', 'ai');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (12, 'Edtech', 'edtech');
-INSERT INTO public.areas OVERRIDING SYSTEM VALUE VALUES (13, 'Consumer', 'consumer');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (1, 'General', 'general');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (2, 'Enterprise', 'enterprise');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (3, 'Fintech', 'fintech');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (4, 'Mobility', 'mobility');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (5, 'Insurtech', 'insurtech');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (6, 'Big Data', 'big data');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (7, 'Healthcare', 'healthcare');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (8, 'Manufacturing', 'manufacturing');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (9, 'Hardware', 'hardware');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (10, 'Proptech', 'proptech');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (11, 'AI', 'ai');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (12, 'Edtech', 'edtech');
+INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (13, 'Consumer', 'consumer');
+--
+-- Data for Name: business_roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (1, 'Product Owner', 'product owner');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (2, 'Project Manager', 'project manager');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (3, 'UX Designer', 'ux designer');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (4, 'UI Designer', 'ui designer');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (5, 'Business Analyst', 'business analyst');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (6, 'Software Developer', 'software developer');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (7, 'Software Architect', 'software architect');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (8, 'Devops', 'devops');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (9, 'Devops Engineer', 'devops engineer');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (10, 'Devops Lead', 'devops lead');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (11, 'Tester', 'tester');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (12, 'QA Lead', 'qa lead');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (13, 'QA Engineer', 'qa engineer');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (14, 'Tech lead', 'tech lead');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (15, 'Scrum master', 'scrum master');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (16, 'Software Development Manager', 'software development manager');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (17, 'Database Administrator', 'database administrator');
+INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (18, 'Database Developer', 'database developer');
 --
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -286,11 +307,15 @@ INSERT INTO public.countries VALUES (728, 'SS', 'SSD', 'South Sudan', 'south sud
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-INSERT INTO public.users OVERRIDING SYSTEM VALUE VALUES (1, 'system', 'system', '{}', '{}', 'UTC', 'en-US', NULL, '2022-05-01 14:55:35.90698+02');
+INSERT INTO public.users OVERRIDING SYSTEM VALUE VALUES (1, 'system', 'system', '{}', '{}', 'UTC', 'en-US', NULL, '2022-05-01 14:55:35.90698+02', '2022-07-09 10:54:32.545377+02');
 --
--- Name: areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: business_areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
-PERFORM pg_catalog.setval('public.areas_id_seq', 1, false);
+PERFORM pg_catalog.setval('public.business_areas_id_seq', 1, false);
+--
+-- Name: business_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+PERFORM pg_catalog.setval('public.business_roles_id_seq', 18, true);
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
