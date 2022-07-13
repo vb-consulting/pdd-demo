@@ -511,6 +511,22 @@ CREATE TABLE public.users (
 --
 COMMENT ON TABLE public.users IS 'System users. May or may not be a person (in people records).';
 --
+-- Name: COLUMN users.data; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.users.data IS 'json data received from external auth provider';
+--
+-- Name: COLUMN users.providers; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.users.providers IS 'list of external auth providers autorized this user';
+--
+-- Name: COLUMN users.timezone; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.users.timezone IS 'timezone from browser';
+--
+-- Name: COLUMN users.culture; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.users.culture IS 'matching culture by browser timezone';
+--
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (

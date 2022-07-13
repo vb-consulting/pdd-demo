@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDWebApp", "PDDWebApp\PDDWebApp.csproj", "{E9CD28A4-7DED-4E9B-A7A6-F65846388059}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "__DatabaseSeeder", "DatabaseSeeder\__DatabaseSeeder.csproj", "{EA622A30-7BD4-4906-902B-AFCF55C8C0D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "____DatabaseSeeder", "DatabaseSeeder\____DatabaseSeeder.csproj", "{EA622A30-7BD4-4906-902B-AFCF55C8C0D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "__Shared", "Shared\__Shared.csproj", "{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}"
 EndProject

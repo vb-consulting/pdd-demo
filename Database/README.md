@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-13T13:37:02.4456773+02:00`
+- Local time stamp: `2022-07-13T14:51:05.4906430+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -73,6 +73,7 @@ Roles in a team that employees are specialized working with.
 ### Table `public.company_areas`
 
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
+Companies - business areas.
 <!-- end -->
 
 *Partitions*:
@@ -81,7 +82,7 @@ Roles in a team that employees are specialized working with.
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-company_areas-company_id" href="#public-company_areas-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_areas"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-business_areas-id) `business_areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-business_areas-id) `business_areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; -->partitioned by<!-- end --> |
 | <a id="user-content-public-company_areas-created_at" href="#public-company_areas-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_areas"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_by" href="#public-company_areas-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_areas"."created_by" is @until-end-tag; --><!-- end --> |
 
@@ -204,10 +205,10 @@ System users. May or may not be a person (in people records).
 | <a id="user-content-public-users-id" href="#public-users-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."users"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-email" href="#public-users-email">#</a>`email` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."users"."email" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-name" href="#public-users-name">#</a>`name` |  | `character varying` | YES |  | <!-- comment on column "public"."users"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-users-data" href="#public-users-data">#</a>`data` |  | `json` | **NO** | `'{}'::json` | <!-- comment on column "public"."users"."data" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-users-providers" href="#public-users-providers">#</a>`providers` |  | `ARRAY` | **NO** | `'{}'::character varying[]` | <!-- comment on column "public"."users"."providers" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-users-timezone" href="#public-users-timezone">#</a>`timezone` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."timezone" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-users-culture" href="#public-users-culture">#</a>`culture` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."culture" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-users-data" href="#public-users-data">#</a>`data` |  | `json` | **NO** | `'{}'::json` | <!-- comment on column "public"."users"."data" is @until-end-tag; -->json data received from external auth provider<!-- end --> |
+| <a id="user-content-public-users-providers" href="#public-users-providers">#</a>`providers` |  | `ARRAY` | **NO** | `'{}'::character varying[]` | <!-- comment on column "public"."users"."providers" is @until-end-tag; -->list of external auth providers autorized this user<!-- end --> |
+| <a id="user-content-public-users-timezone" href="#public-users-timezone">#</a>`timezone` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."timezone" is @until-end-tag; -->timezone from browser<!-- end --> |
+| <a id="user-content-public-users-culture" href="#public-users-culture">#</a>`culture` |  | `character varying` | **NO** |  | <!-- comment on column "public"."users"."culture" is @until-end-tag; -->matching culture by browser timezone<!-- end --> |
 | <a id="user-content-public-users-person_id" href="#public-users-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."users"."person_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-lockout_end" href="#public-users-lockout_end">#</a>`lockout_end` |  | `timestamp with time zone` | YES |  | <!-- comment on column "public"."users"."lockout_end" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-created_at" href="#public-users-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."users"."created_at" is @until-end-tag; --><!-- end --> |
