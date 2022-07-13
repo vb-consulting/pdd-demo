@@ -10,3 +10,5 @@ CREATE TABLE public.person_roles (
     CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE,
     CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES public.business_roles(id) DEFERRABLE
 );
+
+COMMENT ON TABLE public.person_roles IS 'Person - business roles';

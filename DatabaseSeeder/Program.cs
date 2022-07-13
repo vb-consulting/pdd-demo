@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Norm;
 using Npgsql;
 using NpgsqlTypes;
+using PDDWebApp;
 using static Bogus.DataSets.Name;
 
 Console.WriteLine("Hello, World!");
@@ -28,7 +29,7 @@ var config = new ConfigurationBuilder()
 var schema = File.ReadAllText(Path.Combine(currentDir, relativePath, config.GetValue<string>("PgRoutiner:SchemaDumpFile")));
 var data = File.ReadAllText(Path.Combine(currentDir, relativePath, config.GetValue<string>("PgRoutiner:DataDumpFile")));
 
-var connectionString = config.GetConnectionString(config.GetValue<string>(PDDWebApp.Database.ConnectionBuilder.NameKey));
+var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey));
 
 Console.WriteLine(".................................START.................................................................");
 

@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-09T10:57:48.2961573+02:00`
+- Local time stamp: `2022-07-13T13:37:02.4456773+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -13,6 +13,7 @@
 - Table [`public.company_reviews`](#table-publiccompany_reviews)
 - Table [`public.countries`](#table-publiccountries)
 - Table [`public.employee_records`](#table-publicemployee_records)
+- Table [`public.employee_status`](#table-publicemployee_status)
 - Table [`public.people`](#table-publicpeople)
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
@@ -21,26 +22,28 @@
 ### Table `public.business_areas`
 
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
+Business areas that companies may be invloved.
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-business_areas-id" href="#public-business_areas-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_areas-name" href="#public-business_areas-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."business_areas"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
 ### Table `public.business_roles`
 
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
+Roles in a team that employees are specialized working with.
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-business_roles-id" href="#public-business_roles-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_roles-name" href="#public-business_roles-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."business_roles"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
@@ -53,13 +56,13 @@
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-companies-id" href="#public-companies-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-name" href="#public-companies-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."companies"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-companies-web" href="#public-companies-web">#</a>`web` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."web" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-linkedin" href="#public-companies-linkedin">#</a>`linkedin` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-tweeter" href="#public-companies-tweeter">#</a>`tweeter` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."tweeter" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-company_line" href="#public-companies-company_line">#</a>`company_line` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."company_line" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-companies-company_line" href="#public-companies-company_line">#</a>`company_line` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."company_line" is @until-end-tag; -->company moto<!-- end --> |
 | <a id="user-content-public-companies-about" href="#public-companies-about">#</a>`about` |  | `character varying` | YES |  | <!-- comment on column "public"."companies"."about" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-country" href="#public-companies-country">#</a>`country` | **FK [➝](#public-countries-code) `countries.code`** | `smallint` | YES |  | <!-- comment on column "public"."companies"."country" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-companies-country" href="#public-companies-country">#</a>`country` | **FK [➝](#public-countries-code) `countries.code`** | `smallint` | YES |  | <!-- comment on column "public"."companies"."country" is @until-end-tag; -->headquaters country<!-- end --> |
 | <a id="user-content-public-companies-created_at" href="#public-companies-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."companies"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-modified_at" href="#public-companies-modified_at">#</a>`modified_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."companies"."modified_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-created_by" href="#public-companies-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."companies"."created_by" is @until-end-tag; --><!-- end --> |
@@ -71,6 +74,9 @@
 
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 <!-- end -->
+
+*Partitions*:
+`public.company_areas_ai FOR VALUES IN ('11')`, `public.company_areas_bigdata FOR VALUES IN ('6')`, `public.company_areas_consumer FOR VALUES IN ('13')`, `public.company_areas_edtech FOR VALUES IN ('12')`, `public.company_areas_enterprise FOR VALUES IN ('2')`, `public.company_areas_fintech FOR VALUES IN ('3')`, `public.company_areas_general FOR VALUES IN ('1')`, `public.company_areas_hardware FOR VALUES IN ('9')`, `public.company_areas_healthcare FOR VALUES IN ('7')`, `public.company_areas_insurtech FOR VALUES IN ('5')`, `public.company_areas_manufacturing FOR VALUES IN ('8')`, `public.company_areas_mobility FOR VALUES IN ('4')`, `public.company_areas_proptech FOR VALUES IN ('10')`
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
@@ -84,15 +90,16 @@
 ### Table `public.company_reviews`
 
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
+Company reviews made by people.
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-company_reviews-id" href="#public-company_reviews-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_reviews-person_id" href="#public-company_reviews-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."company_reviews"."person_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_reviews-review" href="#public-company_reviews-review">#</a>`review` |  | `character varying` | **NO** |  | <!-- comment on column "public"."company_reviews"."review" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_reviews-rate" href="#public-company_reviews-rate">#</a>`rate` | CHECK (rate IS NULL OR rate > 0 AND rate <= 5) | `smallint` | YES |  | <!-- comment on column "public"."company_reviews"."rate" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; -->company reviewed<!-- end --> |
+| <a id="user-content-public-company_reviews-person_id" href="#public-company_reviews-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."company_reviews"."person_id" is @until-end-tag; -->person reviewer<!-- end --> |
+| <a id="user-content-public-company_reviews-review" href="#public-company_reviews-review">#</a>`review` |  | `character varying` | **NO** |  | <!-- comment on column "public"."company_reviews"."review" is @until-end-tag; -->written review by a person<!-- end --> |
+| <a id="user-content-public-company_reviews-score" href="#public-company_reviews-score">#</a>`score` | CHECK (score IS NULL OR score > 0 AND score <= 5) | `smallint` | YES |  | <!-- comment on column "public"."company_reviews"."score" is @until-end-tag; -->score 1-5<!-- end --> |
 | <a id="user-content-public-company_reviews-created_at" href="#public-company_reviews-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_reviews"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_reviews-modified_at" href="#public-company_reviews-modified_at">#</a>`modified_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_reviews"."modified_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_reviews-created_by" href="#public-company_reviews-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_reviews"."created_by" is @until-end-tag; --><!-- end --> |
@@ -110,7 +117,7 @@
 | <a id="user-content-public-countries-iso2" href="#public-countries-iso2">#</a>`iso2` |  | `character(2)` | **NO** |  | <!-- comment on column "public"."countries"."iso2" is @until-end-tag; -->Contry ISO 3166 alpha-2 code.<!-- end --> |
 | <a id="user-content-public-countries-iso3" href="#public-countries-iso3">#</a>`iso3` |  | `character(3)` | **NO** |  | <!-- comment on column "public"."countries"."iso3" is @until-end-tag; -->Contry ISO 3166 alpha-3 code.<!-- end --> |
 | <a id="user-content-public-countries-name" href="#public-countries-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->Name in lowercase.<!-- end --> |
+| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-countries-culture" href="#public-countries-culture">#</a>`culture` |  | `character varying` | YES |  | <!-- comment on column "public"."countries"."culture" is @until-end-tag; -->The CultureInfo class specifies a unique name for each culture, based on RFC 4646. The name is a combination of an ISO 639 two-letter lowercase culture code associated with a language and an ISO 3166 two-letter uppercase subculture code associated with a country or region. <!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -118,6 +125,7 @@
 ### Table `public.employee_records`
 
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
+History of employment in companies by people.
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -125,9 +133,23 @@
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_started_at" href="#public-employee_records-employment_started_at">#</a>`employment_started_at` |  | `date` | **NO** |  | <!-- comment on column "public"."employee_records"."employment_started_at" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_records-employment_ended_at" href="#public-employee_records-employment_ended_at">#</a>`employment_ended_at` |  | `date` | YES |  | <!-- comment on column "public"."employee_records"."employment_ended_at" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_records-employment_ended_at" href="#public-employee_records-employment_ended_at">#</a>`employment_ended_at` |  | `date` | YES |  | <!-- comment on column "public"."employee_records"."employment_ended_at" is @until-end-tag; -->if this is null, it means person is still working there<!-- end --> |
 | <a id="user-content-public-employee_records-created_at" href="#public-employee_records-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."employee_records"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-created_by" href="#public-employee_records-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."employee_records"."created_by" is @until-end-tag; --><!-- end --> |
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Table `public.employee_status`
+
+<!-- comment on table "public"."employee_status" is @until-end-tag; -->
+List of possible statuses in regards to employment.
+<!-- end -->
+
+| Column |             | Type | Nullable | Default | Comment |
+| ------ | ----------- | -----| -------- | ------- | ------- |
+| <a id="user-content-public-employee_status-id" href="#public-employee_status-id">#</a>`id` | **PK** | `smallint` | **NO** | *auto increment* | <!-- comment on column "public"."employee_status"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_status-name" href="#public-employee_status-name">#</a>`name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."employee_status"."name" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_status-name_normalized" href="#public-employee_status-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."employee_status"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
@@ -141,7 +163,8 @@
 | <a id="user-content-public-people-id" href="#public-people-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-first_name" href="#public-people-first_name">#</a>`first_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."first_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-last_name" href="#public-people-last_name">#</a>`last_name` |  | `character varying` | **NO** |  | <!-- comment on column "public"."people"."last_name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name in lowercase<!-- end --> |
+| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying` | **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name + '\n'  last_name + '  ' +  first_name  all in lowercase to enable both searches (staring with first or last name).<!-- end --> |
+| <a id="user-content-public-people-employee_status" href="#public-people-employee_status">#</a>`employee_status` | **FK [➝](#public-employee_status-id) `employee_status.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."people"."employee_status" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` |  | `USER-DEFINED` | YES |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
 | <a id="user-content-public-people-email" href="#public-people-email">#</a>`email` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."email" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-linkedin" href="#public-people-linkedin">#</a>`linkedin` |  | `character varying` | YES |  | <!-- comment on column "public"."people"."linkedin" is @until-end-tag; --><!-- end --> |
@@ -158,6 +181,7 @@
 ### Table `public.person_roles`
 
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
+Person - business roles
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -172,6 +196,7 @@
 ### Table `public.users`
 
 <!-- comment on table "public"."users" is @until-end-tag; -->
+System users. May or may not be a person (in people records).
 <!-- end -->
 
 | Column |             | Type | Nullable | Default | Comment |

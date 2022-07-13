@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 	  <Content Remove="package-lock.json" />
+	  <Content Remove="package.json" />
 	  <Content Remove="tsconfig.json" />
 	</ItemGroup>
 
@@ -52,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Shared\__Shared.csproj" />
+	  <ProjectReference Include="..\Database\_Database.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">

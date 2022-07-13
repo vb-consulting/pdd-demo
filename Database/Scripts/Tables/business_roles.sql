@@ -7,4 +7,6 @@ CREATE TABLE public.business_roles (
     name_normalized character varying NOT NULL
 );
 
+COMMENT ON TABLE public.business_roles IS 'Roles in a team that employees are specialized working with.';
+COMMENT ON COLUMN public.business_roles.name_normalized IS 'lowercased';
 CREATE UNIQUE INDEX idx_business_roles_name_normalized ON public.business_roles USING btree (name_normalized);

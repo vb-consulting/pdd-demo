@@ -15,4 +15,5 @@ CREATE TABLE public.users (
     CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE
 );
 
+COMMENT ON TABLE public.users IS 'System users. May or may not be a person (in people records).';
 CREATE UNIQUE INDEX idx_users_email ON public.users USING btree (email);

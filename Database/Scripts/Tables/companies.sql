@@ -20,4 +20,7 @@ CREATE TABLE public.companies (
     CONSTRAINT fk_modified_by FOREIGN KEY (modified_by) REFERENCES public.users(id) DEFERRABLE
 );
 
+COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased';
+COMMENT ON COLUMN public.companies.company_line IS 'company moto';
+COMMENT ON COLUMN public.companies.country IS 'headquaters country';
 CREATE INDEX idx_companies_name_normalized ON public.companies USING btree (name_normalized);

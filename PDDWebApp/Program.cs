@@ -4,13 +4,13 @@ global using System.Linq;
 global using System.Text.Json;
 global using Microsoft.Extensions.Options;
 global using PDDWebApp.Pages;
-global using PDDWebApp.Database;
 global using PDDWebApp.Auth;
 
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using PDDWebApp;
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 var builder = WebApplication.CreateBuilder(args);

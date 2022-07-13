@@ -305,6 +305,15 @@ INSERT INTO public.countries VALUES (663, 'MF', 'MAF', 'Saint Martin', 'saint ma
 INSERT INTO public.countries VALUES (534, 'SX', 'SXM', 'Sint Maarten', 'sint maarten', NULL);
 INSERT INTO public.countries VALUES (728, 'SS', 'SSD', 'South Sudan', 'south sudan', NULL);
 --
+-- Data for Name: employee_status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (1, 'Employed', 'employed');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (2, 'Unemployed', 'unemployed');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (3, 'Open to opportunity', 'Open to opportunity');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (4, 'Activly applying', 'activly applying');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (5, 'Retired', 'retired');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (6, 'Unemployable', 'unemployable');
+--
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 INSERT INTO public.users OVERRIDING SYSTEM VALUE VALUES (1, 'system', 'system', '{}', '{}', 'UTC', 'en-US', NULL, '2022-05-01 14:55:35.90698+02', '2022-07-09 10:54:32.545377+02');
@@ -316,6 +325,10 @@ PERFORM pg_catalog.setval('public.business_areas_id_seq', 1, false);
 -- Name: business_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 PERFORM pg_catalog.setval('public.business_roles_id_seq', 18, true);
+--
+-- Name: employee_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+PERFORM pg_catalog.setval('public.employee_status_id_seq', 1, false);
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --

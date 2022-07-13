@@ -1,6 +1,6 @@
 ﻿using Npgsql;
 
-namespace PDDWebApp.Database;
+namespace PDDWebApp;
 
 public static class ConnectionBuilder
 {
@@ -26,8 +26,8 @@ public static class ConnectionBuilder
     {
         logger = app.Logger;
         var connectionName = GetConnectionName(app.Configuration);
-        connectionString = 
-            app.Configuration.GetConnectionString(connectionName) ?? 
+        connectionString =
+            app.Configuration.GetConnectionString(connectionName) ??
             app.Configuration.GetValue<string>($"POSTGRESQLCONNSTR_{connectionName}");
     }
 

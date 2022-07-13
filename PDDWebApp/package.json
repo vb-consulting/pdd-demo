@@ -19,8 +19,8 @@
     "npm-audit-fix": "npm audit fix",
     "code": "code .",
     "psql": "pgroutiner -psql",
-    "pg-schema": "pgroutiner -db -sd -md",
-    "pg-data": "pgroutiner -dd -md"
+    "pg-schema": "cd ../Database/ && pgroutiner -db -sd -md",
+    "pg-data": "cd ../Database/ && pgroutiner -dd"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.1",
