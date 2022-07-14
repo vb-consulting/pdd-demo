@@ -19,15 +19,16 @@ if (c.Key != ConsoleKey.Enter)
 
 var currentDir = Directory.GetCurrentDirectory();
 var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDDWebApp") : Path.Combine(currentDir, "../PDDWebApp");
+var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../Database") : Path.Combine(currentDir, "../Database");
 
 var config = new ConfigurationBuilder()
-    .AddJsonFile(Path.Combine(currentDir, relativePath, "appsettings.PgRoutiner.json"), optional: false, reloadOnChange: false)
+    .AddJsonFile(Path.Combine(currentDir, pgRoutinerPath, "appsettings.PgRoutiner.json"), optional: false, reloadOnChange: false)
     .AddJsonFile(Path.Combine(currentDir, relativePath, "appsettings.json"), optional: false, reloadOnChange: false)
     .AddJsonFile(Path.Combine(currentDir, relativePath, "appsettings.Development.json"), optional: true, reloadOnChange: false)
     .Build();
 
-var schema = File.ReadAllText(Path.Combine(currentDir, relativePath, config.GetValue<string>("PgRoutiner:SchemaDumpFile")));
-var data = File.ReadAllText(Path.Combine(currentDir, relativePath, config.GetValue<string>("PgRoutiner:DataDumpFile")));
+var schema = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile")));
+var data = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile")));
 
 var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey));
 
@@ -52,7 +53,9 @@ NormOptions.Configure(options =>
 using var connection = new NpgsqlConnection(connectionString);
 
 var countries = connection.Read<short>("select code from countries where culture is not null").ToArray();
-var areas = connection.Read<short>("select id from areas").ToArray();
+var usCode = 840;
+var euCodes = connection.Read<short>("select code from countries where iso2 in ('AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE')").ToArray();
+var areas = connection.Read<short>("select id from business_areas").ToArray();
 
 const int peopleCount = 50000;
 const int companyCount = 1000;
@@ -63,7 +66,9 @@ List<string> companyNames = new();
 Randomizer.Seed = new Random(DateTime.Now.Millisecond);
 Regex sanitizeNameRegex = new("[^a-zA-Z0-9]");
 
-foreach(var company in new Faker<Company>()
+connection.Execute("begin");
+
+foreach (var company in new Faker<Company>()
     .StrictMode(true)
     .RuleFor(c => c.Name, f => f.Company.CompanyName())
     .RuleFor(c => c.NameNormalized, (f, c) => c?.Name?.ToLower())
@@ -72,7 +77,7 @@ foreach(var company in new Faker<Company>()
     .RuleFor(c => c.Linkedin, (f, c) => string.Concat("https://linkedin.com/", sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()).OrNull(f, .8f))
     .RuleFor(c => c.CompanyLine, f => f.Company.CatchPhrase())
     .RuleFor(c => c.About, f => f.Company.Bs())
-    .RuleFor(c => c.Country, f => countries[f.Random.Number(countries.Length - 1)])
+    .RuleFor(c => c.Country, f => f.Random.Number(1, 3) switch { 1 => usCode, 2 => f.Random.ArrayElement(euCodes), 3 => f.Random.ArrayElement(countries), _ => usCode })
     .RuleFor(c => c.Areas, f => f.PickRandom(areas, f.Random.Int(1, 5)).ToArray())
     .Generate(companyCount))
 {
@@ -95,38 +100,83 @@ foreach(var company in new Faker<Company>()
     companyNames.Add(company?.Name ?? "");
 }
 
-foreach(var person in new Faker<Person>()
+var employed = connection.Read<short>("select id from employee_status where name_normalized = 'employed'").Single();
+var unemployed = connection.Read<short>("select id from employee_status where name_normalized = 'unemployed'").Single();
+var opentoopportunity = connection.Read<short>("select id from employee_status where name_normalized = 'open to opportunity'").Single();
+var activlyapplying = connection.Read<short>("select id from employee_status where name_normalized = 'activly applying'").Single();
+var retired = connection.Read<short>("select id from employee_status where name_normalized = 'retired'").Single();
+var unemployable = connection.Read<short>("select id from employee_status where name_normalized = 'unemployable'").Single();
+
+string FakeFirstName(Faker f, Person p)
+{
+    var name = f.Name.FirstName(p.Gender);
+    if (p.Gender == Gender.Male)
+    {
+        if (!name.EndsWith("i"))
+        {
+            name = f.Random.Number(1, 7) switch
+            {
+                1 => $"{name}inski",
+                2 => $"{name}islav",
+                3 => $"{name}iv",
+                4 => $"{name}iverton",
+                5 => $"{name}iverson",
+                6 => $"{name}ir",
+                7 => $"{name}iston",
+                _ => name
+            };
+        }
+        else
+        {
+            name = f.Random.Number(1, 3) switch
+            {
+                1 => $"{name}ston",
+                2 => $"{name}athan",
+                3 => $"{name}atan",
+                _ => name
+            };
+        }
+    }
+    if (p.Gender == Gender.Female)
+    {
+        if (!name.EndsWith("a"))
+        {
+            name = f.Random.Number(1, 5) switch
+            {
+                1 => $"{name}ana",
+                2 => $"{name}stazia",
+                3 => $"{name}da",
+                4 => $"{name}moja",
+                5 => $"{name}tvoja",
+                _ => name
+            };
+        }
+        else
+        {
+            name = f.Random.Number(1, 3) switch
+            {
+                1 => $"{name}vova",
+                2 => $"{name}lyna",
+                3 => $"{name}lova",
+                _ => name
+            };
+        }
+    }
+    return name;
+}
+
+foreach (var person in new Faker<Person>()
     .StrictMode(true)
     .RuleFor(p => p.Gender, f => f.PickRandom<Gender>())
-    .RuleFor(p => p.FirstName, (f, p) => f.Name.FirstName(p.Gender))
+    .RuleFor(p => p.FirstName, (f, p) => FakeFirstName(f, p))
     .RuleFor(p => p.LastName, (f, p) => f.Name.LastName(p.Gender))
     .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName).ToLower())
     .RuleFor(c => c.Twitter, (f, p) => string.Concat("https://twitter.com/", p?.Email?.Split("@").First().Split(".").First().ToLower()).OrNull(f, .25f))
     .RuleFor(c => c.Linkedin, (f, p) => string.Concat("https://www.linkedin.com/", p?.Email?.Split("@").First().Split(".").First().ToLower()).OrNull(f, .6f))
-    .RuleFor(p => p.Phone, f => f.Phone.PhoneNumber())
     .RuleFor(p => p.Birth, f => f.Date.Between(DateTime.Now.AddYears(-80), DateTime.Now.AddYears(-15)))
-    .RuleFor(p => p.Country, f => countries[f.Random.Number(countries.Length-1)])
+    .RuleFor(p => p.Country, f => f.Random.Number(1, 3) switch { 1 => usCode, 2 => f.Random.ArrayElement(euCodes), 3 => f.Random.ArrayElement(countries), _ => usCode })
     .Generate(peopleCount))
 {
-    var personId = connection.Read<long>(@"
-        insert into people 
-        (first_name, last_name, name_normalized, gender, email, linkedin, twitter, phone, birth, country)
-        values
-        (@firstName, @lastName, @normalized, @gender, @email, @twitter, @linkedin, @phone, @birth, @country)
-        returning id;", new
-    {
-        firstName = person.FirstName,
-        lastName = person.LastName,
-        normalized = $"{person.FirstName} {person.LastName}\n{person.LastName} {person.FirstName}".ToLower(),
-        gender = person.Gender.ToString().First().ToString(),
-        person.Email,
-        person.Twitter,
-        person.Linkedin,
-        person.Phone,
-        birth = (person.Birth, NpgsqlDbType.Date),
-        person.Country,
-    }).Single();
-
     var attr = new Faker<PersonAttributes>()
         .RuleFor(a => a.Reviews, (f, a) =>
         {
@@ -142,7 +192,7 @@ foreach(var person in new Faker<Person>()
                 result[i] = (
                     attrCompaniesIds[i],
                     f.Rant.Review(companyNames[i]),
-                    f.Random.Int(1, 5)
+                    f.Random.Int(1, 3) switch { 1 => 5, 2 => 4, 3 => f.Random.Int(1, 5), _ => 1 } 
                 );
             }
             return result;
@@ -173,11 +223,49 @@ foreach(var person in new Faker<Person>()
         })
         .Generate();
 
+    var randomizer = new Randomizer(DateTime.Now.Millisecond);
+    short status = unemployable;
+    if (!attr.EmployeeRecord.Any())
+    {
+        status = randomizer.ArrayElement(new short[] { unemployed, activlyapplying, unemployable });
+    }
+    else
+    {
+        var last = attr.EmployeeRecord.Last();
+        if (last.ended == null)
+        {
+            status = randomizer.ArrayElement(new short[] { retired, activlyapplying });
+        }
+        else
+        {
+            status = randomizer.ArrayElement(new short[] { employed, opentoopportunity, activlyapplying });
+        }
+    }
+
+    var personId = connection.Read<long>(@"
+        insert into people 
+        (first_name, last_name, name_normalized, employee_status, gender, email, linkedin, twitter, birth, country)
+        values
+        (@firstName, @lastName, @normalized, @status, @gender::valid_genders, @email, @twitter, @linkedin, @birth, @country)
+        returning id;", new
+    {
+        firstName = person.FirstName,
+        lastName = person.LastName,
+        normalized = $"{person.FirstName} {person.LastName}\n{person.LastName} {person.FirstName}".ToLower(),
+        status,
+        gender = person.Gender.ToString().First().ToString(),
+        person.Email,
+        person.Twitter,
+        person.Linkedin,
+        birth = (person.Birth, NpgsqlDbType.Date),
+        person.Country,
+    }).Single();
+
     if (attr.Reviews.Any())
     {
         connection.Execute(string.Join("\n", attr.Reviews.Select(r => @$"
             insert into company_reviews 
-            (company_id, person_id, review, rate)
+            (company_id, person_id, review, score)
             values 
             ({r.companyId}, {personId}, $r${r.review}$r$, {r.score});
         ")));
@@ -194,6 +282,7 @@ foreach(var person in new Faker<Person>()
     }
 }
 
+connection.Execute("commit");
 
 public class Company
 {
@@ -216,7 +305,6 @@ public class Person
     public string? Email { get; set; }
     public string? Linkedin { get; set; }
     public string? Twitter { get; set; }
-    public string? Phone { get; set; }
     public DateTime Birth { get; set; }
     public int Country { get; set; }
 }

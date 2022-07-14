@@ -309,7 +309,7 @@ INSERT INTO public.countries VALUES (728, 'SS', 'SSD', 'South Sudan', 'south sud
 --
 INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (1, 'Employed', 'employed');
 INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (2, 'Unemployed', 'unemployed');
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (3, 'Open to opportunity', 'Open to opportunity');
+INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (3, 'Open to opportunity', 'open to opportunity');
 INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (4, 'Activly applying', 'activly applying');
 INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (5, 'Retired', 'retired');
 INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (6, 'Unemployable', 'unemployable');

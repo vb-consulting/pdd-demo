@@ -1,4 +1,6 @@
 DROP INDEX IF EXISTS public.idx_people_name_normalized;
+DROP INDEX IF EXISTS public.idx_people_gender;
+DROP INDEX IF EXISTS public.idx_people_employee_status;
 DROP TABLE IF EXISTS public.people;
 
 CREATE TABLE public.people (
@@ -25,4 +27,6 @@ CREATE TABLE public.people (
 
 COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name).';
 COMMENT ON COLUMN public.people.gender IS 'M or F';
+CREATE INDEX idx_people_employee_status ON public.people USING btree (employee_status);
+CREATE INDEX idx_people_gender ON public.people USING btree (gender);
 CREATE INDEX idx_people_name_normalized ON public.people USING btree (name_normalized);
