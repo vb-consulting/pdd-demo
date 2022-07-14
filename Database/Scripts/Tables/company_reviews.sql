@@ -1,5 +1,3 @@
-DROP INDEX IF EXISTS public.idx_company_reviews_score;
-DROP INDEX IF EXISTS public.idx_company_reviews_id;
 DROP TABLE IF EXISTS public.company_reviews;
 
 CREATE TABLE public.company_reviews (
@@ -24,5 +22,3 @@ COMMENT ON COLUMN public.company_reviews.company_id IS 'company reviewed, partit
 COMMENT ON COLUMN public.company_reviews.person_id IS 'person reviewer';
 COMMENT ON COLUMN public.company_reviews.review IS 'written review by a person';
 COMMENT ON COLUMN public.company_reviews.score IS 'score 1-5';
-CREATE INDEX idx_company_reviews_id ON ONLY public.company_reviews USING btree (id);
-CREATE INDEX idx_company_reviews_score ON ONLY public.company_reviews USING btree (score);

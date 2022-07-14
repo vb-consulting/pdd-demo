@@ -15,4 +15,5 @@ CREATE TABLE public.employee_records (
 PARTITION BY LIST (person_id);
 
 COMMENT ON TABLE public.employee_records IS 'History of employment in companies by people.';
+COMMENT ON COLUMN public.employee_records.person_id IS 'partitioned by';
 COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is null, it means person is still working there';

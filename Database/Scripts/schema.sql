@@ -15,16 +15,16 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
+ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
 ALTER TABLE IF EXISTS public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS public.employee_records DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_employee_status;
 ALTER TABLE IF EXISTS public.company_reviews DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS public.employee_records DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS public.company_areas DROP CONSTRAINT IF EXISTS fk_created_by;
@@ -43,15 +43,13 @@ DROP INDEX IF EXISTS public.idx_employee_status_name_normalized;
 DROP INDEX IF EXISTS public.idx_countries_name_normalized;
 DROP INDEX IF EXISTS public.idx_countries_iso3;
 DROP INDEX IF EXISTS public.idx_countries_iso2;
-DROP INDEX IF EXISTS public.idx_company_reviews_score;
-DROP INDEX IF EXISTS public.idx_company_reviews_id;
 DROP INDEX IF EXISTS public.idx_companies_name_normalized;
 DROP INDEX IF EXISTS public.idx_companies_country;
 DROP INDEX IF EXISTS public.idx_business_roles_name_normalized;
 DROP INDEX IF EXISTS public.idx_business_areas_name_normalized;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_pkey;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS pk_person_roles;
 ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS pk_company_areas;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS person_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS people_pkey;
 ALTER TABLE IF EXISTS ONLY public.employee_status DROP CONSTRAINT IF EXISTS employee_status_pkey;
 ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS employee_records_pkey;
@@ -418,6 +416,10 @@ PARTITION BY LIST (person_id);
 --
 COMMENT ON TABLE public.employee_records IS 'History of employment in companies by people.';
 --
+-- Name: COLUMN employee_records.person_id; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.employee_records.person_id IS 'partitioned by';
+--
 -- Name: COLUMN employee_records.employment_ended_at; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is null, it means person is still working there';
@@ -495,11 +497,16 @@ CREATE TABLE public.person_roles (
     role_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL
-);
+)
+PARTITION BY LIST (person_id);
 --
 -- Name: TABLE person_roles; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.person_roles IS 'Person - business roles';
+--
+-- Name: COLUMN person_roles.person_id; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.person_roles.person_id IS 'partition by';
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
@@ -643,15 +650,15 @@ ALTER TABLE ONLY public.employee_status
 ALTER TABLE ONLY public.people
     ADD CONSTRAINT people_pkey PRIMARY KEY (id);
 --
+-- Name: person_roles person_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.person_roles
+    ADD CONSTRAINT person_roles_pkey PRIMARY KEY (person_id, role_id);
+--
 -- Name: company_areas pk_company_areas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.company_areas
     ADD CONSTRAINT pk_company_areas PRIMARY KEY (company_id, area_id);
---
--- Name: person_roles pk_person_roles; Type: CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.person_roles
-    ADD CONSTRAINT pk_person_roles PRIMARY KEY (person_id, role_id);
 --
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -673,14 +680,6 @@ CREATE INDEX idx_companies_country ON public.companies USING btree (country);
 -- Name: idx_companies_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_companies_name_normalized ON public.companies USING btree (name_normalized);
---
--- Name: idx_company_reviews_id; Type: INDEX; Schema: public; Owner: -
---
-CREATE INDEX idx_company_reviews_id ON ONLY public.company_reviews USING btree (id);
---
--- Name: idx_company_reviews_score; Type: INDEX; Schema: public; Owner: -
---
-CREATE INDEX idx_company_reviews_score ON ONLY public.company_reviews USING btree (score);
 --
 -- Name: idx_countries_iso2; Type: INDEX; Schema: public; Owner: -
 --
@@ -766,7 +765,7 @@ ALTER TABLE public.employee_records
 --
 -- Name: person_roles fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE ONLY public.person_roles
+ALTER TABLE public.person_roles
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: company_reviews fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -801,7 +800,7 @@ ALTER TABLE ONLY public.users
 --
 -- Name: person_roles fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE ONLY public.person_roles
+ALTER TABLE public.person_roles
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: company_reviews fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -811,7 +810,7 @@ ALTER TABLE public.company_reviews
 --
 -- Name: person_roles fk_role_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE ONLY public.person_roles
+ALTER TABLE public.person_roles
     ADD CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES public.business_roles(id) DEFERRABLE;
 --
 -- PostgreSQL database dump complete

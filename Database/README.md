@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-14T17:22:19.4208006+02:00`
+- Local time stamp: `2022-07-14T18:03:37.4009120+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -132,7 +132,7 @@ History of employment in companies by people.
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; -->partitioned by<!-- end --> |
 | <a id="user-content-public-employee_records-employment_started_at" href="#public-employee_records-employment_started_at">#</a>`employment_started_at` |  | `date` | **NO** |  | <!-- comment on column "public"."employee_records"."employment_started_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_ended_at" href="#public-employee_records-employment_ended_at">#</a>`employment_ended_at` |  | `date` | YES |  | <!-- comment on column "public"."employee_records"."employment_ended_at" is @until-end-tag; -->if this is null, it means person is still working there<!-- end --> |
 | <a id="user-content-public-employee_records-created_at" href="#public-employee_records-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."employee_records"."created_at" is @until-end-tag; --><!-- end --> |
@@ -187,7 +187,7 @@ Person - business roles
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
-| <a id="user-content-public-person_roles-person_id" href="#public-person_roles-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."person_roles"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-person_id" href="#public-person_roles-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."person_roles"."person_id" is @until-end-tag; -->partition by<!-- end --> |
 | <a id="user-content-public-person_roles-role_id" href="#public-person_roles-role_id">#</a>`role_id` | **PK**, **FK [➝](#public-business_roles-id) `business_roles.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."person_roles"."role_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-person_roles-created_at" href="#public-person_roles-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."person_roles"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-person_roles-created_by" href="#public-person_roles-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."person_roles"."created_by" is @until-end-tag; --><!-- end --> |
