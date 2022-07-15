@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-15T07:38:18.8240983+02:00`
+- Local time stamp: `2022-07-15T11:44:44.8550906+02:00`
 - Schema: public
 
 ## Table of Contents

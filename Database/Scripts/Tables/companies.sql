@@ -25,4 +25,4 @@ COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased';
 COMMENT ON COLUMN public.companies.company_line IS 'company moto';
 COMMENT ON COLUMN public.companies.country IS 'headquaters country';
 CREATE INDEX idx_companies_country ON public.companies USING btree (country);
-CREATE INDEX idx_companies_name_normalized ON public.companies USING btree (name_normalized);
+CREATE INDEX idx_companies_name_normalized ON public.companies USING gist (name_normalized public.gist_trgm_ops);

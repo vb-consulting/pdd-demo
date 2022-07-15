@@ -75,6 +75,15 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_areas;
 DROP TYPE IF EXISTS public.valid_genders;
+DROP EXTENSION IF EXISTS pg_trgm;
+--
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
 --
 -- Name: valid_genders; Type: TYPE; Schema: public; Owner: -
 --
@@ -498,7 +507,7 @@ CREATE INDEX idx_companies_country ON public.companies USING btree (country);
 --
 -- Name: idx_companies_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
-CREATE INDEX idx_companies_name_normalized ON public.companies USING btree (name_normalized);
+CREATE INDEX idx_companies_name_normalized ON public.companies USING gist (name_normalized public.gist_trgm_ops);
 --
 -- Name: idx_company_areas_company_id; Type: INDEX; Schema: public; Owner: -
 --
@@ -538,7 +547,7 @@ CREATE INDEX idx_people_gender ON public.people USING btree (gender);
 --
 -- Name: idx_people_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
-CREATE INDEX idx_people_name_normalized ON public.people USING btree (name_normalized);
+CREATE INDEX idx_people_name_normalized ON public.people USING gist (name_normalized public.gist_trgm_ops);
 --
 -- Name: idx_person_roles_person_id; Type: INDEX; Schema: public; Owner: -
 --

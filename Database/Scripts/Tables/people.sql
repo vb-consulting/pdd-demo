@@ -29,4 +29,4 @@ COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_na
 COMMENT ON COLUMN public.people.gender IS 'M or F';
 CREATE INDEX idx_people_employee_status ON public.people USING btree (employee_status);
 CREATE INDEX idx_people_gender ON public.people USING btree (gender);
-CREATE INDEX idx_people_name_normalized ON public.people USING btree (name_normalized);
+CREATE INDEX idx_people_name_normalized ON public.people USING gist (name_normalized public.gist_trgm_ops);
