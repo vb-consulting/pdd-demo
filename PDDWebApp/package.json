@@ -20,7 +20,9 @@
     "code": "code .",
     "psql": "pgroutiner -psql",
     "pg-schema": "cd ../Database/ && pgroutiner -db -sd -md",
-    "pg-data": "cd ../Database/ && pgroutiner -dd"
+    "pg-data": "cd ../Database/ && pgroutiner -dd",
+    "pg-readme": "cd ../Database/ && pgroutiner -md",
+    "pg-readme-commit": "cd ../Database/ && pgroutiner --commit-md"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.1",
