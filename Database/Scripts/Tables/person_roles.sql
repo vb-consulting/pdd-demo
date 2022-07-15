@@ -1,3 +1,5 @@
+DROP INDEX IF EXISTS public.idx_person_roles_role_id;
+DROP INDEX IF EXISTS public.idx_person_roles_person_id;
 DROP TABLE IF EXISTS public.person_roles;
 
 CREATE TABLE public.person_roles (
@@ -9,8 +11,8 @@ CREATE TABLE public.person_roles (
     CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE,
     CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE,
     CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES public.business_roles(id) DEFERRABLE
-)
-PARTITION BY LIST (person_id);
+);
 
 COMMENT ON TABLE public.person_roles IS 'Person - business roles';
-COMMENT ON COLUMN public.person_roles.person_id IS 'partition by';
+CREATE INDEX idx_person_roles_person_id ON public.person_roles USING btree (person_id);
+CREATE INDEX idx_person_roles_role_id ON public.person_roles USING btree (role_id);

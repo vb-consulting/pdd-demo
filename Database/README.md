@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-14T18:03:37.4009120+02:00`
+- Local time stamp: `2022-07-15T07:38:18.8240983+02:00`
 - Schema: public
 
 ## Table of Contents
@@ -76,13 +76,10 @@ Roles in a team that employees are specialized working with.
 Companies - business areas.
 <!-- end -->
 
-*Partitions*:
-`public.company_areas_ai FOR VALUES IN ('11')`, `public.company_areas_bigdata FOR VALUES IN ('6')`, `public.company_areas_consumer FOR VALUES IN ('13')`, `public.company_areas_edtech FOR VALUES IN ('12')`, `public.company_areas_enterprise FOR VALUES IN ('2')`, `public.company_areas_fintech FOR VALUES IN ('3')`, `public.company_areas_general FOR VALUES IN ('1')`, `public.company_areas_hardware FOR VALUES IN ('9')`, `public.company_areas_healthcare FOR VALUES IN ('7')`, `public.company_areas_insurtech FOR VALUES IN ('5')`, `public.company_areas_manufacturing FOR VALUES IN ('8')`, `public.company_areas_mobility FOR VALUES IN ('4')`, `public.company_areas_proptech FOR VALUES IN ('10')`
-
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
-| <a id="user-content-public-company_areas-company_id" href="#public-company_areas-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_areas"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-business_areas-id) `business_areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; -->partitioned by<!-- end --> |
+| <a id="user-content-public-company_areas-company_id" href="#public-company_areas-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."company_areas"."company_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_areas-area_id" href="#public-company_areas-area_id">#</a>`area_id` | **PK**, **FK [➝](#public-business_areas-id) `business_areas.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."company_areas"."area_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_at" href="#public-company_areas-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."company_areas"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_areas-created_by" href="#public-company_areas-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."company_areas"."created_by" is @until-end-tag; --><!-- end --> |
 
@@ -97,7 +94,7 @@ Company reviews made by people.
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
 | <a id="user-content-public-company_reviews-id" href="#public-company_reviews-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; -->company reviewed, partitioned by<!-- end --> |
+| <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; -->company reviewed<!-- end --> |
 | <a id="user-content-public-company_reviews-person_id" href="#public-company_reviews-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint` | YES |  | <!-- comment on column "public"."company_reviews"."person_id" is @until-end-tag; -->person reviewer<!-- end --> |
 | <a id="user-content-public-company_reviews-review" href="#public-company_reviews-review">#</a>`review` |  | `character varying` | **NO** |  | <!-- comment on column "public"."company_reviews"."review" is @until-end-tag; -->written review by a person<!-- end --> |
 | <a id="user-content-public-company_reviews-score" href="#public-company_reviews-score">#</a>`score` | CHECK (score IS NULL OR score > 0 AND score <= 5) | `smallint` | YES |  | <!-- comment on column "public"."company_reviews"."score" is @until-end-tag; -->score 1-5<!-- end --> |
@@ -131,8 +128,9 @@ History of employment in companies by people.
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
+| <a id="user-content-public-employee_records-id" href="#public-employee_records-id">#</a>`id` | **PK** | `bigint` | **NO** | *auto increment* | <!-- comment on column "public"."employee_records"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>`company_id` | **PK**, **FK [➝](#public-companies-id) `companies.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; -->partitioned by<!-- end --> |
+| <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_started_at" href="#public-employee_records-employment_started_at">#</a>`employment_started_at` |  | `date` | **NO** |  | <!-- comment on column "public"."employee_records"."employment_started_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-employment_ended_at" href="#public-employee_records-employment_ended_at">#</a>`employment_ended_at` |  | `date` | YES |  | <!-- comment on column "public"."employee_records"."employment_ended_at" is @until-end-tag; -->if this is null, it means person is still working there<!-- end --> |
 | <a id="user-content-public-employee_records-created_at" href="#public-employee_records-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."employee_records"."created_at" is @until-end-tag; --><!-- end --> |
@@ -187,8 +185,8 @@ Person - business roles
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| -------- | ------- | ------- |
-| <a id="user-content-public-person_roles-person_id" href="#public-person_roles-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`** | `bigint` | **NO** |  | <!-- comment on column "public"."person_roles"."person_id" is @until-end-tag; -->partition by<!-- end --> |
-| <a id="user-content-public-person_roles-role_id" href="#public-person_roles-role_id">#</a>`role_id` | **PK**, **FK [➝](#public-business_roles-id) `business_roles.id`** | `smallint` | **NO** |  | <!-- comment on column "public"."person_roles"."role_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-person_id" href="#public-person_roles-person_id">#</a>`person_id` | **PK**, **FK [➝](#public-people-id) `people.id`**, **IDX** | `bigint` | **NO** |  | <!-- comment on column "public"."person_roles"."person_id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-person_roles-role_id" href="#public-person_roles-role_id">#</a>`role_id` | **PK**, **FK [➝](#public-business_roles-id) `business_roles.id`**, **IDX** | `smallint` | **NO** |  | <!-- comment on column "public"."person_roles"."role_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-person_roles-created_at" href="#public-person_roles-created_at">#</a>`created_at` |  | `timestamp with time zone` | **NO** | `now()` | <!-- comment on column "public"."person_roles"."created_at" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-person_roles-created_by" href="#public-person_roles-created_by">#</a>`created_by` | **FK [➝](#public-users-id) `users.id`** | `bigint` | **NO** | `1` | <!-- comment on column "public"."person_roles"."created_by" is @until-end-tag; --><!-- end --> |
 

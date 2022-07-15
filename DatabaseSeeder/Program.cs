@@ -107,6 +107,57 @@ var activlyapplying = connection.Read<short>("select id from employee_status whe
 var retired = connection.Read<short>("select id from employee_status where name_normalized = 'retired'").Single();
 var unemployable = connection.Read<short>("select id from employee_status where name_normalized = 'unemployable'").Single();
 
+var productowner = connection.Read<short>("select id from business_roles where name_normalized = 'product owner'").Single();
+var projectmanager = connection.Read<short>("select id from business_roles where name_normalized = 'project manager'").Single();
+var uxdesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ux designer'").Single();
+var uidesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ui designer'").Single();
+var businessanalyst = connection.Read<short>("select id from business_roles where name_normalized = 'business analyst'").Single();
+var softwaredeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'software developer'").Single();
+var softwarearchitect = connection.Read<short>("select id from business_roles where name_normalized = 'software architect'").Single();
+var devops = connection.Read<short>("select id from business_roles where name_normalized = 'devops'").Single();
+var devopsengineer = connection.Read<short>("select id from business_roles where name_normalized = 'devops engineer'").Single();
+var devopslead = connection.Read<short>("select id from business_roles where name_normalized = 'devops lead'").Single();
+var tester = connection.Read<short>("select id from business_roles where name_normalized = 'tester'").Single();
+var qalead = connection.Read<short>("select id from business_roles where name_normalized = 'qa lead'").Single();
+var qaengineer = connection.Read<short>("select id from business_roles where name_normalized = 'qa engineer'").Single();
+var techlead = connection.Read<short>("select id from business_roles where name_normalized = 'tech lead'").Single();
+var scrummaster = connection.Read<short>("select id from business_roles where name_normalized = 'scrum master'").Single();
+var softwaredevelopmentmanager = connection.Read<short>("select id from business_roles where name_normalized = 'software development manager'").Single();
+var databaseadministrator = connection.Read<short>("select id from business_roles where name_normalized = 'database administrator'").Single();
+var databasedeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'database developer'").Single();
+
+var managerRoles1 = new short[] { productowner, projectmanager, businessanalyst, scrummaster, softwaredevelopmentmanager };
+var managerRoles2 = new short[] { projectmanager, businessanalyst };
+var managerRoles3 = new short[] { productowner, softwaredevelopmentmanager };
+
+var uiRoles1 = new short[] { uxdesigner, uidesigner };
+var uiRoles2 = new short[] { uidesigner };
+
+var devRoles1 = new short[] { softwaredeveloper, softwarearchitect, techlead, databaseadministrator, databasedeveloper };
+var devRoles2 = new short[] { softwarearchitect, techlead, databaseadministrator, databasedeveloper };
+var devRoles3 = new short[] { softwaredeveloper, softwarearchitect };
+var devRoles4 = new short[] { softwaredeveloper, databaseadministrator, databasedeveloper };
+
+var devopsRoles1 = new short[] { devops, devopsengineer, techlead, devopslead };
+var devopsRoles2 = new short[] { devops, devopsengineer };
+
+var qaRoles1 = new short[] { tester, qalead, qaengineer };
+var qaRoles2 = new short[] { tester };
+var qaRoles3 = new short[] { tester, qalead };
+
+var dbRoles1 = new short[] { databaseadministrator, databasedeveloper };
+var dbRoles2 = new short[] { databaseadministrator };
+
+var roles = new short[][]
+{
+    managerRoles1, managerRoles2, managerRoles3,
+    uiRoles1, uiRoles2,
+    devRoles1, devRoles2, devRoles3, devRoles4,
+    devopsRoles1, devopsRoles2,
+    qaRoles1, qaRoles2, qaRoles3,
+    dbRoles1, dbRoles2
+};
+
 string FakeFirstName(Faker f, Person p)
 {
     var name = f.Name.FirstName(p.Gender);
@@ -221,6 +272,7 @@ foreach (var person in new Faker<Person>()
             }
             return result.ToArray();
         })
+        .RuleFor(a => a.Roles, (f, a) => roles[f.Random.Int(0, roles.Length - 1)])
         .Generate();
 
     var randomizer = new Randomizer(DateTime.Now.Millisecond);
@@ -260,6 +312,13 @@ foreach (var person in new Faker<Person>()
         birth = (person.Birth, NpgsqlDbType.Date),
         person.Country,
     }).Single();
+
+    connection.Execute(string.Join("\n", attr.Roles.Select(r => @$"
+        insert into person_roles
+        (person_id, role_id)
+        values
+        ({personId}, {r});
+    ")));
 
     if (attr.Reviews.Any())
     {
@@ -316,4 +375,6 @@ public class PersonAttributes
 
     public (long companyId, DateTime started, DateTime? ended)[] EmployeeRecord { get; set; } =
         Array.Empty<(long companyId, DateTime started, DateTime? ended)>();
+
+    public short[] Roles { get; set; } = Array.Empty<short>();
 }

@@ -15,34 +15,39 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
-ALTER TABLE IF EXISTS public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
-ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
+ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS fk_person_id;
-ALTER TABLE IF EXISTS public.employee_records DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_employee_status;
-ALTER TABLE IF EXISTS public.company_reviews DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS public.employee_records DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS public.company_areas DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_country;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_country;
-ALTER TABLE IF EXISTS public.company_reviews DROP CONSTRAINT IF EXISTS fk_company_id;
-ALTER TABLE IF EXISTS public.employee_records DROP CONSTRAINT IF EXISTS fk_company_id;
-ALTER TABLE IF EXISTS public.company_areas DROP CONSTRAINT IF EXISTS fk_company_id;
-ALTER TABLE IF EXISTS public.company_areas DROP CONSTRAINT IF EXISTS fk_area_id;
+ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_company_id;
+ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_company_id;
+ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_company_id;
+ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_area_id;
 DROP INDEX IF EXISTS public.idx_users_email;
+DROP INDEX IF EXISTS public.idx_person_roles_role_id;
+DROP INDEX IF EXISTS public.idx_person_roles_person_id;
 DROP INDEX IF EXISTS public.idx_people_name_normalized;
 DROP INDEX IF EXISTS public.idx_people_gender;
 DROP INDEX IF EXISTS public.idx_people_employee_status;
 DROP INDEX IF EXISTS public.idx_employee_status_name_normalized;
+DROP INDEX IF EXISTS public.idx_employee_records_person_id;
 DROP INDEX IF EXISTS public.idx_countries_name_normalized;
 DROP INDEX IF EXISTS public.idx_countries_iso3;
 DROP INDEX IF EXISTS public.idx_countries_iso2;
+DROP INDEX IF EXISTS public.idx_company_reviews_company_id;
+DROP INDEX IF EXISTS public.idx_company_areas_company_id;
 DROP INDEX IF EXISTS public.idx_companies_name_normalized;
 DROP INDEX IF EXISTS public.idx_companies_country;
 DROP INDEX IF EXISTS public.idx_business_roles_name_normalized;
@@ -65,19 +70,6 @@ DROP TABLE IF EXISTS public.employee_status;
 DROP TABLE IF EXISTS public.employee_records;
 DROP TABLE IF EXISTS public.countries;
 DROP TABLE IF EXISTS public.company_reviews;
-DROP TABLE IF EXISTS public.company_areas_proptech;
-DROP TABLE IF EXISTS public.company_areas_mobility;
-DROP TABLE IF EXISTS public.company_areas_manufacturing;
-DROP TABLE IF EXISTS public.company_areas_insurtech;
-DROP TABLE IF EXISTS public.company_areas_healthcare;
-DROP TABLE IF EXISTS public.company_areas_hardware;
-DROP TABLE IF EXISTS public.company_areas_general;
-DROP TABLE IF EXISTS public.company_areas_fintech;
-DROP TABLE IF EXISTS public.company_areas_enterprise;
-DROP TABLE IF EXISTS public.company_areas_edtech;
-DROP TABLE IF EXISTS public.company_areas_consumer;
-DROP TABLE IF EXISTS public.company_areas_bigdata;
-DROP TABLE IF EXISTS public.company_areas_ai;
 DROP TABLE IF EXISTS public.company_areas;
 DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
@@ -195,133 +187,11 @@ CREATE TABLE public.company_areas (
     area_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL
-)
-PARTITION BY LIST (area_id);
+);
 --
 -- Name: TABLE company_areas; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.company_areas IS 'Companies - business areas.';
---
--- Name: COLUMN company_areas.area_id; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.company_areas.area_id IS 'partitioned by';
---
--- Name: company_areas_ai; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_ai (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_bigdata; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_bigdata (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_consumer; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_consumer (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_edtech; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_edtech (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_enterprise; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_enterprise (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_fintech; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_fintech (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_general; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_general (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_hardware; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_hardware (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_healthcare; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_healthcare (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_insurtech; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_insurtech (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_manufacturing; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_manufacturing (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_mobility; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_mobility (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
---
--- Name: company_areas_proptech; Type: TABLE; Schema: public; Owner: -
---
-CREATE TABLE public.company_areas_proptech (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
-);
 --
 -- Name: company_reviews; Type: TABLE; Schema: public; Owner: -
 --
@@ -335,8 +205,7 @@ CREATE TABLE public.company_reviews (
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL,
     CONSTRAINT company_reviews_rate_check CHECK (((score IS NULL) OR ((score > 0) AND (score <= 5))))
-)
-PARTITION BY LIST (company_id);
+);
 --
 -- Name: TABLE company_reviews; Type: COMMENT; Schema: public; Owner: -
 --
@@ -344,7 +213,7 @@ COMMENT ON TABLE public.company_reviews IS 'Company reviews made by people.';
 --
 -- Name: COLUMN company_reviews.company_id; Type: COMMENT; Schema: public; Owner: -
 --
-COMMENT ON COLUMN public.company_reviews.company_id IS 'company reviewed, partitioned by';
+COMMENT ON COLUMN public.company_reviews.company_id IS 'company reviewed';
 --
 -- Name: COLUMN company_reviews.person_id; Type: COMMENT; Schema: public; Owner: -
 --
@@ -403,26 +272,33 @@ COMMENT ON COLUMN public.countries.culture IS 'The CultureInfo class specifies a
 -- Name: employee_records; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.employee_records (
+    id bigint NOT NULL,
     company_id bigint NOT NULL,
     person_id bigint NOT NULL,
     employment_started_at date NOT NULL,
     employment_ended_at date,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL
-)
-PARTITION BY LIST (person_id);
+);
 --
 -- Name: TABLE employee_records; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.employee_records IS 'History of employment in companies by people.';
 --
--- Name: COLUMN employee_records.person_id; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.employee_records.person_id IS 'partitioned by';
---
 -- Name: COLUMN employee_records.employment_ended_at; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is null, it means person is still working there';
+--
+-- Name: employee_records_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.employee_records ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.employee_records_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
 --
 -- Name: employee_status; Type: TABLE; Schema: public; Owner: -
 --
@@ -497,16 +373,11 @@ CREATE TABLE public.person_roles (
     role_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint DEFAULT 1 NOT NULL
-)
-PARTITION BY LIST (person_id);
+);
 --
 -- Name: TABLE person_roles; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.person_roles IS 'Person - business roles';
---
--- Name: COLUMN person_roles.person_id; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.person_roles.person_id IS 'partition by';
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
@@ -558,58 +429,6 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
     CACHE 1
 );
 --
--- Name: company_areas_ai; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_ai FOR VALUES IN ('11');
---
--- Name: company_areas_bigdata; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_bigdata FOR VALUES IN ('6');
---
--- Name: company_areas_consumer; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_consumer FOR VALUES IN ('13');
---
--- Name: company_areas_edtech; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_edtech FOR VALUES IN ('12');
---
--- Name: company_areas_enterprise; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_enterprise FOR VALUES IN ('2');
---
--- Name: company_areas_fintech; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_fintech FOR VALUES IN ('3');
---
--- Name: company_areas_general; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_general FOR VALUES IN ('1');
---
--- Name: company_areas_hardware; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_hardware FOR VALUES IN ('9');
---
--- Name: company_areas_healthcare; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_healthcare FOR VALUES IN ('7');
---
--- Name: company_areas_insurtech; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_insurtech FOR VALUES IN ('5');
---
--- Name: company_areas_manufacturing; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_manufacturing FOR VALUES IN ('8');
---
--- Name: company_areas_mobility; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_mobility FOR VALUES IN ('4');
---
--- Name: company_areas_proptech; Type: TABLE ATTACH; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas ATTACH PARTITION public.company_areas_proptech FOR VALUES IN ('10');
---
 -- Name: business_areas business_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.business_areas
@@ -628,7 +447,7 @@ ALTER TABLE ONLY public.companies
 -- Name: company_reviews company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.company_reviews
-    ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id, company_id);
+    ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
 --
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -638,7 +457,7 @@ ALTER TABLE ONLY public.countries
 -- Name: employee_records employee_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.employee_records
-    ADD CONSTRAINT employee_records_pkey PRIMARY KEY (company_id, person_id);
+    ADD CONSTRAINT employee_records_pkey PRIMARY KEY (id, company_id);
 --
 -- Name: employee_status employee_status_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -681,6 +500,14 @@ CREATE INDEX idx_companies_country ON public.companies USING btree (country);
 --
 CREATE INDEX idx_companies_name_normalized ON public.companies USING btree (name_normalized);
 --
+-- Name: idx_company_areas_company_id; Type: INDEX; Schema: public; Owner: -
+--
+CREATE INDEX idx_company_areas_company_id ON public.company_areas USING btree (company_id);
+--
+-- Name: idx_company_reviews_company_id; Type: INDEX; Schema: public; Owner: -
+--
+CREATE INDEX idx_company_reviews_company_id ON public.company_reviews USING btree (company_id);
+--
 -- Name: idx_countries_iso2; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_countries_iso2 ON public.countries USING btree (iso2);
@@ -692,6 +519,10 @@ CREATE INDEX idx_countries_iso3 ON public.countries USING btree (iso3);
 -- Name: idx_countries_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_countries_name_normalized ON public.countries USING btree (name_normalized);
+--
+-- Name: idx_employee_records_person_id; Type: INDEX; Schema: public; Owner: -
+--
+CREATE INDEX idx_employee_records_person_id ON public.employee_records USING btree (person_id);
 --
 -- Name: idx_employee_status_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
@@ -709,28 +540,36 @@ CREATE INDEX idx_people_gender ON public.people USING btree (gender);
 --
 CREATE INDEX idx_people_name_normalized ON public.people USING btree (name_normalized);
 --
+-- Name: idx_person_roles_person_id; Type: INDEX; Schema: public; Owner: -
+--
+CREATE INDEX idx_person_roles_person_id ON public.person_roles USING btree (person_id);
+--
+-- Name: idx_person_roles_role_id; Type: INDEX; Schema: public; Owner: -
+--
+CREATE INDEX idx_person_roles_role_id ON public.person_roles USING btree (role_id);
+--
 -- Name: idx_users_email; Type: INDEX; Schema: public; Owner: -
 --
 CREATE UNIQUE INDEX idx_users_email ON public.users USING btree (email);
 --
 -- Name: company_areas fk_area_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_areas
+ALTER TABLE ONLY public.company_areas
     ADD CONSTRAINT fk_area_id FOREIGN KEY (area_id) REFERENCES public.business_areas(id) DEFERRABLE;
 --
 -- Name: company_areas fk_company_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_areas
+ALTER TABLE ONLY public.company_areas
     ADD CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES public.companies(id) DEFERRABLE;
 --
 -- Name: employee_records fk_company_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.employee_records
+ALTER TABLE ONLY public.employee_records
     ADD CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES public.companies(id) DEFERRABLE;
 --
 -- Name: company_reviews fk_company_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_reviews
+ALTER TABLE ONLY public.company_reviews
     ADD CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES public.companies(id) DEFERRABLE;
 --
 -- Name: companies fk_country; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -750,7 +589,7 @@ ALTER TABLE ONLY public.companies
 --
 -- Name: company_areas fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_areas
+ALTER TABLE ONLY public.company_areas
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: people fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -760,17 +599,17 @@ ALTER TABLE ONLY public.people
 --
 -- Name: employee_records fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.employee_records
+ALTER TABLE ONLY public.employee_records
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: person_roles fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.person_roles
+ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: company_reviews fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_reviews
+ALTER TABLE ONLY public.company_reviews
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: people fk_employee_status; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -790,7 +629,7 @@ ALTER TABLE ONLY public.people
 --
 -- Name: employee_records fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.employee_records
+ALTER TABLE ONLY public.employee_records
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: users fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -800,17 +639,17 @@ ALTER TABLE ONLY public.users
 --
 -- Name: person_roles fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.person_roles
+ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: company_reviews fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.company_reviews
+ALTER TABLE ONLY public.company_reviews
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: person_roles fk_role_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE public.person_roles
+ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES public.business_roles(id) DEFERRABLE;
 --
 -- PostgreSQL database dump complete
