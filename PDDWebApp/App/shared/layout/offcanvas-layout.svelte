@@ -2,11 +2,12 @@
     import { onDestroy, afterUpdate, beforeUpdate } from "svelte";
     import { createTooltips, hideTooltips } from "../components/tooltips";
     import Offcanvas from "../components/offcanvas.svelte";
-    import Footer from "./footer.svelte";
     import Links from "./link-list-items.svelte";
     import { get, getBool } from "../config";
     import urls from "../urls";
     import { isDarkTheme } from "./theme";
+
+    export let title = "PDD";
     
     const user = {
         isSigned: getBool("isSigned"), 
@@ -110,7 +111,7 @@
             <div class="d-flex float-start">
                 <button class="btn btn-primary" on:click={() => toggleOffcanvas()}>
                     <i class="{offcanvas.open && !pinned ? "bi-x" : "bi-list"}"></i>
-                    <span class="font-monospace">RazorSvelte</span>
+                    <span class="font-monospace">{title}</span>
                 </button>
             </div>
 
@@ -152,8 +153,6 @@
     <slot></slot>
 </main>
 {/if}
-
-<Footer />
 
 <style lang="scss">
     @import "../../scss/colors";
