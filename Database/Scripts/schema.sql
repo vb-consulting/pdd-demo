@@ -91,6 +91,10 @@ CREATE TYPE public.valid_genders AS ENUM (
     'M',
     'F'
 );
+--
+-- Name: TYPE valid_genders; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 --
@@ -168,7 +172,7 @@ CREATE TABLE public.companies (
 --
 -- Name: COLUMN companies.name_normalized; Type: COMMENT; Schema: public; Owner: -
 --
-COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased';
+COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased, trigram index';
 --
 -- Name: COLUMN companies.company_line; Type: COMMENT; Schema: public; Owner: -
 --
@@ -358,7 +362,7 @@ CREATE TABLE public.people (
 --
 -- Name: COLUMN people.name_normalized; Type: COMMENT; Schema: public; Owner: -
 --
-COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name).';
+COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name), trigram index';
 --
 -- Name: COLUMN people.gender; Type: COMMENT; Schema: public; Owner: -
 --

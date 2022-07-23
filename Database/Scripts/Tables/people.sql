@@ -25,7 +25,7 @@ CREATE TABLE public.people (
     CONSTRAINT fk_modified_by FOREIGN KEY (modified_by) REFERENCES public.users(id) DEFERRABLE
 );
 
-COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name).';
+COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name), trigram index';
 COMMENT ON COLUMN public.people.gender IS 'M or F';
 CREATE INDEX idx_people_employee_status ON public.people USING btree (employee_status);
 CREATE INDEX idx_people_gender ON public.people USING btree (gender);

@@ -14,9 +14,9 @@
             <div class="col">
                 <Chart />
             </div>
-            <div class="col">
+            <!-- <div class="col">
                 <Chart />
-            </div>
+            </div> -->
         </div>
 
         <div class="row">
@@ -26,9 +26,9 @@
             <div class="col">
                 <Chart />
             </div>
-            <div class="col">
+            <!-- <div class="col">
                 <Chart />
-            </div>
+            </div> -->
         </div>
     </div>
 </Layout>

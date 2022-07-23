@@ -6,11 +6,10 @@
 
     let chartValues = [20, 10, 5, 2, 20, 30, 45];
     let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    let ctx;
     let chartCanvas;
 
-    onMount(async (promise) => {
-        ctx = chartCanvas.getContext('2d');
+    onMount(async () => {
+        let ctx = chartCanvas.getContext('2d');
         let chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -23,6 +22,7 @@
                 }]
             },
             options: {
+                /*aspectRatio: 2,*/
                 plugins: {
                     title: {
                         display: true,
@@ -32,9 +32,16 @@
             }
         });
 
-        //chart.resize();
+        
+        // //chart.resize();
+        // window.onresize = () => {
+        //     console.log("resized");
+        //     chart.resize();
+        //     chart.draw();
+        // };
     });
 
 </script>
-
-<canvas bind:this={chartCanvas} id="myChart"></canvas>
+<div class="chart-container" style="position: relative !important; height:100%; width:100%">
+<canvas bind:this={chartCanvas}></canvas>
+</div>
