@@ -1,10 +1,10 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-23T19:15:37.8497856+02:00`
+- Local time stamp: `2022-07-23T21:32:36.0476420+02:00`
 - Schema: public
-- Schema file: [/Scripts/schema.sql](/Scripts/schema.sql)
-- Data file: [/Scripts/data.sql](/Scripts/data.sql)
+- Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
+- Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql)
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
-<sub>[/Scripts/Tables/business_areas.sql](/Scripts/Tables/business_areas.sql)</sub>
+<sub>[/Database/Scripts/Tables/business_areas.sql](/Database/Scripts/Tables/business_areas.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -42,7 +42,7 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
-<sub>[/Scripts/Tables/business_roles.sql](/Scripts/Tables/business_roles.sql)</sub>
+<sub>[/Database/Scripts/Tables/business_roles.sql](/Database/Scripts/Tables/business_roles.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -56,7 +56,7 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Scripts/Tables/companies.sql](/Scripts/Tables/companies.sql)</sub>
+<sub>[/Database/Scripts/Tables/companies.sql](/Database/Scripts/Tables/companies.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -81,7 +81,7 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
-<sub>[/Scripts/Tables/company_areas.sql](/Scripts/Tables/company_areas.sql)</sub>
+<sub>[/Database/Scripts/Tables/company_areas.sql](/Database/Scripts/Tables/company_areas.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -99,7 +99,7 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
-<sub>[/Scripts/Tables/company_reviews.sql](/Scripts/Tables/company_reviews.sql)</sub>
+<sub>[/Database/Scripts/Tables/company_reviews.sql](/Database/Scripts/Tables/company_reviews.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -118,7 +118,7 @@ Company reviews made by people.
 
 <!-- comment on table "public"."countries" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Scripts/Tables/countries.sql](/Scripts/Tables/countries.sql)</sub>
+<sub>[/Database/Scripts/Tables/countries.sql](/Database/Scripts/Tables/countries.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -136,7 +136,7 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
-<sub>[/Scripts/Tables/employee_records.sql](/Scripts/Tables/employee_records.sql)</sub>
+<sub>[/Database/Scripts/Tables/employee_records.sql](/Database/Scripts/Tables/employee_records.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -156,7 +156,7 @@ History of employment in companies by people.
 <!-- comment on table "public"."employee_status" is @until-end-tag; -->
 List of possible statuses in regards to employment.
 <!-- end -->
-<sub>[/Scripts/Tables/employee_status.sql](/Scripts/Tables/employee_status.sql)</sub>
+<sub>[/Database/Scripts/Tables/employee_status.sql](/Database/Scripts/Tables/employee_status.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -170,7 +170,7 @@ List of possible statuses in regards to employment.
 
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Scripts/Tables/people.sql](/Scripts/Tables/people.sql)</sub>
+<sub>[/Database/Scripts/Tables/people.sql](/Database/Scripts/Tables/people.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -197,7 +197,7 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
-<sub>[/Scripts/Tables/person_roles.sql](/Scripts/Tables/person_roles.sql)</sub>
+<sub>[/Database/Scripts/Tables/person_roles.sql](/Database/Scripts/Tables/person_roles.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -215,7 +215,7 @@ Person - business roles
 <!-- comment on table "public"."users" is @until-end-tag; -->
 System users. May or may not be a person (in people records).
 <!-- end -->
-<sub>[/Scripts/Tables/users.sql](/Scripts/Tables/users.sql)</sub>
+<sub>[/Database/Scripts/Tables/users.sql](/Database/Scripts/Tables/users.sql)</sub>
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -235,4 +235,4 @@ System users. May or may not be a person (in people records).
 ## Enums
 | Type name | Values | Comment | Source |
 | --------- | ------ | --------| ------ |
-| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | There are only two genders. | <sub>[/Scripts/Types/valid_genders.sql](/Scripts/Types/valid_genders.sql)</sub> 
+| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | There are only two genders. | <sub>[/Database/Scripts/Types/valid_genders.sql](/Database/Scripts/Types/valid_genders.sql)</sub> 
