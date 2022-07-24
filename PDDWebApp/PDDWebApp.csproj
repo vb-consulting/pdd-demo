@@ -52,10 +52,6 @@
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Database\_Database.csproj" />
-	</ItemGroup>
-
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<PreBuildEvent>npm run frontend-build-all --color=always</PreBuildEvent>
 	</PropertyGroup>

@@ -1,10 +1,10 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-23T21:32:36.0476420+02:00`
+- Local time stamp: `2022-07-24T10:45:34.0598655+02:00`
 - Schema: public
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
-- Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql)
+- Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
 
 ## Table of Contents
 

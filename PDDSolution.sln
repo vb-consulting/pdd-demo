@@ -3,18 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{C62E3D17-12AB-4A44-B8D6-0247CC06B105}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "___SolutionFiles", "___SolutionFiles", "{C62E3D17-12AB-4A44-B8D6-0247CC06B105}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDWebApp", "PDDWebApp\PDDWebApp.csproj", "{E9CD28A4-7DED-4E9B-A7A6-F65846388059}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "____DatabaseSeeder", "DatabaseSeeder\____DatabaseSeeder.csproj", "{EA622A30-7BD4-4906-902B-AFCF55C8C0D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseSeeder", "DatabaseSeeder\DatabaseSeeder.csproj", "{EA622A30-7BD4-4906-902B-AFCF55C8C0D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "__Shared", "Shared\__Shared.csproj", "{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_Database", "Database\_Database.csproj", "{904B62F7-6445-4381-873E-AA8103C49F36}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__Shared", "__Shared", "{ED7EAB47-025C-40AD-B97A-04C2634F7E57}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{5097D129-5AEC-4C3C-88C8-F2B7AB5939E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,13 +38,17 @@ Global
 		{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC851186-DA4A-41EC-A92D-5BBC53E10EF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{904B62F7-6445-4381-873E-AA8103C49F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{904B62F7-6445-4381-873E-AA8103C49F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{904B62F7-6445-4381-873E-AA8103C49F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{904B62F7-6445-4381-873E-AA8103C49F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5097D129-5AEC-4C3C-88C8-F2B7AB5939E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5097D129-5AEC-4C3C-88C8-F2B7AB5939E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5097D129-5AEC-4C3C-88C8-F2B7AB5939E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5097D129-5AEC-4C3C-88C8-F2B7AB5939E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA622A30-7BD4-4906-902B-AFCF55C8C0D5} = {ED7EAB47-025C-40AD-B97A-04C2634F7E57}
+		{CC851186-DA4A-41EC-A92D-5BBC53E10EF4} = {ED7EAB47-025C-40AD-B97A-04C2634F7E57}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A699BCF3-68FF-4F1C-832A-1554539E2005}
