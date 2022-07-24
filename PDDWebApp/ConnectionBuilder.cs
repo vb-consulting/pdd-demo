@@ -1,10 +1,9 @@
-﻿using Npgsql;
-
-namespace PDDWebApp;
+﻿namespace PDDWebApp;
 
 public static class ConnectionBuilder
 {
     public const string NameKey = "ConnectionName";
+    public const string LogDatabaseCallsKey = "LogDatabaseCalls";
 
     private const string info = "INFO";
     private const string notice = "NOTICE";
@@ -29,6 +28,19 @@ public static class ConnectionBuilder
         connectionString =
             app.Configuration.GetConnectionString(connectionName) ??
             app.Configuration.GetValue<string>($"POSTGRESQLCONNSTR_{connectionName}");
+
+        if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool?>(LogDatabaseCallsKey) == true)
+        {
+            NormOptions.Configure(options =>
+            {
+                options.CommandCommentHeader.Enabled = true;
+                options.CommandCommentHeader.IncludeCallerInfo = true;
+                options.CommandCommentHeader.IncludeCommandAttributes = true;
+                options.CommandCommentHeader.IncludeTimestamp = false;
+                options.CommandCommentHeader.IncludeParameters = true;
+                options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
+            });
+        }
     }
 
     private static string GetConnectionName(IConfiguration config)

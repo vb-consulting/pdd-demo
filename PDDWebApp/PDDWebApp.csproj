@@ -52,8 +52,20 @@
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Database\Database.csproj" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<PreBuildEvent>npm run frontend-build-all --color=always</PreBuildEvent>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;SQL80001;TS18003</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;SQL80001;TS18003</NoWarn>
 	</PropertyGroup>
 
 </Project>

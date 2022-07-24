@@ -19,7 +19,9 @@
     "npm-audit-fix": "npm audit fix",
     "code": "code .",
     "psql": "pgroutiner -psql",
-    "pg-schema": "cd ../Database/ && pgroutiner -db -sd -md",
+    "pg-all": "cd ../Database/ && pgroutiner -db -sd -md -r",
+    "pg-extensions": "cd ../Database/ && pgroutiner -db -sd",
+    "pg-schema": "cd ../Database/ && pgroutiner -db -sd",
     "pg-data": "cd ../Database/ && pgroutiner -dd",
     "pg-readme": "cd ../Database/ && pgroutiner -md",
     "pg-readme-commit": "cd ../Database/ && pgroutiner --commit-md"

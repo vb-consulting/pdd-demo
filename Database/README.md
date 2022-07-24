@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-24T10:45:34.0598655+02:00`
+- Local time stamp: `2022-07-24T14:07:32.6820848+02:00`
 - Schema: public
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
@@ -20,6 +20,7 @@
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
 - Enum [`public.valid_genders`](#enum-public-valid_genders)
+- Function [`public.get_chart_data(smallint)`](#function-publicget_chart_datasmallint)
 ## Tables
 
 ### Table `public.business_areas`
@@ -27,7 +28,7 @@
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/business_areas.sql](/Database/Scripts/Tables/business_areas.sql)</sub>
+- Source: [/Database/Scripts/Tables/business_areas.sql](/Database/Scripts/Tables/business_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -42,7 +43,7 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/business_roles.sql](/Database/Scripts/Tables/business_roles.sql)</sub>
+- Source: [/Database/Scripts/Tables/business_roles.sql](/Database/Scripts/Tables/business_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -56,7 +57,7 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Database/Scripts/Tables/companies.sql](/Database/Scripts/Tables/companies.sql)</sub>
+- Source: [/Database/Scripts/Tables/companies.sql](/Database/Scripts/Tables/companies.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -81,7 +82,7 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/company_areas.sql](/Database/Scripts/Tables/company_areas.sql)</sub>
+- Source: [/Database/Scripts/Tables/company_areas.sql](/Database/Scripts/Tables/company_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -99,7 +100,7 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/company_reviews.sql](/Database/Scripts/Tables/company_reviews.sql)</sub>
+- Source: [/Database/Scripts/Tables/company_reviews.sql](/Database/Scripts/Tables/company_reviews.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -118,7 +119,7 @@ Company reviews made by people.
 
 <!-- comment on table "public"."countries" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Database/Scripts/Tables/countries.sql](/Database/Scripts/Tables/countries.sql)</sub>
+- Source: [/Database/Scripts/Tables/countries.sql](/Database/Scripts/Tables/countries.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -136,7 +137,7 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/employee_records.sql](/Database/Scripts/Tables/employee_records.sql)</sub>
+- Source: [/Database/Scripts/Tables/employee_records.sql](/Database/Scripts/Tables/employee_records.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -156,7 +157,7 @@ History of employment in companies by people.
 <!-- comment on table "public"."employee_status" is @until-end-tag; -->
 List of possible statuses in regards to employment.
 <!-- end -->
-<sub>[/Database/Scripts/Tables/employee_status.sql](/Database/Scripts/Tables/employee_status.sql)</sub>
+- Source: [/Database/Scripts/Tables/employee_status.sql](/Database/Scripts/Tables/employee_status.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -170,7 +171,7 @@ List of possible statuses in regards to employment.
 
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
-<sub>[/Database/Scripts/Tables/people.sql](/Database/Scripts/Tables/people.sql)</sub>
+- Source: [/Database/Scripts/Tables/people.sql](/Database/Scripts/Tables/people.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -197,7 +198,7 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
-<sub>[/Database/Scripts/Tables/person_roles.sql](/Database/Scripts/Tables/person_roles.sql)</sub>
+- Source: [/Database/Scripts/Tables/person_roles.sql](/Database/Scripts/Tables/person_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -215,7 +216,7 @@ Person - business roles
 <!-- comment on table "public"."users" is @until-end-tag; -->
 System users. May or may not be a person (in people records).
 <!-- end -->
-<sub>[/Database/Scripts/Tables/users.sql](/Database/Scripts/Tables/users.sql)</sub>
+- Source: [/Database/Scripts/Tables/users.sql](/Database/Scripts/Tables/users.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -235,4 +236,26 @@ System users. May or may not be a person (in people records).
 ## Enums
 | Type name | Values | Comment | Source |
 | --------- | ------ | --------| ------ |
-| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | There are only two genders. | <sub>[/Database/Scripts/Types/valid_genders.sql](/Database/Scripts/Types/valid_genders.sql)</sub> 
+| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | There are only two genders. | [/Database/Scripts/Types/valid_genders.sql](/Database/Scripts/Types/valid_genders.sql) 
+
+## Routines
+
+### Function `public.get_chart_data(smallint)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/Database/Scripts/Functions/get_chart_data.sql](/Database/Scripts/Functions/get_chart_data.sql)
+
+- C# Source: [/Database/Extensions/GetChartData.cs](/Database/Extensions/GetChartData.cs)
+
+<!-- comment on function "public"."get_chart_data"(smallint) is @until-end-tag; -->
+Returns json with chart data for specified chart type:
+- type 1: 
+    Top 10 companies with highest number of current employees.
+    Label is company name and value is number of current employees.
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>

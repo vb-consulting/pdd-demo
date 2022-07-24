@@ -3,6 +3,8 @@ global using System;
 global using System.Linq;
 global using System.Text.Json;
 global using Microsoft.Extensions.Options;
+global using Norm;
+global using Npgsql;
 global using PDDWebApp.Pages;
 global using PDDWebApp.Auth;
 
@@ -37,6 +39,7 @@ app.MapRazorPages();
 
 app.UseAuth();
 app.UseDatabase();
+app.UseEndpoints();
 
 MapFallback(app);
 ConfigureLocalization(builder.Configuration);
