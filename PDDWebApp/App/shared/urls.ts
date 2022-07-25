@@ -10,6 +10,8 @@ const urls = getFromJson<{
     signInGoogleUrl: string;
     signInLinkedInUrl: string;
     signInGitHubUrl: string;
+
+    chart1Url: string;
 }>("urls");
 
 export default urls;

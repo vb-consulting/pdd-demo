@@ -1,7 +1,7 @@
 <script lang="ts">
     import Layout from "./shared/layout/default";
     import Chart from "./shared/components/chart.svelte";
- 
+
 </script>
 
 <Layout title="PDD Dashboard">
@@ -9,10 +9,10 @@
     <div class="container pt-4">
         <div class="row" >
             <div class="col">
-                <Chart />
+                <Chart type="line" />
             </div>
             <div class="col">
-                <Chart />
+                <Chart type="bar" /> 
             </div>
             <!-- <div class="col">
                 <Chart />
@@ -21,10 +21,10 @@
 
         <div class="row">
             <div class="col">
-                <Chart />
+                <!-- <Chart /> -->
             </div>
             <div class="col">
-                <Chart />
+                <!-- <Chart /> -->
             </div>
             <!-- <div class="col">
                 <Chart />

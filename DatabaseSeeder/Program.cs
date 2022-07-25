@@ -81,22 +81,26 @@ foreach (var company in new Faker<Company>()
     .RuleFor(c => c.Areas, f => f.PickRandom(areas, f.Random.Int(1, 5)).ToArray())
     .Generate(companyCount))
 {
-    var companyId = connection.Read<long>(@"
+    var companyId = connection.Read<long?>(@"select id from companies where name_normalized = @name", company.NameNormalized).FirstOrDefault();
+    if (companyId == null)
+    {
+        companyId = connection.Read<long>(@"
         insert into companies 
         (name, name_normalized, web, tweeter, Linkedin, company_line, about, country)
         values
         (@Name, @NameNormalized, @Web, @Twitter, @Linkedin, @CompanyLine, @About, @Country)
         returning id;", company
-    ).Single();
-    
+        ).Single();
+    }
     connection.Execute(string.Join("\n", company?.Areas?.Select(a => @$"
         insert into company_areas
         (company_id, area_id)
         values
-        ({companyId}, {a});
+        ({companyId}, {a})
+        on conflict (company_id, area_id) do nothing;
     ") ?? Array.Empty<string>()));
 
-    companyIds.Add(companyId);
+    companyIds.Add(companyId.Value);
     companyNames.Add(company?.Name ?? "");
 }
 
@@ -294,30 +298,35 @@ foreach (var person in new Faker<Person>()
         }
     }
 
-    var personId = connection.Read<long>(@"
+    var normalized = $"{person.FirstName} {person.LastName}\n{person.LastName} {person.FirstName}".ToLower();
+    var personId = connection.Read<long?>(@"select id from people where name_normalized = @name", normalized).FirstOrDefault();
+    if (personId == null)
+    {
+        personId = connection.Read<long>(@"
         insert into people 
         (first_name, last_name, name_normalized, employee_status, gender, email, linkedin, twitter, birth, country)
         values
         (@firstName, @lastName, @normalized, @status, @gender::valid_genders, @email, @twitter, @linkedin, @birth, @country)
         returning id;", new
-    {
-        firstName = person.FirstName,
-        lastName = person.LastName,
-        normalized = $"{person.FirstName} {person.LastName}\n{person.LastName} {person.FirstName}".ToLower(),
-        status,
-        gender = person.Gender.ToString().First().ToString(),
-        person.Email,
-        person.Twitter,
-        person.Linkedin,
-        birth = (person.Birth, NpgsqlDbType.Date),
-        person.Country,
-    }).Single();
-
+        {
+            firstName = person.FirstName,
+            lastName = person.LastName,
+            normalized = normalized,
+            status,
+            gender = person.Gender.ToString().First().ToString(),
+            person.Email,
+            person.Twitter,
+            person.Linkedin,
+            birth = (person.Birth, NpgsqlDbType.Date),
+            person.Country,
+        }).Single();
+    }
     connection.Execute(string.Join("\n", attr.Roles.Select(r => @$"
         insert into person_roles
         (person_id, role_id)
         values
-        ({personId}, {r});
+        ({personId}, {r})
+        on conflict (person_id, role_id) do nothing;
     ")));
 
     if (attr.Reviews.Any())

@@ -1,47 +1,60 @@
-<script>
-    import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from "chart.js";
-    import { onMount } from 'svelte';
+<script lang="ts">
+    import { Chart, registerables } from "chart.js";
+    import { onMount } from "svelte";
+    import { isDarkTheme } from "../layout/theme"
 
-    Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
+    export let type: "line" | "bar";
+    
+    Chart.register(...registerables);
+    
 
-    let chartValues = [20, 10, 5, 2, 20, 30, 45];
-    let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    let chartCanvas;
+    let chartValues = [55, 49, 44, 24, 15];
+    let chartLabels = ["Italy", "France", "Spain", "USA", "Argentina"];
+    let chartCanvas: HTMLCanvasElement;
+    let chart: Chart
 
-    onMount(async () => {
-        let ctx = chartCanvas.getContext('2d');
-        let chart = new Chart(ctx, {
-            type: 'line',
+    let recreateChat = () => {
+        chart = new Chart(chartCanvas.getContext("2d") as any, {
+            type: type,
             data: {
                 labels: chartLabels,
                 datasets: [{
-                    label: 'Revenue',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: chartValues
+                    backgroundColor: ["red", "green","blue","orange","brown"],
+                    borderColor: "red",//'rgb(255, 99, 132)',
+                    data: chartValues,
                 }]
             },
             options: {
-                /*aspectRatio: 2,*/
                 plugins: {
                     title: {
                         display: true,
                         text: 'Custom Chart Title'
                     }
-                }
+                },
+                
+                //backgroundColor: "rgba(0, 0, 0, 0.1)",
+                //borderColor: "white", //"rgba(0, 0, 0, 0.1)",
+                //color: "white", //"#666",
             }
         });
+    }
 
-        
-        // //chart.resize();
-        // window.onresize = () => {
-        //     console.log("resized");
-        //     chart.resize();
-        //     chart.draw();
-        // };
-    });
+    onMount(recreateChat);
+
+    $: {
+        if ($isDarkTheme) {
+            Chart.defaults.color = "#b7c8d8";
+            Chart.defaults.borderColor = "#b7c8d8";
+        } else {
+            Chart.defaults.color = "#666";
+            Chart.defaults.borderColor = "#666";
+        }
+        if (chart) {
+            chart.destroy();
+            recreateChat();
+        }
+    }
 
 </script>
-<div class="chart-container" style="position: relative !important; height:100%; width:100%">
+
 <canvas bind:this={chartCanvas}></canvas>
-</div>

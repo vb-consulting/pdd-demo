@@ -1,7 +1,7 @@
 var index = (function () {
     'use strict';
 
-    function noop() { }
+    function noop$1() { }
     function assign(tar, src) {
         // @ts-ignore
         for (const k in src)
@@ -41,7 +41,7 @@ var index = (function () {
     }
     function subscribe(store, ...callbacks) {
         if (store == null) {
-            return noop;
+            return noop$1;
         }
         const unsub = store.subscribe(...callbacks);
         return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
@@ -107,7 +107,7 @@ var index = (function () {
         return ret;
     }
     function action_destroyer(action_result) {
-        return action_result && is_function(action_result.destroy) ? action_result.destroy : noop;
+        return action_result && is_function(action_result.destroy) ? action_result.destroy : noop$1;
     }
     function append(target, node) {
         target.appendChild(node);
@@ -498,7 +498,7 @@ var index = (function () {
             ctx: null,
             // state
             props,
-            update: noop,
+            update: noop$1,
             not_equal,
             bound: blank_object(),
             // lifecycle
@@ -557,7 +557,7 @@ var index = (function () {
     class SvelteComponent {
         $destroy() {
             destroy_component(this, 1);
-            this.$destroy = noop;
+            this.$destroy = noop$1;
         }
         $on(type, callback) {
             const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
@@ -5814,7 +5814,7 @@ var index = (function () {
     				mounted = true;
     			}
     		},
-    		p: noop,
+    		p: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(button);
     			mounted = false;
@@ -5992,7 +5992,7 @@ var index = (function () {
 
     // (1:0) <script lang="ts">import { onDestroy, createEventDispatcher }
     function create_catch_block(ctx) {
-    	const block = { c: noop, m: noop, p: noop, d: noop };
+    	const block = { c: noop$1, m: noop$1, p: noop$1, d: noop$1 };
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
@@ -6061,7 +6061,7 @@ var index = (function () {
     			insert_dev(target, div, anchor);
     			append_dev(div, i);
     		},
-    		p: noop,
+    		p: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     		}
@@ -6620,8 +6620,8 @@ var index = (function () {
     				toggle_class(a, "active", document.location.pathname == urls.indexUrl);
     			}
     		},
-    		i: noop,
-    		o: noop,
+    		i: noop$1,
+    		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(li);
@@ -6672,7 +6672,7 @@ var index = (function () {
      * @param {*=}value initial value
      * @param {StartStopNotifier=}start start and stop notifications for subscriptions
      */
-    function writable(value, start = noop) {
+    function writable(value, start = noop$1) {
         let stop;
         const subscribers = new Set();
         function set(new_value) {
@@ -6696,11 +6696,11 @@ var index = (function () {
         function update(fn) {
             set(fn(value));
         }
-        function subscribe(run, invalidate = noop) {
+        function subscribe(run, invalidate = noop$1) {
             const subscriber = [run, invalidate];
             subscribers.add(subscriber);
             if (subscribers.size === 1) {
-                stop = start(set) || noop;
+                stop = start(set) || noop$1;
             }
             run(value);
             return () => {
@@ -6847,7 +6847,7 @@ var index = (function () {
     				mounted = true;
     			}
     		},
-    		p: noop,
+    		p: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			mounted = false;
@@ -6902,7 +6902,7 @@ var index = (function () {
     				mounted = true;
     			}
     		},
-    		p: noop,
+    		p: noop$1,
     		i: function intro(local) {
     			if (current) return;
     			transition_in(links.$$.fragment, local);
@@ -6955,7 +6955,7 @@ var index = (function () {
     			append_dev(a, i);
     			append_dev(a, t);
     		},
-    		p: noop,
+    		p: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(a);
     		}
@@ -7006,7 +7006,7 @@ var index = (function () {
     			append_dev(a, i);
     			append_dev(a, t4);
     		},
-    		p: noop,
+    		p: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(pre);
     			if (detaching) detach_dev(t3);
@@ -7687,6 +7687,12 @@ var index = (function () {
     }
     const _toLeftRightCenter = (align) => align === 'start' ? 'left' : align === 'end' ? 'right' : 'center';
     const _alignStartEnd = (align, start, end) => align === 'start' ? start : align === 'end' ? end : (start + end) / 2;
+    const _textX = (align, left, right, rtl) => {
+      const check = rtl ? 'left' : 'right';
+      return align === check ? right : align === 'center' ? (left + right) / 2 : left;
+    };
+
+    function noop() {}
     const uid = (function() {
       let id = 0;
       return function() {
@@ -8240,7 +8246,7 @@ var index = (function () {
         ? `hsla(${h}, ${s}%, ${l}%, ${b2n(v.a)})`
         : `hsl(${h}, ${s}%, ${l}%)`;
     }
-    const map = {
+    const map$2 = {
       x: 'dark',
       Z: 'light',
       Y: 're',
@@ -8422,13 +8428,13 @@ var index = (function () {
     function unpack() {
       const unpacked = {};
       const keys = Object.keys(names$1);
-      const tkeys = Object.keys(map);
+      const tkeys = Object.keys(map$2);
       let i, j, k, ok, nk;
       for (i = 0; i < keys.length; i++) {
         ok = nk = keys[i];
         for (j = 0; j < tkeys.length; j++) {
           k = tkeys[j];
-          nk = nk.replace(k, map[k]);
+          nk = nk.replace(k, map$2[k]);
         }
         k = parseInt(names$1[ok], 16);
         unpacked[nk] = [k >> 16 & 0xFF, k >> 8 & 0xFF, k & 0xFF];
@@ -12655,6 +12661,18 @@ var index = (function () {
         }
       }
     };
+
+    var controllers = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    BarController: BarController,
+    BubbleController: BubbleController,
+    DoughnutController: DoughnutController,
+    LineController: LineController,
+    PolarAreaController: PolarAreaController,
+    PieController: PieController,
+    RadarController: RadarController,
+    ScatterController: ScatterController
+    });
 
     function abstract() {
       throw new Error('This method is not implemented: Check that a complete date adapter is provided.');
@@ -17097,6 +17115,1206 @@ var index = (function () {
       borderColor: 'borderColor'
     };
 
+    var elements = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    ArcElement: ArcElement,
+    LineElement: LineElement,
+    PointElement: PointElement,
+    BarElement: BarElement
+    });
+
+    function lttbDecimation(data, start, count, availableWidth, options) {
+      const samples = options.samples || availableWidth;
+      if (samples >= count) {
+        return data.slice(start, start + count);
+      }
+      const decimated = [];
+      const bucketWidth = (count - 2) / (samples - 2);
+      let sampledIndex = 0;
+      const endIndex = start + count - 1;
+      let a = start;
+      let i, maxAreaPoint, maxArea, area, nextA;
+      decimated[sampledIndex++] = data[a];
+      for (i = 0; i < samples - 2; i++) {
+        let avgX = 0;
+        let avgY = 0;
+        let j;
+        const avgRangeStart = Math.floor((i + 1) * bucketWidth) + 1 + start;
+        const avgRangeEnd = Math.min(Math.floor((i + 2) * bucketWidth) + 1, count) + start;
+        const avgRangeLength = avgRangeEnd - avgRangeStart;
+        for (j = avgRangeStart; j < avgRangeEnd; j++) {
+          avgX += data[j].x;
+          avgY += data[j].y;
+        }
+        avgX /= avgRangeLength;
+        avgY /= avgRangeLength;
+        const rangeOffs = Math.floor(i * bucketWidth) + 1 + start;
+        const rangeTo = Math.min(Math.floor((i + 1) * bucketWidth) + 1, count) + start;
+        const {x: pointAx, y: pointAy} = data[a];
+        maxArea = area = -1;
+        for (j = rangeOffs; j < rangeTo; j++) {
+          area = 0.5 * Math.abs(
+            (pointAx - avgX) * (data[j].y - pointAy) -
+            (pointAx - data[j].x) * (avgY - pointAy)
+          );
+          if (area > maxArea) {
+            maxArea = area;
+            maxAreaPoint = data[j];
+            nextA = j;
+          }
+        }
+        decimated[sampledIndex++] = maxAreaPoint;
+        a = nextA;
+      }
+      decimated[sampledIndex++] = data[endIndex];
+      return decimated;
+    }
+    function minMaxDecimation(data, start, count, availableWidth) {
+      let avgX = 0;
+      let countX = 0;
+      let i, point, x, y, prevX, minIndex, maxIndex, startIndex, minY, maxY;
+      const decimated = [];
+      const endIndex = start + count - 1;
+      const xMin = data[start].x;
+      const xMax = data[endIndex].x;
+      const dx = xMax - xMin;
+      for (i = start; i < start + count; ++i) {
+        point = data[i];
+        x = (point.x - xMin) / dx * availableWidth;
+        y = point.y;
+        const truncX = x | 0;
+        if (truncX === prevX) {
+          if (y < minY) {
+            minY = y;
+            minIndex = i;
+          } else if (y > maxY) {
+            maxY = y;
+            maxIndex = i;
+          }
+          avgX = (countX * avgX + point.x) / ++countX;
+        } else {
+          const lastIndex = i - 1;
+          if (!isNullOrUndef(minIndex) && !isNullOrUndef(maxIndex)) {
+            const intermediateIndex1 = Math.min(minIndex, maxIndex);
+            const intermediateIndex2 = Math.max(minIndex, maxIndex);
+            if (intermediateIndex1 !== startIndex && intermediateIndex1 !== lastIndex) {
+              decimated.push({
+                ...data[intermediateIndex1],
+                x: avgX,
+              });
+            }
+            if (intermediateIndex2 !== startIndex && intermediateIndex2 !== lastIndex) {
+              decimated.push({
+                ...data[intermediateIndex2],
+                x: avgX
+              });
+            }
+          }
+          if (i > 0 && lastIndex !== startIndex) {
+            decimated.push(data[lastIndex]);
+          }
+          decimated.push(point);
+          prevX = truncX;
+          countX = 0;
+          minY = maxY = y;
+          minIndex = maxIndex = startIndex = i;
+        }
+      }
+      return decimated;
+    }
+    function cleanDecimatedDataset(dataset) {
+      if (dataset._decimated) {
+        const data = dataset._data;
+        delete dataset._decimated;
+        delete dataset._data;
+        Object.defineProperty(dataset, 'data', {value: data});
+      }
+    }
+    function cleanDecimatedData(chart) {
+      chart.data.datasets.forEach((dataset) => {
+        cleanDecimatedDataset(dataset);
+      });
+    }
+    function getStartAndCountOfVisiblePointsSimplified(meta, points) {
+      const pointCount = points.length;
+      let start = 0;
+      let count;
+      const {iScale} = meta;
+      const {min, max, minDefined, maxDefined} = iScale.getUserBounds();
+      if (minDefined) {
+        start = _limitValue(_lookupByKey(points, iScale.axis, min).lo, 0, pointCount - 1);
+      }
+      if (maxDefined) {
+        count = _limitValue(_lookupByKey(points, iScale.axis, max).hi + 1, start, pointCount) - start;
+      } else {
+        count = pointCount - start;
+      }
+      return {start, count};
+    }
+    var plugin_decimation = {
+      id: 'decimation',
+      defaults: {
+        algorithm: 'min-max',
+        enabled: false,
+      },
+      beforeElementsUpdate: (chart, args, options) => {
+        if (!options.enabled) {
+          cleanDecimatedData(chart);
+          return;
+        }
+        const availableWidth = chart.width;
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          const {_data, indexAxis} = dataset;
+          const meta = chart.getDatasetMeta(datasetIndex);
+          const data = _data || dataset.data;
+          if (resolve([indexAxis, chart.options.indexAxis]) === 'y') {
+            return;
+          }
+          if (!meta.controller.supportsDecimation) {
+            return;
+          }
+          const xAxis = chart.scales[meta.xAxisID];
+          if (xAxis.type !== 'linear' && xAxis.type !== 'time') {
+            return;
+          }
+          if (chart.options.parsing) {
+            return;
+          }
+          let {start, count} = getStartAndCountOfVisiblePointsSimplified(meta, data);
+          const threshold = options.threshold || 4 * availableWidth;
+          if (count <= threshold) {
+            cleanDecimatedDataset(dataset);
+            return;
+          }
+          if (isNullOrUndef(_data)) {
+            dataset._data = data;
+            delete dataset.data;
+            Object.defineProperty(dataset, 'data', {
+              configurable: true,
+              enumerable: true,
+              get: function() {
+                return this._decimated;
+              },
+              set: function(d) {
+                this._data = d;
+              }
+            });
+          }
+          let decimated;
+          switch (options.algorithm) {
+          case 'lttb':
+            decimated = lttbDecimation(data, start, count, availableWidth, options);
+            break;
+          case 'min-max':
+            decimated = minMaxDecimation(data, start, count, availableWidth);
+            break;
+          default:
+            throw new Error(`Unsupported decimation algorithm '${options.algorithm}'`);
+          }
+          dataset._decimated = decimated;
+        });
+      },
+      destroy(chart) {
+        cleanDecimatedData(chart);
+      }
+    };
+
+    function _segments(line, target, property) {
+      const segments = line.segments;
+      const points = line.points;
+      const tpoints = target.points;
+      const parts = [];
+      for (const segment of segments) {
+        let {start, end} = segment;
+        end = _findSegmentEnd(start, end, points);
+        const bounds = _getBounds(property, points[start], points[end], segment.loop);
+        if (!target.segments) {
+          parts.push({
+            source: segment,
+            target: bounds,
+            start: points[start],
+            end: points[end]
+          });
+          continue;
+        }
+        const targetSegments = _boundSegments(target, bounds);
+        for (const tgt of targetSegments) {
+          const subBounds = _getBounds(property, tpoints[tgt.start], tpoints[tgt.end], tgt.loop);
+          const fillSources = _boundSegment(segment, points, subBounds);
+          for (const fillSource of fillSources) {
+            parts.push({
+              source: fillSource,
+              target: tgt,
+              start: {
+                [property]: _getEdge(bounds, subBounds, 'start', Math.max)
+              },
+              end: {
+                [property]: _getEdge(bounds, subBounds, 'end', Math.min)
+              }
+            });
+          }
+        }
+      }
+      return parts;
+    }
+    function _getBounds(property, first, last, loop) {
+      if (loop) {
+        return;
+      }
+      let start = first[property];
+      let end = last[property];
+      if (property === 'angle') {
+        start = _normalizeAngle(start);
+        end = _normalizeAngle(end);
+      }
+      return {property, start, end};
+    }
+    function _pointsFromSegments(boundary, line) {
+      const {x = null, y = null} = boundary || {};
+      const linePoints = line.points;
+      const points = [];
+      line.segments.forEach(({start, end}) => {
+        end = _findSegmentEnd(start, end, linePoints);
+        const first = linePoints[start];
+        const last = linePoints[end];
+        if (y !== null) {
+          points.push({x: first.x, y});
+          points.push({x: last.x, y});
+        } else if (x !== null) {
+          points.push({x, y: first.y});
+          points.push({x, y: last.y});
+        }
+      });
+      return points;
+    }
+    function _findSegmentEnd(start, end, points) {
+      for (;end > start; end--) {
+        const point = points[end];
+        if (!isNaN(point.x) && !isNaN(point.y)) {
+          break;
+        }
+      }
+      return end;
+    }
+    function _getEdge(a, b, prop, fn) {
+      if (a && b) {
+        return fn(a[prop], b[prop]);
+      }
+      return a ? a[prop] : b ? b[prop] : 0;
+    }
+
+    function _createBoundaryLine(boundary, line) {
+      let points = [];
+      let _loop = false;
+      if (isArray(boundary)) {
+        _loop = true;
+        points = boundary;
+      } else {
+        points = _pointsFromSegments(boundary, line);
+      }
+      return points.length ? new LineElement({
+        points,
+        options: {tension: 0},
+        _loop,
+        _fullLoop: _loop
+      }) : null;
+    }
+
+    function _resolveTarget(sources, index, propagate) {
+      const source = sources[index];
+      let fill = source.fill;
+      const visited = [index];
+      let target;
+      if (!propagate) {
+        return fill;
+      }
+      while (fill !== false && visited.indexOf(fill) === -1) {
+        if (!isNumberFinite(fill)) {
+          return fill;
+        }
+        target = sources[fill];
+        if (!target) {
+          return false;
+        }
+        if (target.visible) {
+          return fill;
+        }
+        visited.push(fill);
+        fill = target.fill;
+      }
+      return false;
+    }
+    function _decodeFill(line, index, count) {
+      const fill = parseFillOption(line);
+      if (isObject(fill)) {
+        return isNaN(fill.value) ? false : fill;
+      }
+      let target = parseFloat(fill);
+      if (isNumberFinite(target) && Math.floor(target) === target) {
+        return decodeTargetIndex(fill[0], index, target, count);
+      }
+      return ['origin', 'start', 'end', 'stack', 'shape'].indexOf(fill) >= 0 && fill;
+    }
+    function decodeTargetIndex(firstCh, index, target, count) {
+      if (firstCh === '-' || firstCh === '+') {
+        target = index + target;
+      }
+      if (target === index || target < 0 || target >= count) {
+        return false;
+      }
+      return target;
+    }
+    function _getTargetPixel(fill, scale) {
+      let pixel = null;
+      if (fill === 'start') {
+        pixel = scale.bottom;
+      } else if (fill === 'end') {
+        pixel = scale.top;
+      } else if (isObject(fill)) {
+        pixel = scale.getPixelForValue(fill.value);
+      } else if (scale.getBasePixel) {
+        pixel = scale.getBasePixel();
+      }
+      return pixel;
+    }
+    function _getTargetValue(fill, scale, startValue) {
+      let value;
+      if (fill === 'start') {
+        value = startValue;
+      } else if (fill === 'end') {
+        value = scale.options.reverse ? scale.min : scale.max;
+      } else if (isObject(fill)) {
+        value = fill.value;
+      } else {
+        value = scale.getBaseValue();
+      }
+      return value;
+    }
+    function parseFillOption(line) {
+      const options = line.options;
+      const fillOption = options.fill;
+      let fill = valueOrDefault(fillOption && fillOption.target, fillOption);
+      if (fill === undefined) {
+        fill = !!options.backgroundColor;
+      }
+      if (fill === false || fill === null) {
+        return false;
+      }
+      if (fill === true) {
+        return 'origin';
+      }
+      return fill;
+    }
+
+    function _buildStackLine(source) {
+      const {scale, index, line} = source;
+      const points = [];
+      const segments = line.segments;
+      const sourcePoints = line.points;
+      const linesBelow = getLinesBelow(scale, index);
+      linesBelow.push(_createBoundaryLine({x: null, y: scale.bottom}, line));
+      for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        for (let j = segment.start; j <= segment.end; j++) {
+          addPointsBelow(points, sourcePoints[j], linesBelow);
+        }
+      }
+      return new LineElement({points, options: {}});
+    }
+    function getLinesBelow(scale, index) {
+      const below = [];
+      const metas = scale.getMatchingVisibleMetas('line');
+      for (let i = 0; i < metas.length; i++) {
+        const meta = metas[i];
+        if (meta.index === index) {
+          break;
+        }
+        if (!meta.hidden) {
+          below.unshift(meta.dataset);
+        }
+      }
+      return below;
+    }
+    function addPointsBelow(points, sourcePoint, linesBelow) {
+      const postponed = [];
+      for (let j = 0; j < linesBelow.length; j++) {
+        const line = linesBelow[j];
+        const {first, last, point} = findPoint(line, sourcePoint, 'x');
+        if (!point || (first && last)) {
+          continue;
+        }
+        if (first) {
+          postponed.unshift(point);
+        } else {
+          points.push(point);
+          if (!last) {
+            break;
+          }
+        }
+      }
+      points.push(...postponed);
+    }
+    function findPoint(line, sourcePoint, property) {
+      const point = line.interpolate(sourcePoint, property);
+      if (!point) {
+        return {};
+      }
+      const pointValue = point[property];
+      const segments = line.segments;
+      const linePoints = line.points;
+      let first = false;
+      let last = false;
+      for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        const firstValue = linePoints[segment.start][property];
+        const lastValue = linePoints[segment.end][property];
+        if (_isBetween(pointValue, firstValue, lastValue)) {
+          first = pointValue === firstValue;
+          last = pointValue === lastValue;
+          break;
+        }
+      }
+      return {first, last, point};
+    }
+
+    class simpleArc {
+      constructor(opts) {
+        this.x = opts.x;
+        this.y = opts.y;
+        this.radius = opts.radius;
+      }
+      pathSegment(ctx, bounds, opts) {
+        const {x, y, radius} = this;
+        bounds = bounds || {start: 0, end: TAU};
+        ctx.arc(x, y, radius, bounds.end, bounds.start, true);
+        return !opts.bounds;
+      }
+      interpolate(point) {
+        const {x, y, radius} = this;
+        const angle = point.angle;
+        return {
+          x: x + Math.cos(angle) * radius,
+          y: y + Math.sin(angle) * radius,
+          angle
+        };
+      }
+    }
+
+    function _getTarget(source) {
+      const {chart, fill, line} = source;
+      if (isNumberFinite(fill)) {
+        return getLineByIndex(chart, fill);
+      }
+      if (fill === 'stack') {
+        return _buildStackLine(source);
+      }
+      if (fill === 'shape') {
+        return true;
+      }
+      const boundary = computeBoundary(source);
+      if (boundary instanceof simpleArc) {
+        return boundary;
+      }
+      return _createBoundaryLine(boundary, line);
+    }
+    function getLineByIndex(chart, index) {
+      const meta = chart.getDatasetMeta(index);
+      const visible = meta && chart.isDatasetVisible(index);
+      return visible ? meta.dataset : null;
+    }
+    function computeBoundary(source) {
+      const scale = source.scale || {};
+      if (scale.getPointPositionForValue) {
+        return computeCircularBoundary(source);
+      }
+      return computeLinearBoundary(source);
+    }
+    function computeLinearBoundary(source) {
+      const {scale = {}, fill} = source;
+      const pixel = _getTargetPixel(fill, scale);
+      if (isNumberFinite(pixel)) {
+        const horizontal = scale.isHorizontal();
+        return {
+          x: horizontal ? pixel : null,
+          y: horizontal ? null : pixel
+        };
+      }
+      return null;
+    }
+    function computeCircularBoundary(source) {
+      const {scale, fill} = source;
+      const options = scale.options;
+      const length = scale.getLabels().length;
+      const start = options.reverse ? scale.max : scale.min;
+      const value = _getTargetValue(fill, scale, start);
+      const target = [];
+      if (options.grid.circular) {
+        const center = scale.getPointPositionForValue(0, start);
+        return new simpleArc({
+          x: center.x,
+          y: center.y,
+          radius: scale.getDistanceFromCenterForValue(value)
+        });
+      }
+      for (let i = 0; i < length; ++i) {
+        target.push(scale.getPointPositionForValue(i, value));
+      }
+      return target;
+    }
+
+    function _drawfill(ctx, source, area) {
+      const target = _getTarget(source);
+      const {line, scale, axis} = source;
+      const lineOpts = line.options;
+      const fillOption = lineOpts.fill;
+      const color = lineOpts.backgroundColor;
+      const {above = color, below = color} = fillOption || {};
+      if (target && line.points.length) {
+        clipArea(ctx, area);
+        doFill(ctx, {line, target, above, below, area, scale, axis});
+        unclipArea(ctx);
+      }
+    }
+    function doFill(ctx, cfg) {
+      const {line, target, above, below, area, scale} = cfg;
+      const property = line._loop ? 'angle' : cfg.axis;
+      ctx.save();
+      if (property === 'x' && below !== above) {
+        clipVertical(ctx, target, area.top);
+        fill(ctx, {line, target, color: above, scale, property});
+        ctx.restore();
+        ctx.save();
+        clipVertical(ctx, target, area.bottom);
+      }
+      fill(ctx, {line, target, color: below, scale, property});
+      ctx.restore();
+    }
+    function clipVertical(ctx, target, clipY) {
+      const {segments, points} = target;
+      let first = true;
+      let lineLoop = false;
+      ctx.beginPath();
+      for (const segment of segments) {
+        const {start, end} = segment;
+        const firstPoint = points[start];
+        const lastPoint = points[_findSegmentEnd(start, end, points)];
+        if (first) {
+          ctx.moveTo(firstPoint.x, firstPoint.y);
+          first = false;
+        } else {
+          ctx.lineTo(firstPoint.x, clipY);
+          ctx.lineTo(firstPoint.x, firstPoint.y);
+        }
+        lineLoop = !!target.pathSegment(ctx, segment, {move: lineLoop});
+        if (lineLoop) {
+          ctx.closePath();
+        } else {
+          ctx.lineTo(lastPoint.x, clipY);
+        }
+      }
+      ctx.lineTo(target.first().x, clipY);
+      ctx.closePath();
+      ctx.clip();
+    }
+    function fill(ctx, cfg) {
+      const {line, target, property, color, scale} = cfg;
+      const segments = _segments(line, target, property);
+      for (const {source: src, target: tgt, start, end} of segments) {
+        const {style: {backgroundColor = color} = {}} = src;
+        const notShape = target !== true;
+        ctx.save();
+        ctx.fillStyle = backgroundColor;
+        clipBounds(ctx, scale, notShape && _getBounds(property, start, end));
+        ctx.beginPath();
+        const lineLoop = !!line.pathSegment(ctx, src);
+        let loop;
+        if (notShape) {
+          if (lineLoop) {
+            ctx.closePath();
+          } else {
+            interpolatedLineTo(ctx, target, end, property);
+          }
+          const targetLoop = !!target.pathSegment(ctx, tgt, {move: lineLoop, reverse: true});
+          loop = lineLoop && targetLoop;
+          if (!loop) {
+            interpolatedLineTo(ctx, target, start, property);
+          }
+        }
+        ctx.closePath();
+        ctx.fill(loop ? 'evenodd' : 'nonzero');
+        ctx.restore();
+      }
+    }
+    function clipBounds(ctx, scale, bounds) {
+      const {top, bottom} = scale.chart.chartArea;
+      const {property, start, end} = bounds || {};
+      if (property === 'x') {
+        ctx.beginPath();
+        ctx.rect(start, top, end - start, bottom - top);
+        ctx.clip();
+      }
+    }
+    function interpolatedLineTo(ctx, target, point, property) {
+      const interpolatedPoint = target.interpolate(point, property);
+      if (interpolatedPoint) {
+        ctx.lineTo(interpolatedPoint.x, interpolatedPoint.y);
+      }
+    }
+
+    var index = {
+      id: 'filler',
+      afterDatasetsUpdate(chart, _args, options) {
+        const count = (chart.data.datasets || []).length;
+        const sources = [];
+        let meta, i, line, source;
+        for (i = 0; i < count; ++i) {
+          meta = chart.getDatasetMeta(i);
+          line = meta.dataset;
+          source = null;
+          if (line && line.options && line instanceof LineElement) {
+            source = {
+              visible: chart.isDatasetVisible(i),
+              index: i,
+              fill: _decodeFill(line, i, count),
+              chart,
+              axis: meta.controller.options.indexAxis,
+              scale: meta.vScale,
+              line,
+            };
+          }
+          meta.$filler = source;
+          sources.push(source);
+        }
+        for (i = 0; i < count; ++i) {
+          source = sources[i];
+          if (!source || source.fill === false) {
+            continue;
+          }
+          source.fill = _resolveTarget(sources, i, options.propagate);
+        }
+      },
+      beforeDraw(chart, _args, options) {
+        const draw = options.drawTime === 'beforeDraw';
+        const metasets = chart.getSortedVisibleDatasetMetas();
+        const area = chart.chartArea;
+        for (let i = metasets.length - 1; i >= 0; --i) {
+          const source = metasets[i].$filler;
+          if (!source) {
+            continue;
+          }
+          source.line.updateControlPoints(area, source.axis);
+          if (draw) {
+            _drawfill(chart.ctx, source, area);
+          }
+        }
+      },
+      beforeDatasetsDraw(chart, _args, options) {
+        if (options.drawTime !== 'beforeDatasetsDraw') {
+          return;
+        }
+        const metasets = chart.getSortedVisibleDatasetMetas();
+        for (let i = metasets.length - 1; i >= 0; --i) {
+          const source = metasets[i].$filler;
+          if (source) {
+            _drawfill(chart.ctx, source, chart.chartArea);
+          }
+        }
+      },
+      beforeDatasetDraw(chart, args, options) {
+        const source = args.meta.$filler;
+        if (!source || source.fill === false || options.drawTime !== 'beforeDatasetDraw') {
+          return;
+        }
+        _drawfill(chart.ctx, source, chart.chartArea);
+      },
+      defaults: {
+        propagate: true,
+        drawTime: 'beforeDatasetDraw'
+      }
+    };
+
+    const getBoxSize = (labelOpts, fontSize) => {
+      let {boxHeight = fontSize, boxWidth = fontSize} = labelOpts;
+      if (labelOpts.usePointStyle) {
+        boxHeight = Math.min(boxHeight, fontSize);
+        boxWidth = Math.min(boxWidth, fontSize);
+      }
+      return {
+        boxWidth,
+        boxHeight,
+        itemHeight: Math.max(fontSize, boxHeight)
+      };
+    };
+    const itemsEqual = (a, b) => a !== null && b !== null && a.datasetIndex === b.datasetIndex && a.index === b.index;
+    class Legend extends Element$1 {
+      constructor(config) {
+        super();
+        this._added = false;
+        this.legendHitBoxes = [];
+        this._hoveredItem = null;
+        this.doughnutMode = false;
+        this.chart = config.chart;
+        this.options = config.options;
+        this.ctx = config.ctx;
+        this.legendItems = undefined;
+        this.columnSizes = undefined;
+        this.lineWidths = undefined;
+        this.maxHeight = undefined;
+        this.maxWidth = undefined;
+        this.top = undefined;
+        this.bottom = undefined;
+        this.left = undefined;
+        this.right = undefined;
+        this.height = undefined;
+        this.width = undefined;
+        this._margins = undefined;
+        this.position = undefined;
+        this.weight = undefined;
+        this.fullSize = undefined;
+      }
+      update(maxWidth, maxHeight, margins) {
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
+        this._margins = margins;
+        this.setDimensions();
+        this.buildLabels();
+        this.fit();
+      }
+      setDimensions() {
+        if (this.isHorizontal()) {
+          this.width = this.maxWidth;
+          this.left = this._margins.left;
+          this.right = this.width;
+        } else {
+          this.height = this.maxHeight;
+          this.top = this._margins.top;
+          this.bottom = this.height;
+        }
+      }
+      buildLabels() {
+        const labelOpts = this.options.labels || {};
+        let legendItems = callback(labelOpts.generateLabels, [this.chart], this) || [];
+        if (labelOpts.filter) {
+          legendItems = legendItems.filter((item) => labelOpts.filter(item, this.chart.data));
+        }
+        if (labelOpts.sort) {
+          legendItems = legendItems.sort((a, b) => labelOpts.sort(a, b, this.chart.data));
+        }
+        if (this.options.reverse) {
+          legendItems.reverse();
+        }
+        this.legendItems = legendItems;
+      }
+      fit() {
+        const {options, ctx} = this;
+        if (!options.display) {
+          this.width = this.height = 0;
+          return;
+        }
+        const labelOpts = options.labels;
+        const labelFont = toFont(labelOpts.font);
+        const fontSize = labelFont.size;
+        const titleHeight = this._computeTitleHeight();
+        const {boxWidth, itemHeight} = getBoxSize(labelOpts, fontSize);
+        let width, height;
+        ctx.font = labelFont.string;
+        if (this.isHorizontal()) {
+          width = this.maxWidth;
+          height = this._fitRows(titleHeight, fontSize, boxWidth, itemHeight) + 10;
+        } else {
+          height = this.maxHeight;
+          width = this._fitCols(titleHeight, fontSize, boxWidth, itemHeight) + 10;
+        }
+        this.width = Math.min(width, options.maxWidth || this.maxWidth);
+        this.height = Math.min(height, options.maxHeight || this.maxHeight);
+      }
+      _fitRows(titleHeight, fontSize, boxWidth, itemHeight) {
+        const {ctx, maxWidth, options: {labels: {padding}}} = this;
+        const hitboxes = this.legendHitBoxes = [];
+        const lineWidths = this.lineWidths = [0];
+        const lineHeight = itemHeight + padding;
+        let totalHeight = titleHeight;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        let row = -1;
+        let top = -lineHeight;
+        this.legendItems.forEach((legendItem, i) => {
+          const itemWidth = boxWidth + (fontSize / 2) + ctx.measureText(legendItem.text).width;
+          if (i === 0 || lineWidths[lineWidths.length - 1] + itemWidth + 2 * padding > maxWidth) {
+            totalHeight += lineHeight;
+            lineWidths[lineWidths.length - (i > 0 ? 0 : 1)] = 0;
+            top += lineHeight;
+            row++;
+          }
+          hitboxes[i] = {left: 0, top, row, width: itemWidth, height: itemHeight};
+          lineWidths[lineWidths.length - 1] += itemWidth + padding;
+        });
+        return totalHeight;
+      }
+      _fitCols(titleHeight, fontSize, boxWidth, itemHeight) {
+        const {ctx, maxHeight, options: {labels: {padding}}} = this;
+        const hitboxes = this.legendHitBoxes = [];
+        const columnSizes = this.columnSizes = [];
+        const heightLimit = maxHeight - titleHeight;
+        let totalWidth = padding;
+        let currentColWidth = 0;
+        let currentColHeight = 0;
+        let left = 0;
+        let col = 0;
+        this.legendItems.forEach((legendItem, i) => {
+          const itemWidth = boxWidth + (fontSize / 2) + ctx.measureText(legendItem.text).width;
+          if (i > 0 && currentColHeight + itemHeight + 2 * padding > heightLimit) {
+            totalWidth += currentColWidth + padding;
+            columnSizes.push({width: currentColWidth, height: currentColHeight});
+            left += currentColWidth + padding;
+            col++;
+            currentColWidth = currentColHeight = 0;
+          }
+          hitboxes[i] = {left, top: currentColHeight, col, width: itemWidth, height: itemHeight};
+          currentColWidth = Math.max(currentColWidth, itemWidth);
+          currentColHeight += itemHeight + padding;
+        });
+        totalWidth += currentColWidth;
+        columnSizes.push({width: currentColWidth, height: currentColHeight});
+        return totalWidth;
+      }
+      adjustHitBoxes() {
+        if (!this.options.display) {
+          return;
+        }
+        const titleHeight = this._computeTitleHeight();
+        const {legendHitBoxes: hitboxes, options: {align, labels: {padding}, rtl}} = this;
+        const rtlHelper = getRtlAdapter(rtl, this.left, this.width);
+        if (this.isHorizontal()) {
+          let row = 0;
+          let left = _alignStartEnd(align, this.left + padding, this.right - this.lineWidths[row]);
+          for (const hitbox of hitboxes) {
+            if (row !== hitbox.row) {
+              row = hitbox.row;
+              left = _alignStartEnd(align, this.left + padding, this.right - this.lineWidths[row]);
+            }
+            hitbox.top += this.top + titleHeight + padding;
+            hitbox.left = rtlHelper.leftForLtr(rtlHelper.x(left), hitbox.width);
+            left += hitbox.width + padding;
+          }
+        } else {
+          let col = 0;
+          let top = _alignStartEnd(align, this.top + titleHeight + padding, this.bottom - this.columnSizes[col].height);
+          for (const hitbox of hitboxes) {
+            if (hitbox.col !== col) {
+              col = hitbox.col;
+              top = _alignStartEnd(align, this.top + titleHeight + padding, this.bottom - this.columnSizes[col].height);
+            }
+            hitbox.top = top;
+            hitbox.left += this.left + padding;
+            hitbox.left = rtlHelper.leftForLtr(rtlHelper.x(hitbox.left), hitbox.width);
+            top += hitbox.height + padding;
+          }
+        }
+      }
+      isHorizontal() {
+        return this.options.position === 'top' || this.options.position === 'bottom';
+      }
+      draw() {
+        if (this.options.display) {
+          const ctx = this.ctx;
+          clipArea(ctx, this);
+          this._draw();
+          unclipArea(ctx);
+        }
+      }
+      _draw() {
+        const {options: opts, columnSizes, lineWidths, ctx} = this;
+        const {align, labels: labelOpts} = opts;
+        const defaultColor = defaults.color;
+        const rtlHelper = getRtlAdapter(opts.rtl, this.left, this.width);
+        const labelFont = toFont(labelOpts.font);
+        const {color: fontColor, padding} = labelOpts;
+        const fontSize = labelFont.size;
+        const halfFontSize = fontSize / 2;
+        let cursor;
+        this.drawTitle();
+        ctx.textAlign = rtlHelper.textAlign('left');
+        ctx.textBaseline = 'middle';
+        ctx.lineWidth = 0.5;
+        ctx.font = labelFont.string;
+        const {boxWidth, boxHeight, itemHeight} = getBoxSize(labelOpts, fontSize);
+        const drawLegendBox = function(x, y, legendItem) {
+          if (isNaN(boxWidth) || boxWidth <= 0 || isNaN(boxHeight) || boxHeight < 0) {
+            return;
+          }
+          ctx.save();
+          const lineWidth = valueOrDefault(legendItem.lineWidth, 1);
+          ctx.fillStyle = valueOrDefault(legendItem.fillStyle, defaultColor);
+          ctx.lineCap = valueOrDefault(legendItem.lineCap, 'butt');
+          ctx.lineDashOffset = valueOrDefault(legendItem.lineDashOffset, 0);
+          ctx.lineJoin = valueOrDefault(legendItem.lineJoin, 'miter');
+          ctx.lineWidth = lineWidth;
+          ctx.strokeStyle = valueOrDefault(legendItem.strokeStyle, defaultColor);
+          ctx.setLineDash(valueOrDefault(legendItem.lineDash, []));
+          if (labelOpts.usePointStyle) {
+            const drawOptions = {
+              radius: boxWidth * Math.SQRT2 / 2,
+              pointStyle: legendItem.pointStyle,
+              rotation: legendItem.rotation,
+              borderWidth: lineWidth
+            };
+            const centerX = rtlHelper.xPlus(x, boxWidth / 2);
+            const centerY = y + halfFontSize;
+            drawPoint(ctx, drawOptions, centerX, centerY);
+          } else {
+            const yBoxTop = y + Math.max((fontSize - boxHeight) / 2, 0);
+            const xBoxLeft = rtlHelper.leftForLtr(x, boxWidth);
+            const borderRadius = toTRBLCorners(legendItem.borderRadius);
+            ctx.beginPath();
+            if (Object.values(borderRadius).some(v => v !== 0)) {
+              addRoundedRectPath(ctx, {
+                x: xBoxLeft,
+                y: yBoxTop,
+                w: boxWidth,
+                h: boxHeight,
+                radius: borderRadius,
+              });
+            } else {
+              ctx.rect(xBoxLeft, yBoxTop, boxWidth, boxHeight);
+            }
+            ctx.fill();
+            if (lineWidth !== 0) {
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+        };
+        const fillText = function(x, y, legendItem) {
+          renderText(ctx, legendItem.text, x, y + (itemHeight / 2), labelFont, {
+            strikethrough: legendItem.hidden,
+            textAlign: rtlHelper.textAlign(legendItem.textAlign)
+          });
+        };
+        const isHorizontal = this.isHorizontal();
+        const titleHeight = this._computeTitleHeight();
+        if (isHorizontal) {
+          cursor = {
+            x: _alignStartEnd(align, this.left + padding, this.right - lineWidths[0]),
+            y: this.top + padding + titleHeight,
+            line: 0
+          };
+        } else {
+          cursor = {
+            x: this.left + padding,
+            y: _alignStartEnd(align, this.top + titleHeight + padding, this.bottom - columnSizes[0].height),
+            line: 0
+          };
+        }
+        overrideTextDirection(this.ctx, opts.textDirection);
+        const lineHeight = itemHeight + padding;
+        this.legendItems.forEach((legendItem, i) => {
+          ctx.strokeStyle = legendItem.fontColor || fontColor;
+          ctx.fillStyle = legendItem.fontColor || fontColor;
+          const textWidth = ctx.measureText(legendItem.text).width;
+          const textAlign = rtlHelper.textAlign(legendItem.textAlign || (legendItem.textAlign = labelOpts.textAlign));
+          const width = boxWidth + halfFontSize + textWidth;
+          let x = cursor.x;
+          let y = cursor.y;
+          rtlHelper.setWidth(this.width);
+          if (isHorizontal) {
+            if (i > 0 && x + width + padding > this.right) {
+              y = cursor.y += lineHeight;
+              cursor.line++;
+              x = cursor.x = _alignStartEnd(align, this.left + padding, this.right - lineWidths[cursor.line]);
+            }
+          } else if (i > 0 && y + lineHeight > this.bottom) {
+            x = cursor.x = x + columnSizes[cursor.line].width + padding;
+            cursor.line++;
+            y = cursor.y = _alignStartEnd(align, this.top + titleHeight + padding, this.bottom - columnSizes[cursor.line].height);
+          }
+          const realX = rtlHelper.x(x);
+          drawLegendBox(realX, y, legendItem);
+          x = _textX(textAlign, x + boxWidth + halfFontSize, isHorizontal ? x + width : this.right, opts.rtl);
+          fillText(rtlHelper.x(x), y, legendItem);
+          if (isHorizontal) {
+            cursor.x += width + padding;
+          } else {
+            cursor.y += lineHeight;
+          }
+        });
+        restoreTextDirection(this.ctx, opts.textDirection);
+      }
+      drawTitle() {
+        const opts = this.options;
+        const titleOpts = opts.title;
+        const titleFont = toFont(titleOpts.font);
+        const titlePadding = toPadding(titleOpts.padding);
+        if (!titleOpts.display) {
+          return;
+        }
+        const rtlHelper = getRtlAdapter(opts.rtl, this.left, this.width);
+        const ctx = this.ctx;
+        const position = titleOpts.position;
+        const halfFontSize = titleFont.size / 2;
+        const topPaddingPlusHalfFontSize = titlePadding.top + halfFontSize;
+        let y;
+        let left = this.left;
+        let maxWidth = this.width;
+        if (this.isHorizontal()) {
+          maxWidth = Math.max(...this.lineWidths);
+          y = this.top + topPaddingPlusHalfFontSize;
+          left = _alignStartEnd(opts.align, left, this.right - maxWidth);
+        } else {
+          const maxHeight = this.columnSizes.reduce((acc, size) => Math.max(acc, size.height), 0);
+          y = topPaddingPlusHalfFontSize + _alignStartEnd(opts.align, this.top, this.bottom - maxHeight - opts.labels.padding - this._computeTitleHeight());
+        }
+        const x = _alignStartEnd(position, left, left + maxWidth);
+        ctx.textAlign = rtlHelper.textAlign(_toLeftRightCenter(position));
+        ctx.textBaseline = 'middle';
+        ctx.strokeStyle = titleOpts.color;
+        ctx.fillStyle = titleOpts.color;
+        ctx.font = titleFont.string;
+        renderText(ctx, titleOpts.text, x, y, titleFont);
+      }
+      _computeTitleHeight() {
+        const titleOpts = this.options.title;
+        const titleFont = toFont(titleOpts.font);
+        const titlePadding = toPadding(titleOpts.padding);
+        return titleOpts.display ? titleFont.lineHeight + titlePadding.height : 0;
+      }
+      _getLegendItemAt(x, y) {
+        let i, hitBox, lh;
+        if (_isBetween(x, this.left, this.right)
+          && _isBetween(y, this.top, this.bottom)) {
+          lh = this.legendHitBoxes;
+          for (i = 0; i < lh.length; ++i) {
+            hitBox = lh[i];
+            if (_isBetween(x, hitBox.left, hitBox.left + hitBox.width)
+              && _isBetween(y, hitBox.top, hitBox.top + hitBox.height)) {
+              return this.legendItems[i];
+            }
+          }
+        }
+        return null;
+      }
+      handleEvent(e) {
+        const opts = this.options;
+        if (!isListened(e.type, opts)) {
+          return;
+        }
+        const hoveredItem = this._getLegendItemAt(e.x, e.y);
+        if (e.type === 'mousemove' || e.type === 'mouseout') {
+          const previous = this._hoveredItem;
+          const sameItem = itemsEqual(previous, hoveredItem);
+          if (previous && !sameItem) {
+            callback(opts.onLeave, [e, previous, this], this);
+          }
+          this._hoveredItem = hoveredItem;
+          if (hoveredItem && !sameItem) {
+            callback(opts.onHover, [e, hoveredItem, this], this);
+          }
+        } else if (hoveredItem) {
+          callback(opts.onClick, [e, hoveredItem, this], this);
+        }
+      }
+    }
+    function isListened(type, opts) {
+      if ((type === 'mousemove' || type === 'mouseout') && (opts.onHover || opts.onLeave)) {
+        return true;
+      }
+      if (opts.onClick && (type === 'click' || type === 'mouseup')) {
+        return true;
+      }
+      return false;
+    }
+    var plugin_legend = {
+      id: 'legend',
+      _element: Legend,
+      start(chart, _args, options) {
+        const legend = chart.legend = new Legend({ctx: chart.ctx, options, chart});
+        layouts.configure(chart, legend, options);
+        layouts.addBox(chart, legend);
+      },
+      stop(chart) {
+        layouts.removeBox(chart, chart.legend);
+        delete chart.legend;
+      },
+      beforeUpdate(chart, _args, options) {
+        const legend = chart.legend;
+        layouts.configure(chart, legend, options);
+        legend.options = options;
+      },
+      afterUpdate(chart) {
+        const legend = chart.legend;
+        legend.buildLabels();
+        legend.adjustHitBoxes();
+      },
+      afterEvent(chart, args) {
+        if (!args.replay) {
+          chart.legend.handleEvent(args.event);
+        }
+      },
+      defaults: {
+        display: true,
+        position: 'top',
+        align: 'center',
+        fullSize: true,
+        reverse: false,
+        weight: 1000,
+        onClick(e, legendItem, legend) {
+          const index = legendItem.datasetIndex;
+          const ci = legend.chart;
+          if (ci.isDatasetVisible(index)) {
+            ci.hide(index);
+            legendItem.hidden = true;
+          } else {
+            ci.show(index);
+            legendItem.hidden = false;
+          }
+        },
+        onHover: null,
+        onLeave: null,
+        labels: {
+          color: (ctx) => ctx.chart.options.color,
+          boxWidth: 40,
+          padding: 10,
+          generateLabels(chart) {
+            const datasets = chart.data.datasets;
+            const {labels: {usePointStyle, pointStyle, textAlign, color}} = chart.legend.options;
+            return chart._getSortedDatasetMetas().map((meta) => {
+              const style = meta.controller.getStyle(usePointStyle ? 0 : undefined);
+              const borderWidth = toPadding(style.borderWidth);
+              return {
+                text: datasets[meta.index].label,
+                fillStyle: style.backgroundColor,
+                fontColor: color,
+                hidden: !meta.visible,
+                lineCap: style.borderCapStyle,
+                lineDash: style.borderDash,
+                lineDashOffset: style.borderDashOffset,
+                lineJoin: style.borderJoinStyle,
+                lineWidth: (borderWidth.width + borderWidth.height) / 4,
+                strokeStyle: style.borderColor,
+                pointStyle: pointStyle || style.pointStyle,
+                rotation: style.rotation,
+                textAlign: textAlign || style.textAlign,
+                borderRadius: 0,
+                datasetIndex: meta.index
+              };
+            }, this);
+          }
+        },
+        title: {
+          color: (ctx) => ctx.chart.options.color,
+          display: false,
+          position: 'center',
+          text: '',
+        }
+      },
+      descriptors: {
+        _scriptable: (name) => !name.startsWith('on'),
+        labels: {
+          _scriptable: (name) => !['generateLabels', 'filter', 'sort'].includes(name),
+        }
+      },
+    };
+
     class Title extends Element$1 {
       constructor(config) {
         super();
@@ -17217,6 +18435,49 @@ var index = (function () {
         position: 'top',
         text: '',
         weight: 2000
+      },
+      defaultRoutes: {
+        color: 'color'
+      },
+      descriptors: {
+        _scriptable: true,
+        _indexable: false,
+      },
+    };
+
+    const map = new WeakMap();
+    var plugin_subtitle = {
+      id: 'subtitle',
+      start(chart, _args, options) {
+        const title = new Title({
+          ctx: chart.ctx,
+          options,
+          chart
+        });
+        layouts.configure(chart, title, options);
+        layouts.addBox(chart, title);
+        map.set(chart, title);
+      },
+      stop(chart) {
+        layouts.removeBox(chart, map.get(chart));
+        map.delete(chart);
+      },
+      beforeUpdate(chart, _args, options) {
+        const title = map.get(chart);
+        layouts.configure(chart, title, options);
+        title.options = options;
+      },
+      defaults: {
+        align: 'center',
+        display: false,
+        font: {
+          weight: 'normal',
+        },
+        fullSize: true,
+        padding: 0,
+        position: 'top',
+        text: '',
+        weight: 1500
       },
       defaultRoutes: {
         color: 'color'
@@ -18006,6 +19267,190 @@ var index = (function () {
       }
     }
     Tooltip.positioners = positioners;
+    var plugin_tooltip = {
+      id: 'tooltip',
+      _element: Tooltip,
+      positioners,
+      afterInit(chart, _args, options) {
+        if (options) {
+          chart.tooltip = new Tooltip({chart, options});
+        }
+      },
+      beforeUpdate(chart, _args, options) {
+        if (chart.tooltip) {
+          chart.tooltip.initialize(options);
+        }
+      },
+      reset(chart, _args, options) {
+        if (chart.tooltip) {
+          chart.tooltip.initialize(options);
+        }
+      },
+      afterDraw(chart) {
+        const tooltip = chart.tooltip;
+        if (tooltip && tooltip._willRender()) {
+          const args = {
+            tooltip
+          };
+          if (chart.notifyPlugins('beforeTooltipDraw', args) === false) {
+            return;
+          }
+          tooltip.draw(chart.ctx);
+          chart.notifyPlugins('afterTooltipDraw', args);
+        }
+      },
+      afterEvent(chart, args) {
+        if (chart.tooltip) {
+          const useFinalPosition = args.replay;
+          if (chart.tooltip.handleEvent(args.event, useFinalPosition, args.inChartArea)) {
+            args.changed = true;
+          }
+        }
+      },
+      defaults: {
+        enabled: true,
+        external: null,
+        position: 'average',
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        titleColor: '#fff',
+        titleFont: {
+          weight: 'bold',
+        },
+        titleSpacing: 2,
+        titleMarginBottom: 6,
+        titleAlign: 'left',
+        bodyColor: '#fff',
+        bodySpacing: 2,
+        bodyFont: {
+        },
+        bodyAlign: 'left',
+        footerColor: '#fff',
+        footerSpacing: 2,
+        footerMarginTop: 6,
+        footerFont: {
+          weight: 'bold',
+        },
+        footerAlign: 'left',
+        padding: 6,
+        caretPadding: 2,
+        caretSize: 5,
+        cornerRadius: 6,
+        boxHeight: (ctx, opts) => opts.bodyFont.size,
+        boxWidth: (ctx, opts) => opts.bodyFont.size,
+        multiKeyBackground: '#fff',
+        displayColors: true,
+        boxPadding: 0,
+        borderColor: 'rgba(0,0,0,0)',
+        borderWidth: 0,
+        animation: {
+          duration: 400,
+          easing: 'easeOutQuart',
+        },
+        animations: {
+          numbers: {
+            type: 'number',
+            properties: ['x', 'y', 'width', 'height', 'caretX', 'caretY'],
+          },
+          opacity: {
+            easing: 'linear',
+            duration: 200
+          }
+        },
+        callbacks: {
+          beforeTitle: noop,
+          title(tooltipItems) {
+            if (tooltipItems.length > 0) {
+              const item = tooltipItems[0];
+              const labels = item.chart.data.labels;
+              const labelCount = labels ? labels.length : 0;
+              if (this && this.options && this.options.mode === 'dataset') {
+                return item.dataset.label || '';
+              } else if (item.label) {
+                return item.label;
+              } else if (labelCount > 0 && item.dataIndex < labelCount) {
+                return labels[item.dataIndex];
+              }
+            }
+            return '';
+          },
+          afterTitle: noop,
+          beforeBody: noop,
+          beforeLabel: noop,
+          label(tooltipItem) {
+            if (this && this.options && this.options.mode === 'dataset') {
+              return tooltipItem.label + ': ' + tooltipItem.formattedValue || tooltipItem.formattedValue;
+            }
+            let label = tooltipItem.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            const value = tooltipItem.formattedValue;
+            if (!isNullOrUndef(value)) {
+              label += value;
+            }
+            return label;
+          },
+          labelColor(tooltipItem) {
+            const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetIndex);
+            const options = meta.controller.getStyle(tooltipItem.dataIndex);
+            return {
+              borderColor: options.borderColor,
+              backgroundColor: options.backgroundColor,
+              borderWidth: options.borderWidth,
+              borderDash: options.borderDash,
+              borderDashOffset: options.borderDashOffset,
+              borderRadius: 0,
+            };
+          },
+          labelTextColor() {
+            return this.options.bodyColor;
+          },
+          labelPointStyle(tooltipItem) {
+            const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetIndex);
+            const options = meta.controller.getStyle(tooltipItem.dataIndex);
+            return {
+              pointStyle: options.pointStyle,
+              rotation: options.rotation,
+            };
+          },
+          afterLabel: noop,
+          afterBody: noop,
+          beforeFooter: noop,
+          footer: noop,
+          afterFooter: noop
+        }
+      },
+      defaultRoutes: {
+        bodyFont: 'font',
+        footerFont: 'font',
+        titleFont: 'font'
+      },
+      descriptors: {
+        _scriptable: (name) => name !== 'filter' && name !== 'itemSort' && name !== 'external',
+        _indexable: false,
+        callbacks: {
+          _scriptable: false,
+          _indexable: false,
+        },
+        animation: {
+          _fallback: false
+        },
+        animations: {
+          _fallback: 'animation'
+        }
+      },
+      additionalOptionScopes: ['interaction']
+    };
+
+    var plugins = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    Decimation: plugin_decimation,
+    Filler: index,
+    Legend: plugin_legend,
+    SubTitle: plugin_subtitle,
+    Title: plugin_title,
+    Tooltip: plugin_tooltip
+    });
 
     const addIfString = (labels, raw, index, addedLabels) => {
       if (typeof raw === 'string') {
@@ -19412,38 +20857,47 @@ var index = (function () {
     TimeSeriesScale.id = 'timeseries';
     TimeSeriesScale.defaults = TimeScale.defaults;
 
+    var scales = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    CategoryScale: CategoryScale,
+    LinearScale: LinearScale,
+    LogarithmicScale: LogarithmicScale,
+    RadialLinearScale: RadialLinearScale,
+    TimeScale: TimeScale,
+    TimeSeriesScale: TimeSeriesScale
+    });
+
+    const registerables = [
+      controllers,
+      elements,
+      plugins,
+      scales,
+    ];
+
     /* App\shared\components\chart.svelte generated by Svelte v3.49.0 */
     const file$1 = "App\\shared\\components\\chart.svelte";
 
     function create_fragment$1(ctx) {
-    	let div;
     	let canvas;
 
     	const block = {
     		c: function create() {
-    			div = element("div");
     			canvas = element("canvas");
-    			add_location(canvas, file$1, 45, 0, 1485);
-    			attr_dev(div, "class", "chart-container");
-    			set_style(div, "position", "relative", 1);
-    			set_style(div, "height", "100%");
-    			set_style(div, "width", "100%");
-    			add_location(div, file$1, 44, 0, 1391);
+    			add_location(canvas, file$1, 50, 0, 1441);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			append_dev(div, canvas);
-    			/*canvas_binding*/ ctx[1](canvas);
+    			insert_dev(target, canvas, anchor);
+    			/*canvas_binding*/ ctx[4](canvas);
     		},
-    		p: noop,
-    		i: noop,
-    		o: noop,
+    		p: noop$1,
+    		i: noop$1,
+    		o: noop$1,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
-    			/*canvas_binding*/ ctx[1](null);
+    			if (detaching) detach_dev(canvas);
+    			/*canvas_binding*/ ctx[4](null);
     		}
     	};
 
@@ -19459,46 +20913,47 @@ var index = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
+    	let $isDarkTheme;
+    	validate_store(isDarkTheme, 'isDarkTheme');
+    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(3, $isDarkTheme = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Chart', slots, []);
-    	Chart.register(LineController, LineElement, PointElement, LinearScale, plugin_title, CategoryScale);
-    	let chartValues = [20, 10, 5, 2, 20, 30, 45];
-    	let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    	let { type } = $$props;
+    	Chart.register(...registerables);
+    	let chartValues = [55, 49, 44, 24, 15];
+    	let chartLabels = ["Italy", "France", "Spain", "USA", "Argentina"];
     	let chartCanvas;
+    	let chart;
 
-    	onMount(async () => {
-    		let ctx = chartCanvas.getContext('2d');
-
-    		new Chart(ctx,
+    	let recreateChat = () => {
+    		$$invalidate(2, chart = new Chart(chartCanvas.getContext("2d"),
     		{
-    				type: 'line',
+    				type,
     				data: {
     					labels: chartLabels,
     					datasets: [
     						{
-    							label: 'Revenue',
-    							backgroundColor: 'rgb(255, 99, 132)',
-    							borderColor: 'rgb(255, 99, 132)',
+    							backgroundColor: ["red", "green", "blue", "orange", "brown"],
+    							borderColor: "red",
     							data: chartValues
     						}
     					]
     				},
     				options: {
-    					/*aspectRatio: 2,*/
     					plugins: {
     						title: {
     							display: true,
     							text: 'Custom Chart Title'
     						}
     					}
-    				}
-    			});
-    	}); // //chart.resize();
-    	// window.onresize = () => {
-    	//     console.log("resized");
-    	//     chart.resize();
+    				}, //backgroundColor: "rgba(0, 0, 0, 0.1)",
+    				//borderColor: "white", //"rgba(0, 0, 0, 0.1)",
+    				
+    			})); //color: "white", //"#666",
+    	};
 
-    	const writable_props = [];
+    	onMount(recreateChat);
+    	const writable_props = ['type'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Chart> was created with unknown prop '${key}'`);
@@ -19511,37 +20966,63 @@ var index = (function () {
     		});
     	}
 
+    	$$self.$$set = $$props => {
+    		if ('type' in $$props) $$invalidate(1, type = $$props.type);
+    	};
+
     	$$self.$capture_state = () => ({
     		Chart,
-    		LineController,
-    		LineElement,
-    		PointElement,
-    		LinearScale,
-    		Title: plugin_title,
-    		CategoryScale,
+    		registerables,
     		onMount,
+    		isDarkTheme,
+    		type,
     		chartValues,
     		chartLabels,
-    		chartCanvas
+    		chartCanvas,
+    		chart,
+    		recreateChat,
+    		$isDarkTheme
     	});
 
     	$$self.$inject_state = $$props => {
+    		if ('type' in $$props) $$invalidate(1, type = $$props.type);
     		if ('chartValues' in $$props) chartValues = $$props.chartValues;
     		if ('chartLabels' in $$props) chartLabels = $$props.chartLabels;
     		if ('chartCanvas' in $$props) $$invalidate(0, chartCanvas = $$props.chartCanvas);
+    		if ('chart' in $$props) $$invalidate(2, chart = $$props.chart);
+    		if ('recreateChat' in $$props) $$invalidate(8, recreateChat = $$props.recreateChat);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [chartCanvas, canvas_binding];
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*$isDarkTheme, chart*/ 12) {
+    			{
+    				if ($isDarkTheme) {
+    					Chart.defaults.color = "#b7c8d8";
+    					Chart.defaults.borderColor = "#b7c8d8";
+    				} else {
+    					Chart.defaults.color = "#666";
+    					Chart.defaults.borderColor = "#666";
+    				}
+
+    				if (chart) {
+    					chart.destroy();
+    					recreateChat();
+    				}
+    			}
+    		}
+    	};
+
+    	return [chartCanvas, type, chart, $isDarkTheme, canvas_binding];
     }
 
     class Chart_1 extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { type: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -19549,6 +21030,21 @@ var index = (function () {
     			options,
     			id: create_fragment$1.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*type*/ ctx[1] === undefined && !('type' in props)) {
+    			console.warn("<Chart> was created without expected prop 'type'");
+    		}
+    	}
+
+    	get type() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set type(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -19567,15 +21063,11 @@ var index = (function () {
     	let t1;
     	let div5;
     	let div3;
-    	let chart2;
     	let t2;
     	let div4;
-    	let chart3;
     	let current;
-    	chart0 = new Chart_1({ $$inline: true });
-    	chart1 = new Chart_1({ $$inline: true });
-    	chart2 = new Chart_1({ $$inline: true });
-    	chart3 = new Chart_1({ $$inline: true });
+    	chart0 = new Chart_1({ props: { type: "line" }, $$inline: true });
+    	chart1 = new Chart_1({ props: { type: "bar" }, $$inline: true });
 
     	const block = {
     		c: function create() {
@@ -19589,22 +21081,20 @@ var index = (function () {
     			t1 = space();
     			div5 = element("div");
     			div3 = element("div");
-    			create_component(chart2.$$.fragment);
     			t2 = space();
     			div4 = element("div");
-    			create_component(chart3.$$.fragment);
     			attr_dev(div0, "class", "col");
     			add_location(div0, file, 8, 12, 241);
     			attr_dev(div1, "class", "col");
-    			add_location(div1, file, 11, 12, 319);
+    			add_location(div1, file, 11, 12, 331);
     			attr_dev(div2, "class", "row");
     			add_location(div2, file, 7, 8, 209);
     			attr_dev(div3, "class", "col");
-    			add_location(div3, file, 20, 12, 529);
+    			add_location(div3, file, 20, 12, 553);
     			attr_dev(div4, "class", "col");
-    			add_location(div4, file, 23, 12, 607);
+    			add_location(div4, file, 23, 12, 640);
     			attr_dev(div5, "class", "row");
-    			add_location(div5, file, 19, 8, 498);
+    			add_location(div5, file, 19, 8, 522);
     			attr_dev(div6, "class", "container pt-4");
     			add_location(div6, file, 6, 4, 171);
     		},
@@ -19619,34 +21109,26 @@ var index = (function () {
     			append_dev(div6, t1);
     			append_dev(div6, div5);
     			append_dev(div5, div3);
-    			mount_component(chart2, div3, null);
     			append_dev(div5, t2);
     			append_dev(div5, div4);
-    			mount_component(chart3, div4, null);
     			current = true;
     		},
-    		p: noop,
+    		p: noop$1,
     		i: function intro(local) {
     			if (current) return;
     			transition_in(chart0.$$.fragment, local);
     			transition_in(chart1.$$.fragment, local);
-    			transition_in(chart2.$$.fragment, local);
-    			transition_in(chart3.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(chart0.$$.fragment, local);
     			transition_out(chart1.$$.fragment, local);
-    			transition_out(chart2.$$.fragment, local);
-    			transition_out(chart3.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div6);
     			destroy_component(chart0);
     			destroy_component(chart1);
-    			destroy_component(chart2);
-    			destroy_component(chart3);
     		}
     	};
 

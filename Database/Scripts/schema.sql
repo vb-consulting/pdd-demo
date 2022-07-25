@@ -61,6 +61,7 @@ ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS emp
 ALTER TABLE IF EXISTS ONLY public.countries DROP CONSTRAINT IF EXISTS countries_pkey;
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS company_reviews_pkey;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_pkey;
+ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_name_normalized_key;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS business_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_areas DROP CONSTRAINT IF EXISTS business_areas_pkey;
 DROP TABLE IF EXISTS public.users;
@@ -74,9 +75,14 @@ DROP TABLE IF EXISTS public.company_areas;
 DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS public.get_chart_data(_type smallint);
+DROP FUNCTION IF EXISTS reporting.get_chart_data_1();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
+DROP SCHEMA IF EXISTS reporting;
+--
+-- Name: reporting; Type: SCHEMA; Schema: -; Owner: -
+--
+CREATE SCHEMA reporting;
 --
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
@@ -97,45 +103,35 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: get_chart_data(smallint); Type: FUNCTION; Schema: public; Owner: -
+-- Name: get_chart_data_1(); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION public.get_chart_data(_type smallint) RETURNS json
-    LANGUAGE plpgsql
+CREATE FUNCTION reporting.get_chart_data_1() RETURNS json
+    LANGUAGE sql
     AS $$
-begin
-if _type = 1 then
-    -- top 10 companies with highest number of current employees
-    return (
-        select 
-            json_agg(t) 
-        from (
-            select 
-                c.name as label,
-                count(*) as value
-            from 
-                companies c
-                inner join employee_records er on c.id = er.company_id and er.employment_ended_at is null
-            group by
-                c.name
-            order by 
-                count(*) desc, c.name
-            limit 
-                10
-        ) t
-    );
-else
-    raise exception 'invalid chart type %', _type;
-end if;
-end
+select 
+    json_build_object(
+        'companies', json_build_object(
+            'labels', json_agg(t.name),
+            'values', json_agg(t.count)
+        )
+    )
+from (
+    select c.name, count(*)
+    from 
+        companies c
+        inner join employee_records er on c.id = er.company_id and er.employment_ended_at is null
+    group by 
+        c.id, c.name
+    order by 
+        count(*) desc, c.name
+    limit 10
+) t
 $$;
 --
--- Name: FUNCTION get_chart_data(_type smallint); Type: COMMENT; Schema: public; Owner: -
+-- Name: FUNCTION get_chart_data_1(); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION public.get_chart_data(_type smallint) IS 'Returns json with chart data for specified chart type:
-- type 1: 
-    Top 10 companies with highest number of current employees.
-    Label is company name and value is number of current employees.
-';
+COMMENT ON FUNCTION reporting.get_chart_data_1() IS 'Top 10 comapnies by number of current employees.
+Json object witjh one series where labeles are comapnis names and values are number of current employees.';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 --
@@ -492,6 +488,11 @@ ALTER TABLE ONLY public.business_areas
 --
 ALTER TABLE ONLY public.business_roles
     ADD CONSTRAINT business_roles_pkey PRIMARY KEY (id);
+--
+-- Name: companies companies_name_normalized_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.companies
+    ADD CONSTRAINT companies_name_normalized_key UNIQUE (name_normalized);
 --
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
