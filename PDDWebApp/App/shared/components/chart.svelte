@@ -3,8 +3,9 @@
     import { onMount } from "svelte";
     import { isDarkTheme } from "../layout/theme"
 
-    export let dataFunc: () => Promise<Record<string, {"labels": Array<string>, "values": Array<number>}>>;
+    export let dataFunc: () => Promise<{labels: string[], series: number[][]}>;
     export let type: "line" | "bar";
+    export let datasetLabel = "";
     export let defaultColorDarkTheme = "#b7c8d8";
     export let defaultBorderColorDarkTheme = "#b7c8d8";
     export let defaultColorLightTheme = "#666";
@@ -21,17 +22,17 @@
         return {
                 type,
                 data: {
-                    labels: Object.values(data)[0].labels,
-                    datasets: Object.entries(data).map(([name, value]) => Object({ 
+                    labels: data.labels,
+                    datasets: data.series.map(values => Object({ 
                         backgroundColor: basicColors,
-                        label: name,
-                        data: value.values
+                        label: datasetLabel,
+                        data: values
                     }))
                 },
                 options: {
                     plugins: {
                         legend: {
-                            display: Object.values(data).length > 1,
+                            display: data.series.length > 1,
                         }
                     }
                 }

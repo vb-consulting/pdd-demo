@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-27T12:49:08.7564148+02:00`
+- Local time stamp: `2022-07-27T13:32:47.5079329+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
@@ -36,7 +36,10 @@
 
 <!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
-Json object witjh one series where labeles are comapnis names and values are number of current employees.
+Json object with only one series where labeles are comapnies names and values are number of the current employees.
+
+- Returns JSON schema: `{"labels": [string], "series: [[number]]"}`
+
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -117,8 +120,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`37`** | count=**`261.908`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
-| rows=**`29.310`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
+| count=**`73`** | count=**`261.980`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
+| rows=**`64.482`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -228,8 +231,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`35`** | count=**`0`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`3.609.630`** | rows=**`0`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
+| count=**`71`** | count=**`0`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`7.941.186`** | rows=**`0`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

@@ -18,7 +18,9 @@ public static class PgRoutineChartTop10ComapniesByEmployees
     /// <summary>
     /// Executes sql function "chart_top_10_comapnies_by_employees"
     /// Top 10 comapnies by number of current employees.
-    /// Json object witjh one series where labeles are comapnis names and values are number of current employees.
+    /// Json object with only one series where labeles are comapnies names and values are number of the current employees.
+    /// 
+    /// - Returns JSON schema: `{"labels": [string], "series: [[number]]"}`
     /// </summary>
     /// <returns>string?</returns>
     public static string? ChartTop10ComapniesByEmployees(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
@@ -33,7 +35,9 @@ public static class PgRoutineChartTop10ComapniesByEmployees
     /// <summary>
     /// Asynchronously executes sql function "chart_top_10_comapnies_by_employees"
     /// Top 10 comapnies by number of current employees.
-    /// Json object witjh one series where labeles are comapnis names and values are number of current employees.
+    /// Json object with only one series where labeles are comapnies names and values are number of the current employees.
+    /// 
+    /// - Returns JSON schema: `{"labels": [string], "series: [[number]]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>
     public static async ValueTask<string?> ChartTop10ComapniesByEmployeesAsync(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)

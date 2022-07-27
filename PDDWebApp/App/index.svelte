@@ -10,7 +10,7 @@
     <div class="container pt-4">
         <div class="row" >
             <div class="col">
-                <Chart type="bar" dataFunc={() => get(urls.chart1Url)} />
+                <Chart type="bar" dataFunc={() => get(urls.chart1Url)} datasetLabel="Number of employees: " />
             </div>
             <div class="col">
                 <!-- <Chart type="bar" />  -->

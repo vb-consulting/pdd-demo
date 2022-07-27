@@ -20885,21 +20885,21 @@ var index = (function () {
     	const block = {
     		c: function create() {
     			canvas = element("canvas");
-    			add_location(canvas, file$1, 65, 0, 1956);
+    			add_location(canvas, file$1, 66, 0, 1945);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, canvas, anchor);
-    			/*canvas_binding*/ ctx[9](canvas);
+    			/*canvas_binding*/ ctx[10](canvas);
     		},
     		p: noop$1,
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(canvas);
-    			/*canvas_binding*/ ctx[9](null);
+    			/*canvas_binding*/ ctx[10](null);
     		}
     	};
 
@@ -20917,11 +20917,12 @@ var index = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let $isDarkTheme;
     	validate_store(isDarkTheme, 'isDarkTheme');
-    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(8, $isDarkTheme = $$value));
+    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(9, $isDarkTheme = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Chart', slots, []);
     	let { dataFunc } = $$props;
     	let { type } = $$props;
+    	let { datasetLabel = "" } = $$props;
     	let { defaultColorDarkTheme = "#b7c8d8" } = $$props;
     	let { defaultBorderColorDarkTheme = "#b7c8d8" } = $$props;
     	let { defaultColorLightTheme = "#666" } = $$props;
@@ -20937,16 +20938,16 @@ var index = (function () {
     		return {
     			type,
     			data: {
-    				labels: Object.values(data)[0].labels,
-    				datasets: Object.entries(data).map(([name, value]) => Object({
+    				labels: data.labels,
+    				datasets: data.series.map(values => Object({
     					backgroundColor: basicColors,
-    					label: name,
-    					data: value.values
+    					label: datasetLabel,
+    					data: values
     				}))
     			},
     			options: {
     				plugins: {
-    					legend: { display: Object.values(data).length > 1 }
+    					legend: { display: data.series.length > 1 }
     				}
     			}
     		};
@@ -20958,13 +20959,13 @@ var index = (function () {
     		}
 
     		if (!chart) {
-    			$$invalidate(7, chart = new Chart(chartCanvas.getContext("2d"), await fetchChartConfig()));
+    			$$invalidate(8, chart = new Chart(chartCanvas.getContext("2d"), await fetchChartConfig()));
     		} else {
     			let data = JSON.parse(JSON.stringify(chart.data));
     			let options = JSON.parse(JSON.stringify(chart.options));
     			let ctx = chart.ctx;
     			chart.destroy();
-    			$$invalidate(7, chart = new Chart(ctx, { type, data, options }));
+    			$$invalidate(8, chart = new Chart(ctx, { type, data, options }));
     		}
     	};
 
@@ -20973,6 +20974,7 @@ var index = (function () {
     	const writable_props = [
     		'dataFunc',
     		'type',
+    		'datasetLabel',
     		'defaultColorDarkTheme',
     		'defaultBorderColorDarkTheme',
     		'defaultColorLightTheme',
@@ -20993,10 +20995,11 @@ var index = (function () {
     	$$self.$$set = $$props => {
     		if ('dataFunc' in $$props) $$invalidate(1, dataFunc = $$props.dataFunc);
     		if ('type' in $$props) $$invalidate(2, type = $$props.type);
-    		if ('defaultColorDarkTheme' in $$props) $$invalidate(3, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
-    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(4, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
-    		if ('defaultColorLightTheme' in $$props) $$invalidate(5, defaultColorLightTheme = $$props.defaultColorLightTheme);
-    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(6, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('datasetLabel' in $$props) $$invalidate(3, datasetLabel = $$props.datasetLabel);
+    		if ('defaultColorDarkTheme' in $$props) $$invalidate(4, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
+    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(5, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
+    		if ('defaultColorLightTheme' in $$props) $$invalidate(6, defaultColorLightTheme = $$props.defaultColorLightTheme);
+    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(7, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
     	};
 
     	$$self.$capture_state = () => ({
@@ -21006,6 +21009,7 @@ var index = (function () {
     		isDarkTheme,
     		dataFunc,
     		type,
+    		datasetLabel,
     		defaultColorDarkTheme,
     		defaultBorderColorDarkTheme,
     		defaultColorLightTheme,
@@ -21021,14 +21025,15 @@ var index = (function () {
     	$$self.$inject_state = $$props => {
     		if ('dataFunc' in $$props) $$invalidate(1, dataFunc = $$props.dataFunc);
     		if ('type' in $$props) $$invalidate(2, type = $$props.type);
-    		if ('defaultColorDarkTheme' in $$props) $$invalidate(3, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
-    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(4, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
-    		if ('defaultColorLightTheme' in $$props) $$invalidate(5, defaultColorLightTheme = $$props.defaultColorLightTheme);
-    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(6, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('datasetLabel' in $$props) $$invalidate(3, datasetLabel = $$props.datasetLabel);
+    		if ('defaultColorDarkTheme' in $$props) $$invalidate(4, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
+    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(5, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
+    		if ('defaultColorLightTheme' in $$props) $$invalidate(6, defaultColorLightTheme = $$props.defaultColorLightTheme);
+    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(7, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
     		if ('chartCanvas' in $$props) $$invalidate(0, chartCanvas = $$props.chartCanvas);
-    		if ('chart' in $$props) $$invalidate(7, chart = $$props.chart);
+    		if ('chart' in $$props) $$invalidate(8, chart = $$props.chart);
     		if ('fetchChartConfig' in $$props) fetchChartConfig = $$props.fetchChartConfig;
-    		if ('recreateChat' in $$props) $$invalidate(13, recreateChat = $$props.recreateChat);
+    		if ('recreateChat' in $$props) $$invalidate(14, recreateChat = $$props.recreateChat);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -21036,7 +21041,7 @@ var index = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 504) {
+    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 1008) {
     			{
     				if ($isDarkTheme) {
     					Chart.defaults.color = defaultColorDarkTheme;
@@ -21057,6 +21062,7 @@ var index = (function () {
     		chartCanvas,
     		dataFunc,
     		type,
+    		datasetLabel,
     		defaultColorDarkTheme,
     		defaultBorderColorDarkTheme,
     		defaultColorLightTheme,
@@ -21074,10 +21080,11 @@ var index = (function () {
     		init(this, options, instance$1, create_fragment$1, safe_not_equal, {
     			dataFunc: 1,
     			type: 2,
-    			defaultColorDarkTheme: 3,
-    			defaultBorderColorDarkTheme: 4,
-    			defaultColorLightTheme: 5,
-    			defaultBorderColorLightTheme: 6
+    			datasetLabel: 3,
+    			defaultColorDarkTheme: 4,
+    			defaultBorderColorDarkTheme: 5,
+    			defaultColorLightTheme: 6,
+    			defaultBorderColorLightTheme: 7
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -21112,6 +21119,14 @@ var index = (function () {
     	}
 
     	set type(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get datasetLabel() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set datasetLabel(value) {
     		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -21201,7 +21216,11 @@ var index = (function () {
     	let current;
 
     	chart = new Chart_1({
-    			props: { type: "bar", dataFunc: /*func*/ ctx[0] },
+    			props: {
+    				type: "bar",
+    				dataFunc: /*func*/ ctx[0],
+    				datasetLabel: "Number of employees: "
+    			},
     			$$inline: true
     		});
 
@@ -21221,15 +21240,15 @@ var index = (function () {
     			attr_dev(div0, "class", "col");
     			add_location(div0, file, 10, 12, 315);
     			attr_dev(div1, "class", "col");
-    			add_location(div1, file, 13, 12, 441);
+    			add_location(div1, file, 13, 12, 478);
     			attr_dev(div2, "class", "row");
     			add_location(div2, file, 9, 8, 283);
     			attr_dev(div3, "class", "col");
-    			add_location(div3, file, 22, 12, 672);
+    			add_location(div3, file, 22, 12, 709);
     			attr_dev(div4, "class", "col");
-    			add_location(div4, file, 25, 12, 759);
+    			add_location(div4, file, 25, 12, 796);
     			attr_dev(div5, "class", "row");
-    			add_location(div5, file, 21, 8, 641);
+    			add_location(div5, file, 21, 8, 678);
     			attr_dev(div6, "class", "container pt-4");
     			add_location(div6, file, 8, 4, 245);
     		},
