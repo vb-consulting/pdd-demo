@@ -3,55 +3,67 @@
     import { onMount } from "svelte";
     import { isDarkTheme } from "../layout/theme"
 
-    //{"companies" : {"labels" : ["Wunsch LLC", "Sipes Inc", ], "values" : [137, 112, ]}}
-    //export let 
+    export let dataFunc: () => Promise<Record<string, {"labels": Array<string>, "values": Array<number>}>>;
     export let type: "line" | "bar";
+    export let defaultColorDarkTheme = "#b7c8d8";
+    export let defaultBorderColorDarkTheme = "#b7c8d8";
+    export let defaultColorLightTheme = "#666";
+    export let defaultBorderColorLightTheme = "#666";
     
     Chart.register(...registerables);
 
-    let chartValues = [55, 49, 44, 24, 15];
-    let chartLabels = ["Italy", "France", "Spain", "USA", "Argentina"];
+    const basicColors = ["red", "yellow","blue","orange","green", "violet"];
     let chartCanvas: HTMLCanvasElement;
     let chart: Chart
 
-    let recreateChat = () => {
-        chart = new Chart(chartCanvas.getContext("2d") as any, {
-            type: type,
-            data: {
-                labels: chartLabels,
-                datasets: [{
-                    backgroundColor: ["red", "green","blue","orange","brown"],
-                    borderColor: "red",//'rgb(255, 99, 132)',
-                    data: chartValues,
-                }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Custom Chart Title'
-                    }
+    let fetchChartConfig = async () => {
+        let data = await dataFunc();
+        return {
+                type,
+                data: {
+                    labels: Object.values(data)[0].labels,
+                    datasets: Object.entries(data).map(([name, value]) => Object({ 
+                        backgroundColor: basicColors,
+                        label: name,
+                        data: value.values
+                    }))
                 },
-                
-                //backgroundColor: "rgba(0, 0, 0, 0.1)",
-                //borderColor: "white", //"rgba(0, 0, 0, 0.1)",
-                //color: "white", //"#666",
+                options: {
+                    plugins: {
+                        legend: {
+                            display: Object.values(data).length > 1,
+                        }
+                    }
+                }
             }
-        });
+    }
+
+    let recreateChat = async () => {
+        if (!chartCanvas) {
+            return;
+        }
+        if (!chart) {
+            chart = new Chart(chartCanvas.getContext("2d") as any, await fetchChartConfig());
+        } else {
+            let data = JSON.parse(JSON.stringify(chart.data));
+            let options = JSON.parse(JSON.stringify(chart.options));
+            let ctx = chart.ctx;
+            chart.destroy();
+            chart = new Chart(ctx, {type, data, options});
+        }
     }
 
     onMount(recreateChat);
 
     $: {
         if ($isDarkTheme) {
-            Chart.defaults.color = "#b7c8d8";
-            Chart.defaults.borderColor = "#b7c8d8";
+            Chart.defaults.color = defaultColorDarkTheme;
+            Chart.defaults.borderColor = defaultBorderColorDarkTheme;
         } else {
-            Chart.defaults.color = "#666";
-            Chart.defaults.borderColor = "#666";
+            Chart.defaults.color = defaultColorLightTheme;
+            Chart.defaults.borderColor = defaultBorderColorLightTheme;
         }
         if (chart) {
-            chart.destroy();
             recreateChat();
         }
     }

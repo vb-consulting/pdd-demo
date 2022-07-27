@@ -33,6 +33,7 @@ public static class ConnectionBuilder
         {
             NormOptions.Configure(options =>
             {
+                options.NpgsqlEnableSqlRewriting = false;
                 options.CommandCommentHeader.Enabled = true;
                 options.CommandCommentHeader.IncludeCallerInfo = true;
                 options.CommandCommentHeader.IncludeCommandAttributes = true;
@@ -41,10 +42,13 @@ public static class ConnectionBuilder
                 options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
             });
         }
-        NormOptions.Configure(options =>
+        else
         {
-            options.NpgsqlEnableSqlRewriting = false;
-        });
+            NormOptions.Configure(options =>
+            {
+                options.NpgsqlEnableSqlRewriting = false;
+            });
+        }
     }
 
     private static string GetConnectionName(IConfiguration config)
