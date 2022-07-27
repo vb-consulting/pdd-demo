@@ -17,7 +17,7 @@ public static class EndpointBuilder
         app.MapGet(Urls.Chart1Url, [AllowAnonymous] async (NpgsqlConnection connection, HttpResponse response) =>
         {
             response.ContentType = MediaTypeNames.Application.Json;
-            return await connection.GetChartData1Async();
+            return await connection.ChartTop10ComapniesByEmployeesAsync();
         });
     }
 }

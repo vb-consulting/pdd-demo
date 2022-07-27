@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS public.company_areas;
 DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS reporting.get_chart_data_1();
+DROP FUNCTION IF EXISTS reporting.chart_top_10_comapnies_by_employees();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS reporting;
@@ -103,9 +103,9 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: get_chart_data_1(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_top_10_comapnies_by_employees(); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.get_chart_data_1() RETURNS json
+CREATE FUNCTION reporting.chart_top_10_comapnies_by_employees() RETURNS json
     LANGUAGE sql
     AS $$
 select 
@@ -128,9 +128,9 @@ from (
 ) t
 $$;
 --
--- Name: FUNCTION get_chart_data_1(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_top_10_comapnies_by_employees(); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.get_chart_data_1() IS 'Top 10 comapnies by number of current employees.
+COMMENT ON FUNCTION reporting.chart_top_10_comapnies_by_employees() IS 'Top 10 comapnies by number of current employees.
 Json object witjh one series where labeles are comapnis names and values are number of current employees.';
 SET default_tablespace = '';
 SET default_table_access_method = heap;

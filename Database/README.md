@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-26T09:58:51.6940088+02:00`
+- Local time stamp: `2022-07-27T09:55:25.5655826+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
@@ -20,7 +20,7 @@
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
 - Enum [`public.valid_genders`](#enum-public-valid_genders)
-- Function [`reporting.get_chart_data_1()`](#function-reportingget_chart_data_1)
+- Function [`reporting.chart_top_10_comapnies_by_employees()`](#function-reportingchart_top_10_comapnies_by_employees)
 ## Tables
 
 ### Table `public.business_areas`
@@ -28,7 +28,13 @@
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/business_areas.sql](/Database/Scripts/tables/business_areas.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`3`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`13`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -43,7 +49,13 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/business_roles.sql](/Database/Scripts/tables/business_roles.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`2`** | count=**`128.085`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`128.085`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -57,7 +69,13 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
+- Count estimate: **977**
 - Source: [/Database/Scripts/tables/companies.sql](/Database/Scripts/tables/companies.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`31`** | count=**`261.896`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
+| rows=**`23.448`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -82,7 +100,13 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
+- Count estimate: **2.952**
 - Source: [/Database/Scripts/tables/company_areas.sql](/Database/Scripts/tables/company_areas.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`5`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -100,7 +124,13 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
+- Count estimate: **137.573**
 - Source: [/Database/Scripts/tables/company_reviews.sql](/Database/Scripts/tables/company_reviews.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`5`** | count=**`0`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -119,7 +149,13 @@ Company reviews made by people.
 
 <!-- comment on table "public"."countries" is @until-end-tag; -->
 <!-- end -->
+- Count estimate: **249**
 - Source: [/Database/Scripts/tables/countries.sql](/Database/Scripts/tables/countries.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`44.731`** | count=**`5.749`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`6.565.479`** | rows=**`5.749`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-07-25 11:37:36Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -137,7 +173,13 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
+- Count estimate: **120.321**
 - Source: [/Database/Scripts/tables/employee_records.sql](/Database/Scripts/tables/employee_records.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`29`** | count=**`0`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`2.887.704`** | rows=**`0`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -157,7 +199,13 @@ History of employment in companies by people.
 <!-- comment on table "public"."employee_status" is @until-end-tag; -->
 List of possible statuses in regards to employment.
 <!-- end -->
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/employee_status.sql](/Database/Scripts/tables/employee_status.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`2`** | count=**`49.503`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`49.503`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -171,7 +219,13 @@ List of possible statuses in regards to employment.
 
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
+- Count estimate: **49.497**
 - Source: [/Database/Scripts/tables/people.sql](/Database/Scripts/tables/people.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`8`** | count=**`435.962`** | inserted=**`49.497`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`386.466`** | live=**`49.497`**, dead=**`0`** | last auto=**`2022-07-25 11:45:43Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -198,7 +252,13 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
+- Count estimate: **128.067**
 - Source: [/Database/Scripts/tables/person_roles.sql](/Database/Scripts/tables/person_roles.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`6`** | count=**`128.276`** | inserted=**`128.067`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`209`** | live=**`128.067`**, dead=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -216,7 +276,13 @@ Person - business roles
 <!-- comment on table "public"."users" is @until-end-tag; -->
 System users. May or may not be a person (in people records).
 <!-- end -->
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/users.sql](/Database/Scripts/tables/users.sql)
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`3`** | count=**`489.861`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`489.861`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
@@ -240,17 +306,17 @@ System users. May or may not be a person (in people records).
 
 ## Routines
 
-### Function `reporting.get_chart_data_1()`
+### Function `reporting.chart_top_10_comapnies_by_employees()`
 
 - Returns `json`
 
 - Language is `sql`
 
-- Source: [/Database/Scripts/functions/reporting/reporting.get_chart_data_1.sql](/Database/Scripts/functions/reporting/reporting.get_chart_data_1.sql)
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql)
 
-- C# Source: [/Database/Extensions/GetChartData1.cs](/Database/Extensions/GetChartData1.cs)
+- C# Source: [/Database/Extensions/ChartTop10ComapniesByEmployees.cs](/Database/Extensions/ChartTop10ComapniesByEmployees.cs)
 
-<!-- comment on function "reporting"."get_chart_data_1"() is @until-end-tag; -->
+<!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
 Json object witjh one series where labeles are comapnis names and values are number of current employees.
 <!-- end -->

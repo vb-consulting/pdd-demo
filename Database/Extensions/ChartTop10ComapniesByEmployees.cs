@@ -10,17 +10,17 @@ using Npgsql;
 
 namespace PDD.Database.Extensions;
 
-public static class PgRoutineGetChartData1
+public static class PgRoutineChartTop10ComapniesByEmployees
 {
-    public const string Name = "reporting.get_chart_data_1";
+    public const string Name = "reporting.chart_top_10_comapnies_by_employees";
 
     /// <summary>
-    /// Executes sql function "get_chart_data_1"
+    /// Executes sql function "chart_top_10_comapnies_by_employees"
     /// Top 10 comapnies by number of current employees.
     /// Json object witjh one series where labeles are comapnis names and values are number of current employees.
     /// </summary>
     /// <returns>string?</returns>
-    public static string? GetChartData1(this NpgsqlConnection connection)
+    public static string? ChartTop10ComapniesByEmployees(this NpgsqlConnection connection)
     {
         return connection
             .WithUnknownResultType()
@@ -30,12 +30,12 @@ public static class PgRoutineGetChartData1
     }
 
     /// <summary>
-    /// Asynchronously executes sql function "get_chart_data_1"
+    /// Asynchronously executes sql function "chart_top_10_comapnies_by_employees"
     /// Top 10 comapnies by number of current employees.
     /// Json object witjh one series where labeles are comapnis names and values are number of current employees.
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> GetChartData1Async(this NpgsqlConnection connection)
+    public static async ValueTask<string?> ChartTop10ComapniesByEmployeesAsync(this NpgsqlConnection connection)
     {
         return await connection
             .WithUnknownResultType()

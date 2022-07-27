@@ -3,10 +3,11 @@
     import { onMount } from "svelte";
     import { isDarkTheme } from "../layout/theme"
 
+    //{"companies" : {"labels" : ["Wunsch LLC", "Sipes Inc", ], "values" : [137, 112, ]}}
+    //export let 
     export let type: "line" | "bar";
     
     Chart.register(...registerables);
-    
 
     let chartValues = [55, 49, 44, 24, 15];
     let chartLabels = ["Italy", "France", "Spain", "USA", "Argentina"];

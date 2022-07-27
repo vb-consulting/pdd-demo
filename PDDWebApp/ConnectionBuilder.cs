@@ -41,6 +41,10 @@ public static class ConnectionBuilder
                 options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
             });
         }
+        NormOptions.Configure(options =>
+        {
+            options.NpgsqlEnableSqlRewriting = false;
+        });
     }
 
     private static string GetConnectionName(IConfiguration config)
