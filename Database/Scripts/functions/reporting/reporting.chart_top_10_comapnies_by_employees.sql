@@ -6,7 +6,9 @@ CREATE OR REPLACE FUNCTION reporting.chart_top_10_comapnies_by_employees() RETUR
 select 
     json_build_object(
         'labels', json_agg(t.name),
-        'series', array[json_agg(t.count)]
+        'series', array[
+            json_build_object('data', json_agg(t.count))
+        ]
     )
 from (
     select c.name, count(*)
@@ -22,6 +24,6 @@ from (
 $$;
 
 COMMENT ON FUNCTION reporting.chart_top_10_comapnies_by_employees() IS 'Top 10 comapnies by number of current employees.
-Json object with only one series where labeles are comapnies names and values are number of the current employees.
-- Returns JSON schema: `{"labels": [string], "series: [[number]]"}`
+Json object where lables are companies name and it onyl have one series with the number of current employees for each company.
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';

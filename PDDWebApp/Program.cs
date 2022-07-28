@@ -7,6 +7,7 @@ global using Norm;
 global using Npgsql;
 global using PDDWebApp.Pages;
 global using PDDWebApp.Auth;
+global using PDD.Database.Extensions;
 
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;

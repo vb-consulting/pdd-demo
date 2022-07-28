@@ -12,6 +12,7 @@ const urls = getFromJson<{
     signInGitHubUrl: string;
 
     chart1Url: string;
+    chart2Url: string;
 }>("urls");
 
 export default urls;

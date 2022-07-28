@@ -20885,7 +20885,7 @@ var index = (function () {
     	const block = {
     		c: function create() {
     			canvas = element("canvas");
-    			add_location(canvas, file$1, 66, 0, 1945);
+    			add_location(canvas, file$1, 66, 0, 1967);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -20939,10 +20939,10 @@ var index = (function () {
     			type,
     			data: {
     				labels: data.labels,
-    				datasets: data.series.map(values => Object({
+    				datasets: data.series.map(series => Object({
     					backgroundColor: basicColors,
-    					label: datasetLabel,
-    					data: values
+    					label: datasetLabel || series.label,
+    					data: series.data
     				}))
     			},
     			options: {
@@ -21205,9 +21205,10 @@ var index = (function () {
     	let div6;
     	let div2;
     	let div0;
-    	let chart;
+    	let chart0;
     	let t0;
     	let div1;
+    	let chart1;
     	let t1;
     	let div5;
     	let div3;
@@ -21215,11 +21216,19 @@ var index = (function () {
     	let div4;
     	let current;
 
-    	chart = new Chart_1({
+    	chart0 = new Chart_1({
     			props: {
     				type: "bar",
     				dataFunc: /*func*/ ctx[0],
     				datasetLabel: "Number of employees: "
+    			},
+    			$$inline: true
+    		});
+
+    	chart1 = new Chart_1({
+    			props: {
+    				type: "line",
+    				dataFunc: /*func_1*/ ctx[1]
     			},
     			$$inline: true
     		});
@@ -21229,9 +21238,10 @@ var index = (function () {
     			div6 = element("div");
     			div2 = element("div");
     			div0 = element("div");
-    			create_component(chart.$$.fragment);
+    			create_component(chart0.$$.fragment);
     			t0 = space();
     			div1 = element("div");
+    			create_component(chart1.$$.fragment);
     			t1 = space();
     			div5 = element("div");
     			div3 = element("div");
@@ -21244,11 +21254,11 @@ var index = (function () {
     			attr_dev(div2, "class", "row");
     			add_location(div2, file, 9, 8, 283);
     			attr_dev(div3, "class", "col");
-    			add_location(div3, file, 22, 12, 709);
+    			add_location(div3, file, 22, 12, 737);
     			attr_dev(div4, "class", "col");
-    			add_location(div4, file, 25, 12, 796);
+    			add_location(div4, file, 25, 12, 824);
     			attr_dev(div5, "class", "row");
-    			add_location(div5, file, 21, 8, 678);
+    			add_location(div5, file, 21, 8, 706);
     			attr_dev(div6, "class", "container pt-4");
     			add_location(div6, file, 8, 4, 245);
     		},
@@ -21256,9 +21266,10 @@ var index = (function () {
     			insert_dev(target, div6, anchor);
     			append_dev(div6, div2);
     			append_dev(div2, div0);
-    			mount_component(chart, div0, null);
+    			mount_component(chart0, div0, null);
     			append_dev(div2, t0);
     			append_dev(div2, div1);
+    			mount_component(chart1, div1, null);
     			append_dev(div6, t1);
     			append_dev(div6, div5);
     			append_dev(div5, div3);
@@ -21269,16 +21280,19 @@ var index = (function () {
     		p: noop$1,
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(chart.$$.fragment, local);
+    			transition_in(chart0.$$.fragment, local);
+    			transition_in(chart1.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(chart.$$.fragment, local);
+    			transition_out(chart0.$$.fragment, local);
+    			transition_out(chart1.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div6);
-    			destroy_component(chart);
+    			destroy_component(chart0);
+    			destroy_component(chart1);
     		}
     	};
 
@@ -21320,7 +21334,7 @@ var index = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope*/ 2) {
+    			if (dirty & /*$$scope*/ 4) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -21361,8 +21375,9 @@ var index = (function () {
     	});
 
     	const func = () => get(urls.chart1Url);
+    	const func_1 = () => get(urls.chart2Url);
     	$$self.$capture_state = () => ({ Layout: Offcanvas_layout, Chart: Chart_1, get, urls });
-    	return [func];
+    	return [func, func_1];
     }
 
     class App extends SvelteComponentDev {

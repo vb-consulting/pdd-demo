@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-27T13:32:47.5079329+02:00`
+- Local time stamp: `2022-07-28T11:50:47.6380403+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
@@ -9,6 +9,7 @@
 ## Table of Contents
 
 - Function [`reporting.chart_top_10_comapnies_by_employees()`](#function-reportingchart_top_10_comapnies_by_employees)
+- Function [`reporting.chart_top_10_comapnies_last_10_years_number_of_employees()`](#function-reportingchart_top_10_comapnies_last_10_years_number_of_employees)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
 - Table [`public.companies`](#table-publiccompanies)
@@ -36,9 +37,29 @@
 
 <!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
-Json object with only one series where labeles are comapnies names and values are number of the current employees.
+Json object where lables are companies name and it onyl have one series with the number of current employees for each company.
 
-- Returns JSON schema: `{"labels": [string], "series: [[number]]"}`
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `reporting.chart_top_10_comapnies_last_10_years_number_of_employees()`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_last_10_years_number_of_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_last_10_years_number_of_employees.sql)
+
+- C# Source: [/Database/Extensions/ChartTop10ComapniesLast10YearsNumberOfEmployees.cs](/Database/Extensions/ChartTop10ComapniesLast10YearsNumberOfEmployees.cs)
+
+<!-- comment on function "reporting"."chart_top_10_comapnies_last_10_years_number_of_employees"() is @until-end-tag; -->
+Top 10 comapnies by number of employees for the last ten years.
+Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+
+- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 
 <!-- end -->
 
@@ -120,8 +141,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`73`** | count=**`261.980`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
-| rows=**`64.482`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
+| count=**`159`** | count=**`262.152`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
+| rows=**`148.504`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -231,8 +252,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`71`** | count=**`0`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`7.941.186`** | rows=**`0`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
+| count=**`178`** | count=**`1.325`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`20.815.533`** | rows=**`348.975`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -357,6 +378,6 @@ System users. May or may not be a person (in people records).
 ## Enums
 | Type name | Values | Comment | Source |
 | --------- | ------ | --------| ------ |
-| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | There are only two genders. | [/Database/Scripts/types/valid_genders.sql](/Database/Scripts/types/valid_genders.sql) 
+| <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`valid_genders` | `'M', 'F'` | <!-- comment on type "public"."valid_genders" is @until-end-tag; -->There are only two genders.<!-- end --> | [/Database/Scripts/types/valid_genders.sql](/Database/Scripts/types/valid_genders.sql) |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

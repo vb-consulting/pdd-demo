@@ -13,7 +13,7 @@
                 <Chart type="bar" dataFunc={() => get(urls.chart1Url)} datasetLabel="Number of employees: " />
             </div>
             <div class="col">
-                <!-- <Chart type="bar" />  -->
+                <Chart type="line" dataFunc={() => get(urls.chart2Url)} />
             </div>
             <!-- <div class="col">
                 <Chart />
