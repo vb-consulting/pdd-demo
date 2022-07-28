@@ -1,19 +1,20 @@
 <script lang="ts">
     import { Chart, registerables } from "chart.js";
     import { onMount } from "svelte";
-    import { isDarkTheme } from "../layout/theme"
+    import { isDarkTheme } from "../layout/theme";
 
     export let dataFunc: () => Promise<{labels: string[], series: {data: number[], label: string | undefined}[]}>;
-    export let type: "line" | "bar";
+    export let type: "line" | "bar" | "pie" | "doughnut";
     export let datasetLabel: string = "";
     export let defaultColorDarkTheme = "#b7c8d8";
-    export let defaultBorderColorDarkTheme = "#b7c8d8";
+    export let defaultBorderColorDarkTheme = "#6c757d";
     export let defaultColorLightTheme = "#666";
     export let defaultBorderColorLightTheme = "#666";
+    export let basicColors = ["red", "yellow","blue","orange","green", "violet", "purple", "magenta", "grey", "brown", "pink", "aqua", "navy"];
+    export let displayLegend: boolean | undefined = undefined;
     
     Chart.register(...registerables);
 
-    const basicColors = ["red", "yellow","blue","orange","green", "violet"];
     let chartCanvas: HTMLCanvasElement;
     let chart: Chart
 
@@ -32,9 +33,9 @@
                 options: {
                     plugins: {
                         legend: {
-                            display: data.series.length > 1,
+                            display: displayLegend != undefined ? displayLegend : data.series.length > 1,
                         }
-                    }
+                    },
                 }
             }
     }

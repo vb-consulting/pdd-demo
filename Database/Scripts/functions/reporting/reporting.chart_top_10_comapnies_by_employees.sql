@@ -24,6 +24,6 @@ from (
 $$;
 
 COMMENT ON FUNCTION reporting.chart_top_10_comapnies_by_employees() IS 'Top 10 comapnies by number of current employees.
-Json object where lables are companies name and it onyl have one series with the number of current employees for each company.
+Json object where lables are companies name and it only have one series with the number of current employees for each company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';

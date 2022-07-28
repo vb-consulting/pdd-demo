@@ -13,6 +13,7 @@ const urls = getFromJson<{
 
     chart1Url: string;
     chart2Url: string;
+    chart3Url: string;
 }>("urls");
 
 export default urls;

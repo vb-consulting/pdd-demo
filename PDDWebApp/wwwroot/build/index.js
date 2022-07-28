@@ -20885,21 +20885,21 @@ var index = (function () {
     	const block = {
     		c: function create() {
     			canvas = element("canvas");
-    			add_location(canvas, file$1, 66, 0, 1967);
+    			add_location(canvas, file$1, 67, 0, 2119);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, canvas, anchor);
-    			/*canvas_binding*/ ctx[10](canvas);
+    			/*canvas_binding*/ ctx[12](canvas);
     		},
     		p: noop$1,
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(canvas);
-    			/*canvas_binding*/ ctx[10](null);
+    			/*canvas_binding*/ ctx[12](null);
     		}
     	};
 
@@ -20917,18 +20917,35 @@ var index = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let $isDarkTheme;
     	validate_store(isDarkTheme, 'isDarkTheme');
-    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(9, $isDarkTheme = $$value));
+    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(11, $isDarkTheme = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Chart', slots, []);
     	let { dataFunc } = $$props;
     	let { type } = $$props;
     	let { datasetLabel = "" } = $$props;
     	let { defaultColorDarkTheme = "#b7c8d8" } = $$props;
-    	let { defaultBorderColorDarkTheme = "#b7c8d8" } = $$props;
+    	let { defaultBorderColorDarkTheme = "#6c757d" } = $$props;
     	let { defaultColorLightTheme = "#666" } = $$props;
     	let { defaultBorderColorLightTheme = "#666" } = $$props;
+
+    	let { basicColors = [
+    		"red",
+    		"yellow",
+    		"blue",
+    		"orange",
+    		"green",
+    		"violet",
+    		"purple",
+    		"magenta",
+    		"grey",
+    		"brown",
+    		"pink",
+    		"aqua",
+    		"navy"
+    	] } = $$props;
+
+    	let { displayLegend = undefined } = $$props;
     	Chart.register(...registerables);
-    	const basicColors = ["red", "yellow", "blue", "orange", "green", "violet"];
     	let chartCanvas;
     	let chart;
 
@@ -20947,7 +20964,11 @@ var index = (function () {
     			},
     			options: {
     				plugins: {
-    					legend: { display: data.series.length > 1 }
+    					legend: {
+    						display: displayLegend != undefined
+    						? displayLegend
+    						: data.series.length > 1
+    					}
     				}
     			}
     		};
@@ -20959,13 +20980,13 @@ var index = (function () {
     		}
 
     		if (!chart) {
-    			$$invalidate(8, chart = new Chart(chartCanvas.getContext("2d"), await fetchChartConfig()));
+    			$$invalidate(10, chart = new Chart(chartCanvas.getContext("2d"), await fetchChartConfig()));
     		} else {
     			let data = JSON.parse(JSON.stringify(chart.data));
     			let options = JSON.parse(JSON.stringify(chart.options));
     			let ctx = chart.ctx;
     			chart.destroy();
-    			$$invalidate(8, chart = new Chart(ctx, { type, data, options }));
+    			$$invalidate(10, chart = new Chart(ctx, { type, data, options }));
     		}
     	};
 
@@ -20978,7 +20999,9 @@ var index = (function () {
     		'defaultColorDarkTheme',
     		'defaultBorderColorDarkTheme',
     		'defaultColorLightTheme',
-    		'defaultBorderColorLightTheme'
+    		'defaultBorderColorLightTheme',
+    		'basicColors',
+    		'displayLegend'
     	];
 
     	Object_1.keys($$props).forEach(key => {
@@ -21000,6 +21023,8 @@ var index = (function () {
     		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(5, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
     		if ('defaultColorLightTheme' in $$props) $$invalidate(6, defaultColorLightTheme = $$props.defaultColorLightTheme);
     		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(7, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('basicColors' in $$props) $$invalidate(8, basicColors = $$props.basicColors);
+    		if ('displayLegend' in $$props) $$invalidate(9, displayLegend = $$props.displayLegend);
     	};
 
     	$$self.$capture_state = () => ({
@@ -21015,6 +21040,7 @@ var index = (function () {
     		defaultColorLightTheme,
     		defaultBorderColorLightTheme,
     		basicColors,
+    		displayLegend,
     		chartCanvas,
     		chart,
     		fetchChartConfig,
@@ -21030,10 +21056,12 @@ var index = (function () {
     		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(5, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
     		if ('defaultColorLightTheme' in $$props) $$invalidate(6, defaultColorLightTheme = $$props.defaultColorLightTheme);
     		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(7, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('basicColors' in $$props) $$invalidate(8, basicColors = $$props.basicColors);
+    		if ('displayLegend' in $$props) $$invalidate(9, displayLegend = $$props.displayLegend);
     		if ('chartCanvas' in $$props) $$invalidate(0, chartCanvas = $$props.chartCanvas);
-    		if ('chart' in $$props) $$invalidate(8, chart = $$props.chart);
+    		if ('chart' in $$props) $$invalidate(10, chart = $$props.chart);
     		if ('fetchChartConfig' in $$props) fetchChartConfig = $$props.fetchChartConfig;
-    		if ('recreateChat' in $$props) $$invalidate(14, recreateChat = $$props.recreateChat);
+    		if ('recreateChat' in $$props) $$invalidate(15, recreateChat = $$props.recreateChat);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -21041,7 +21069,7 @@ var index = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 1008) {
+    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 3312) {
     			{
     				if ($isDarkTheme) {
     					Chart.defaults.color = defaultColorDarkTheme;
@@ -21067,6 +21095,8 @@ var index = (function () {
     		defaultBorderColorDarkTheme,
     		defaultColorLightTheme,
     		defaultBorderColorLightTheme,
+    		basicColors,
+    		displayLegend,
     		chart,
     		$isDarkTheme,
     		canvas_binding
@@ -21084,7 +21114,9 @@ var index = (function () {
     			defaultColorDarkTheme: 4,
     			defaultBorderColorDarkTheme: 5,
     			defaultColorLightTheme: 6,
-    			defaultBorderColorLightTheme: 7
+    			defaultBorderColorLightTheme: 7,
+    			basicColors: 8,
+    			displayLegend: 9
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -21161,6 +21193,22 @@ var index = (function () {
     	set defaultBorderColorLightTheme(value) {
     		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
+
+    	get basicColors() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set basicColors(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get displayLegend() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set displayLegend(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
     const _fetch = async (url, method, func, content, raw = false) => {
@@ -21202,18 +21250,30 @@ var index = (function () {
 
     // (7:0) <Layout title="PDD Dashboard">
     function create_default_slot(ctx) {
-    	let div6;
-    	let div2;
-    	let div0;
-    	let chart0;
-    	let t0;
-    	let div1;
-    	let chart1;
-    	let t1;
-    	let div5;
-    	let div3;
-    	let t2;
+    	let div9;
     	let div4;
+    	let div0;
+    	let p0;
+    	let t1;
+    	let chart0;
+    	let t2;
+    	let div1;
+    	let p1;
+    	let t4;
+    	let chart1;
+    	let t5;
+    	let div3;
+    	let p2;
+    	let t7;
+    	let div2;
+    	let chart2;
+    	let t8;
+    	let div8;
+    	let div5;
+    	let t9;
+    	let div6;
+    	let t10;
+    	let div7;
     	let current;
 
     	chart0 = new Chart_1({
@@ -21233,48 +21293,93 @@ var index = (function () {
     			$$inline: true
     		});
 
+    	chart2 = new Chart_1({
+    			props: {
+    				type: "pie",
+    				dataFunc: /*func_2*/ ctx[2],
+    				displayLegend: true
+    			},
+    			$$inline: true
+    		});
+
     	const block = {
     		c: function create() {
-    			div6 = element("div");
-    			div2 = element("div");
-    			div0 = element("div");
-    			create_component(chart0.$$.fragment);
-    			t0 = space();
-    			div1 = element("div");
-    			create_component(chart1.$$.fragment);
-    			t1 = space();
-    			div5 = element("div");
-    			div3 = element("div");
-    			t2 = space();
+    			div9 = element("div");
     			div4 = element("div");
-    			attr_dev(div0, "class", "col");
-    			add_location(div0, file, 10, 12, 315);
-    			attr_dev(div1, "class", "col");
-    			add_location(div1, file, 13, 12, 478);
-    			attr_dev(div2, "class", "row");
-    			add_location(div2, file, 9, 8, 283);
-    			attr_dev(div3, "class", "col");
-    			add_location(div3, file, 22, 12, 737);
-    			attr_dev(div4, "class", "col");
-    			add_location(div4, file, 25, 12, 824);
-    			attr_dev(div5, "class", "row");
-    			add_location(div5, file, 21, 8, 706);
-    			attr_dev(div6, "class", "container pt-4");
-    			add_location(div6, file, 8, 4, 245);
+    			div0 = element("div");
+    			p0 = element("p");
+    			p0.textContent = "Top 10 companies by the number of employees";
+    			t1 = space();
+    			create_component(chart0.$$.fragment);
+    			t2 = space();
+    			div1 = element("div");
+    			p1 = element("p");
+    			p1.textContent = "Top 10 companies by the number of employees - employee growth last 10 years";
+    			t4 = space();
+    			create_component(chart1.$$.fragment);
+    			t5 = space();
+    			div3 = element("div");
+    			p2 = element("p");
+    			p2.textContent = "Number of companies by business areas";
+    			t7 = space();
+    			div2 = element("div");
+    			create_component(chart2.$$.fragment);
+    			t8 = space();
+    			div8 = element("div");
+    			div5 = element("div");
+    			t9 = space();
+    			div6 = element("div");
+    			t10 = space();
+    			div7 = element("div");
+    			add_location(p0, file, 11, 16, 383);
+    			attr_dev(div0, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div0, file, 10, 12, 337);
+    			add_location(p1, file, 15, 16, 625);
+    			attr_dev(div1, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div1, file, 14, 12, 579);
+    			add_location(p2, file, 19, 16, 863);
+    			attr_dev(div2, "class", "chart-fixed-size svelte-ly95le");
+    			add_location(div2, file, 20, 16, 925);
+    			attr_dev(div3, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div3, file, 18, 12, 817);
+    			attr_dev(div4, "class", "row");
+    			add_location(div4, file, 9, 8, 306);
+    			attr_dev(div5, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div5, file, 27, 12, 1158);
+    			attr_dev(div6, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div6, file, 30, 12, 1256);
+    			attr_dev(div7, "class", "col-md-4 chart svelte-ly95le");
+    			add_location(div7, file, 33, 12, 1354);
+    			attr_dev(div8, "class", "row");
+    			add_location(div8, file, 26, 8, 1127);
+    			attr_dev(div9, "class", "main container-fluid text-center pt-4 svelte-ly95le");
+    			add_location(div9, file, 8, 4, 245);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div6, anchor);
-    			append_dev(div6, div2);
-    			append_dev(div2, div0);
+    			insert_dev(target, div9, anchor);
+    			append_dev(div9, div4);
+    			append_dev(div4, div0);
+    			append_dev(div0, p0);
+    			append_dev(div0, t1);
     			mount_component(chart0, div0, null);
-    			append_dev(div2, t0);
-    			append_dev(div2, div1);
+    			append_dev(div4, t2);
+    			append_dev(div4, div1);
+    			append_dev(div1, p1);
+    			append_dev(div1, t4);
     			mount_component(chart1, div1, null);
-    			append_dev(div6, t1);
-    			append_dev(div6, div5);
-    			append_dev(div5, div3);
-    			append_dev(div5, t2);
-    			append_dev(div5, div4);
+    			append_dev(div4, t5);
+    			append_dev(div4, div3);
+    			append_dev(div3, p2);
+    			append_dev(div3, t7);
+    			append_dev(div3, div2);
+    			mount_component(chart2, div2, null);
+    			append_dev(div9, t8);
+    			append_dev(div9, div8);
+    			append_dev(div8, div5);
+    			append_dev(div8, t9);
+    			append_dev(div8, div6);
+    			append_dev(div8, t10);
+    			append_dev(div8, div7);
     			current = true;
     		},
     		p: noop$1,
@@ -21282,17 +21387,20 @@ var index = (function () {
     			if (current) return;
     			transition_in(chart0.$$.fragment, local);
     			transition_in(chart1.$$.fragment, local);
+    			transition_in(chart2.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(chart0.$$.fragment, local);
     			transition_out(chart1.$$.fragment, local);
+    			transition_out(chart2.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div6);
+    			if (detaching) detach_dev(div9);
     			destroy_component(chart0);
     			destroy_component(chart1);
+    			destroy_component(chart2);
     		}
     	};
 
@@ -21334,7 +21442,7 @@ var index = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope*/ 4) {
+    			if (dirty & /*$$scope*/ 8) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -21376,8 +21484,9 @@ var index = (function () {
 
     	const func = () => get(urls.chart1Url);
     	const func_1 = () => get(urls.chart2Url);
+    	const func_2 = () => get(urls.chart3Url);
     	$$self.$capture_state = () => ({ Layout: Offcanvas_layout, Chart: Chart_1, get, urls });
-    	return [func, func_1];
+    	return [func, func_1, func_2];
     }
 
     class App extends SvelteComponentDev {

@@ -75,8 +75,9 @@ DROP TABLE IF EXISTS public.company_areas;
 DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS reporting.chart_top_10_comapnies_last_10_years_number_of_employees();
+DROP FUNCTION IF EXISTS reporting.chart_top_comapnies_last_10_years_number_of_employees();
 DROP FUNCTION IF EXISTS reporting.chart_top_10_comapnies_by_employees();
+DROP FUNCTION IF EXISTS reporting.chart_number_of_companies_by_areas();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS reporting;
@@ -103,6 +104,37 @@ CREATE TYPE public.valid_genders AS ENUM (
 -- Name: TYPE valid_genders; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
+--
+-- Name: chart_number_of_companies_by_areas(); Type: FUNCTION; Schema: reporting; Owner: -
+--
+CREATE FUNCTION reporting.chart_number_of_companies_by_areas() RETURNS json
+    LANGUAGE sql
+    AS $$
+select 
+    json_build_object(
+        'labels', json_agg(t.name),
+        'series', array[
+            json_build_object('data', json_agg(t.count))
+        ]
+    )
+from (
+    select a.name, count(*)
+    from 
+        business_areas a
+        inner join company_areas c on a.id = c.area_id
+    group by 
+        a.name
+    order by 
+        count(*) desc, a.name
+) t
+$$;
+--
+-- Name: FUNCTION chart_number_of_companies_by_areas(); Type: COMMENT; Schema: reporting; Owner: -
+--
+COMMENT ON FUNCTION reporting.chart_number_of_companies_by_areas() IS 'Number of companies by business area.
+Json object where lables are companies name and it only have one series with the number of business area for each company.
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+';
 --
 -- Name: chart_top_10_comapnies_by_employees(); Type: FUNCTION; Schema: reporting; Owner: -
 --
@@ -132,13 +164,13 @@ $$;
 -- Name: FUNCTION chart_top_10_comapnies_by_employees(); Type: COMMENT; Schema: reporting; Owner: -
 --
 COMMENT ON FUNCTION reporting.chart_top_10_comapnies_by_employees() IS 'Top 10 comapnies by number of current employees.
-Json object where lables are companies name and it onyl have one series with the number of current employees for each company.
+Json object where lables are companies name and it only have one series with the number of current employees for each company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_top_10_comapnies_last_10_years_number_of_employees(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_top_comapnies_last_10_years_number_of_employees(); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_top_10_comapnies_last_10_years_number_of_employees() RETURNS json
+CREATE FUNCTION reporting.chart_top_comapnies_last_10_years_number_of_employees() RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -176,7 +208,7 @@ begin
                         c.id, c.name
                     order by 
                         count(*) desc, c.name
-                    limit 10
+                    limit 5
                 ) c
                 join lateral (
                     select count(*) as value
@@ -194,9 +226,9 @@ begin
 end
 $$;
 --
--- Name: FUNCTION chart_top_10_comapnies_last_10_years_number_of_employees(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_top_comapnies_last_10_years_number_of_employees(); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_top_10_comapnies_last_10_years_number_of_employees() IS 'Top 10 comapnies by number of employees for the last ten years.
+COMMENT ON FUNCTION reporting.chart_top_comapnies_last_10_years_number_of_employees() IS 'Top 5 comapnies by number of employees for the last ten years.
 Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';

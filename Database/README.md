@@ -1,15 +1,16 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-28T11:50:47.6380403+02:00`
+- Local time stamp: `2022-07-28T14:46:56.7753851+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
 
 ## Table of Contents
 
+- Function [`reporting.chart_number_of_companies_by_areas()`](#function-reportingchart_number_of_companies_by_areas)
 - Function [`reporting.chart_top_10_comapnies_by_employees()`](#function-reportingchart_top_10_comapnies_by_employees)
-- Function [`reporting.chart_top_10_comapnies_last_10_years_number_of_employees()`](#function-reportingchart_top_10_comapnies_last_10_years_number_of_employees)
+- Function [`reporting.chart_top_comapnies_last_10_years_number_of_employees()`](#function-reportingchart_top_comapnies_last_10_years_number_of_employees)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
 - Table [`public.companies`](#table-publiccompanies)
@@ -25,6 +26,26 @@
 
 ## Routines
 
+### Function `reporting.chart_number_of_companies_by_areas()`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql](/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql)
+
+- C# Source: [/Database/Extensions/ChartNumberOfCompaniesByAreas.cs](/Database/Extensions/ChartNumberOfCompaniesByAreas.cs)
+
+<!-- comment on function "reporting"."chart_number_of_companies_by_areas"() is @until-end-tag; -->
+Number of companies by business area.
+Json object where lables are companies name and it only have one series with the number of business area for each company.
+
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
 ### Function `reporting.chart_top_10_comapnies_by_employees()`
 
 - Returns `json`
@@ -37,7 +58,7 @@
 
 <!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
-Json object where lables are companies name and it onyl have one series with the number of current employees for each company.
+Json object where lables are companies name and it only have one series with the number of current employees for each company.
 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 
@@ -45,18 +66,18 @@ Json object where lables are companies name and it onyl have one series with the
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `reporting.chart_top_10_comapnies_last_10_years_number_of_employees()`
+### Function `reporting.chart_top_comapnies_last_10_years_number_of_employees()`
 
 - Returns `json`
 
 - Language is `plpgsql`
 
-- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_last_10_years_number_of_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_last_10_years_number_of_employees.sql)
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql)
 
-- C# Source: [/Database/Extensions/ChartTop10ComapniesLast10YearsNumberOfEmployees.cs](/Database/Extensions/ChartTop10ComapniesLast10YearsNumberOfEmployees.cs)
+- C# Source: [/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs](/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs)
 
-<!-- comment on function "reporting"."chart_top_10_comapnies_last_10_years_number_of_employees"() is @until-end-tag; -->
-Top 10 comapnies by number of employees for the last ten years.
+<!-- comment on function "reporting"."chart_top_comapnies_last_10_years_number_of_employees"() is @until-end-tag; -->
+Top 5 comapnies by number of employees for the last ten years.
 Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
 
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
@@ -84,8 +105,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`3`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`13`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+| count=**`123`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`1.573`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -141,8 +162,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`159`** | count=**`262.152`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
-| rows=**`148.504`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
+| count=**`509`** | count=**`262.852`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
+| rows=**`490.454`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -168,8 +189,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
+| count=**`125`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`354.240`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -197,8 +218,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`0`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`0`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
+| count=**`6`** | count=**`0`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`137.573`** | rows=**`0`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -252,8 +273,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`178`** | count=**`1.325`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`20.815.533`** | rows=**`348.975`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
+| count=**`699`** | count=**`20.135`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`83.502.774`** | rows=**`5.296.005`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
