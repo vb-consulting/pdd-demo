@@ -11,19 +11,18 @@ using System.Runtime.CompilerServices;
 
 namespace PDD.Database.Extensions;
 
-public static class PgRoutineChartTopComapniesLast10YearsNumberOfEmployees
+public static class PgRoutineChart2
 {
-    public const string Name = "reporting.chart_top_comapnies_last_10_years_number_of_employees";
+    public const string Name = "reporting.chart_2";
 
     /// <summary>
-    /// Executes plpgsql function "chart_top_comapnies_last_10_years_number_of_employees"
+    /// Executes plpgsql function "chart_2"
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
-    /// 
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <returns>string?</returns>
-    public static string? ChartTopComapniesLast10YearsNumberOfEmployees(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? Chart2(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return connection
             .WithUnknownResultType()
@@ -33,14 +32,13 @@ public static class PgRoutineChartTopComapniesLast10YearsNumberOfEmployees
     }
 
     /// <summary>
-    /// Asynchronously executes plpgsql function "chart_top_comapnies_last_10_years_number_of_employees"
+    /// Asynchronously executes plpgsql function "chart_2"
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
-    /// 
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> ChartTopComapniesLast10YearsNumberOfEmployeesAsync(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async ValueTask<string?> Chart2Async(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return await connection
             .WithUnknownResultType()

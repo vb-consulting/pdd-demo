@@ -35,7 +35,7 @@
                         legend: {
                             display: displayLegend != undefined ? displayLegend : data.series.length > 1,
                         }
-                    },
+                    }
                 }
             }
     }
@@ -56,6 +56,7 @@
     }
 
     onMount(recreateChat);
+
 
     $: {
         if ($isDarkTheme) {

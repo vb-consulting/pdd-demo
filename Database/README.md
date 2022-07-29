@@ -1,16 +1,19 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-28T14:46:56.7753851+02:00`
+- Local time stamp: `2022-07-29T14:22:34.6255379+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
 - Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
 
 ## Table of Contents
 
-- Function [`reporting.chart_number_of_companies_by_areas()`](#function-reportingchart_number_of_companies_by_areas)
-- Function [`reporting.chart_top_10_comapnies_by_employees()`](#function-reportingchart_top_10_comapnies_by_employees)
-- Function [`reporting.chart_top_comapnies_last_10_years_number_of_employees()`](#function-reportingchart_top_comapnies_last_10_years_number_of_employees)
+- Function [`reporting.chart_1()`](#function-reportingchart_1)
+- Function [`reporting.chart_2()`](#function-reportingchart_2)
+- Function [`reporting.chart_3()`](#function-reportingchart_3)
+- Function [`reporting.chart_4()`](#function-reportingchart_4)
+- Function [`reporting.chart_5()`](#function-reportingchart_5)
+- Function [`reporting.chart_6()`](#function-reportingchart_6)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
 - Table [`public.companies`](#table-publiccompanies)
@@ -26,39 +29,19 @@
 
 ## Routines
 
-### Function `reporting.chart_number_of_companies_by_areas()`
+### Function `reporting.chart_1()`
 
 - Returns `json`
 
 - Language is `sql`
 
-- Source: [/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql](/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql)
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_1.sql](/Database/Scripts/functions/reporting/reporting.chart_1.sql)
 
-- C# Source: [/Database/Extensions/ChartNumberOfCompaniesByAreas.cs](/Database/Extensions/ChartNumberOfCompaniesByAreas.cs)
+- C# Source: [/Database/Extensions/Chart1.cs](/Database/Extensions/Chart1.cs)
 
-<!-- comment on function "reporting"."chart_number_of_companies_by_areas"() is @until-end-tag; -->
-Number of companies by business area.
-Json object where lables are companies name and it only have one series with the number of business area for each company.
-
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `reporting.chart_top_10_comapnies_by_employees()`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql)
-
-- C# Source: [/Database/Extensions/ChartTop10ComapniesByEmployees.cs](/Database/Extensions/ChartTop10ComapniesByEmployees.cs)
-
-<!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
+<!-- comment on function "reporting"."chart_1"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
-Json object where lables are companies name and it only have one series with the number of current employees for each company.
+Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 
@@ -66,21 +49,99 @@ Json object where lables are companies name and it only have one series with the
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `reporting.chart_top_comapnies_last_10_years_number_of_employees()`
+### Function `reporting.chart_2()`
 
 - Returns `json`
 
 - Language is `plpgsql`
 
-- Source: [/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql](/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql)
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_2.sql](/Database/Scripts/functions/reporting/reporting.chart_2.sql)
 
-- C# Source: [/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs](/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs)
+- C# Source: [/Database/Extensions/Chart2.cs](/Database/Extensions/Chart2.cs)
 
-<!-- comment on function "reporting"."chart_top_comapnies_last_10_years_number_of_employees"() is @until-end-tag; -->
+<!-- comment on function "reporting"."chart_2"() is @until-end-tag; -->
 Top 5 comapnies by number of employees for the last ten years.
 Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
-
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `reporting.chart_3()`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_3.sql](/Database/Scripts/functions/reporting/reporting.chart_3.sql)
+
+- C# Source: [/Database/Extensions/Chart3.cs](/Database/Extensions/Chart3.cs)
+
+<!-- comment on function "reporting"."chart_3"() is @until-end-tag; -->
+Number of companies by business area.
+Json object where lables are companies name and it only have one series with the number of business area for each company.
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `reporting.chart_4()`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_4.sql](/Database/Scripts/functions/reporting/reporting.chart_4.sql)
+
+- C# Source: [/Database/Extensions/Chart4.cs](/Database/Extensions/Chart4.cs)
+
+<!-- comment on function "reporting"."chart_4"() is @until-end-tag; -->
+Number of companies by country.
+Json object where lables are country names and it only have one series with the number of companies for each country.
+It show only first 9 conutries and 10th is summed together as other. 
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `reporting.chart_5()`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_5.sql](/Database/Scripts/functions/reporting/reporting.chart_5.sql)
+
+- C# Source: [/Database/Extensions/Chart5.cs](/Database/Extensions/Chart5.cs)
+
+<!-- comment on function "reporting"."chart_5"() is @until-end-tag; -->
+Top 10 comanies with highest number of user reviews.
+Json object where lables are companies names with average score and it only have one series with total number of reviews.
+
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `reporting.chart_6()`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/Database/Scripts/functions/reporting/reporting.chart_6.sql](/Database/Scripts/functions/reporting/reporting.chart_6.sql)
+
+- C# Source: [/Database/Extensions/Chart6.cs](/Database/Extensions/Chart6.cs)
+
+<!-- comment on function "reporting"."chart_6"() is @until-end-tag; -->
+Business areas, the number of employees for top 3 companies by highest number of employees.
+Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 
 <!-- end -->
 
@@ -105,8 +166,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`123`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`1.573`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+| count=**`264`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`3.406`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -129,8 +190,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`128.085`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`128.085`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
+| count=**`4`** | count=**`128.895`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`36`** | rows=**`128.895`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -162,8 +223,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`509`** | count=**`262.852`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
-| rows=**`490.454`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
+| count=**`923`** | count=**`264.089`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
+| rows=**`894.932`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -189,8 +250,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`125`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`354.240`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
+| count=**`266`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`770.472`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -218,8 +279,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`6`** | count=**`0`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`137.573`** | rows=**`0`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
+| count=**`89`** | count=**`266`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`11.556.132`** | rows=**`33.924`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -244,8 +305,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`44.731`** | count=**`5.749`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`6.565.479`** | rows=**`5.749`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-07-25 11:37:36Z`**, rows updated since=**`0`** |
+| count=**`44.868`** | count=**`6.023`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`6.599.592`** | rows=**`6.023`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-07-25 11:37:36Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -273,8 +334,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`699`** | count=**`20.135`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`83.502.774`** | rows=**`5.296.005`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
+| count=**`1.232`** | count=**`28.125`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`147.633.867`** | rows=**`7.529.665`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -332,8 +393,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`8`** | count=**`435.962`** | inserted=**`49.497`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`386.466`** | live=**`49.497`**, dead=**`0`** | last auto=**`2022-07-25 11:45:43Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
+| count=**`9`** | count=**`435.962`** | inserted=**`49.497`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`49.497`** | rows=**`386.466`** | live=**`49.497`**, dead=**`0`** | last auto=**`2022-07-25 11:45:43Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -359,8 +420,8 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`6`** | count=**`128.276`** | inserted=**`128.067`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`209`** | live=**`128.067`**, dead=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
+| count=**`8`** | count=**`150.011`** | inserted=**`128.067`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`256.134`** | rows=**`56.648`** | live=**`128.067`**, dead=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

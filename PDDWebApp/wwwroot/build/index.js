@@ -20885,7 +20885,7 @@ var index = (function () {
     	const block = {
     		c: function create() {
     			canvas = element("canvas");
-    			add_location(canvas, file$1, 67, 0, 2119);
+    			add_location(canvas, file$1, 67, 0, 2118);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -21250,30 +21250,40 @@ var index = (function () {
 
     // (7:0) <Layout title="PDD Dashboard">
     function create_default_slot(ctx) {
-    	let div9;
-    	let div4;
+    	let div16;
+    	let div7;
+    	let div1;
     	let div0;
-    	let p0;
     	let t1;
     	let chart0;
     	let t2;
-    	let div1;
-    	let p1;
+    	let div3;
+    	let div2;
     	let t4;
     	let chart1;
     	let t5;
-    	let div3;
-    	let p2;
+    	let div6;
+    	let div4;
     	let t7;
-    	let div2;
+    	let div5;
     	let chart2;
     	let t8;
+    	let div15;
+    	let div10;
     	let div8;
-    	let div5;
-    	let t9;
-    	let div6;
     	let t10;
-    	let div7;
+    	let div9;
+    	let chart3;
+    	let t11;
+    	let div12;
+    	let div11;
+    	let t13;
+    	let chart4;
+    	let t14;
+    	let div14;
+    	let div13;
+    	let t16;
+    	let chart5;
     	let current;
 
     	chart0 = new Chart_1({
@@ -21295,91 +21305,144 @@ var index = (function () {
 
     	chart2 = new Chart_1({
     			props: {
-    				type: "pie",
+    				type: "doughnut",
     				dataFunc: /*func_2*/ ctx[2],
     				displayLegend: true
     			},
     			$$inline: true
     		});
 
+    	chart3 = new Chart_1({
+    			props: {
+    				type: "pie",
+    				dataFunc: /*func_3*/ ctx[3],
+    				displayLegend: true
+    			},
+    			$$inline: true
+    		});
+
+    	chart4 = new Chart_1({
+    			props: { type: "bar", dataFunc: /*func_4*/ ctx[4] },
+    			$$inline: true
+    		});
+
+    	chart5 = new Chart_1({
+    			props: { type: "bar", dataFunc: /*func_5*/ ctx[5] },
+    			$$inline: true
+    		});
+
     	const block = {
     		c: function create() {
-    			div9 = element("div");
-    			div4 = element("div");
+    			div16 = element("div");
+    			div7 = element("div");
+    			div1 = element("div");
     			div0 = element("div");
-    			p0 = element("p");
-    			p0.textContent = "Top 10 companies by the number of employees";
+    			div0.textContent = "Top 10 companies by the number of employees";
     			t1 = space();
     			create_component(chart0.$$.fragment);
     			t2 = space();
-    			div1 = element("div");
-    			p1 = element("p");
-    			p1.textContent = "Top 10 companies by the number of employees - employee growth last 10 years";
+    			div3 = element("div");
+    			div2 = element("div");
+    			div2.textContent = "Top 5 companies by the number of employees - employee growth last 10 years";
     			t4 = space();
     			create_component(chart1.$$.fragment);
     			t5 = space();
-    			div3 = element("div");
-    			p2 = element("p");
-    			p2.textContent = "Number of companies by business areas";
+    			div6 = element("div");
+    			div4 = element("div");
+    			div4.textContent = "Number of companies by business areas";
     			t7 = space();
-    			div2 = element("div");
+    			div5 = element("div");
     			create_component(chart2.$$.fragment);
     			t8 = space();
+    			div15 = element("div");
+    			div10 = element("div");
     			div8 = element("div");
-    			div5 = element("div");
-    			t9 = space();
-    			div6 = element("div");
+    			div8.textContent = "Top 10 companies by the countries";
     			t10 = space();
-    			div7 = element("div");
-    			add_location(p0, file, 11, 16, 383);
-    			attr_dev(div0, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div0, file, 10, 12, 337);
-    			add_location(p1, file, 15, 16, 625);
-    			attr_dev(div1, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div1, file, 14, 12, 579);
-    			add_location(p2, file, 19, 16, 863);
-    			attr_dev(div2, "class", "chart-fixed-size svelte-ly95le");
-    			add_location(div2, file, 20, 16, 925);
-    			attr_dev(div3, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div3, file, 18, 12, 817);
-    			attr_dev(div4, "class", "row");
-    			add_location(div4, file, 9, 8, 306);
-    			attr_dev(div5, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div5, file, 27, 12, 1158);
-    			attr_dev(div6, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div6, file, 30, 12, 1256);
-    			attr_dev(div7, "class", "col-md-4 chart svelte-ly95le");
-    			add_location(div7, file, 33, 12, 1354);
-    			attr_dev(div8, "class", "row");
-    			add_location(div8, file, 26, 8, 1127);
-    			attr_dev(div9, "class", "main container-fluid text-center pt-4 svelte-ly95le");
-    			add_location(div9, file, 8, 4, 245);
+    			div9 = element("div");
+    			create_component(chart3.$$.fragment);
+    			t11 = space();
+    			div12 = element("div");
+    			div11 = element("div");
+    			div11.textContent = "Top 10 companies by the number of employees";
+    			t13 = space();
+    			create_component(chart4.$$.fragment);
+    			t14 = space();
+    			div14 = element("div");
+    			div13 = element("div");
+    			div13.textContent = "Number of employees by area - for the top 3 companies by the number of employees";
+    			t16 = space();
+    			create_component(chart5.$$.fragment);
+    			attr_dev(div0, "class", "text-primary fw-bolder");
+    			add_location(div0, file, 11, 16, 407);
+    			attr_dev(div1, "class", "col-md-4 border-top border-start chart svelte-ncaft5");
+    			add_location(div1, file, 10, 12, 337);
+    			attr_dev(div2, "class", "text-primary fw-bolder");
+    			add_location(div2, file, 16, 16, 726);
+    			attr_dev(div3, "class", "col-md-4 border-top border-start chart svelte-ncaft5");
+    			add_location(div3, file, 15, 12, 656);
+    			attr_dev(div4, "class", "text-primary fw-bolder");
+    			add_location(div4, file, 20, 16, 1033);
+    			attr_dev(div5, "class", "chart-fixed-size svelte-ncaft5");
+    			add_location(div5, file, 21, 16, 1130);
+    			attr_dev(div6, "class", "col-md-4 border-top border-start border-end chart svelte-ncaft5");
+    			add_location(div6, file, 19, 12, 952);
+    			attr_dev(div7, "class", "row");
+    			add_location(div7, file, 9, 8, 306);
+    			attr_dev(div8, "class", "text-primary fw-bolder");
+    			add_location(div8, file, 29, 16, 1452);
+    			attr_dev(div9, "class", "chart-fixed-size svelte-ncaft5");
+    			add_location(div9, file, 30, 16, 1545);
+    			attr_dev(div10, "class", "col-md-4 border-top border-start border-bottom chart svelte-ncaft5");
+    			add_location(div10, file, 28, 12, 1368);
+    			attr_dev(div11, "class", "text-primary fw-bolder");
+    			add_location(div11, file, 35, 16, 1817);
+    			attr_dev(div12, "class", "col-md-4 border-top border-start border-bottom chart svelte-ncaft5");
+    			add_location(div12, file, 34, 12, 1733);
+    			attr_dev(div13, "class", "text-primary fw-bolder");
+    			add_location(div13, file, 39, 16, 2106);
+    			attr_dev(div14, "class", "col-md-4 border-top border-start border-end border-bottom chart svelte-ncaft5");
+    			add_location(div14, file, 38, 12, 2011);
+    			attr_dev(div15, "class", "row");
+    			add_location(div15, file, 27, 8, 1337);
+    			attr_dev(div16, "class", "main container-fluid text-center pt-4 svelte-ncaft5");
+    			add_location(div16, file, 8, 4, 245);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div9, anchor);
-    			append_dev(div9, div4);
-    			append_dev(div4, div0);
-    			append_dev(div0, p0);
-    			append_dev(div0, t1);
-    			mount_component(chart0, div0, null);
-    			append_dev(div4, t2);
-    			append_dev(div4, div1);
-    			append_dev(div1, p1);
-    			append_dev(div1, t4);
-    			mount_component(chart1, div1, null);
-    			append_dev(div4, t5);
-    			append_dev(div4, div3);
-    			append_dev(div3, p2);
-    			append_dev(div3, t7);
+    			insert_dev(target, div16, anchor);
+    			append_dev(div16, div7);
+    			append_dev(div7, div1);
+    			append_dev(div1, div0);
+    			append_dev(div1, t1);
+    			mount_component(chart0, div1, null);
+    			append_dev(div7, t2);
+    			append_dev(div7, div3);
     			append_dev(div3, div2);
-    			mount_component(chart2, div2, null);
-    			append_dev(div9, t8);
-    			append_dev(div9, div8);
-    			append_dev(div8, div5);
-    			append_dev(div8, t9);
-    			append_dev(div8, div6);
-    			append_dev(div8, t10);
-    			append_dev(div8, div7);
+    			append_dev(div3, t4);
+    			mount_component(chart1, div3, null);
+    			append_dev(div7, t5);
+    			append_dev(div7, div6);
+    			append_dev(div6, div4);
+    			append_dev(div6, t7);
+    			append_dev(div6, div5);
+    			mount_component(chart2, div5, null);
+    			append_dev(div16, t8);
+    			append_dev(div16, div15);
+    			append_dev(div15, div10);
+    			append_dev(div10, div8);
+    			append_dev(div10, t10);
+    			append_dev(div10, div9);
+    			mount_component(chart3, div9, null);
+    			append_dev(div15, t11);
+    			append_dev(div15, div12);
+    			append_dev(div12, div11);
+    			append_dev(div12, t13);
+    			mount_component(chart4, div12, null);
+    			append_dev(div15, t14);
+    			append_dev(div15, div14);
+    			append_dev(div14, div13);
+    			append_dev(div14, t16);
+    			mount_component(chart5, div14, null);
     			current = true;
     		},
     		p: noop$1,
@@ -21388,19 +21451,28 @@ var index = (function () {
     			transition_in(chart0.$$.fragment, local);
     			transition_in(chart1.$$.fragment, local);
     			transition_in(chart2.$$.fragment, local);
+    			transition_in(chart3.$$.fragment, local);
+    			transition_in(chart4.$$.fragment, local);
+    			transition_in(chart5.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(chart0.$$.fragment, local);
     			transition_out(chart1.$$.fragment, local);
     			transition_out(chart2.$$.fragment, local);
+    			transition_out(chart3.$$.fragment, local);
+    			transition_out(chart4.$$.fragment, local);
+    			transition_out(chart5.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div9);
+    			if (detaching) detach_dev(div16);
     			destroy_component(chart0);
     			destroy_component(chart1);
     			destroy_component(chart2);
+    			destroy_component(chart3);
+    			destroy_component(chart4);
+    			destroy_component(chart5);
     		}
     	};
 
@@ -21442,7 +21514,7 @@ var index = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope*/ 8) {
+    			if (dirty & /*$$scope*/ 64) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -21485,8 +21557,11 @@ var index = (function () {
     	const func = () => get(urls.chart1Url);
     	const func_1 = () => get(urls.chart2Url);
     	const func_2 = () => get(urls.chart3Url);
+    	const func_3 = () => get(urls.chart4Url);
+    	const func_4 = () => get(urls.chart5Url);
+    	const func_5 = () => get(urls.chart6Url);
     	$$self.$capture_state = () => ({ Layout: Offcanvas_layout, Chart: Chart_1, get, urls });
-    	return [func, func_1, func_2];
+    	return [func, func_1, func_2, func_3, func_4, func_5];
     }
 
     class App extends SvelteComponentDev {

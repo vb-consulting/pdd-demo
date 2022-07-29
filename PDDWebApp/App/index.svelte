@@ -9,31 +9,37 @@
 
     <div class="main container-fluid text-center pt-4">
         <div class="row">
-            <div class="col-md-4 chart">
-                <p>Top 10 companies by the number of employees</p>
+            <div class="col-md-4 border-top border-start chart">
+                <div class="text-primary fw-bolder">Top 10 companies by the number of employees</div>
                 <Chart type="bar" dataFunc={() => get(urls.chart1Url)} datasetLabel="Number of employees: " />
+                
             </div>
-            <div class="col-md-4 chart">
-                <p>Top 10 companies by the number of employees - employee growth last 10 years</p>
+            <div class="col-md-4 border-top border-start chart">
+                <div class="text-primary fw-bolder">Top 5 companies by the number of employees - employee growth last 10 years</div>
                 <Chart type="line" dataFunc={() => get(urls.chart2Url)} />
             </div>
-            <div class="col-md-4 chart">
-                <p>Number of companies by business areas</p>
+            <div class="col-md-4 border-top border-start border-end chart">
+                <div class="text-primary fw-bolder">Number of companies by business areas</div>
                 <div class="chart-fixed-size">
-                    <Chart type="pie" dataFunc={() => get(urls.chart3Url)} displayLegend={true} />
+                    <Chart type="doughnut" dataFunc={() => get(urls.chart3Url)} displayLegend={true} />
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4 chart">
-                <!-- <Chart /> -->
+            <div class="col-md-4 border-top border-start border-bottom chart">
+                <div class="text-primary fw-bolder">Top 10 companies by the countries</div>
+                <div class="chart-fixed-size">
+                    <Chart type="pie" dataFunc={() => get(urls.chart4Url)} displayLegend={true} />
+                </div>
             </div>
-            <div class="col-md-4 chart">
-                <!-- <Chart /> -->
+            <div class="col-md-4 border-top border-start border-bottom chart">
+                <div class="text-primary fw-bolder">Top 10 companies by the number of employees</div>
+                <Chart type="bar" dataFunc={() => get(urls.chart5Url)} />
             </div>
-            <div class="col-md-4 chart">
-                <!-- <Chart /> -->
+            <div class="col-md-4 border-top border-start border-end border-bottom chart">
+                <div class="text-primary fw-bolder">Number of employees by area - for the top 3 companies by the number of employees</div>
+                <Chart type="bar" dataFunc={() => get(urls.chart6Url)} />
             </div>
         </div>
     </div>
@@ -47,11 +53,10 @@
     }
     .chart {
         padding: 25px;
-        border: 1px $gray-700 dotted;
     }
     .chart-fixed-size {
         display: inline-block;
         position: relative;
-        height: 150px;
+        min-height: 300px;
     }
 </style>

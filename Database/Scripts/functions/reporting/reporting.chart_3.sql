@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS reporting.chart_number_of_companies_by_areas();
+DROP FUNCTION IF EXISTS reporting.chart_3();
 
-CREATE OR REPLACE FUNCTION reporting.chart_number_of_companies_by_areas() RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_3() RETURNS json
     LANGUAGE sql
     AS $$
 select 
@@ -22,7 +22,7 @@ from (
 ) t
 $$;
 
-COMMENT ON FUNCTION reporting.chart_number_of_companies_by_areas() IS 'Number of companies by business area.
+COMMENT ON FUNCTION reporting.chart_3() IS 'Number of companies by business area.
 Json object where lables are companies name and it only have one series with the number of business area for each company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';

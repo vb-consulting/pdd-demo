@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS reporting.chart_top_comapnies_last_10_years_number_of_employees();
+DROP FUNCTION IF EXISTS reporting.chart_2();
 
-CREATE OR REPLACE FUNCTION reporting.chart_top_comapnies_last_10_years_number_of_employees() RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_2() RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -56,7 +56,7 @@ begin
 end
 $$;
 
-COMMENT ON FUNCTION reporting.chart_top_comapnies_last_10_years_number_of_employees() IS 'Top 5 comapnies by number of employees for the last ten years.
+COMMENT ON FUNCTION reporting.chart_2() IS 'Top 5 comapnies by number of employees for the last ten years.
 Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';

@@ -29,16 +29,19 @@
 <h1 id="dictionary-for-database-pdd">Dictionary for database <code>pdd</code></h1>
 <ul>
 <li>Server: PostgreSQL <code>localhost:5436</code>, version <code>14.0</code></li>
-<li>Local time stamp: <code>2022-07-28T14:46:56.7753851+02:00</code></li>
+<li>Local time stamp: <code>2022-07-29T14:22:34.6255379+02:00</code></li>
 <li>Schema's: <code>public</code>, <code>reporting</code></li>
 <li>Schema file: <a href="/Database/Scripts/schema.sql">/Database/Scripts/schema.sql</a></li>
 <li>Data file: <a href="/Database/Scripts/data.sql">/Database/Scripts/data.sql</a> for tables <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a>, <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a></li>
 </ul>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li>Function <a href="#function-reportingchart_number_of_companies_by_areas"><code>reporting.chart_number_of_companies_by_areas()</code></a></li>
-<li>Function <a href="#function-reportingchart_top_10_comapnies_by_employees"><code>reporting.chart_top_10_comapnies_by_employees()</code></a></li>
-<li>Function <a href="#function-reportingchart_top_comapnies_last_10_years_number_of_employees"><code>reporting.chart_top_comapnies_last_10_years_number_of_employees()</code></a></li>
+<li>Function <a href="#function-reportingchart_1"><code>reporting.chart_1()</code></a></li>
+<li>Function <a href="#function-reportingchart_2"><code>reporting.chart_2()</code></a></li>
+<li>Function <a href="#function-reportingchart_3"><code>reporting.chart_3()</code></a></li>
+<li>Function <a href="#function-reportingchart_4"><code>reporting.chart_4()</code></a></li>
+<li>Function <a href="#function-reportingchart_5"><code>reporting.chart_5()</code></a></li>
+<li>Function <a href="#function-reportingchart_6"><code>reporting.chart_6()</code></a></li>
 <li>Table <a href="#table-publicbusiness_areas"><code>public.business_areas</code></a></li>
 <li>Table <a href="#table-publicbusiness_roles"><code>public.business_roles</code></a></li>
 <li>Table <a href="#table-publiccompanies"><code>public.companies</code></a></li>
@@ -53,18 +56,56 @@
 <li>Enum <a href="#enum-public-valid_genders"><code>public.valid_genders</code></a></li>
 </ul>
 <h2 id="routines">Routines</h2>
-<h3 id="function-reporting.chart_number_of_companies_by_areas">Function <code>reporting.chart_number_of_companies_by_areas()</code></h3>
+<h3 id="function-reporting.chart_1">Function <code>reporting.chart_1()</code></h3>
 <ul>
 <li><p>Returns <code>json</code></p>
 </li>
 <li><p>Language is <code>sql</code></p>
 </li>
-<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql">/Database/Scripts/functions/reporting/reporting.chart_number_of_companies_by_areas.sql</a></p>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_1.sql">/Database/Scripts/functions/reporting/reporting.chart_1.sql</a></p>
 </li>
-<li><p>C# Source: <a href="/Database/Extensions/ChartNumberOfCompaniesByAreas.cs">/Database/Extensions/ChartNumberOfCompaniesByAreas.cs</a></p>
+<li><p>C# Source: <a href="/Database/Extensions/Chart1.cs">/Database/Extensions/Chart1.cs</a></p>
 </li>
 </ul>
-<!-- comment on function "reporting"."chart_number_of_companies_by_areas"() is @until-end-tag; -->
+<!-- comment on function "reporting"."chart_1"() is @until-end-tag; -->
+<p>Top 10 comapnies by number of current employees.
+Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.</p>
+<ul>
+<li>Returns JSON schema: <code>{&quot;labels&quot;: [string], &quot;series: [{&quot;data&quot;: [number]}]&quot;}</code></li>
+</ul>
+<!-- end -->
+<p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
+<h3 id="function-reporting.chart_2">Function <code>reporting.chart_2()</code></h3>
+<ul>
+<li><p>Returns <code>json</code></p>
+</li>
+<li><p>Language is <code>plpgsql</code></p>
+</li>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_2.sql">/Database/Scripts/functions/reporting/reporting.chart_2.sql</a></p>
+</li>
+<li><p>C# Source: <a href="/Database/Extensions/Chart2.cs">/Database/Extensions/Chart2.cs</a></p>
+</li>
+</ul>
+<!-- comment on function "reporting"."chart_2"() is @until-end-tag; -->
+<p>Top 5 comapnies by number of employees for the last ten years.
+Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.</p>
+<ul>
+<li>Returns JSON: <code>{labels: string[], series: {data: number[], label: string}[]}</code></li>
+</ul>
+<!-- end -->
+<p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
+<h3 id="function-reporting.chart_3">Function <code>reporting.chart_3()</code></h3>
+<ul>
+<li><p>Returns <code>json</code></p>
+</li>
+<li><p>Language is <code>sql</code></p>
+</li>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_3.sql">/Database/Scripts/functions/reporting/reporting.chart_3.sql</a></p>
+</li>
+<li><p>C# Source: <a href="/Database/Extensions/Chart3.cs">/Database/Extensions/Chart3.cs</a></p>
+</li>
+</ul>
+<!-- comment on function "reporting"."chart_3"() is @until-end-tag; -->
 <p>Number of companies by business area.
 Json object where lables are companies name and it only have one series with the number of business area for each company.</p>
 <ul>
@@ -72,41 +113,61 @@ Json object where lables are companies name and it only have one series with the
 </ul>
 <!-- end -->
 <p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
-<h3 id="function-reporting.chart_top_10_comapnies_by_employees">Function <code>reporting.chart_top_10_comapnies_by_employees()</code></h3>
+<h3 id="function-reporting.chart_4">Function <code>reporting.chart_4()</code></h3>
 <ul>
 <li><p>Returns <code>json</code></p>
 </li>
 <li><p>Language is <code>sql</code></p>
 </li>
-<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql">/Database/Scripts/functions/reporting/reporting.chart_top_10_comapnies_by_employees.sql</a></p>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_4.sql">/Database/Scripts/functions/reporting/reporting.chart_4.sql</a></p>
 </li>
-<li><p>C# Source: <a href="/Database/Extensions/ChartTop10ComapniesByEmployees.cs">/Database/Extensions/ChartTop10ComapniesByEmployees.cs</a></p>
+<li><p>C# Source: <a href="/Database/Extensions/Chart4.cs">/Database/Extensions/Chart4.cs</a></p>
 </li>
 </ul>
-<!-- comment on function "reporting"."chart_top_10_comapnies_by_employees"() is @until-end-tag; -->
-<p>Top 10 comapnies by number of current employees.
-Json object where lables are companies name and it only have one series with the number of current employees for each company.</p>
+<!-- comment on function "reporting"."chart_4"() is @until-end-tag; -->
+<p>Number of companies by country.
+Json object where lables are country names and it only have one series with the number of companies for each country.
+It show only first 9 conutries and 10th is summed together as other.</p>
 <ul>
 <li>Returns JSON schema: <code>{&quot;labels&quot;: [string], &quot;series: [{&quot;data&quot;: [number]}]&quot;}</code></li>
 </ul>
 <!-- end -->
 <p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
-<h3 id="function-reporting.chart_top_comapnies_last_10_years_number_of_employees">Function <code>reporting.chart_top_comapnies_last_10_years_number_of_employees()</code></h3>
+<h3 id="function-reporting.chart_5">Function <code>reporting.chart_5()</code></h3>
 <ul>
 <li><p>Returns <code>json</code></p>
 </li>
-<li><p>Language is <code>plpgsql</code></p>
+<li><p>Language is <code>sql</code></p>
 </li>
-<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql">/Database/Scripts/functions/reporting/reporting.chart_top_comapnies_last_10_years_number_of_employees.sql</a></p>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_5.sql">/Database/Scripts/functions/reporting/reporting.chart_5.sql</a></p>
 </li>
-<li><p>C# Source: <a href="/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs">/Database/Extensions/ChartTopComapniesLast10YearsNumberOfEmployees.cs</a></p>
+<li><p>C# Source: <a href="/Database/Extensions/Chart5.cs">/Database/Extensions/Chart5.cs</a></p>
 </li>
 </ul>
-<!-- comment on function "reporting"."chart_top_comapnies_last_10_years_number_of_employees"() is @until-end-tag; -->
-<p>Top 5 comapnies by number of employees for the last ten years.
-Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.</p>
+<!-- comment on function "reporting"."chart_5"() is @until-end-tag; -->
+<p>Top 10 comanies with highest number of user reviews.
+Json object where lables are companies names with average score and it only have one series with total number of reviews.</p>
 <ul>
-<li>Returns JSON: <code>{labels: string[], series: {data: number[], label: string}[]}</code></li>
+<li>Returns JSON schema: <code>{&quot;labels&quot;: [string], &quot;series: [{&quot;data&quot;: [number]}]&quot;}</code></li>
+</ul>
+<!-- end -->
+<p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
+<h3 id="function-reporting.chart_6">Function <code>reporting.chart_6()</code></h3>
+<ul>
+<li><p>Returns <code>json</code></p>
+</li>
+<li><p>Language is <code>sql</code></p>
+</li>
+<li><p>Source: <a href="/Database/Scripts/functions/reporting/reporting.chart_6.sql">/Database/Scripts/functions/reporting/reporting.chart_6.sql</a></p>
+</li>
+<li><p>C# Source: <a href="/Database/Extensions/Chart6.cs">/Database/Extensions/Chart6.cs</a></p>
+</li>
+</ul>
+<!-- comment on function "reporting"."chart_6"() is @until-end-tag; -->
+<p>Business areas, the number of employees for top 3 companies by highest number of employees.
+Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.</p>
+<ul>
+<li>Returns JSON schema: <code>{&quot;labels&quot;: [string], &quot;series: [{&quot;data&quot;: [number], &quot;label&quot;: string}]&quot;}</code></li>
 </ul>
 <!-- end -->
 <p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
@@ -172,14 +233,14 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>123</code></strong></td>
+<td>count=<strong><code>264</code></strong></td>
 <td>count=<strong><code>2.952</code></strong></td>
 <td>inserted=<strong><code>13</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>1.573</code></strong></td>
+<td>rows=<strong><code>3.406</code></strong></td>
 <td>rows=<strong><code>2.952</code></strong></td>
 <td>live=<strong><code>13</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>13</code></strong></td>
@@ -249,15 +310,15 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>2</code></strong></td>
-<td>count=<strong><code>128.085</code></strong></td>
+<td>count=<strong><code>4</code></strong></td>
+<td>count=<strong><code>128.895</code></strong></td>
 <td>inserted=<strong><code>18</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>0</code></strong></td>
-<td>rows=<strong><code>128.085</code></strong></td>
+<td>rows=<strong><code>36</code></strong></td>
+<td>rows=<strong><code>128.895</code></strong></td>
 <td>live=<strong><code>18</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>18</code></strong></td>
 <td>last auto=, rows updated since=<strong><code>18</code></strong></td>
@@ -405,14 +466,14 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>509</code></strong></td>
-<td>count=<strong><code>262.852</code></strong></td>
+<td>count=<strong><code>923</code></strong></td>
+<td>count=<strong><code>264.089</code></strong></td>
 <td>inserted=<strong><code>977</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=<strong><code>2022-07-26 10:40:06Z</code></strong>, count=<strong><code>1</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>490.454</code></strong></td>
+<td>rows=<strong><code>894.932</code></strong></td>
 <td>rows=<strong><code>260.924</code></strong></td>
 <td>live=<strong><code>977</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
@@ -506,14 +567,14 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>125</code></strong></td>
+<td>count=<strong><code>266</code></strong></td>
 <td>count=<strong><code>2.975</code></strong></td>
 <td>inserted=<strong><code>2.952</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>354.240</code></strong></td>
+<td>rows=<strong><code>770.472</code></strong></td>
 <td>rows=<strong><code>23</code></strong></td>
 <td>live=<strong><code>2.952</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:36Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
@@ -623,15 +684,15 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>6</code></strong></td>
-<td>count=<strong><code>0</code></strong></td>
+<td>count=<strong><code>89</code></strong></td>
+<td>count=<strong><code>266</code></strong></td>
 <td>inserted=<strong><code>137.573</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>137.573</code></strong></td>
-<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>11.556.132</code></strong></td>
+<td>rows=<strong><code>33.924</code></strong></td>
 <td>live=<strong><code>137.573</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:41Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:42Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
@@ -723,15 +784,15 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>44.731</code></strong></td>
-<td>count=<strong><code>5.749</code></strong></td>
+<td>count=<strong><code>44.868</code></strong></td>
+<td>count=<strong><code>6.023</code></strong></td>
 <td>inserted=<strong><code>249</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>6.565.479</code></strong></td>
-<td>rows=<strong><code>5.749</code></strong></td>
+<td>rows=<strong><code>6.599.592</code></strong></td>
+<td>rows=<strong><code>6.023</code></strong></td>
 <td>live=<strong><code>249</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>249</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:37:36Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
@@ -840,15 +901,15 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>699</code></strong></td>
-<td>count=<strong><code>20.135</code></strong></td>
+<td>count=<strong><code>1.232</code></strong></td>
+<td>count=<strong><code>28.125</code></strong></td>
 <td>inserted=<strong><code>120.321</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>83.502.774</code></strong></td>
-<td>rows=<strong><code>5.296.005</code></strong></td>
+<td>rows=<strong><code>147.633.867</code></strong></td>
+<td>rows=<strong><code>7.529.665</code></strong></td>
 <td>live=<strong><code>120.321</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:38Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:38Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
@@ -1089,14 +1150,14 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>8</code></strong></td>
+<td>count=<strong><code>9</code></strong></td>
 <td>count=<strong><code>435.962</code></strong></td>
 <td>inserted=<strong><code>49.497</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>49.497</code></strong></td>
 <td>rows=<strong><code>386.466</code></strong></td>
 <td>live=<strong><code>49.497</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:43Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
@@ -1190,15 +1251,15 @@ Json object with only one series where labeles are last ten years names and valu
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>6</code></strong></td>
-<td>count=<strong><code>128.276</code></strong></td>
+<td>count=<strong><code>8</code></strong></td>
+<td>count=<strong><code>150.011</code></strong></td>
 <td>inserted=<strong><code>128.067</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>0</code></strong></td>
-<td>rows=<strong><code>209</code></strong></td>
+<td>rows=<strong><code>256.134</code></strong></td>
+<td>rows=<strong><code>56.648</code></strong></td>
 <td>live=<strong><code>128.067</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:45Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
 <td>last auto=<strong><code>2022-07-25 11:45:45Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>

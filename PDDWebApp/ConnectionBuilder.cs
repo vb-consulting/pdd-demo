@@ -36,7 +36,7 @@ public static class ConnectionBuilder
                 options.NpgsqlEnableSqlRewriting = false;
                 options.CommandCommentHeader.Enabled = true;
                 options.CommandCommentHeader.IncludeCallerInfo = true;
-                options.CommandCommentHeader.IncludeCommandAttributes = true;
+                options.CommandCommentHeader.IncludeCommandAttributes = false;
                 options.CommandCommentHeader.IncludeTimestamp = false;
                 options.CommandCommentHeader.IncludeParameters = true;
                 options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
