@@ -15,11 +15,11 @@
 
 <div class="title-wrap">
     <div class="text-secondary fw-bolder text-center fs-4">{title}</div>
-    <i class="bi bi-box-arrow-up-right" on:click={() => modal.open = true}></i>
+    <i class="bi bi-box-arrow-up-right" on:click={() => modal.open = true} data-bs-toggle="tooltip" title="Open in fullscreen"></i>
 </div>
 
 {#if minHeight}
-    <div class="chart-fixed-size" style="min-height: {minHeight};">
+    <div class="chart-fixed-size" style="min-height: {minHeight}; width: {minHeight};">
         <Chart type={type} dataFunc={() => get(getUrl)} datasetLabel={datasetLabel} displayLegend={displayLegend} />
     </div>
 {:else}
@@ -27,7 +27,7 @@
 {/if}
 
 <Modal state={modal} fullscreen={true} title={title} closeBtn={true} titleCloseButton={true}>
-    <div class="modal-wrap">
+    <div class="modal-wrap" style="grid-template-columns: {(type=="bar" || type=="doughnut" ? "40%" : "75%")}">
         <Chart type={type} dataFunc={() => get(getUrl)} datasetLabel={datasetLabel} displayLegend={displayLegend} />
     </div>
 </Modal>
@@ -36,8 +36,8 @@
     .chart-fixed-size {
         display: inline-block; 
         position: relative;
-        margin-left: 25%;
-        margin-right: 25%;
+        left: 50%;
+        transform: translateX(-50%);
     }
     .title-wrap {
         display: grid;
@@ -49,6 +49,5 @@
     }
     .modal-wrap {
         display: grid;
-        grid-template-columns: 75%;
     }
 </style>

@@ -12,6 +12,8 @@
     export let defaultBorderColorLightTheme = "#666";
     export let basicColors = ["red", "yellow","blue","orange","green", "violet", "purple", "magenta", "grey", "brown", "pink", "aqua", "navy"];
     export let displayLegend: boolean | undefined = undefined;
+    export let seriesBackgroundColor: string[] | string | undefined = (type == "line" ? undefined : basicColors);
+    export let seriesColor: string[] | string | undefined = (type == "line" ? basicColors : undefined);
     
     Chart.register(...registerables);
 
@@ -19,28 +21,8 @@
     let chart: Chart;
     let loading = true;
 
-    let fetchChartConfig = async () => {
-        loading = true;
-        let data = await dataFunc();
-        loading = false;
-        return {
-                type,
-                data: {
-                    labels: data.labels,
-                    datasets: data.series.map(series => Object({ 
-                        backgroundColor: basicColors,
-                        label: datasetLabel || series.label,
-                        data: series.data,
-                    }))
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: displayLegend != undefined ? displayLegend : data.series.length > 1,
-                        }
-                    }
-                }
-            }
+    let getColorByIndex = (index: number) => {
+        return basicColors[index % basicColors.length];
     }
 
     let recreateChat = async () => {
@@ -48,7 +30,29 @@
             return;
         }
         if (!chart) {
-            chart = new Chart(chartCanvas.getContext("2d") as any, await fetchChartConfig());
+            loading = true;
+            let data = await dataFunc();
+            loading = false;
+            chart = new Chart(chartCanvas.getContext("2d") as any, {
+                type,
+                data: {
+                    labels: data.labels,
+                    datasets: data.series.map((series, index) => Object({ 
+                        backgroundColor: data.series.length > 1 ? getColorByIndex(index) : seriesBackgroundColor,
+                        label: datasetLabel || series.label,
+                        data: series.data,
+                        borderColor: seriesColor,
+                    }))
+
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: displayLegend != undefined ? displayLegend : data.series.length > 1
+                        }
+                    }
+                }
+            });
         } else {
             let data = JSON.parse(JSON.stringify(chart.data));
             let options = JSON.parse(JSON.stringify(chart.options));
