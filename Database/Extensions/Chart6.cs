@@ -19,7 +19,6 @@ public static class PgRoutineChart6
     /// Executes sql function "chart_6"
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <returns>string?</returns>
@@ -36,7 +35,6 @@ public static class PgRoutineChart6
     /// Asynchronously executes sql function "chart_6"
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>

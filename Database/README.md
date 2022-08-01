@@ -1,10 +1,10 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-07-29T14:22:34.6255379+02:00`
+- Local time stamp: `2022-08-01T13:20:09.5354340+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/Database/Scripts/schema.sql](/Database/Scripts/schema.sql)
-- Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status)
+- Data file: [/Database/Scripts/data.sql](/Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
 
 ## Table of Contents
 
@@ -15,6 +15,7 @@
 - Function [`reporting.chart_5()`](#function-reportingchart_5)
 - Function [`reporting.chart_6()`](#function-reportingchart_6)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
+- Table [`public.business_role_types`](#table-publicbusiness_role_types)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
 - Table [`public.companies`](#table-publiccompanies)
 - Table [`public.company_areas`](#table-publiccompany_areas)
@@ -42,7 +43,6 @@
 <!-- comment on function "reporting"."chart_1"() is @until-end-tag; -->
 Top 10 comapnies by number of current employees.
 Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
-
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 
 <!-- end -->
@@ -120,7 +120,6 @@ It show only first 9 conutries and 10th is summed together as other.
 <!-- comment on function "reporting"."chart_5"() is @until-end-tag; -->
 Top 10 comanies with highest number of user reviews.
 Json object where lables are companies names with average score and it only have one series with total number of reviews.
-
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 
 <!-- end -->
@@ -140,7 +139,6 @@ Json object where lables are companies names with average score and it only have
 <!-- comment on function "reporting"."chart_6"() is @until-end-tag; -->
 Business areas, the number of employees for top 3 companies by highest number of employees.
 Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
-
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 
 <!-- end -->
@@ -153,21 +151,45 @@ Json object where lables are business area names and three series with number of
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: ****
 - Source: [/Database/Scripts/tables/business_areas.sql](/Database/Scripts/tables/business_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-business_areas-id" href="#public-business_areas-id">#</a>**`id`** | **PK** | `smallint`| **NO** | *auto increment* | <!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_areas-id" href="#public-business_areas-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_areas-name" href="#public-business_areas-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_areas"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 - Stats for `public.business_areas`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`264`** | count=**`2.952`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`3.406`** | rows=**`2.952`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+| count=**`2`** | count=**`0`** | inserted=**`91`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`13`**, dead=**`0`** | last auto=**`2022-08-01 11:19:33Z`**, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Table `public.business_role_types`
+
+<!-- comment on table "public"."business_role_types" is @until-end-tag; -->
+Types or groups of business roles.
+<!-- end -->
+- Count estimate: **-1**
+- Source: [/Database/Scripts/tables/business_role_types.sql](/Database/Scripts/tables/business_role_types.sql)
+
+| Column |             | Type | Nullable | Default | Comment |
+| ------ | ----------- | -----| :------: | ------- | ------- |
+| <a id="user-content-public-business_role_types-id" href="#public-business_role_types-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_role_types"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_role_types-name" href="#public-business_role_types-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_role_types"."name" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_role_types-name_normalized" href="#public-business_role_types-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_role_types"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+
+- Stats for `public.business_role_types`:
+
+| **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
+| ----------------- | -------------- | -------- | ---------- | ----------- |
+| count=**`2`** | count=**`126`** | inserted=**`42`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`126`** | live=**`6`**, dead=**`36`** | last auto=, rows inserted since=**`42`** | last auto=, rows updated since=**`6`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -177,21 +199,22 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: ****
 - Source: [/Database/Scripts/tables/business_roles.sql](/Database/Scripts/tables/business_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-business_roles-id" href="#public-business_roles-id">#</a>**`id`** | **PK** | `smallint`| **NO** | *auto increment* | <!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-business_roles-id" href="#public-business_roles-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_roles-name" href="#public-business_roles-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_roles"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+| <a id="user-content-public-business_roles-type" href="#public-business_roles-type">#</a>`type` | **FK [➝](#public-business_role_types-id) `business_role_types.id`** | `smallint`| **NO** |  | <!-- comment on column "public"."business_roles"."type" is @until-end-tag; --><!-- end --> |
 
 - Stats for `public.business_roles`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`4`** | count=**`128.895`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`36`** | rows=**`128.895`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
+| count=**`3`** | count=**`0`** | inserted=**`126`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`18`**, dead=**`0`** | last auto=**`2022-08-01 11:19:33Z`**, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -200,14 +223,14 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **977**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/companies.sql](/Database/Scripts/tables/companies.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-companies-id" href="#public-companies-id">#</a>**`id`** | **PK** | `bigint`| **NO** | *auto increment* | <!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-companies-id" href="#public-companies-id">#</a>**`id`** | **PK** | `bigint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-name" href="#public-companies-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."companies"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX**, UNIQUE | `character varying`| **NO** |  | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; -->lowercased, trigram index<!-- end --> |
+| <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX**, UNIQUE | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; -->lowercased, trigram index<!-- end --> |
 | <a id="user-content-public-companies-web" href="#public-companies-web">#</a>`web` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."web" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-linkedin" href="#public-companies-linkedin">#</a>`linkedin` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-tweeter" href="#public-companies-tweeter">#</a>`tweeter` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."tweeter" is @until-end-tag; --><!-- end --> |
@@ -223,8 +246,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`923`** | count=**`264.089`** | inserted=**`977`**, updated=**`0`**, deleted=**`0`** | last=**`2022-07-26 10:40:06Z`**, count=**`1`** | last=, count=**`0`** |
-| rows=**`894.932`** | rows=**`260.924`** | live=**`977`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:37Z`**, rows updated since=**`0`** |
+| count=**`7`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -234,7 +257,7 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
-- Count estimate: **2.952**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/company_areas.sql](/Database/Scripts/tables/company_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -250,8 +273,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`266`** | count=**`2.975`** | inserted=**`2.952`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`770.472`** | rows=**`23`** | live=**`2.952`**, dead=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:36Z`**, rows updated since=**`0`** |
+| count=**`5`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -261,12 +284,12 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
-- Count estimate: **137.573**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/company_reviews.sql](/Database/Scripts/tables/company_reviews.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-company_reviews-id" href="#public-company_reviews-id">#</a>**`id`** | **PK** | `bigint`| **NO** | *auto increment* | <!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-company_reviews-id" href="#public-company_reviews-id">#</a>**`id`** | **PK** | `bigint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-company_reviews-company_id" href="#public-company_reviews-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`**, **IDX** | `bigint`| **NO** |  | <!-- comment on column "public"."company_reviews"."company_id" is @until-end-tag; -->company reviewed<!-- end --> |
 | <a id="user-content-public-company_reviews-person_id" href="#public-company_reviews-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`** | `bigint`| YES |  | <!-- comment on column "public"."company_reviews"."person_id" is @until-end-tag; -->person reviewer<!-- end --> |
 | <a id="user-content-public-company_reviews-review" href="#public-company_reviews-review">#</a>`review` |  | `character varying`| **NO** |  | <!-- comment on column "public"."company_reviews"."review" is @until-end-tag; -->written review by a person<!-- end --> |
@@ -279,8 +302,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`89`** | count=**`266`** | inserted=**`137.573`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`11.556.132`** | rows=**`33.924`** | live=**`137.573`**, dead=**`0`** | last auto=**`2022-07-25 11:45:41Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:42Z`**, rows updated since=**`0`** |
+| count=**`5`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -289,7 +312,7 @@ Company reviews made by people.
 
 <!-- comment on table "public"."countries" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **249**
+- Count estimate: ****
 - Source: [/Database/Scripts/tables/countries.sql](/Database/Scripts/tables/countries.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -298,15 +321,15 @@ Company reviews made by people.
 | <a id="user-content-public-countries-iso2" href="#public-countries-iso2">#</a>`iso2` | **IDX** | `character(2)`| **NO** |  | <!-- comment on column "public"."countries"."iso2" is @until-end-tag; -->Contry ISO 3166 alpha-2 code.<!-- end --> |
 | <a id="user-content-public-countries-iso3" href="#public-countries-iso3">#</a>`iso3` | **IDX** | `character(3)`| **NO** |  | <!-- comment on column "public"."countries"."iso3" is @until-end-tag; -->Contry ISO 3166 alpha-3 code.<!-- end --> |
 | <a id="user-content-public-countries-name" href="#public-countries-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."countries"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-countries-culture" href="#public-countries-culture">#</a>`culture` |  | `character varying`| YES |  | <!-- comment on column "public"."countries"."culture" is @until-end-tag; -->The CultureInfo class specifies a unique name for each culture, based on RFC 4646. The name is a combination of an ISO 639 two-letter lowercase culture code associated with a language and an ISO 3166 two-letter uppercase subculture code associated with a country or region. <!-- end --> |
 
 - Stats for `public.countries`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`44.868`** | count=**`6.023`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`6.599.592`** | rows=**`6.023`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-07-25 11:37:36Z`**, rows updated since=**`0`** |
+| count=**`4`** | count=**`0`** | inserted=**`751`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`249`**, dead=**`0`** | last auto=**`2022-08-01 11:19:33Z`**, rows inserted since=**`249`** | last auto=, rows updated since=**`249`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -316,12 +339,12 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
-- Count estimate: **120.321**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/employee_records.sql](/Database/Scripts/tables/employee_records.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-employee_records-id" href="#public-employee_records-id">#</a>**`id`** | **PK** | `bigint`| **NO** | *auto increment* | <!-- comment on column "public"."employee_records"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_records-id" href="#public-employee_records-id">#</a>**`id`** | **PK** | `bigint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."employee_records"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>`company_id` | **FK [➝](#public-companies-id) `companies.id`** | `bigint`| **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-company_id" href="#public-employee_records-company_id">#</a>**`company_id`** | **PK** | `bigint`| **NO** |  | <!-- comment on column "public"."employee_records"."company_id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_records-person_id" href="#public-employee_records-person_id">#</a>`person_id` | **FK [➝](#public-people-id) `people.id`**, **IDX** | `bigint`| **NO** |  | <!-- comment on column "public"."employee_records"."person_id" is @until-end-tag; --><!-- end --> |
@@ -334,8 +357,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`1.232`** | count=**`28.125`** | inserted=**`120.321`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`147.633.867`** | rows=**`7.529.665`** | live=**`120.321`**, dead=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:38Z`**, rows updated since=**`0`** |
+| count=**`5`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -350,16 +373,16 @@ List of possible statuses in regards to employment.
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-employee_status-id" href="#public-employee_status-id">#</a>**`id`** | **PK** | `smallint`| **NO** | *auto increment* | <!-- comment on column "public"."employee_status"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-employee_status-id" href="#public-employee_status-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."employee_status"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_status-name" href="#public-employee_status-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."employee_status"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_status-name_normalized" href="#public-employee_status-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."employee_status"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
+| <a id="user-content-public-employee_status-name_normalized" href="#public-employee_status-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."employee_status"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 - Stats for `public.employee_status`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`49.503`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`49.503`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
+| count=**`2`** | count=**`0`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -368,15 +391,15 @@ List of possible statuses in regards to employment.
 
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **49.497**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/people.sql](/Database/Scripts/tables/people.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-people-id" href="#public-people-id">#</a>**`id`** | **PK** | `bigint`| **NO** | *auto increment* | <!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-people-id" href="#public-people-id">#</a>**`id`** | **PK** | `bigint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-first_name" href="#public-people-first_name">#</a>`first_name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."people"."first_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-last_name" href="#public-people-last_name">#</a>`last_name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."people"."last_name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name + '\n'  last_name + '  ' +  first_name  all in lowercase to enable both searches (staring with first or last name), trigram index<!-- end --> |
+| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS ((lower((first_name)::text) || ' '::text) || lower((last_name)::text))` | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first namer + last name, trigram index<!-- end --> |
 | <a id="user-content-public-people-employee_status" href="#public-people-employee_status">#</a>`employee_status` | **FK [➝](#public-employee_status-id) `employee_status.id`**, **IDX** | `smallint`| **NO** |  | <!-- comment on column "public"."people"."employee_status" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` | **IDX** | `valid_genders` <sub>user definded `AS ENUM ('M', 'F')` [➝](#enum-public-valid_genders)</sub>| YES |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
 | <a id="user-content-public-people-email" href="#public-people-email">#</a>`email` |  | `character varying`| YES |  | <!-- comment on column "public"."people"."email" is @until-end-tag; --><!-- end --> |
@@ -393,8 +416,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`9`** | count=**`435.962`** | inserted=**`49.497`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`49.497`** | rows=**`386.466`** | live=**`49.497`**, dead=**`0`** | last auto=**`2022-07-25 11:45:43Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
+| count=**`8`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -404,7 +427,7 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
-- Count estimate: **128.067**
+- Count estimate: **-1**
 - Source: [/Database/Scripts/tables/person_roles.sql](/Database/Scripts/tables/person_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -420,8 +443,8 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`8`** | count=**`150.011`** | inserted=**`128.067`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`256.134`** | rows=**`56.648`** | live=**`128.067`**, dead=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows inserted since=**`0`** | last auto=**`2022-07-25 11:45:45Z`**, rows updated since=**`0`** |
+| count=**`6`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -436,7 +459,7 @@ System users. May or may not be a person (in people records).
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
-| <a id="user-content-public-users-id" href="#public-users-id">#</a>**`id`** | **PK** | `bigint`| **NO** | *auto increment* | <!-- comment on column "public"."users"."id" is @until-end-tag; --><!-- end --> |
+| <a id="user-content-public-users-id" href="#public-users-id">#</a>**`id`** | **PK** | `bigint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."users"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-email" href="#public-users-email">#</a>`email` | **IDX** | `character varying`| **NO** |  | <!-- comment on column "public"."users"."email" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-users-name" href="#public-users-name">#</a>`name` |  | `character varying`| YES |  | <!-- comment on column "public"."users"."name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-users-data" href="#public-users-data">#</a>`data` |  | `json`| **NO** | `'{}'::json` | <!-- comment on column "public"."users"."data" is @until-end-tag; -->json data received from external auth provider<!-- end --> |
@@ -451,8 +474,8 @@ System users. May or may not be a person (in people records).
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`3`** | count=**`489.861`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`489.861`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
+| count=**`3`** | count=**`0`** | inserted=**`2`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`1`**, dead=**`1`** | last auto=, rows inserted since=**`2`** | last auto=, rows updated since=**`1`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

@@ -1,45 +1,56 @@
 <script lang="ts">
     import Layout from "./shared/layout/default";
-    import Chart from "./shared/components/chart.svelte";
-    import { get } from "./shared/fetch";
+    import ChartBox from "./shared/components/chart-box.svelte";
     import urls from "./shared/urls";
 </script>
 
 <Layout title="PDD Dashboard">
 
-    <div class="main container-fluid text-center pt-4">
+    <div class="main container-fluid pt-4">
         <div class="row">
             <div class="col-md-4 border-top border-start chart">
-                <div class="text-primary fw-bolder">Top 10 companies by the number of employees</div>
-                <Chart type="bar" dataFunc={() => get(urls.chart1Url)} datasetLabel="Number of employees: " />
-                
+                <ChartBox 
+                    type="bar" 
+                    getUrl={urls.chart1Url} 
+                    datasetLabel="Number of employees: " 
+                    title="Top 10 companies by the number of employees" />
             </div>
             <div class="col-md-4 border-top border-start chart">
-                <div class="text-primary fw-bolder">Top 5 companies by the number of employees - employee growth last 10 years</div>
-                <Chart type="line" dataFunc={() => get(urls.chart2Url)} />
+                <ChartBox 
+                    type="line" 
+                    getUrl={urls.chart2Url} 
+                    title="Top 5 companies by the number of employees - employee growth last 10 years" />
             </div>
             <div class="col-md-4 border-top border-start border-end chart">
-                <div class="text-primary fw-bolder">Number of companies by business areas</div>
-                <div class="chart-fixed-size">
-                    <Chart type="doughnut" dataFunc={() => get(urls.chart3Url)} displayLegend={true} />
-                </div>
+                <ChartBox 
+                    type="doughnut" 
+                    getUrl={urls.chart3Url} 
+                    minHeight="300px"
+                    displayLegend={true}
+                    title="Number of companies by business areas" />
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4 border-top border-start border-bottom chart">
-                <div class="text-primary fw-bolder">Top 10 companies by the countries</div>
-                <div class="chart-fixed-size">
-                    <Chart type="pie" dataFunc={() => get(urls.chart4Url)} displayLegend={true} />
-                </div>
+                <ChartBox 
+                    type="pie" 
+                    getUrl={urls.chart4Url} 
+                    minHeight="300px"
+                    displayLegend={true}
+                    title="Top 10 companies by the country" />
             </div>
             <div class="col-md-4 border-top border-start border-bottom chart">
-                <div class="text-primary fw-bolder">Top 10 companies by the number of employees</div>
-                <Chart type="bar" dataFunc={() => get(urls.chart5Url)} />
+                <ChartBox 
+                    type="bar" 
+                    getUrl={urls.chart5Url} 
+                    title="Top 10 companies by the number of employees" />
             </div>
             <div class="col-md-4 border-top border-start border-end border-bottom chart">
-                <div class="text-primary fw-bolder">Number of employees by area - for the top 3 companies by the number of employees</div>
-                <Chart type="bar" dataFunc={() => get(urls.chart6Url)} />
+                <ChartBox 
+                    type="bar" 
+                    getUrl={urls.chart6Url} 
+                    title="Number of employees by area - for the top 3 companies by the number of employees" />
             </div>
         </div>
     </div>
@@ -53,10 +64,5 @@
     }
     .chart {
         padding: 25px;
-    }
-    .chart-fixed-size {
-        display: inline-block;
-        position: relative;
-        min-height: 300px;
     }
 </style>

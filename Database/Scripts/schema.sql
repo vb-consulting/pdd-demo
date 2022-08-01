@@ -15,6 +15,7 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS fk_type;
 ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
@@ -51,6 +52,7 @@ DROP INDEX IF EXISTS public.idx_company_areas_company_id;
 DROP INDEX IF EXISTS public.idx_companies_name_normalized;
 DROP INDEX IF EXISTS public.idx_companies_country;
 DROP INDEX IF EXISTS public.idx_business_roles_name_normalized;
+DROP INDEX IF EXISTS public.idx_business_role_types_name_normalized;
 DROP INDEX IF EXISTS public.idx_business_areas_name_normalized;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_pkey;
 ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS pk_company_areas;
@@ -63,6 +65,7 @@ ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS comp
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_pkey;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_name_normalized_key;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS business_roles_pkey;
+ALTER TABLE IF EXISTS ONLY public.business_role_types DROP CONSTRAINT IF EXISTS business_role_types_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_areas DROP CONSTRAINT IF EXISTS business_areas_pkey;
 DROP TABLE IF EXISTS public.users;
 DROP TABLE IF EXISTS public.person_roles;
@@ -74,6 +77,7 @@ DROP TABLE IF EXISTS public.company_reviews;
 DROP TABLE IF EXISTS public.company_areas;
 DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
+DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
 DROP FUNCTION IF EXISTS reporting.chart_6();
 DROP FUNCTION IF EXISTS reporting.chart_5();
@@ -391,7 +395,7 @@ SET default_table_access_method = heap;
 CREATE TABLE public.business_areas (
     id smallint NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
 --
 -- Name: TABLE business_areas; Type: COMMENT; Schema: public; Owner: -
@@ -413,12 +417,40 @@ ALTER TABLE public.business_areas ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTI
     CACHE 1
 );
 --
+-- Name: business_role_types; Type: TABLE; Schema: public; Owner: -
+--
+CREATE TABLE public.business_role_types (
+    id smallint NOT NULL,
+    name character varying NOT NULL,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
+);
+--
+-- Name: TABLE business_role_types; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON TABLE public.business_role_types IS 'Types or groups of business roles.';
+--
+-- Name: COLUMN business_role_types.name_normalized; Type: COMMENT; Schema: public; Owner: -
+--
+COMMENT ON COLUMN public.business_role_types.name_normalized IS 'lowercased';
+--
+-- Name: business_role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.business_role_types ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.business_role_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+--
 -- Name: business_roles; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_roles (
     id smallint NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
+    type smallint NOT NULL
 );
 --
 -- Name: TABLE business_roles; Type: COMMENT; Schema: public; Owner: -
@@ -445,7 +477,7 @@ ALTER TABLE public.business_roles ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTI
 CREATE TABLE public.companies (
     id bigint NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     web character varying,
     linkedin character varying,
     tweeter character varying,
@@ -546,7 +578,7 @@ CREATE TABLE public.countries (
     iso2 character(2) NOT NULL,
     iso3 character(3) NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     culture character varying
 );
 --
@@ -606,7 +638,7 @@ ALTER TABLE public.employee_records ALTER COLUMN id ADD GENERATED ALWAYS AS IDEN
 CREATE TABLE public.employee_status (
     id smallint NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
 --
 -- Name: TABLE employee_status; Type: COMMENT; Schema: public; Owner: -
@@ -634,7 +666,7 @@ CREATE TABLE public.people (
     id bigint NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
-    name_normalized character varying NOT NULL,
+    name_normalized character varying GENERATED ALWAYS AS (((lower((first_name)::text) || ' '::text) || lower((last_name)::text))) STORED NOT NULL,
     employee_status smallint NOT NULL,
     gender public.valid_genders,
     email character varying,
@@ -650,7 +682,7 @@ CREATE TABLE public.people (
 --
 -- Name: COLUMN people.name_normalized; Type: COMMENT; Schema: public; Owner: -
 --
-COMMENT ON COLUMN public.people.name_normalized IS 'first_name + '' '' + last_name + ''\n''  last_name + ''  '' +  first_name  all in lowercase to enable both searches (staring with first or last name), trigram index';
+COMMENT ON COLUMN public.people.name_normalized IS 'first namer + last name, trigram index';
 --
 -- Name: COLUMN people.gender; Type: COMMENT; Schema: public; Owner: -
 --
@@ -735,6 +767,11 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 ALTER TABLE ONLY public.business_areas
     ADD CONSTRAINT business_areas_pkey PRIMARY KEY (id);
 --
+-- Name: business_role_types business_role_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.business_role_types
+    ADD CONSTRAINT business_role_types_pkey PRIMARY KEY (id);
+--
 -- Name: business_roles business_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.business_roles
@@ -793,6 +830,10 @@ ALTER TABLE ONLY public.users
 -- Name: idx_business_areas_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
 CREATE UNIQUE INDEX idx_business_areas_name_normalized ON public.business_areas USING btree (name_normalized);
+--
+-- Name: idx_business_role_types_name_normalized; Type: INDEX; Schema: public; Owner: -
+--
+CREATE UNIQUE INDEX idx_business_role_types_name_normalized ON public.business_role_types USING btree (name_normalized);
 --
 -- Name: idx_business_roles_name_normalized; Type: INDEX; Schema: public; Owner: -
 --
@@ -957,6 +998,11 @@ ALTER TABLE ONLY public.company_reviews
 --
 ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES public.business_roles(id) DEFERRABLE;
+--
+-- Name: business_roles fk_type; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.business_roles
+    ADD CONSTRAINT fk_type FOREIGN KEY (type) REFERENCES public.business_role_types(id) DEFERRABLE;
 --
 -- PostgreSQL database dump complete
 --

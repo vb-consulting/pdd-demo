@@ -29,10 +29,10 @@
 <h1 id="dictionary-for-database-pdd">Dictionary for database <code>pdd</code></h1>
 <ul>
 <li>Server: PostgreSQL <code>localhost:5436</code>, version <code>14.0</code></li>
-<li>Local time stamp: <code>2022-07-29T14:22:34.6255379+02:00</code></li>
+<li>Local time stamp: <code>2022-08-01T13:20:09.5354340+02:00</code></li>
 <li>Schema's: <code>public</code>, <code>reporting</code></li>
 <li>Schema file: <a href="/Database/Scripts/schema.sql">/Database/Scripts/schema.sql</a></li>
-<li>Data file: <a href="/Database/Scripts/data.sql">/Database/Scripts/data.sql</a> for tables <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a>, <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a></li>
+<li>Data file: <a href="/Database/Scripts/data.sql">/Database/Scripts/data.sql</a> for tables <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a>, <a href="#table-publicbusiness_role_types">business_role_types</a>, <a href="#table-publicbusiness_areas">business_areas</a>, <a href="#table-publicbusiness_roles">business_roles</a>, <a href="#table-publiccountries">countries</a>, <a href="#table-publicusers">users</a>, <a href="#table-publicemployee_status">employee_status</a>, <a href="#table-publicbusiness_role_types">business_role_types</a></li>
 </ul>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
@@ -43,6 +43,7 @@
 <li>Function <a href="#function-reportingchart_5"><code>reporting.chart_5()</code></a></li>
 <li>Function <a href="#function-reportingchart_6"><code>reporting.chart_6()</code></a></li>
 <li>Table <a href="#table-publicbusiness_areas"><code>public.business_areas</code></a></li>
+<li>Table <a href="#table-publicbusiness_role_types"><code>public.business_role_types</code></a></li>
 <li>Table <a href="#table-publicbusiness_roles"><code>public.business_roles</code></a></li>
 <li>Table <a href="#table-publiccompanies"><code>public.companies</code></a></li>
 <li>Table <a href="#table-publiccompany_areas"><code>public.company_areas</code></a></li>
@@ -177,7 +178,7 @@ Json object where lables are business area names and three series with number of
 <p>Business areas that companies may be invloved.</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>-1</strong></li>
+<li>Count estimate: ****</li>
 <li>Source: <a href="/Database/Scripts/tables/business_areas.sql">/Database/Scripts/tables/business_areas.sql</a></li>
 </ul>
 <table>
@@ -197,7 +198,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>smallint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -213,7 +214,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong></td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
 <td><!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; -->lowercased<!-- end --></td>
 </tr>
 </tbody>
@@ -233,18 +234,95 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>264</code></strong></td>
-<td>count=<strong><code>2.952</code></strong></td>
-<td>inserted=<strong><code>13</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>2</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>91</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>3.406</code></strong></td>
-<td>rows=<strong><code>2.952</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
 <td>live=<strong><code>13</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=, rows inserted since=<strong><code>13</code></strong></td>
+<td>last auto=<strong><code>2022-08-01 11:19:33Z</code></strong>, rows inserted since=<strong><code>13</code></strong></td>
 <td>last auto=, rows updated since=<strong><code>13</code></strong></td>
+</tr>
+</tbody>
+</table>
+<p><a href="#table-of-contents" title="Table of Contents">⇡</a></p>
+<h3 id="table-public.business_role_types">Table <code>public.business_role_types</code></h3>
+<!-- comment on table "public"."business_role_types" is @until-end-tag; -->
+<p>Types or groups of business roles.</p>
+<!-- end -->
+<ul>
+<li>Count estimate: <strong>-1</strong></li>
+<li>Source: <a href="/Database/Scripts/tables/business_role_types.sql">/Database/Scripts/tables/business_role_types.sql</a></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th></th>
+<th>Type</th>
+<th style="text-align: center;">Nullable</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a id="user-content-public-business_role_types-id" href="#public-business_role_types-id">#</a><strong><code>id</code></strong></td>
+<td><strong>PK</strong></td>
+<td><code>smallint</code></td>
+<td style="text-align: center;"><strong>NO</strong></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
+<td><!-- comment on column "public"."business_role_types"."id" is @until-end-tag; --><!-- end --></td>
+</tr>
+<tr>
+<td><a id="user-content-public-business_role_types-name" href="#public-business_role_types-name">#</a><code>name</code></td>
+<td></td>
+<td><code>character varying</code></td>
+<td style="text-align: center;"><strong>NO</strong></td>
+<td></td>
+<td><!-- comment on column "public"."business_role_types"."name" is @until-end-tag; --><!-- end --></td>
+</tr>
+<tr>
+<td><a id="user-content-public-business_role_types-name_normalized" href="#public-business_role_types-name_normalized">#</a><code>name_normalized</code></td>
+<td><strong>IDX</strong></td>
+<td><code>character varying</code></td>
+<td style="text-align: center;"><strong>NO</strong></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
+<td><!-- comment on column "public"."business_role_types"."name_normalized" is @until-end-tag; -->lowercased<!-- end --></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Stats for <code>public.business_role_types</code>:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Sequence Scan</strong></th>
+<th><strong>Index Scan</strong></th>
+<th><strong>Rows</strong></th>
+<th><strong>Vaccum</strong></th>
+<th><strong>Analyze</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>count=<strong><code>2</code></strong></td>
+<td>count=<strong><code>126</code></strong></td>
+<td>inserted=<strong><code>42</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>last=, count=<strong><code>0</code></strong></td>
+<td>last=, count=<strong><code>0</code></strong></td>
+</tr>
+<tr>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>126</code></strong></td>
+<td>live=<strong><code>6</code></strong>, dead=<strong><code>36</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>42</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>6</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -254,7 +332,7 @@ Json object where lables are business area names and three series with number of
 <p>Roles in a team that employees are specialized working with.</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>-1</strong></li>
+<li>Count estimate: ****</li>
 <li>Source: <a href="/Database/Scripts/tables/business_roles.sql">/Database/Scripts/tables/business_roles.sql</a></li>
 </ul>
 <table>
@@ -274,7 +352,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>smallint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -290,8 +368,16 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong></td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
 <td><!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; -->lowercased<!-- end --></td>
+</tr>
+<tr>
+<td><a id="user-content-public-business_roles-type" href="#public-business_roles-type">#</a><code>type</code></td>
+<td><strong>FK <a href="#public-business_role_types-id">➝</a> <code>business_role_types.id</code></strong></td>
+<td><code>smallint</code></td>
+<td style="text-align: center;"><strong>NO</strong></td>
+<td></td>
+<td><!-- comment on column "public"."business_roles"."type" is @until-end-tag; --><!-- end --></td>
 </tr>
 </tbody>
 </table>
@@ -310,17 +396,17 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>4</code></strong></td>
-<td>count=<strong><code>128.895</code></strong></td>
-<td>inserted=<strong><code>18</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>3</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>126</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>36</code></strong></td>
-<td>rows=<strong><code>128.895</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
 <td>live=<strong><code>18</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=, rows inserted since=<strong><code>18</code></strong></td>
+<td>last auto=<strong><code>2022-08-01 11:19:33Z</code></strong>, rows inserted since=<strong><code>18</code></strong></td>
 <td>last auto=, rows updated since=<strong><code>18</code></strong></td>
 </tr>
 </tbody>
@@ -330,7 +416,7 @@ Json object where lables are business area names and three series with number of
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>977</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/companies.sql">/Database/Scripts/tables/companies.sql</a></li>
 </ul>
 <table>
@@ -350,7 +436,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>bigint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -366,7 +452,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong>, UNIQUE</td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
 <td><!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; -->lowercased, trigram index<!-- end --></td>
 </tr>
 <tr>
@@ -466,18 +552,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>923</code></strong></td>
-<td>count=<strong><code>264.089</code></strong></td>
-<td>inserted=<strong><code>977</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
-<td>last=<strong><code>2022-07-26 10:40:06Z</code></strong>, count=<strong><code>1</code></strong></td>
+<td>count=<strong><code>7</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>894.932</code></strong></td>
-<td>rows=<strong><code>260.924</code></strong></td>
-<td>live=<strong><code>977</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:37Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -487,7 +573,7 @@ Json object where lables are business area names and three series with number of
 <p>Companies - business areas.</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>2.952</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/company_areas.sql">/Database/Scripts/tables/company_areas.sql</a></li>
 </ul>
 <table>
@@ -567,18 +653,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>266</code></strong></td>
-<td>count=<strong><code>2.975</code></strong></td>
-<td>inserted=<strong><code>2.952</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>5</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>770.472</code></strong></td>
-<td>rows=<strong><code>23</code></strong></td>
-<td>live=<strong><code>2.952</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:36Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:36Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -588,7 +674,7 @@ Json object where lables are business area names and three series with number of
 <p>Company reviews made by people.</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>137.573</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/company_reviews.sql">/Database/Scripts/tables/company_reviews.sql</a></li>
 </ul>
 <table>
@@ -608,7 +694,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>bigint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."company_reviews"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -684,18 +770,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>89</code></strong></td>
-<td>count=<strong><code>266</code></strong></td>
-<td>inserted=<strong><code>137.573</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>5</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>11.556.132</code></strong></td>
-<td>rows=<strong><code>33.924</code></strong></td>
-<td>live=<strong><code>137.573</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:41Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:42Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -704,7 +790,7 @@ Json object where lables are business area names and three series with number of
 <!-- comment on table "public"."countries" is @until-end-tag; -->
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>249</strong></li>
+<li>Count estimate: ****</li>
 <li>Source: <a href="/Database/Scripts/tables/countries.sql">/Database/Scripts/tables/countries.sql</a></li>
 </ul>
 <table>
@@ -756,7 +842,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong></td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
 <td><!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->lowercased<!-- end --></td>
 </tr>
 <tr>
@@ -784,18 +870,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>44.868</code></strong></td>
-<td>count=<strong><code>6.023</code></strong></td>
-<td>inserted=<strong><code>249</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>4</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>751</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>6.599.592</code></strong></td>
-<td>rows=<strong><code>6.023</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
 <td>live=<strong><code>249</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=, rows inserted since=<strong><code>249</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:37:36Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>last auto=<strong><code>2022-08-01 11:19:33Z</code></strong>, rows inserted since=<strong><code>249</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>249</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -805,7 +891,7 @@ Json object where lables are business area names and three series with number of
 <p>History of employment in companies by people.</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>120.321</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/employee_records.sql">/Database/Scripts/tables/employee_records.sql</a></li>
 </ul>
 <table>
@@ -825,7 +911,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>bigint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."employee_records"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -901,18 +987,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>1.232</code></strong></td>
-<td>count=<strong><code>28.125</code></strong></td>
-<td>inserted=<strong><code>120.321</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>5</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>147.633.867</code></strong></td>
-<td>rows=<strong><code>7.529.665</code></strong></td>
-<td>live=<strong><code>120.321</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:38Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:38Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -942,7 +1028,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>smallint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."employee_status"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -958,7 +1044,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong></td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
+<td><code>GENERATED ALWAYS AS lower((name)::text)</code></td>
 <td><!-- comment on column "public"."employee_status"."name_normalized" is @until-end-tag; -->lowercased<!-- end --></td>
 </tr>
 </tbody>
@@ -979,14 +1065,14 @@ Json object where lables are business area names and three series with number of
 <tbody>
 <tr>
 <td>count=<strong><code>2</code></strong></td>
-<td>count=<strong><code>49.503</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
 <td>inserted=<strong><code>6</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
 <td>rows=<strong><code>0</code></strong></td>
-<td>rows=<strong><code>49.503</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
 <td>live=<strong><code>6</code></strong>, dead=<strong><code>0</code></strong></td>
 <td>last auto=, rows inserted since=<strong><code>6</code></strong></td>
 <td>last auto=, rows updated since=<strong><code>6</code></strong></td>
@@ -998,7 +1084,7 @@ Json object where lables are business area names and three series with number of
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>49.497</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/people.sql">/Database/Scripts/tables/people.sql</a></li>
 </ul>
 <table>
@@ -1018,7 +1104,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>bigint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -1042,8 +1128,8 @@ Json object where lables are business area names and three series with number of
 <td><strong>IDX</strong></td>
 <td><code>character varying</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td></td>
-<td><!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first_name + ' ' + last_name + '\n'  last_name + '  ' +  first_name  all in lowercase to enable both searches (staring with first or last name), trigram index<!-- end --></td>
+<td><code>GENERATED ALWAYS AS ((lower((first_name)::text) || ' '::text) || lower((last_name)::text))</code></td>
+<td><!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first namer + last name, trigram index<!-- end --></td>
 </tr>
 <tr>
 <td><a id="user-content-public-people-employee_status" href="#public-people-employee_status">#</a><code>employee_status</code></td>
@@ -1150,18 +1236,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>9</code></strong></td>
-<td>count=<strong><code>435.962</code></strong></td>
-<td>inserted=<strong><code>49.497</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>8</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>49.497</code></strong></td>
-<td>rows=<strong><code>386.466</code></strong></td>
-<td>live=<strong><code>49.497</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:43Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:45Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -1171,7 +1257,7 @@ Json object where lables are business area names and three series with number of
 <p>Person - business roles</p>
 <!-- end -->
 <ul>
-<li>Count estimate: <strong>128.067</strong></li>
+<li>Count estimate: <strong>-1</strong></li>
 <li>Source: <a href="/Database/Scripts/tables/person_roles.sql">/Database/Scripts/tables/person_roles.sql</a></li>
 </ul>
 <table>
@@ -1251,18 +1337,18 @@ Json object where lables are business area names and three series with number of
 </thead>
 <tbody>
 <tr>
-<td>count=<strong><code>8</code></strong></td>
-<td>count=<strong><code>150.011</code></strong></td>
-<td>inserted=<strong><code>128.067</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>6</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>0</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
-<td>rows=<strong><code>256.134</code></strong></td>
-<td>rows=<strong><code>56.648</code></strong></td>
-<td>live=<strong><code>128.067</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:45Z</code></strong>, rows inserted since=<strong><code>0</code></strong></td>
-<td>last auto=<strong><code>2022-07-25 11:45:45Z</code></strong>, rows updated since=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>0</code></strong>, dead=<strong><code>0</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>0</code></strong></td>
+<td>last auto=, rows updated since=<strong><code>0</code></strong></td>
 </tr>
 </tbody>
 </table>
@@ -1292,7 +1378,7 @@ Json object where lables are business area names and three series with number of
 <td><strong>PK</strong></td>
 <td><code>bigint</code></td>
 <td style="text-align: center;"><strong>NO</strong></td>
-<td><em>auto increment</em></td>
+<td><code>GENERATED ALWAYS AS IDENTITY</code></td>
 <td><!-- comment on column "public"."users"."id" is @until-end-tag; --><!-- end --></td>
 </tr>
 <tr>
@@ -1385,16 +1471,16 @@ Json object where lables are business area names and three series with number of
 <tbody>
 <tr>
 <td>count=<strong><code>3</code></strong></td>
-<td>count=<strong><code>489.861</code></strong></td>
-<td>inserted=<strong><code>1</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
+<td>count=<strong><code>0</code></strong></td>
+<td>inserted=<strong><code>2</code></strong>, updated=<strong><code>0</code></strong>, deleted=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 <td>last=, count=<strong><code>0</code></strong></td>
 </tr>
 <tr>
 <td>rows=<strong><code>0</code></strong></td>
-<td>rows=<strong><code>489.861</code></strong></td>
-<td>live=<strong><code>1</code></strong>, dead=<strong><code>0</code></strong></td>
-<td>last auto=, rows inserted since=<strong><code>1</code></strong></td>
+<td>rows=<strong><code>0</code></strong></td>
+<td>live=<strong><code>1</code></strong>, dead=<strong><code>1</code></strong></td>
+<td>last auto=, rows inserted since=<strong><code>2</code></strong></td>
 <td>last auto=, rows updated since=<strong><code>1</code></strong></td>
 </tr>
 </tbody>

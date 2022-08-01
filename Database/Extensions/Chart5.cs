@@ -19,7 +19,6 @@ public static class PgRoutineChart5
     /// Executes sql function "chart_5"
     /// Top 10 comanies with highest number of user reviews.
     /// Json object where lables are companies names with average score and it only have one series with total number of reviews.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>string?</returns>
@@ -36,7 +35,6 @@ public static class PgRoutineChart5
     /// Asynchronously executes sql function "chart_5"
     /// Top 10 comanies with highest number of user reviews.
     /// Json object where lables are companies names with average score and it only have one series with total number of reviews.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>

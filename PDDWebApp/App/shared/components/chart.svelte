@@ -4,7 +4,7 @@
     import { isDarkTheme } from "../layout/theme";
 
     export let dataFunc: () => Promise<{labels: string[], series: {data: number[], label: string | undefined}[]}>;
-    export let type: "line" | "bar" | "pie" | "doughnut";
+    export let type: ChartType;
     export let datasetLabel: string = "";
     export let defaultColorDarkTheme = "#b7c8d8";
     export let defaultBorderColorDarkTheme = "#6c757d";
@@ -16,10 +16,13 @@
     Chart.register(...registerables);
 
     let chartCanvas: HTMLCanvasElement;
-    let chart: Chart
+    let chart: Chart;
+    let loading = true;
 
     let fetchChartConfig = async () => {
+        loading = true;
         let data = await dataFunc();
+        loading = false;
         return {
                 type,
                 data: {
@@ -57,7 +60,6 @@
 
     onMount(recreateChat);
 
-
     $: {
         if ($isDarkTheme) {
             Chart.defaults.color = defaultColorDarkTheme;
@@ -73,4 +75,15 @@
 
 </script>
 
-<canvas bind:this={chartCanvas}></canvas>
+<div class="placeholder-glow">
+    <canvas class:chart-loading={loading} class:placeholder={loading} bind:this={chartCanvas}></canvas>
+</div>
+
+<style lang="scss">
+    .chart-loading  {
+        width: 75%;
+        height: 75%;
+        margin: 5%;
+        border-radius: 5%;
+    }
+</style>

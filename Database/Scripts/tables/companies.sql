@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS public.companies;
 CREATE TABLE public.companies (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL UNIQUE,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL UNIQUE,
     web character varying,
     linkedin character varying,
     tweeter character varying,

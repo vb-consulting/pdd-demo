@@ -34,3 +34,5 @@ type ComponentOrientationType = "start"|"end"|"top"|"bottom";
 type ComponentPromiseFunc = (() => Promise<string>) | undefined;
 
 type ComponentSizeType = "sm"|"md"|"lg"|"xl"|"xxl";
+
+type ChartType = "line" | "bar" | "pie" | "doughnut";

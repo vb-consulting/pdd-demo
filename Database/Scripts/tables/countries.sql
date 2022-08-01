@@ -8,7 +8,7 @@ CREATE TABLE public.countries (
     iso2 character(2) NOT NULL,
     iso3 character(3) NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying NOT NULL,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     culture character varying
 );
 

@@ -86,9 +86,9 @@ foreach (var company in new Faker<Company>()
     {
         companyId = connection.Read<long>(@"
         insert into companies 
-        (name, name_normalized, web, tweeter, Linkedin, company_line, about, country)
+        (name, web, tweeter, Linkedin, company_line, about, country)
         values
-        (@Name, @NameNormalized, @Web, @Twitter, @Linkedin, @CompanyLine, @About, @Country)
+        (@Name, @Web, @Twitter, @Linkedin, @CompanyLine, @About, @Country)
         returning id;", company
         ).Single();
     }
@@ -304,9 +304,9 @@ foreach (var person in new Faker<Person>()
     {
         personId = connection.Read<long>(@"
         insert into people 
-        (first_name, last_name, name_normalized, employee_status, gender, email, linkedin, twitter, birth, country)
+        (first_name, last_name, employee_status, gender, email, linkedin, twitter, birth, country)
         values
-        (@firstName, @lastName, @normalized, @status, @gender::valid_genders, @email, @twitter, @linkedin, @birth, @country)
+        (@firstName, @lastName, @status, @gender::valid_genders, @email, @twitter, @linkedin, @birth, @country)
         returning id;", new
         {
             firstName = person.FirstName,

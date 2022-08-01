@@ -19,7 +19,6 @@ public static class PgRoutineChart1
     /// Executes sql function "chart_1"
     /// Top 10 comapnies by number of current employees.
     /// Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>string?</returns>
@@ -36,7 +35,6 @@ public static class PgRoutineChart1
     /// Asynchronously executes sql function "chart_1"
     /// Top 10 comapnies by number of current employees.
     /// Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
-    /// 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>
