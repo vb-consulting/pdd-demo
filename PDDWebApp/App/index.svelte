@@ -12,7 +12,7 @@
                 <ChartBox 
                     type="bar" 
                     getUrl={urls.chart1Url} 
-                    datasetLabel="Number of employees: " 
+                    seriesLabel="Number of employees: " 
                     title="Top 10 companies by the number of employees" />
             </div>
             <div class="col-md-4 border-top border-start chart">

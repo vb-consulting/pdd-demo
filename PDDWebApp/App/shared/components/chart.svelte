@@ -2,67 +2,153 @@
     import { Chart, registerables } from "chart.js";
     import { onMount } from "svelte";
     import { isDarkTheme } from "../layout/theme";
-
-    export let dataFunc: () => Promise<{labels: string[], series: {data: number[], label: string | undefined}[]}>;
+    /**
+     * One of the predefined chart types.
+     *
+     * @default undefined
+     */
     export let type: ChartType;
-    export let datasetLabel: string = "";
+    /**
+     * Async function that returns data for the chart.
+     * This function will not be used and it doesn't have to be defined if chartData property is used.
+     *
+     * @default undefined
+     */
+    export let dataFunc: (() => Promise<{labels: string[], series: {data: number[], label: string | undefined}[]}>) | undefined = undefined;
+    /**
+     * Internal chart data, used for copying data and options from one chart to other to avoid extra requests.
+     * If this prooperty is defined, `dataFunc` will be ignored.
+     *
+     * @default undefined
+     */
+    export let chartData: {data: any, options: any} | undefined = undefined;
+    /**
+     * Function that returns internal chart data from chart instance.
+     */
+    export const getChartData = () => {
+        return {data: JSON.parse(JSON.stringify(chart.data)), options: JSON.parse(JSON.stringify(chart.options))}
+    };
+    /**
+     * Default series label. Will override series label returned from dataFunc 
+     *
+     * @default undefined
+     */
+    export let seriesLabel: string | undefined = undefined;
+    /**
+     * Default color for dark theme
+     *
+     * @default #b7c8d8
+     */
     export let defaultColorDarkTheme = "#b7c8d8";
+    /**
+     * Default border color for dark theme
+     *
+     * @default #6c757d
+     */
     export let defaultBorderColorDarkTheme = "#6c757d";
+    /**
+     * Default color for light theme
+     *
+     * @default #666
+     */
     export let defaultColorLightTheme = "#666";
+    /**
+     * Default border color for light theme
+     *
+     * @default #666
+     */
     export let defaultBorderColorLightTheme = "#666";
+    /**
+     * Basic set of color that will be assigned for either values or series
+     *
+     * @default ["red", "yellow","blue","orange","green", "violet", "purple", "magenta", "grey", "brown", "pink", "aqua", "navy"]
+     */
     export let basicColors = ["red", "yellow","blue","orange","green", "violet", "purple", "magenta", "grey", "brown", "pink", "aqua", "navy"];
+    /**
+     * Display series legend?
+     *
+     * @default true if more than one series
+     */
     export let displayLegend: boolean | undefined = undefined;
+    /**
+     * Background color for series
+     *
+     * @default basicColors if type not line, otherwise chart default
+     */
     export let seriesBackgroundColor: string[] | string | undefined = (type == "line" ? undefined : basicColors);
+    /**
+     * Color for series
+     *
+     * @default basicColors if type line, otherwise chart default
+     */
     export let seriesColor: string[] | string | undefined = (type == "line" ? basicColors : undefined);
-    
+    /**
+     * Refresh chart with new data from dataFunc
+     *
+     * @default basicColors if type line, otherwise chart default
+     */
+    export const refreshChart = async () => {
+        if (!dataFunc) {
+            return;
+        }
+        if (chart) {
+            chart.destroy();
+        }
+        loading = true;
+        let response = await dataFunc();
+        loading = false;
+        if (!response) {
+            return;
+        }
+        let len = response.series.length;
+        chart = new Chart(chartCanvas.getContext("2d") as any, {
+            type,
+            data: {
+                labels: response.labels,
+                datasets: response.series.map((series, index) => Object({ 
+                    backgroundColor: len > 1 ? basicColors[index % basicColors.length] : seriesBackgroundColor,
+                    label: seriesLabel || series.label,
+                    data: series.data,
+                    borderColor: seriesColor,
+                }))
+
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: displayLegend != undefined ? displayLegend : response.series.length > 1
+                    }
+                }
+            }
+        });
+    }
+
     Chart.register(...registerables);
 
     let chartCanvas: HTMLCanvasElement;
     let chart: Chart;
-    let loading = true;
+    let loading = false;
 
-    let getColorByIndex = (index: number) => {
-        return basicColors[index % basicColors.length];
-    }
-
-    let recreateChat = async () => {
+    let recreateChart = async () => {
         if (!chartCanvas) {
             return;
         }
         if (!chart) {
-            loading = true;
-            let data = await dataFunc();
-            loading = false;
-            chart = new Chart(chartCanvas.getContext("2d") as any, {
-                type,
-                data: {
-                    labels: data.labels,
-                    datasets: data.series.map((series, index) => Object({ 
-                        backgroundColor: data.series.length > 1 ? getColorByIndex(index) : seriesBackgroundColor,
-                        label: datasetLabel || series.label,
-                        data: series.data,
-                        borderColor: seriesColor,
-                    }))
-
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: displayLegend != undefined ? displayLegend : data.series.length > 1
-                        }
-                    }
-                }
-            });
+            if (!chartData) {
+                await refreshChart();
+            } else {
+                loading = false;
+                chart = new Chart(chartCanvas.getContext("2d") as any, {type, data: chartData.data, options: chartData.options});
+            }
         } else {
-            let data = JSON.parse(JSON.stringify(chart.data));
-            let options = JSON.parse(JSON.stringify(chart.options));
-            let ctx = chart.ctx;
+            const {data, options} = getChartData();
+            const prevCtx = chart.ctx;
             chart.destroy();
-            chart = new Chart(ctx, {type, data, options});
+            chart = new Chart(prevCtx, {type, data, options});
         }
     }
 
-    onMount(recreateChat);
+    onMount(recreateChart);
 
     $: {
         if ($isDarkTheme) {
@@ -73,21 +159,24 @@
             Chart.defaults.borderColor = defaultBorderColorLightTheme;
         }
         if (chart) {
-            recreateChat();
+            recreateChart();
         }
     }
 
 </script>
 
 <div class="placeholder-glow">
-    <canvas class:chart-loading={loading} class:placeholder={loading} bind:this={chartCanvas}></canvas>
+    {#if loading}
+        <div class="chart-loading placeholder"></div>
+    {/if}
+    <canvas bind:this={chartCanvas}></canvas>
 </div>
 
 <style lang="scss">
     .chart-loading  {
-        width: 75%;
-        height: 75%;
-        margin: 5%;
+        width: 90%;
+        height: 60%;
+        margin: 10%;
         border-radius: 5%;
     }
 </style>

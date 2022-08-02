@@ -618,6 +618,10 @@ var index = (function () {
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
     }
+    function prop_dev(node, property, value) {
+        node[property] = value;
+        dispatch_dev('SvelteDOMSetProperty', { node, property, value });
+    }
     function set_data_dev(text, data) {
         data = '' + data;
         if (text.wholeText === data)
@@ -5664,7 +5668,7 @@ var index = (function () {
     const get_title_slot_context$1 = ctx => ({});
 
     // (134:4) {#if title || titleCloseButton || $$slots.title}
-    function create_if_block_3$1(ctx) {
+    function create_if_block_3$2(ctx) {
     	let div;
     	let h5;
     	let t0;
@@ -5673,7 +5677,7 @@ var index = (function () {
     	let if_block0 = /*title*/ ctx[4] && create_if_block_5$1(ctx);
     	const title_slot_template = /*#slots*/ ctx[18].title;
     	const title_slot = create_slot(title_slot_template, ctx, /*$$scope*/ ctx[17], get_title_slot_context$1);
-    	let if_block1 = /*titleCloseButton*/ ctx[5] && create_if_block_4$1(ctx);
+    	let if_block1 = /*titleCloseButton*/ ctx[5] && create_if_block_4$2(ctx);
 
     	const block = {
     		c: function create() {
@@ -5736,7 +5740,7 @@ var index = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_4$1(ctx);
+    					if_block1 = create_if_block_4$2(ctx);
     					if_block1.c();
     					if_block1.m(div, null);
     				}
@@ -5764,7 +5768,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3$1.name,
+    		id: create_if_block_3$2.name,
     		type: "if",
     		source: "(134:4) {#if title || titleCloseButton || $$slots.title}",
     		ctx
@@ -5809,7 +5813,7 @@ var index = (function () {
     }
 
     // (142:12) {#if titleCloseButton}
-    function create_if_block_4$1(ctx) {
+    function create_if_block_4$2(ctx) {
     	let button;
     	let mounted;
     	let dispose;
@@ -5839,7 +5843,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4$1.name,
+    		id: create_if_block_4$2.name,
     		type: "if",
     		source: "(142:12) {#if titleCloseButton}",
     		ctx
@@ -5849,12 +5853,12 @@ var index = (function () {
     }
 
     // (148:8) {#if state.open}
-    function create_if_block$3(ctx) {
+    function create_if_block$4(ctx) {
     	let t0;
     	let t1;
     	let current;
-    	let if_block0 = /*promise*/ ctx[6] && create_if_block_2$2(ctx);
-    	let if_block1 = /*content*/ ctx[7] && create_if_block_1$2(ctx);
+    	let if_block0 = /*promise*/ ctx[6] && create_if_block_2$3(ctx);
+    	let if_block1 = /*content*/ ctx[7] && create_if_block_1$3(ctx);
     	const default_slot_template = /*#slots*/ ctx[18].default;
     	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[17], null);
 
@@ -5883,7 +5887,7 @@ var index = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_2$2(ctx);
+    					if_block0 = create_if_block_2$3(ctx);
     					if_block0.c();
     					if_block0.m(t0.parentNode, t0);
     				}
@@ -5896,7 +5900,7 @@ var index = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_1$2(ctx);
+    					if_block1 = create_if_block_1$3(ctx);
     					if_block1.c();
     					if_block1.m(t1.parentNode, t1);
     				}
@@ -5940,7 +5944,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$3.name,
+    		id: create_if_block$4.name,
     		type: "if",
     		source: "(148:8) {#if state.open}",
     		ctx
@@ -5950,7 +5954,7 @@ var index = (function () {
     }
 
     // (149:12) {#if promise}
-    function create_if_block_2$2(ctx) {
+    function create_if_block_2$3(ctx) {
     	let await_block_anchor;
     	let promise_1;
 
@@ -5996,7 +6000,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2$2.name,
+    		id: create_if_block_2$3.name,
     		type: "if",
     		source: "(149:12) {#if promise}",
     		ctx
@@ -6094,7 +6098,7 @@ var index = (function () {
     }
 
     // (158:12) {#if content}
-    function create_if_block_1$2(ctx) {
+    function create_if_block_1$3(ctx) {
     	let html_tag;
     	let html_anchor;
 
@@ -6119,7 +6123,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$2.name,
+    		id: create_if_block_1$3.name,
     		type: "if",
     		source: "(158:12) {#if content}",
     		ctx
@@ -6136,8 +6140,8 @@ var index = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = (/*title*/ ctx[4] || /*titleCloseButton*/ ctx[5] || /*$$slots*/ ctx[10].title) && create_if_block_3$1(ctx);
-    	let if_block1 = /*state*/ ctx[0].open && create_if_block$3(ctx);
+    	let if_block0 = (/*title*/ ctx[4] || /*titleCloseButton*/ ctx[5] || /*$$slots*/ ctx[10].title) && create_if_block_3$2(ctx);
+    	let if_block1 = /*state*/ ctx[0].open && create_if_block$4(ctx);
 
     	const block = {
     		c: function create() {
@@ -6181,7 +6185,7 @@ var index = (function () {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_3$1(ctx);
+    					if_block0 = create_if_block_3$2(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(div1, t);
@@ -6204,7 +6208,7 @@ var index = (function () {
     						transition_in(if_block1, 1);
     					}
     				} else {
-    					if_block1 = create_if_block$3(ctx);
+    					if_block1 = create_if_block$4(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
     					if_block1.m(div0, null);
@@ -6757,11 +6761,11 @@ var index = (function () {
     const file$4 = "App\\shared\\layout\\offcanvas-layout.svelte";
 
     // (83:0) {#if !pinned}
-    function create_if_block_1$1(ctx) {
+    function create_if_block_1$2(ctx) {
     	let t;
     	let offcanvas_1;
     	let current;
-    	let if_block = !/*offcanvas*/ ctx[2].open && create_if_block_2$1(ctx);
+    	let if_block = !/*offcanvas*/ ctx[2].open && create_if_block_2$2(ctx);
 
     	offcanvas_1 = new Offcanvas({
     			props: {
@@ -6793,7 +6797,7 @@ var index = (function () {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block_2$1(ctx);
+    					if_block = create_if_block_2$2(ctx);
     					if_block.c();
     					if_block.m(t.parentNode, t);
     				}
@@ -6829,7 +6833,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$1.name,
+    		id: create_if_block_1$2.name,
     		type: "if",
     		source: "(83:0) {#if !pinned}",
     		ctx
@@ -6839,7 +6843,7 @@ var index = (function () {
     }
 
     // (85:4) {#if !offcanvas.open}
-    function create_if_block_2$1(ctx) {
+    function create_if_block_2$2(ctx) {
     	let div;
     	let mounted;
     	let dispose;
@@ -6872,7 +6876,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2$1.name,
+    		id: create_if_block_2$2.name,
     		type: "if",
     		source: "(85:4) {#if !offcanvas.open}",
     		ctx
@@ -6988,7 +6992,7 @@ var index = (function () {
     }
 
     // (106:16) {#if user.isSigned}
-    function create_if_block$2(ctx) {
+    function create_if_block$3(ctx) {
     	let pre;
     	let t3;
     	let a;
@@ -7031,7 +7035,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$2.name,
+    		id: create_if_block$3.name,
     		type: "if",
     		source: "(106:16) {#if user.isSigned}",
     		ctx
@@ -7071,10 +7075,10 @@ var index = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = !/*pinned*/ ctx[1] && create_if_block_1$1(ctx);
+    	let if_block0 = !/*pinned*/ ctx[1] && create_if_block_1$2(ctx);
 
     	function select_block_type(ctx, dirty) {
-    		if (/*user*/ ctx[4].isSigned) return create_if_block$2;
+    		if (/*user*/ ctx[4].isSigned) return create_if_block$3;
     		return create_else_block$1;
     	}
 
@@ -7213,7 +7217,7 @@ var index = (function () {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_1$1(ctx);
+    					if_block0 = create_if_block_1$2(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(t1.parentNode, t1);
@@ -20763,43 +20767,79 @@ var index = (function () {
     const { Object: Object_1 } = globals;
     const file$3 = "App\\shared\\components\\chart.svelte";
 
-    function create_fragment$3(ctx) {
+    // (164:4) {#if loading}
+    function create_if_block$2(ctx) {
     	let div;
-    	let canvas;
 
     	const block = {
     		c: function create() {
     			div = element("div");
+    			attr_dev(div, "class", "chart-loading placeholder svelte-c4uxe5");
+    			add_location(div, file$3, 164, 8, 4638);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$2.name,
+    		type: "if",
+    		source: "(164:4) {#if loading}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$3(ctx) {
+    	let div;
+    	let t;
+    	let canvas;
+    	let if_block = /*loading*/ ctx[1] && create_if_block$2(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if (if_block) if_block.c();
+    			t = space();
     			canvas = element("canvas");
-    			attr_dev(canvas, "class", "svelte-mavk62");
-    			toggle_class(canvas, "chart-loading", /*loading*/ ctx[1]);
-    			toggle_class(canvas, "placeholder", /*loading*/ ctx[1]);
-    			add_location(canvas, file$3, 74, 4, 2576);
+    			add_location(canvas, file$3, 166, 4, 4700);
     			attr_dev(div, "class", "placeholder-glow");
-    			add_location(div, file$3, 73, 0, 2540);
+    			add_location(div, file$3, 162, 0, 4579);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
+    			if (if_block) if_block.m(div, null);
+    			append_dev(div, t);
     			append_dev(div, canvas);
-    			/*canvas_binding*/ ctx[15](canvas);
+    			/*canvas_binding*/ ctx[18](canvas);
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*loading*/ 2) {
-    				toggle_class(canvas, "chart-loading", /*loading*/ ctx[1]);
-    			}
-
-    			if (dirty & /*loading*/ 2) {
-    				toggle_class(canvas, "placeholder", /*loading*/ ctx[1]);
+    			if (/*loading*/ ctx[1]) {
+    				if (if_block) ; else {
+    					if_block = create_if_block$2(ctx);
+    					if_block.c();
+    					if_block.m(div, t);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
     			}
     		},
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			/*canvas_binding*/ ctx[15](null);
+    			if (if_block) if_block.d();
+    			/*canvas_binding*/ ctx[18](null);
     		}
     	};
 
@@ -20817,12 +20857,21 @@ var index = (function () {
     function instance$2($$self, $$props, $$invalidate) {
     	let $isDarkTheme;
     	validate_store(isDarkTheme, 'isDarkTheme');
-    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(14, $isDarkTheme = $$value));
+    	component_subscribe($$self, isDarkTheme, $$value => $$invalidate(17, $isDarkTheme = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Chart', slots, []);
-    	let { dataFunc } = $$props;
     	let { type } = $$props;
-    	let { datasetLabel = "" } = $$props;
+    	let { dataFunc = undefined } = $$props;
+    	let { chartData = undefined } = $$props;
+
+    	const getChartData = () => {
+    		return {
+    			data: JSON.parse(JSON.stringify(chart.data)),
+    			options: JSON.parse(JSON.stringify(chart.options))
+    		};
+    	};
+
+    	let { seriesLabel = undefined } = $$props;
     	let { defaultColorDarkTheme = "#b7c8d8" } = $$props;
     	let { defaultBorderColorDarkTheme = "#6c757d" } = $$props;
     	let { defaultColorLightTheme = "#666" } = $$props;
@@ -20847,64 +20896,90 @@ var index = (function () {
     	let { displayLegend = undefined } = $$props;
     	let { seriesBackgroundColor = type == "line" ? undefined : basicColors } = $$props;
     	let { seriesColor = type == "line" ? basicColors : undefined } = $$props;
+
+    	const refreshChart = async () => {
+    		if (!dataFunc) {
+    			return;
+    		}
+
+    		if (chart) {
+    			chart.destroy();
+    		}
+
+    		$$invalidate(1, loading = true);
+    		let response = await dataFunc();
+    		$$invalidate(1, loading = false);
+
+    		if (!response) {
+    			return;
+    		}
+
+    		let len = response.series.length;
+
+    		$$invalidate(16, chart = new Chart(chartCanvas.getContext("2d"),
+    		{
+    				type,
+    				data: {
+    					labels: response.labels,
+    					datasets: response.series.map((series, index) => Object({
+    						backgroundColor: len > 1
+    						? basicColors[index % basicColors.length]
+    						: seriesBackgroundColor,
+    						label: seriesLabel || series.label,
+    						data: series.data,
+    						borderColor: seriesColor
+    					}))
+    				},
+    				options: {
+    					plugins: {
+    						legend: {
+    							display: displayLegend != undefined
+    							? displayLegend
+    							: response.series.length > 1
+    						}
+    					}
+    				}
+    			}));
+    	};
+
     	Chart.register(...registerables);
     	let chartCanvas;
     	let chart;
-    	let loading = true;
+    	let loading = false;
 
-    	let getColorByIndex = index => {
-    		return basicColors[index % basicColors.length];
-    	};
-
-    	let recreateChat = async () => {
+    	let recreateChart = async () => {
     		if (!chartCanvas) {
     			return;
     		}
 
     		if (!chart) {
-    			$$invalidate(1, loading = true);
-    			let data = await dataFunc();
-    			$$invalidate(1, loading = false);
+    			if (!chartData) {
+    				await refreshChart();
+    			} else {
+    				$$invalidate(1, loading = false);
 
-    			$$invalidate(13, chart = new Chart(chartCanvas.getContext("2d"),
-    			{
-    					type,
-    					data: {
-    						labels: data.labels,
-    						datasets: data.series.map((series, index) => Object({
-    							backgroundColor: data.series.length > 1
-    							? getColorByIndex(index)
-    							: seriesBackgroundColor,
-    							label: datasetLabel || series.label,
-    							data: series.data,
-    							borderColor: seriesColor
-    						}))
-    					},
-    					options: {
-    						plugins: {
-    							legend: {
-    								display: displayLegend != undefined
-    								? displayLegend
-    								: data.series.length > 1
-    							}
-    						}
-    					}
-    				}));
+    				$$invalidate(16, chart = new Chart(chartCanvas.getContext("2d"),
+    				{
+    						type,
+    						data: chartData.data,
+    						options: chartData.options
+    					}));
+    			}
     		} else {
-    			let data = JSON.parse(JSON.stringify(chart.data));
-    			let options = JSON.parse(JSON.stringify(chart.options));
-    			let ctx = chart.ctx;
+    			const { data, options } = getChartData();
+    			const prevCtx = chart.ctx;
     			chart.destroy();
-    			$$invalidate(13, chart = new Chart(ctx, { type, data, options }));
+    			$$invalidate(16, chart = new Chart(prevCtx, { type, data, options }));
     		}
     	};
 
-    	onMount(recreateChat);
+    	onMount(recreateChart);
 
     	const writable_props = [
-    		'dataFunc',
     		'type',
-    		'datasetLabel',
+    		'dataFunc',
+    		'chartData',
+    		'seriesLabel',
     		'defaultColorDarkTheme',
     		'defaultBorderColorDarkTheme',
     		'defaultColorLightTheme',
@@ -20927,17 +21002,18 @@ var index = (function () {
     	}
 
     	$$self.$$set = $$props => {
-    		if ('dataFunc' in $$props) $$invalidate(2, dataFunc = $$props.dataFunc);
-    		if ('type' in $$props) $$invalidate(3, type = $$props.type);
-    		if ('datasetLabel' in $$props) $$invalidate(4, datasetLabel = $$props.datasetLabel);
-    		if ('defaultColorDarkTheme' in $$props) $$invalidate(5, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
-    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(6, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
-    		if ('defaultColorLightTheme' in $$props) $$invalidate(7, defaultColorLightTheme = $$props.defaultColorLightTheme);
-    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(8, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
-    		if ('basicColors' in $$props) $$invalidate(9, basicColors = $$props.basicColors);
-    		if ('displayLegend' in $$props) $$invalidate(10, displayLegend = $$props.displayLegend);
-    		if ('seriesBackgroundColor' in $$props) $$invalidate(11, seriesBackgroundColor = $$props.seriesBackgroundColor);
-    		if ('seriesColor' in $$props) $$invalidate(12, seriesColor = $$props.seriesColor);
+    		if ('type' in $$props) $$invalidate(2, type = $$props.type);
+    		if ('dataFunc' in $$props) $$invalidate(3, dataFunc = $$props.dataFunc);
+    		if ('chartData' in $$props) $$invalidate(4, chartData = $$props.chartData);
+    		if ('seriesLabel' in $$props) $$invalidate(6, seriesLabel = $$props.seriesLabel);
+    		if ('defaultColorDarkTheme' in $$props) $$invalidate(7, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
+    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(8, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
+    		if ('defaultColorLightTheme' in $$props) $$invalidate(9, defaultColorLightTheme = $$props.defaultColorLightTheme);
+    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(10, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('basicColors' in $$props) $$invalidate(11, basicColors = $$props.basicColors);
+    		if ('displayLegend' in $$props) $$invalidate(12, displayLegend = $$props.displayLegend);
+    		if ('seriesBackgroundColor' in $$props) $$invalidate(13, seriesBackgroundColor = $$props.seriesBackgroundColor);
+    		if ('seriesColor' in $$props) $$invalidate(14, seriesColor = $$props.seriesColor);
     	};
 
     	$$self.$capture_state = () => ({
@@ -20945,9 +21021,11 @@ var index = (function () {
     		registerables,
     		onMount,
     		isDarkTheme,
-    		dataFunc,
     		type,
-    		datasetLabel,
+    		dataFunc,
+    		chartData,
+    		getChartData,
+    		seriesLabel,
     		defaultColorDarkTheme,
     		defaultBorderColorDarkTheme,
     		defaultColorLightTheme,
@@ -20956,31 +21034,31 @@ var index = (function () {
     		displayLegend,
     		seriesBackgroundColor,
     		seriesColor,
+    		refreshChart,
     		chartCanvas,
     		chart,
     		loading,
-    		getColorByIndex,
-    		recreateChat,
+    		recreateChart,
     		$isDarkTheme
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('dataFunc' in $$props) $$invalidate(2, dataFunc = $$props.dataFunc);
-    		if ('type' in $$props) $$invalidate(3, type = $$props.type);
-    		if ('datasetLabel' in $$props) $$invalidate(4, datasetLabel = $$props.datasetLabel);
-    		if ('defaultColorDarkTheme' in $$props) $$invalidate(5, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
-    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(6, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
-    		if ('defaultColorLightTheme' in $$props) $$invalidate(7, defaultColorLightTheme = $$props.defaultColorLightTheme);
-    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(8, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
-    		if ('basicColors' in $$props) $$invalidate(9, basicColors = $$props.basicColors);
-    		if ('displayLegend' in $$props) $$invalidate(10, displayLegend = $$props.displayLegend);
-    		if ('seriesBackgroundColor' in $$props) $$invalidate(11, seriesBackgroundColor = $$props.seriesBackgroundColor);
-    		if ('seriesColor' in $$props) $$invalidate(12, seriesColor = $$props.seriesColor);
+    		if ('type' in $$props) $$invalidate(2, type = $$props.type);
+    		if ('dataFunc' in $$props) $$invalidate(3, dataFunc = $$props.dataFunc);
+    		if ('chartData' in $$props) $$invalidate(4, chartData = $$props.chartData);
+    		if ('seriesLabel' in $$props) $$invalidate(6, seriesLabel = $$props.seriesLabel);
+    		if ('defaultColorDarkTheme' in $$props) $$invalidate(7, defaultColorDarkTheme = $$props.defaultColorDarkTheme);
+    		if ('defaultBorderColorDarkTheme' in $$props) $$invalidate(8, defaultBorderColorDarkTheme = $$props.defaultBorderColorDarkTheme);
+    		if ('defaultColorLightTheme' in $$props) $$invalidate(9, defaultColorLightTheme = $$props.defaultColorLightTheme);
+    		if ('defaultBorderColorLightTheme' in $$props) $$invalidate(10, defaultBorderColorLightTheme = $$props.defaultBorderColorLightTheme);
+    		if ('basicColors' in $$props) $$invalidate(11, basicColors = $$props.basicColors);
+    		if ('displayLegend' in $$props) $$invalidate(12, displayLegend = $$props.displayLegend);
+    		if ('seriesBackgroundColor' in $$props) $$invalidate(13, seriesBackgroundColor = $$props.seriesBackgroundColor);
+    		if ('seriesColor' in $$props) $$invalidate(14, seriesColor = $$props.seriesColor);
     		if ('chartCanvas' in $$props) $$invalidate(0, chartCanvas = $$props.chartCanvas);
-    		if ('chart' in $$props) $$invalidate(13, chart = $$props.chart);
+    		if ('chart' in $$props) $$invalidate(16, chart = $$props.chart);
     		if ('loading' in $$props) $$invalidate(1, loading = $$props.loading);
-    		if ('getColorByIndex' in $$props) getColorByIndex = $$props.getColorByIndex;
-    		if ('recreateChat' in $$props) $$invalidate(18, recreateChat = $$props.recreateChat);
+    		if ('recreateChart' in $$props) $$invalidate(20, recreateChart = $$props.recreateChart);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -20988,7 +21066,7 @@ var index = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 25056) {
+    		if ($$self.$$.dirty & /*$isDarkTheme, defaultColorDarkTheme, defaultBorderColorDarkTheme, defaultColorLightTheme, defaultBorderColorLightTheme, chart*/ 198528) {
     			{
     				if ($isDarkTheme) {
     					Chart.defaults.color = defaultColorDarkTheme;
@@ -20999,7 +21077,7 @@ var index = (function () {
     				}
 
     				if (chart) {
-    					recreateChat();
+    					recreateChart();
     				}
     			}
     		}
@@ -21008,9 +21086,11 @@ var index = (function () {
     	return [
     		chartCanvas,
     		loading,
-    		dataFunc,
     		type,
-    		datasetLabel,
+    		dataFunc,
+    		chartData,
+    		getChartData,
+    		seriesLabel,
     		defaultColorDarkTheme,
     		defaultBorderColorDarkTheme,
     		defaultColorLightTheme,
@@ -21019,6 +21099,7 @@ var index = (function () {
     		displayLegend,
     		seriesBackgroundColor,
     		seriesColor,
+    		refreshChart,
     		chart,
     		$isDarkTheme,
     		canvas_binding
@@ -21030,17 +21111,20 @@ var index = (function () {
     		super(options);
 
     		init(this, options, instance$2, create_fragment$3, safe_not_equal, {
-    			dataFunc: 2,
-    			type: 3,
-    			datasetLabel: 4,
-    			defaultColorDarkTheme: 5,
-    			defaultBorderColorDarkTheme: 6,
-    			defaultColorLightTheme: 7,
-    			defaultBorderColorLightTheme: 8,
-    			basicColors: 9,
-    			displayLegend: 10,
-    			seriesBackgroundColor: 11,
-    			seriesColor: 12
+    			type: 2,
+    			dataFunc: 3,
+    			chartData: 4,
+    			getChartData: 5,
+    			seriesLabel: 6,
+    			defaultColorDarkTheme: 7,
+    			defaultBorderColorDarkTheme: 8,
+    			defaultColorLightTheme: 9,
+    			defaultBorderColorLightTheme: 10,
+    			basicColors: 11,
+    			displayLegend: 12,
+    			seriesBackgroundColor: 13,
+    			seriesColor: 14,
+    			refreshChart: 15
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -21053,21 +21137,9 @@ var index = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*dataFunc*/ ctx[2] === undefined && !('dataFunc' in props)) {
-    			console.warn("<Chart> was created without expected prop 'dataFunc'");
-    		}
-
-    		if (/*type*/ ctx[3] === undefined && !('type' in props)) {
+    		if (/*type*/ ctx[2] === undefined && !('type' in props)) {
     			console.warn("<Chart> was created without expected prop 'type'");
     		}
-    	}
-
-    	get dataFunc() {
-    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set dataFunc(value) {
-    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
     	get type() {
@@ -21078,11 +21150,35 @@ var index = (function () {
     		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get datasetLabel() {
+    	get dataFunc() {
     		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set datasetLabel(value) {
+    	set dataFunc(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get chartData() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set chartData(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get getChartData() {
+    		return this.$$.ctx[5];
+    	}
+
+    	set getChartData(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get seriesLabel() {
+    		throw new Error("<Chart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set seriesLabel(value) {
     		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -21147,6 +21243,14 @@ var index = (function () {
     	}
 
     	set seriesColor(value) {
+    		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get refreshChart() {
+    		return this.$$.ctx[15];
+    	}
+
+    	set refreshChart(value) {
     		throw new Error("<Chart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -21566,8 +21670,68 @@ var index = (function () {
     const get_footer_slot_context = ctx => ({});
     const get_title_slot_changes = dirty => ({});
     const get_title_slot_context = ctx => ({});
+    const get_header_slot_changes = dirty => ({});
+    const get_header_slot_context = ctx => ({});
 
-    // (196:12) {#if title || titleCloseButton || $$slots.title}
+    // (196:12) {#if $$slots.header}
+    function create_if_block_10(ctx) {
+    	let current;
+    	const header_slot_template = /*#slots*/ ctx[25].header;
+    	const header_slot = create_slot(header_slot_template, ctx, /*$$scope*/ ctx[24], get_header_slot_context);
+
+    	const block = {
+    		c: function create() {
+    			if (header_slot) header_slot.c();
+    		},
+    		m: function mount(target, anchor) {
+    			if (header_slot) {
+    				header_slot.m(target, anchor);
+    			}
+
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			if (header_slot) {
+    				if (header_slot.p && (!current || dirty[0] & /*$$scope*/ 16777216)) {
+    					update_slot_base(
+    						header_slot,
+    						header_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[24],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[24])
+    						: get_slot_changes(header_slot_template, /*$$scope*/ ctx[24], dirty, get_header_slot_changes),
+    						get_header_slot_context
+    					);
+    				}
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(header_slot, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(header_slot, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (header_slot) header_slot.d(detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_10.name,
+    		type: "if",
+    		source: "(196:12) {#if $$slots.header}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (199:12) {#if title || titleCloseButton || $$slots.title}
     function create_if_block_7(ctx) {
     	let div;
     	let h5;
@@ -21589,9 +21753,9 @@ var index = (function () {
     			t1 = space();
     			if (if_block1) if_block1.c();
     			attr_dev(h5, "class", "modal-title");
-    			add_location(h5, file$2, 197, 20, 5143);
+    			add_location(h5, file$2, 200, 20, 5241);
     			attr_dev(div, "class", "modal-header");
-    			add_location(div, file$2, 196, 16, 5095);
+    			add_location(div, file$2, 199, 16, 5193);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -21670,14 +21834,14 @@ var index = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(196:12) {#if title || titleCloseButton || $$slots.title}",
+    		source: "(199:12) {#if title || titleCloseButton || $$slots.title}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (199:24) {#if title}
+    // (202:24) {#if title}
     function create_if_block_9(ctx) {
     	let html_tag;
     	let html_anchor;
@@ -21705,14 +21869,14 @@ var index = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(199:24) {#if title}",
+    		source: "(202:24) {#if title}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (204:20) {#if titleCloseButton}
+    // (207:20) {#if titleCloseButton}
     function create_if_block_8(ctx) {
     	let button;
     	let mounted;
@@ -21723,7 +21887,7 @@ var index = (function () {
     			button = element("button");
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn-close text-reset");
-    			add_location(button, file$2, 204, 20, 5423);
+    			add_location(button, file$2, 207, 20, 5521);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -21745,15 +21909,15 @@ var index = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(204:20) {#if titleCloseButton}",
+    		source: "(207:20) {#if titleCloseButton}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (210:16) {#if state.open}
-    function create_if_block_4(ctx) {
+    // (213:16) {#if state.open}
+    function create_if_block_4$1(ctx) {
     	let t0;
     	let t1;
     	let current;
@@ -21844,16 +22008,16 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4.name,
+    		id: create_if_block_4$1.name,
     		type: "if",
-    		source: "(210:16) {#if state.open}",
+    		source: "(213:16) {#if state.open}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (211:20) {#if promise}
+    // (214:20) {#if promise}
     function create_if_block_6(ctx) {
     	let await_block_anchor;
     	let promise_1;
@@ -21902,7 +22066,7 @@ var index = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(211:20) {#if promise}",
+    		source: "(214:20) {#if promise}",
     		ctx
     	});
 
@@ -21924,7 +22088,7 @@ var index = (function () {
     	return block;
     }
 
-    // (216:24) {:then content}
+    // (219:24) {:then content}
     function create_then_block(ctx) {
     	let html_tag;
     	let raw_value = /*content*/ ctx[15] + "";
@@ -21953,14 +22117,14 @@ var index = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(216:24) {:then content}",
+    		source: "(219:24) {:then content}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (212:42)                               <div class="text-center">                                  <i class="spinner-border" style="width: 3rem; height: 3rem;"></i>                              </div>                          {:then content}
+    // (215:42)                               <div class="text-center">                                  <i class="spinner-border" style="width: 3rem; height: 3rem;"></i>                              </div>                          {:then content}
     function create_pending_block(ctx) {
     	let div;
     	let i;
@@ -21972,9 +22136,9 @@ var index = (function () {
     			attr_dev(i, "class", "spinner-border");
     			set_style(i, "width", "3rem");
     			set_style(i, "height", "3rem");
-    			add_location(i, file$2, 213, 32, 5810);
+    			add_location(i, file$2, 216, 32, 5908);
     			attr_dev(div, "class", "text-center");
-    			add_location(div, file$2, 212, 28, 5751);
+    			add_location(div, file$2, 215, 28, 5849);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -21990,14 +22154,14 @@ var index = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(212:42)                               <div class=\\\"text-center\\\">                                  <i class=\\\"spinner-border\\\" style=\\\"width: 3rem; height: 3rem;\\\"></i>                              </div>                          {:then content}",
+    		source: "(215:42)                               <div class=\\\"text-center\\\">                                  <i class=\\\"spinner-border\\\" style=\\\"width: 3rem; height: 3rem;\\\"></i>                              </div>                          {:then content}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (220:20) {#if content}
+    // (223:20) {#if content}
     function create_if_block_5(ctx) {
     	let html_tag;
     	let html_anchor;
@@ -22025,25 +22189,25 @@ var index = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(220:20) {#if content}",
+    		source: "(223:20) {#if content}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (226:12) {#if closeBtn || (buttons && buttons.length) || $$slots.footer || footer}
+    // (229:12) {#if closeBtn || (buttons && buttons.length) || $$slots.footer || footer}
     function create_if_block$1(ctx) {
     	let div;
     	let t0;
     	let t1;
     	let t2;
     	let current;
-    	let if_block0 = /*closeBtn*/ ctx[12] && create_if_block_3(ctx);
-    	let if_block1 = /*footer*/ ctx[3] && create_if_block_2(ctx);
+    	let if_block0 = /*closeBtn*/ ctx[12] && create_if_block_3$1(ctx);
+    	let if_block1 = /*footer*/ ctx[3] && create_if_block_2$1(ctx);
     	const footer_slot_template = /*#slots*/ ctx[25].footer;
     	const footer_slot = create_slot(footer_slot_template, ctx, /*$$scope*/ ctx[24], get_footer_slot_context);
-    	let if_block2 = /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length && create_if_block_1(ctx);
+    	let if_block2 = /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length && create_if_block_1$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -22056,7 +22220,7 @@ var index = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			attr_dev(div, "class", "modal-footer");
-    			add_location(div, file$2, 226, 16, 6344);
+    			add_location(div, file$2, 229, 16, 6442);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -22078,7 +22242,7 @@ var index = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_3(ctx);
+    					if_block0 = create_if_block_3$1(ctx);
     					if_block0.c();
     					if_block0.m(div, t0);
     				}
@@ -22091,7 +22255,7 @@ var index = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_2(ctx);
+    					if_block1 = create_if_block_2$1(ctx);
     					if_block1.c();
     					if_block1.m(div, t1);
     				}
@@ -22119,7 +22283,7 @@ var index = (function () {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
-    					if_block2 = create_if_block_1(ctx);
+    					if_block2 = create_if_block_1$1(ctx);
     					if_block2.c();
     					if_block2.m(div, null);
     				}
@@ -22150,15 +22314,15 @@ var index = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(226:12) {#if closeBtn || (buttons && buttons.length) || $$slots.footer || footer}",
+    		source: "(229:12) {#if closeBtn || (buttons && buttons.length) || $$slots.footer || footer}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (228:20) {#if closeBtn}
-    function create_if_block_3(ctx) {
+    // (231:20) {#if closeBtn}
+    function create_if_block_3$1(ctx) {
     	let button;
     	let mounted;
     	let dispose;
@@ -22169,7 +22333,7 @@ var index = (function () {
     			button.textContent = "Close";
     			attr_dev(button, "class", "btn btn-secondary");
     			attr_dev(button, "data-bs-dismiss", "modal");
-    			add_location(button, file$2, 228, 24, 6432);
+    			add_location(button, file$2, 231, 24, 6530);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -22189,17 +22353,17 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_3$1.name,
     		type: "if",
-    		source: "(228:20) {#if closeBtn}",
+    		source: "(231:20) {#if closeBtn}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (231:20) {#if footer}
-    function create_if_block_2(ctx) {
+    // (234:20) {#if footer}
+    function create_if_block_2$1(ctx) {
     	let html_tag;
     	let html_anchor;
 
@@ -22224,17 +22388,17 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(231:20) {#if footer}",
+    		source: "(234:20) {#if footer}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (235:20) {#if buttons && buttons.length}
-    function create_if_block_1(ctx) {
+    // (238:20) {#if buttons && buttons.length}
+    function create_if_block_1$1(ctx) {
     	let each_1_anchor;
     	let each_value = /*buttons*/ ctx[14];
     	validate_each_argument(each_value);
@@ -22292,16 +22456,16 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
+    		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(235:20) {#if buttons && buttons.length}",
+    		source: "(238:20) {#if buttons && buttons.length}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (236:24) {#each buttons as button}
+    // (239:24) {#each buttons as button}
     function create_each_block(ctx) {
     	let button;
     	let t_value = /*button*/ ctx[36].text + "";
@@ -22323,7 +22487,7 @@ var index = (function () {
     			? /*button*/ ctx[36].classes
     			: "btn-primary"));
 
-    			add_location(button, file$2, 236, 28, 6838);
+    			add_location(button, file$2, 239, 28, 6936);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -22355,7 +22519,7 @@ var index = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(236:24) {#each buttons as button}",
+    		source: "(239:24) {#each buttons as button}",
     		ctx
     	});
 
@@ -22367,15 +22531,17 @@ var index = (function () {
     	let div2;
     	let div1;
     	let t0;
-    	let div0;
     	let t1;
+    	let div0;
+    	let t2;
     	let div2_class_value;
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = (/*title*/ ctx[1] || /*titleCloseButton*/ ctx[2] || /*$$slots*/ ctx[18].title) && create_if_block_7(ctx);
-    	let if_block1 = /*state*/ ctx[0].open && create_if_block_4(ctx);
-    	let if_block2 = (/*closeBtn*/ ctx[12] || /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length || /*$$slots*/ ctx[18].footer || /*footer*/ ctx[3]) && create_if_block$1(ctx);
+    	let if_block0 = /*$$slots*/ ctx[18].header && create_if_block_10(ctx);
+    	let if_block1 = (/*title*/ ctx[1] || /*titleCloseButton*/ ctx[2] || /*$$slots*/ ctx[18].title) && create_if_block_7(ctx);
+    	let if_block2 = /*state*/ ctx[0].open && create_if_block_4$1(ctx);
+    	let if_block3 = (/*closeBtn*/ ctx[12] || /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length || /*$$slots*/ ctx[18].footer || /*footer*/ ctx[3]) && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -22384,12 +22550,14 @@ var index = (function () {
     			div1 = element("div");
     			if (if_block0) if_block0.c();
     			t0 = space();
-    			div0 = element("div");
     			if (if_block1) if_block1.c();
     			t1 = space();
+    			div0 = element("div");
     			if (if_block2) if_block2.c();
+    			t2 = space();
+    			if (if_block3) if_block3.c();
     			attr_dev(div0, "class", "modal-body");
-    			add_location(div0, file$2, 208, 12, 5584);
+    			add_location(div0, file$2, 211, 12, 5682);
     			attr_dev(div1, "class", "modal-content");
     			add_location(div1, file$2, 194, 8, 4988);
     			attr_dev(div2, "class", div2_class_value = "modal-dialog " + (/*classes*/ ctx[11] ? /*classes*/ ctx[11] : ""));
@@ -22414,10 +22582,12 @@ var index = (function () {
     			append_dev(div2, div1);
     			if (if_block0) if_block0.m(div1, null);
     			append_dev(div1, t0);
-    			append_dev(div1, div0);
-    			if (if_block1) if_block1.m(div0, null);
+    			if (if_block1) if_block1.m(div1, null);
     			append_dev(div1, t1);
-    			if (if_block2) if_block2.m(div1, null);
+    			append_dev(div1, div0);
+    			if (if_block2) if_block2.m(div0, null);
+    			append_dev(div1, t2);
+    			if (if_block3) if_block3.m(div1, null);
     			current = true;
 
     			if (!mounted) {
@@ -22426,15 +22596,15 @@ var index = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (/*title*/ ctx[1] || /*titleCloseButton*/ ctx[2] || /*$$slots*/ ctx[18].title) {
+    			if (/*$$slots*/ ctx[18].header) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
-    					if (dirty[0] & /*title, titleCloseButton, $$slots*/ 262150) {
+    					if (dirty[0] & /*$$slots*/ 262144) {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_7(ctx);
+    					if_block0 = create_if_block_10(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(div1, t0);
@@ -22449,18 +22619,18 @@ var index = (function () {
     				check_outros();
     			}
 
-    			if (/*state*/ ctx[0].open) {
+    			if (/*title*/ ctx[1] || /*titleCloseButton*/ ctx[2] || /*$$slots*/ ctx[18].title) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
 
-    					if (dirty[0] & /*state*/ 1) {
+    					if (dirty[0] & /*title, titleCloseButton, $$slots*/ 262150) {
     						transition_in(if_block1, 1);
     					}
     				} else {
-    					if_block1 = create_if_block_4(ctx);
+    					if_block1 = create_if_block_7(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
-    					if_block1.m(div0, null);
+    					if_block1.m(div1, t1);
     				}
     			} else if (if_block1) {
     				group_outros();
@@ -22472,24 +22642,47 @@ var index = (function () {
     				check_outros();
     			}
 
-    			if (/*closeBtn*/ ctx[12] || /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length || /*$$slots*/ ctx[18].footer || /*footer*/ ctx[3]) {
+    			if (/*state*/ ctx[0].open) {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
 
-    					if (dirty[0] & /*closeBtn, buttons, $$slots, footer*/ 282632) {
+    					if (dirty[0] & /*state*/ 1) {
     						transition_in(if_block2, 1);
     					}
     				} else {
-    					if_block2 = create_if_block$1(ctx);
+    					if_block2 = create_if_block_4$1(ctx);
     					if_block2.c();
     					transition_in(if_block2, 1);
-    					if_block2.m(div1, null);
+    					if_block2.m(div0, null);
     				}
     			} else if (if_block2) {
     				group_outros();
 
     				transition_out(if_block2, 1, 1, () => {
     					if_block2 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*closeBtn*/ ctx[12] || /*buttons*/ ctx[14] && /*buttons*/ ctx[14].length || /*$$slots*/ ctx[18].footer || /*footer*/ ctx[3]) {
+    				if (if_block3) {
+    					if_block3.p(ctx, dirty);
+
+    					if (dirty[0] & /*closeBtn, buttons, $$slots, footer*/ 282632) {
+    						transition_in(if_block3, 1);
+    					}
+    				} else {
+    					if_block3 = create_if_block$1(ctx);
+    					if_block3.c();
+    					transition_in(if_block3, 1);
+    					if_block3.m(div1, null);
+    				}
+    			} else if (if_block3) {
+    				group_outros();
+
+    				transition_out(if_block3, 1, 1, () => {
+    					if_block3 = null;
     				});
 
     				check_outros();
@@ -22532,12 +22725,14 @@ var index = (function () {
     			transition_in(if_block0);
     			transition_in(if_block1);
     			transition_in(if_block2);
+    			transition_in(if_block3);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(if_block0);
     			transition_out(if_block1);
     			transition_out(if_block2);
+    			transition_out(if_block3);
     			current = false;
     		},
     		d: function destroy(detaching) {
@@ -22545,6 +22740,7 @@ var index = (function () {
     			if (if_block0) if_block0.d();
     			if (if_block1) if_block1.d();
     			if (if_block2) if_block2.d();
+    			if (if_block3) if_block3.d();
     			mounted = false;
     			dispose();
     		}
@@ -22563,7 +22759,7 @@ var index = (function () {
 
     function instance_1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots('Modal', slots, ['title','default','footer']);
+    	validate_slots('Modal', slots, ['header','title','default','footer']);
     	const $$slots = compute_slots(slots);
     	let { backdrop = true } = $$props;
     	let { focus = true } = $$props;
@@ -23055,99 +23251,141 @@ var index = (function () {
     /* App\shared\components\chart-box.svelte generated by Svelte v3.49.0 */
     const file$1 = "App\\shared\\components\\chart-box.svelte";
 
-    // (22:0) {:else}
-    function create_else_block(ctx) {
-    	let chart;
-    	let current;
-
-    	chart = new Chart_1({
-    			props: {
-    				type: /*type*/ ctx[1],
-    				dataFunc: /*func_1*/ ctx[9],
-    				datasetLabel: /*datasetLabel*/ ctx[3],
-    				displayLegend: /*displayLegend*/ ctx[5]
-    			},
-    			$$inline: true
-    		});
+    // (75:4) {#if showModal}
+    function create_if_block_4(ctx) {
+    	let i;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
-    			create_component(chart.$$.fragment);
+    			i = element("i");
+    			attr_dev(i, "class", "bi bi-box-arrow-up-right svelte-13oms1i");
+    			attr_dev(i, "data-bs-toggle", "tooltip");
+    			attr_dev(i, "title", "Open in Fullscreen");
+    			add_location(i, file$1, 75, 8, 1695);
     		},
     		m: function mount(target, anchor) {
-    			mount_component(chart, target, anchor);
-    			current = true;
+    			insert_dev(target, i, anchor);
+
+    			if (!mounted) {
+    				dispose = listen_dev(i, "click", /*click_handler*/ ctx[15], false, false, false);
+    				mounted = true;
+    			}
     		},
-    		p: function update(ctx, dirty) {
-    			const chart_changes = {};
-    			if (dirty & /*type*/ 2) chart_changes.type = /*type*/ ctx[1];
-    			if (dirty & /*getUrl*/ 4) chart_changes.dataFunc = /*func_1*/ ctx[9];
-    			if (dirty & /*datasetLabel*/ 8) chart_changes.datasetLabel = /*datasetLabel*/ ctx[3];
-    			if (dirty & /*displayLegend*/ 32) chart_changes.displayLegend = /*displayLegend*/ ctx[5];
-    			chart.$set(chart_changes);
-    		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(chart.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(chart.$$.fragment, local);
-    			current = false;
-    		},
+    		p: noop$1,
     		d: function destroy(detaching) {
-    			destroy_component(chart, detaching);
+    			if (detaching) detach_dev(i);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block.name,
-    		type: "else",
-    		source: "(22:0) {:else}",
+    		id: create_if_block_4.name,
+    		type: "if",
+    		source: "(75:4) {#if showModal}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (18:0) {#if minHeight}
-    function create_if_block(ctx) {
-    	let div;
-    	let chart;
+    // (84:0) {:else}
+    function create_else_block_1(ctx) {
+    	let chart_1;
     	let current;
 
-    	chart = new Chart_1({
-    			props: {
-    				type: /*type*/ ctx[1],
-    				dataFunc: /*func*/ ctx[8],
-    				datasetLabel: /*datasetLabel*/ ctx[3],
-    				displayLegend: /*displayLegend*/ ctx[5]
-    			},
-    			$$inline: true
-    		});
+    	let chart_1_props = {
+    		type: /*type*/ ctx[1],
+    		dataFunc: /*func_1*/ ctx[18],
+    		seriesLabel: /*seriesLabel*/ ctx[3],
+    		displayLegend: /*displayLegend*/ ctx[5]
+    	};
+
+    	chart_1 = new Chart_1({ props: chart_1_props, $$inline: true });
+    	/*chart_1_binding_1*/ ctx[19](chart_1);
+
+    	const block = {
+    		c: function create() {
+    			create_component(chart_1.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(chart_1, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const chart_1_changes = {};
+    			if (dirty & /*type*/ 2) chart_1_changes.type = /*type*/ ctx[1];
+    			if (dirty & /*getUrl*/ 4) chart_1_changes.dataFunc = /*func_1*/ ctx[18];
+    			if (dirty & /*seriesLabel*/ 8) chart_1_changes.seriesLabel = /*seriesLabel*/ ctx[3];
+    			if (dirty & /*displayLegend*/ 32) chart_1_changes.displayLegend = /*displayLegend*/ ctx[5];
+    			chart_1.$set(chart_1_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(chart_1.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(chart_1.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			/*chart_1_binding_1*/ ctx[19](null);
+    			destroy_component(chart_1, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(84:0) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (80:0) {#if minHeight}
+    function create_if_block_3(ctx) {
+    	let div;
+    	let chart_1;
+    	let current;
+
+    	let chart_1_props = {
+    		type: /*type*/ ctx[1],
+    		dataFunc: /*func*/ ctx[16],
+    		seriesLabel: /*seriesLabel*/ ctx[3],
+    		displayLegend: /*displayLegend*/ ctx[5]
+    	};
+
+    	chart_1 = new Chart_1({ props: chart_1_props, $$inline: true });
+    	/*chart_1_binding*/ ctx[17](chart_1);
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			create_component(chart.$$.fragment);
-    			attr_dev(div, "class", "chart-fixed-size svelte-ds7c35");
+    			create_component(chart_1.$$.fragment);
+    			attr_dev(div, "class", "chart-fixed-size svelte-13oms1i");
     			set_style(div, "min-height", /*minHeight*/ ctx[4]);
     			set_style(div, "width", /*minHeight*/ ctx[4]);
-    			add_location(div, file$1, 18, 4, 587);
+    			add_location(div, file$1, 80, 4, 1866);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-    			mount_component(chart, div, null);
+    			mount_component(chart_1, div, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			const chart_changes = {};
-    			if (dirty & /*type*/ 2) chart_changes.type = /*type*/ ctx[1];
-    			if (dirty & /*getUrl*/ 4) chart_changes.dataFunc = /*func*/ ctx[8];
-    			if (dirty & /*datasetLabel*/ 8) chart_changes.datasetLabel = /*datasetLabel*/ ctx[3];
-    			if (dirty & /*displayLegend*/ 32) chart_changes.displayLegend = /*displayLegend*/ ctx[5];
-    			chart.$set(chart_changes);
+    			const chart_1_changes = {};
+    			if (dirty & /*type*/ 2) chart_1_changes.type = /*type*/ ctx[1];
+    			if (dirty & /*getUrl*/ 4) chart_1_changes.dataFunc = /*func*/ ctx[16];
+    			if (dirty & /*seriesLabel*/ 8) chart_1_changes.seriesLabel = /*seriesLabel*/ ctx[3];
+    			if (dirty & /*displayLegend*/ 32) chart_1_changes.displayLegend = /*displayLegend*/ ctx[5];
+    			chart_1.$set(chart_1_changes);
 
     			if (!current || dirty & /*minHeight*/ 16) {
     				set_style(div, "min-height", /*minHeight*/ ctx[4]);
@@ -23159,16 +23397,79 @@ var index = (function () {
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(chart.$$.fragment, local);
+    			transition_in(chart_1.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(chart.$$.fragment, local);
+    			transition_out(chart_1.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			destroy_component(chart);
+    			/*chart_1_binding*/ ctx[17](null);
+    			destroy_component(chart_1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_3.name,
+    		type: "if",
+    		source: "(80:0) {#if minHeight}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (88:0) {#if showModal}
+    function create_if_block(ctx) {
+    	let modal_1;
+    	let current;
+
+    	modal_1 = new Modal({
+    			props: {
+    				state: /*modal*/ ctx[9],
+    				fullscreen: true,
+    				closeBtn: true,
+    				$$slots: {
+    					header: [create_header_slot],
+    					default: [create_default_slot$1]
+    				},
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(modal_1.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(modal_1, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const modal_1_changes = {};
+    			if (dirty & /*modal*/ 512) modal_1_changes.state = /*modal*/ ctx[9];
+
+    			if (dirty & /*$$scope, refreshing, showModalControls, title, zoom, type, getUrl, chart*/ 4197767) {
+    				modal_1_changes.$$scope = { dirty, ctx };
+    			}
+
+    			modal_1.$set(modal_1_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(modal_1.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(modal_1.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(modal_1, detaching);
     		}
     	};
 
@@ -23176,25 +23477,24 @@ var index = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(18:0) {#if minHeight}",
+    		source: "(88:0) {#if showModal}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:0) <Modal state={modal} fullscreen={true} title={title} closeBtn={true} titleCloseButton={true}>
+    // (89:0) <Modal state={modal} fullscreen={true} closeBtn={true}>
     function create_default_slot$1(ctx) {
     	let div;
-    	let chart;
+    	let chart_1;
     	let current;
 
-    	chart = new Chart_1({
+    	chart_1 = new Chart_1({
     			props: {
     				type: /*type*/ ctx[1],
-    				dataFunc: /*func_2*/ ctx[10],
-    				datasetLabel: /*datasetLabel*/ ctx[3],
-    				displayLegend: /*displayLegend*/ ctx[5]
+    				dataFunc: /*func_2*/ ctx[20],
+    				chartData: /*chart*/ ctx[8].getChartData()
     			},
     			$$inline: true
     		});
@@ -23202,46 +23502,39 @@ var index = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			create_component(chart.$$.fragment);
-    			attr_dev(div, "class", "modal-wrap svelte-ds7c35");
-
-    			set_style(div, "grid-template-columns", /*type*/ ctx[1] == "bar" || /*type*/ ctx[1] == "doughnut"
-    			? "40%"
-    			: "75%");
-
-    			add_location(div, file$1, 26, 4, 1033);
+    			create_component(chart_1.$$.fragment);
+    			attr_dev(div, "class", "modal-wrap svelte-13oms1i");
+    			set_style(div, "grid-template-columns", /*zoom*/ ctx[10] + "%");
+    			add_location(div, file$1, 113, 4, 3510);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-    			mount_component(chart, div, null);
+    			mount_component(chart_1, div, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			const chart_changes = {};
-    			if (dirty & /*type*/ 2) chart_changes.type = /*type*/ ctx[1];
-    			if (dirty & /*getUrl*/ 4) chart_changes.dataFunc = /*func_2*/ ctx[10];
-    			if (dirty & /*datasetLabel*/ 8) chart_changes.datasetLabel = /*datasetLabel*/ ctx[3];
-    			if (dirty & /*displayLegend*/ 32) chart_changes.displayLegend = /*displayLegend*/ ctx[5];
-    			chart.$set(chart_changes);
+    			const chart_1_changes = {};
+    			if (dirty & /*type*/ 2) chart_1_changes.type = /*type*/ ctx[1];
+    			if (dirty & /*getUrl*/ 4) chart_1_changes.dataFunc = /*func_2*/ ctx[20];
+    			if (dirty & /*chart*/ 256) chart_1_changes.chartData = /*chart*/ ctx[8].getChartData();
+    			chart_1.$set(chart_1_changes);
 
-    			if (!current || dirty & /*type*/ 2) {
-    				set_style(div, "grid-template-columns", /*type*/ ctx[1] == "bar" || /*type*/ ctx[1] == "doughnut"
-    				? "40%"
-    				: "75%");
+    			if (!current || dirty & /*zoom*/ 1024) {
+    				set_style(div, "grid-template-columns", /*zoom*/ ctx[10] + "%");
     			}
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(chart.$$.fragment, local);
+    			transition_in(chart_1.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(chart.$$.fragment, local);
+    			transition_out(chart_1.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			destroy_component(chart);
+    			destroy_component(chart_1);
     		}
     	};
 
@@ -23249,7 +23542,250 @@ var index = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(26:0) <Modal state={modal} fullscreen={true} title={title} closeBtn={true} titleCloseButton={true}>",
+    		source: "(89:0) <Modal state={modal} fullscreen={true} closeBtn={true}>",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (92:8) {#if showModalControls}
+    function create_if_block_1(ctx) {
+    	let div0;
+    	let button0;
+    	let i0;
+    	let t0;
+    	let button1;
+    	let i1;
+    	let t1;
+    	let div1;
+    	let button2;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type_1(ctx, dirty) {
+    		if (/*refreshing*/ ctx[11]) return create_if_block_2;
+    		return create_else_block;
+    	}
+
+    	let current_block_type = select_block_type_1(ctx);
+    	let if_block = current_block_type(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div0 = element("div");
+    			button0 = element("button");
+    			i0 = element("i");
+    			t0 = space();
+    			button1 = element("button");
+    			i1 = element("i");
+    			t1 = space();
+    			div1 = element("div");
+    			button2 = element("button");
+    			if_block.c();
+    			attr_dev(i0, "class", "bi bi-zoom-out svelte-13oms1i");
+    			add_location(i0, file$1, 94, 20, 2623);
+    			attr_dev(button0, "type", "button");
+    			attr_dev(button0, "class", "btn btn-light");
+    			attr_dev(button0, "data-bs-toggle", "tooltip");
+    			attr_dev(button0, "title", "Zoom In");
+    			add_location(button0, file$1, 93, 16, 2498);
+    			attr_dev(i1, "class", "bi bi-zoom-in svelte-13oms1i");
+    			add_location(i1, file$1, 97, 20, 2825);
+    			attr_dev(button1, "type", "button");
+    			attr_dev(button1, "class", "btn btn-light");
+    			attr_dev(button1, "data-bs-toggle", "tooltip");
+    			attr_dev(button1, "title", "Zoom Out");
+    			add_location(button1, file$1, 96, 16, 2698);
+    			attr_dev(div0, "class", "btn-group");
+    			add_location(div0, file$1, 92, 12, 2457);
+    			attr_dev(button2, "type", "button");
+    			button2.disabled = /*refreshing*/ ctx[11];
+    			attr_dev(button2, "class", "btn btn-light");
+    			attr_dev(button2, "data-bs-toggle", "tooltip");
+    			attr_dev(button2, "title", "Refresh");
+    			add_location(button2, file$1, 101, 16, 2956);
+    			attr_dev(div1, "class", "btn-group");
+    			add_location(div1, file$1, 100, 12, 2915);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div0, anchor);
+    			append_dev(div0, button0);
+    			append_dev(button0, i0);
+    			append_dev(div0, t0);
+    			append_dev(div0, button1);
+    			append_dev(button1, i1);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, button2);
+    			if_block.m(button2, null);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(button0, "click", /*zoomIn*/ ctx[12], false, false, false),
+    					listen_dev(button1, "click", /*zoomOut*/ ctx[13], false, false, false),
+    					listen_dev(button2, "click", /*refresh*/ ctx[14], false, false, false)
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (current_block_type !== (current_block_type = select_block_type_1(ctx))) {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(button2, null);
+    				}
+    			}
+
+    			if (dirty & /*refreshing*/ 2048) {
+    				prop_dev(button2, "disabled", /*refreshing*/ ctx[11]);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div0);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(div1);
+    			if_block.d();
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(92:8) {#if showModalControls}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (107:20) {:else}
+    function create_else_block(ctx) {
+    	let i;
+
+    	const block = {
+    		c: function create() {
+    			i = element("i");
+    			attr_dev(i, "class", "bi bi-arrow-clockwise svelte-13oms1i");
+    			add_location(i, file$1, 107, 24, 3366);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, i, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(i);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(107:20) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (103:20) {#if refreshing}
+    function create_if_block_2(ctx) {
+    	let div;
+    	let span;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			span = element("span");
+    			span.textContent = "Loading...";
+    			attr_dev(span, "class", "visually-hidden");
+    			add_location(span, file$1, 104, 28, 3232);
+    			attr_dev(div, "class", "spinner-border spinner-small svelte-13oms1i");
+    			attr_dev(div, "role", "status");
+    			add_location(div, file$1, 103, 24, 3146);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, span);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(103:20) {#if refreshing}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (90:4) 
+    function create_header_slot(ctx) {
+    	let div;
+    	let h5;
+    	let t0;
+    	let t1;
+    	let if_block = /*showModalControls*/ ctx[7] && create_if_block_1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			h5 = element("h5");
+    			t0 = text(/*title*/ ctx[0]);
+    			t1 = space();
+    			if (if_block) if_block.c();
+    			attr_dev(h5, "class", "modal-title");
+    			add_location(h5, file$1, 90, 8, 2373);
+    			attr_dev(div, "slot", "header");
+    			attr_dev(div, "class", "modal-header");
+    			add_location(div, file$1, 89, 4, 2323);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, h5);
+    			append_dev(h5, t0);
+    			append_dev(div, t1);
+    			if (if_block) if_block.m(div, null);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*title*/ 1) set_data_dev(t0, /*title*/ ctx[0]);
+
+    			if (/*showModalControls*/ ctx[7]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block_1(ctx);
+    					if_block.c();
+    					if_block.m(div, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			if (if_block) if_block.d();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_header_slot.name,
+    		type: "slot",
+    		source: "(90:4) ",
     		ctx
     	});
 
@@ -23261,16 +23797,14 @@ var index = (function () {
     	let div0;
     	let t0;
     	let t1;
-    	let i;
     	let t2;
     	let current_block_type_index;
-    	let if_block;
+    	let if_block1;
     	let t3;
-    	let modal_1;
+    	let if_block2_anchor;
     	let current;
-    	let mounted;
-    	let dispose;
-    	const if_block_creators = [create_if_block, create_else_block];
+    	let if_block0 = /*showModal*/ ctx[6] && create_if_block_4(ctx);
+    	const if_block_creators = [create_if_block_3, create_else_block_1];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -23279,20 +23813,8 @@ var index = (function () {
     	}
 
     	current_block_type_index = select_block_type(ctx);
-    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-
-    	modal_1 = new Modal({
-    			props: {
-    				state: /*modal*/ ctx[6],
-    				fullscreen: true,
-    				title: /*title*/ ctx[0],
-    				closeBtn: true,
-    				titleCloseButton: true,
-    				$$slots: { default: [create_default_slot$1] },
-    				$$scope: { ctx }
-    			},
-    			$$inline: true
-    		});
+    	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    	let if_block2 = /*showModal*/ ctx[6] && create_if_block(ctx);
 
     	const block = {
     		c: function create() {
@@ -23300,19 +23822,16 @@ var index = (function () {
     			div0 = element("div");
     			t0 = text(/*title*/ ctx[0]);
     			t1 = space();
-    			i = element("i");
+    			if (if_block0) if_block0.c();
     			t2 = space();
-    			if_block.c();
+    			if_block1.c();
     			t3 = space();
-    			create_component(modal_1.$$.fragment);
+    			if (if_block2) if_block2.c();
+    			if_block2_anchor = empty();
     			attr_dev(div0, "class", "text-secondary fw-bolder text-center fs-4");
-    			add_location(div0, file$1, 13, 4, 353);
-    			attr_dev(i, "class", "bi bi-box-arrow-up-right svelte-ds7c35");
-    			attr_dev(i, "data-bs-toggle", "tooltip");
-    			attr_dev(i, "title", "Open in fullscreen");
-    			add_location(i, file$1, 14, 4, 427);
-    			attr_dev(div1, "class", "title-wrap svelte-ds7c35");
-    			add_location(div1, file$1, 12, 0, 323);
+    			add_location(div0, file$1, 73, 4, 1596);
+    			attr_dev(div1, "class", "title-wrap svelte-13oms1i");
+    			add_location(div1, file$1, 72, 0, 1566);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -23322,20 +23841,30 @@ var index = (function () {
     			append_dev(div1, div0);
     			append_dev(div0, t0);
     			append_dev(div1, t1);
-    			append_dev(div1, i);
+    			if (if_block0) if_block0.m(div1, null);
     			insert_dev(target, t2, anchor);
     			if_blocks[current_block_type_index].m(target, anchor);
     			insert_dev(target, t3, anchor);
-    			mount_component(modal_1, target, anchor);
+    			if (if_block2) if_block2.m(target, anchor);
+    			insert_dev(target, if_block2_anchor, anchor);
     			current = true;
-
-    			if (!mounted) {
-    				dispose = listen_dev(i, "click", /*click_handler*/ ctx[7], false, false, false);
-    				mounted = true;
-    			}
     		},
     		p: function update(ctx, [dirty]) {
     			if (!current || dirty & /*title*/ 1) set_data_dev(t0, /*title*/ ctx[0]);
+
+    			if (/*showModal*/ ctx[6]) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_4(ctx);
+    					if_block0.c();
+    					if_block0.m(div1, null);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
     			let previous_block_index = current_block_type_index;
     			current_block_type_index = select_block_type(ctx);
 
@@ -23349,48 +23878,61 @@ var index = (function () {
     				});
 
     				check_outros();
-    				if_block = if_blocks[current_block_type_index];
+    				if_block1 = if_blocks[current_block_type_index];
 
-    				if (!if_block) {
-    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    					if_block.c();
+    				if (!if_block1) {
+    					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block1.c();
     				} else {
-    					if_block.p(ctx, dirty);
+    					if_block1.p(ctx, dirty);
     				}
 
-    				transition_in(if_block, 1);
-    				if_block.m(t3.parentNode, t3);
+    				transition_in(if_block1, 1);
+    				if_block1.m(t3.parentNode, t3);
     			}
 
-    			const modal_1_changes = {};
-    			if (dirty & /*modal*/ 64) modal_1_changes.state = /*modal*/ ctx[6];
-    			if (dirty & /*title*/ 1) modal_1_changes.title = /*title*/ ctx[0];
+    			if (/*showModal*/ ctx[6]) {
+    				if (if_block2) {
+    					if_block2.p(ctx, dirty);
 
-    			if (dirty & /*$$scope, type, getUrl, datasetLabel, displayLegend*/ 2094) {
-    				modal_1_changes.$$scope = { dirty, ctx };
+    					if (dirty & /*showModal*/ 64) {
+    						transition_in(if_block2, 1);
+    					}
+    				} else {
+    					if_block2 = create_if_block(ctx);
+    					if_block2.c();
+    					transition_in(if_block2, 1);
+    					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
+    				}
+    			} else if (if_block2) {
+    				group_outros();
+
+    				transition_out(if_block2, 1, 1, () => {
+    					if_block2 = null;
+    				});
+
+    				check_outros();
     			}
-
-    			modal_1.$set(modal_1_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(if_block);
-    			transition_in(modal_1.$$.fragment, local);
+    			transition_in(if_block1);
+    			transition_in(if_block2);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(if_block);
-    			transition_out(modal_1.$$.fragment, local);
+    			transition_out(if_block1);
+    			transition_out(if_block2);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
+    			if (if_block0) if_block0.d();
     			if (detaching) detach_dev(t2);
     			if_blocks[current_block_type_index].d(detaching);
     			if (detaching) detach_dev(t3);
-    			destroy_component(modal_1, detaching);
-    			mounted = false;
-    			dispose();
+    			if (if_block2) if_block2.d(detaching);
+    			if (detaching) detach_dev(if_block2_anchor);
     		}
     	};
 
@@ -23411,51 +23953,117 @@ var index = (function () {
     	let { title } = $$props;
     	let { type } = $$props;
     	let { getUrl } = $$props;
-    	let { datasetLabel = "" } = $$props;
+    	let { seriesLabel = "" } = $$props;
     	let { minHeight = "" } = $$props;
     	let { displayLegend = undefined } = $$props;
+    	let { showModal = true } = $$props;
+    	let { showModalControls = true } = $$props;
+    	let chart;
     	let modal = { open: false };
-    	const writable_props = ['title', 'type', 'getUrl', 'datasetLabel', 'minHeight', 'displayLegend'];
+    	let initialZoom = type == "pie" || type == "doughnut" ? 40 : 75;
+    	let zoom = initialZoom;
+    	let refreshing = false;
+
+    	function zoomIn() {
+    		$$invalidate(10, zoom = zoom - 15);
+    	}
+
+    	function zoomOut() {
+    		$$invalidate(10, zoom = zoom + 15);
+    	}
+
+    	async function refresh() {
+    		hideTooltips();
+    		$$invalidate(11, refreshing = true);
+    		await chart.refreshChart();
+    		$$invalidate(10, zoom = initialZoom);
+    		$$invalidate(11, refreshing = false);
+    	}
+
+    	const writable_props = [
+    		'title',
+    		'type',
+    		'getUrl',
+    		'seriesLabel',
+    		'minHeight',
+    		'displayLegend',
+    		'showModal',
+    		'showModalControls'
+    	];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Chart_box> was created with unknown prop '${key}'`);
     	});
 
-    	const click_handler = () => $$invalidate(6, modal.open = true, modal);
+    	const click_handler = () => $$invalidate(9, modal.open = true, modal);
     	const func = () => get(getUrl);
+
+    	function chart_1_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			chart = $$value;
+    			$$invalidate(8, chart);
+    		});
+    	}
+
     	const func_1 = () => get(getUrl);
+
+    	function chart_1_binding_1($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			chart = $$value;
+    			$$invalidate(8, chart);
+    		});
+    	}
+
     	const func_2 = () => get(getUrl);
 
     	$$self.$$set = $$props => {
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
     		if ('type' in $$props) $$invalidate(1, type = $$props.type);
     		if ('getUrl' in $$props) $$invalidate(2, getUrl = $$props.getUrl);
-    		if ('datasetLabel' in $$props) $$invalidate(3, datasetLabel = $$props.datasetLabel);
+    		if ('seriesLabel' in $$props) $$invalidate(3, seriesLabel = $$props.seriesLabel);
     		if ('minHeight' in $$props) $$invalidate(4, minHeight = $$props.minHeight);
     		if ('displayLegend' in $$props) $$invalidate(5, displayLegend = $$props.displayLegend);
+    		if ('showModal' in $$props) $$invalidate(6, showModal = $$props.showModal);
+    		if ('showModalControls' in $$props) $$invalidate(7, showModalControls = $$props.showModalControls);
     	};
 
     	$$self.$capture_state = () => ({
     		Chart: Chart_1,
     		Modal,
+    		hideTooltips,
     		get,
     		title,
     		type,
     		getUrl,
-    		datasetLabel,
+    		seriesLabel,
     		minHeight,
     		displayLegend,
-    		modal
+    		showModal,
+    		showModalControls,
+    		chart,
+    		modal,
+    		initialZoom,
+    		zoom,
+    		refreshing,
+    		zoomIn,
+    		zoomOut,
+    		refresh
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
     		if ('type' in $$props) $$invalidate(1, type = $$props.type);
     		if ('getUrl' in $$props) $$invalidate(2, getUrl = $$props.getUrl);
-    		if ('datasetLabel' in $$props) $$invalidate(3, datasetLabel = $$props.datasetLabel);
+    		if ('seriesLabel' in $$props) $$invalidate(3, seriesLabel = $$props.seriesLabel);
     		if ('minHeight' in $$props) $$invalidate(4, minHeight = $$props.minHeight);
     		if ('displayLegend' in $$props) $$invalidate(5, displayLegend = $$props.displayLegend);
-    		if ('modal' in $$props) $$invalidate(6, modal = $$props.modal);
+    		if ('showModal' in $$props) $$invalidate(6, showModal = $$props.showModal);
+    		if ('showModalControls' in $$props) $$invalidate(7, showModalControls = $$props.showModalControls);
+    		if ('chart' in $$props) $$invalidate(8, chart = $$props.chart);
+    		if ('modal' in $$props) $$invalidate(9, modal = $$props.modal);
+    		if ('initialZoom' in $$props) initialZoom = $$props.initialZoom;
+    		if ('zoom' in $$props) $$invalidate(10, zoom = $$props.zoom);
+    		if ('refreshing' in $$props) $$invalidate(11, refreshing = $$props.refreshing);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -23466,13 +24074,23 @@ var index = (function () {
     		title,
     		type,
     		getUrl,
-    		datasetLabel,
+    		seriesLabel,
     		minHeight,
     		displayLegend,
+    		showModal,
+    		showModalControls,
+    		chart,
     		modal,
+    		zoom,
+    		refreshing,
+    		zoomIn,
+    		zoomOut,
+    		refresh,
     		click_handler,
     		func,
+    		chart_1_binding,
     		func_1,
+    		chart_1_binding_1,
     		func_2
     	];
     }
@@ -23485,9 +24103,11 @@ var index = (function () {
     			title: 0,
     			type: 1,
     			getUrl: 2,
-    			datasetLabel: 3,
+    			seriesLabel: 3,
     			minHeight: 4,
-    			displayLegend: 5
+    			displayLegend: 5,
+    			showModal: 6,
+    			showModalControls: 7
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -23537,11 +24157,11 @@ var index = (function () {
     		throw new Error("<Chart_box>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get datasetLabel() {
+    	get seriesLabel() {
     		throw new Error("<Chart_box>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set datasetLabel(value) {
+    	set seriesLabel(value) {
     		throw new Error("<Chart_box>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -23558,6 +24178,22 @@ var index = (function () {
     	}
 
     	set displayLegend(value) {
+    		throw new Error("<Chart_box>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get showModal() {
+    		throw new Error("<Chart_box>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set showModal(value) {
+    		throw new Error("<Chart_box>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get showModalControls() {
+    		throw new Error("<Chart_box>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set showModalControls(value) {
     		throw new Error("<Chart_box>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -23593,7 +24229,7 @@ var index = (function () {
     			props: {
     				type: "bar",
     				getUrl: urls.chart1Url,
-    				datasetLabel: "Number of employees: ",
+    				seriesLabel: "Number of employees: ",
     				title: "Top 10 companies by the number of employees"
     			},
     			$$inline: true
@@ -23673,19 +24309,19 @@ var index = (function () {
     			attr_dev(div0, "class", "col-md-4 border-top border-start chart svelte-o9hok4");
     			add_location(div0, file, 9, 12, 293);
     			attr_dev(div1, "class", "col-md-4 border-top border-start chart svelte-o9hok4");
-    			add_location(div1, file, 16, 12, 621);
+    			add_location(div1, file, 16, 12, 620);
     			attr_dev(div2, "class", "col-md-4 border-top border-start border-end chart svelte-o9hok4");
-    			add_location(div2, file, 22, 12, 922);
+    			add_location(div2, file, 22, 12, 921);
     			attr_dev(div3, "class", "row");
     			add_location(div3, file, 8, 8, 262);
     			attr_dev(div4, "class", "col-md-4 border-top border-start border-bottom chart svelte-o9hok4");
-    			add_location(div4, file, 33, 12, 1327);
+    			add_location(div4, file, 33, 12, 1326);
     			attr_dev(div5, "class", "col-md-4 border-top border-start border-bottom chart svelte-o9hok4");
-    			add_location(div5, file, 41, 12, 1679);
+    			add_location(div5, file, 41, 12, 1678);
     			attr_dev(div6, "class", "col-md-4 border-top border-start border-end border-bottom chart svelte-o9hok4");
-    			add_location(div6, file, 47, 12, 1962);
+    			add_location(div6, file, 47, 12, 1961);
     			attr_dev(div7, "class", "row");
-    			add_location(div7, file, 32, 8, 1296);
+    			add_location(div7, file, 32, 8, 1295);
     			attr_dev(div8, "class", "main container-fluid pt-4 svelte-o9hok4");
     			add_location(div8, file, 7, 4, 213);
     		},

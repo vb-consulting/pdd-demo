@@ -19,7 +19,7 @@ interface IComponentButton {
     classes?: string;
 }
 
-interface IComponentModalButton extends IButton {
+interface IComponentModalButton extends IComponentButton {
 }
 
 type ComponentUseCallbackType = ((node: HTMLElement) => {

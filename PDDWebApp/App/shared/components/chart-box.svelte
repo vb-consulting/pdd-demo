@@ -1,38 +1,127 @@
 <script lang="ts">
     import Chart from "./chart.svelte";
     import Modal from "./modal.svelte";
+    import {hideTooltips} from "./tooltips";
     import { get } from "../fetch";
-
+    /**
+     * Chart title
+     *
+     * @default undefined
+     */
     export let title: string;
+    /**
+     * One of the predefined chart types.
+     *
+     * @default undefined
+     */
     export let type: ChartType;
+    /**
+     * Url that will be get fetcjed from server to return chart data in format `{labels: string[], series: {data: number[], label: string | undefined}[]}`
+     *
+     * @default undefined
+     */
     export let getUrl: string;
-    export let datasetLabel: string = "";
+    /**
+     * Default series label. Will override series label returned from dataFunc 
+     *
+     * @default undefined
+     */
+    export let seriesLabel: string = "";
+    /**
+     * Minimum chart height in pixels
+     *
+     * @default ""
+     */
     export let minHeight: string = "";
+    /**
+     * Display series legend?
+     *
+     * @default true if more than one series
+     */
     export let displayLegend: boolean | undefined = undefined;
+    /**
+     * Show open in full screen icon in upper right corner
+     *
+     * @default true
+     */
+    export let showModal = true;
+    /**
+     * Show fullscreen modal controls (zoom, refresh)
+     *
+     * @default true
+     */
+    export let showModalControls = true;
 
+    let chart: Chart;
     let modal = {open: false};
+    let initialZoom = type=="pie" || type=="doughnut" ? 40 : 75;
+    let zoom = initialZoom;
+    let refreshing = false;
+
+    function zoomIn() {
+        zoom = zoom - 15;
+    }
+    function zoomOut() {
+        zoom = zoom + 15;
+    }
+    async function refresh() {
+        hideTooltips();
+        refreshing = true;
+        await chart.refreshChart();
+        zoom = initialZoom;
+        refreshing = false;
+    }
 </script>
 
 <div class="title-wrap">
     <div class="text-secondary fw-bolder text-center fs-4">{title}</div>
-    <i class="bi bi-box-arrow-up-right" on:click={() => modal.open = true} data-bs-toggle="tooltip" title="Open in fullscreen"></i>
+    {#if showModal}
+        <i class="bi bi-box-arrow-up-right" on:click={() => modal.open = true} data-bs-toggle="tooltip" title="Open in Fullscreen"></i>
+    {/if}
 </div>
 
 {#if minHeight}
     <div class="chart-fixed-size" style="min-height: {minHeight}; width: {minHeight};">
-        <Chart type={type} dataFunc={() => get(getUrl)} datasetLabel={datasetLabel} displayLegend={displayLegend} />
+        <Chart bind:this={chart} type={type} dataFunc={() => get(getUrl)} seriesLabel={seriesLabel} displayLegend={displayLegend} />
     </div>
 {:else}
-    <Chart type={type} dataFunc={() => get(getUrl)} datasetLabel={datasetLabel} displayLegend={displayLegend} />
+    <Chart bind:this={chart} type={type} dataFunc={() => get(getUrl)} seriesLabel={seriesLabel} displayLegend={displayLegend} />
 {/if}
 
-<Modal state={modal} fullscreen={true} title={title} closeBtn={true} titleCloseButton={true}>
-    <div class="modal-wrap" style="grid-template-columns: {(type=="bar" || type=="doughnut" ? "40%" : "75%")}">
-        <Chart type={type} dataFunc={() => get(getUrl)} datasetLabel={datasetLabel} displayLegend={displayLegend} />
+{#if showModal}
+<Modal state={modal} fullscreen={true} closeBtn={true}>
+    <div slot="header" class="modal-header">
+        <h5 class="modal-title">{title}</h5> 
+        {#if showModalControls}
+            <div class="btn-group">
+                <button type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Zoom In" on:click={zoomIn}>
+                    <i class="bi bi-zoom-out"></i>
+                </button>
+                <button type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Zoom Out" on:click={zoomOut}>
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" disabled={refreshing} class="btn btn-light" data-bs-toggle="tooltip" title="Refresh" on:click={refresh}>
+                    {#if refreshing}
+                        <div class="spinner-border spinner-small" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    {:else}
+                        <i class="bi bi-arrow-clockwise"></i>
+                    {/if}
+                </button>
+            </div>
+        {/if}
+    </div>
+    <div class="modal-wrap" style="grid-template-columns: {zoom}%">
+        <Chart type={type} dataFunc={() => get(getUrl)} chartData={chart.getChartData()} />
     </div>
 </Modal>
+{/if}
 
 <style lang="scss">
+    @import "../../scss/colors";
     .chart-fixed-size {
         display: inline-block; 
         position: relative;
@@ -49,5 +138,11 @@
     }
     .modal-wrap {
         display: grid;
+    }
+    .spinner-small {
+        width: 1rem;
+        height: 1rem;
+        border: 0.1em solid $primary;
+        border-right-color: transparent;
     }
 </style>
