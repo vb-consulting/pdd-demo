@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-08-04T09:29:21.1447561+02:00`
+- Local time stamp: `2022-08-04T09:37:19.6272559+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
@@ -26,8 +26,6 @@
 - Table [`public.people`](#table-publicpeople)
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
-- View [`public.pg_stat_statements`](#view-publicpg_stat_statements)
-- View [`public.pg_stat_statements_info`](#view-publicpg_stat_statements_info)
 - Enum [`public.valid_genders`](#enum-public-valid_genders)
 
 ## Routines
@@ -491,65 +489,6 @@ System users. May or may not be a person (in people records).
 | count=**`3`** | count=**`488.900`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
 | rows=**`0`** | rows=**`488.900`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
 
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-## Views
-
-### View `public.pg_stat_statements`
-
-<!-- comment on view "public"."pg_stat_statements" is @until-end-tag; -->
-<!-- end -->
-- Source: [/PDD.Database/Scripts/views/pg_stat_statements.sql](/PDD.Database/Scripts/views/pg_stat_statements.sql)
-
-| Column | Type | Comment |
-| ------ | ---- | --------|
-| `userid` | `oid`| <!-- comment on column "public"."pg_stat_statements"."userid" is @until-end-tag; --><!-- end --> |
-| `dbid` | `oid`| <!-- comment on column "public"."pg_stat_statements"."dbid" is @until-end-tag; --><!-- end --> |
-| `toplevel` | `boolean`| <!-- comment on column "public"."pg_stat_statements"."toplevel" is @until-end-tag; --><!-- end --> |
-| `queryid` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."queryid" is @until-end-tag; --><!-- end --> |
-| `query` | `text`| <!-- comment on column "public"."pg_stat_statements"."query" is @until-end-tag; --><!-- end --> |
-| `plans` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."plans" is @until-end-tag; --><!-- end --> |
-| `total_plan_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."total_plan_time" is @until-end-tag; --><!-- end --> |
-| `min_plan_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."min_plan_time" is @until-end-tag; --><!-- end --> |
-| `max_plan_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."max_plan_time" is @until-end-tag; --><!-- end --> |
-| `mean_plan_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."mean_plan_time" is @until-end-tag; --><!-- end --> |
-| `stddev_plan_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."stddev_plan_time" is @until-end-tag; --><!-- end --> |
-| `calls` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."calls" is @until-end-tag; --><!-- end --> |
-| `total_exec_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."total_exec_time" is @until-end-tag; --><!-- end --> |
-| `min_exec_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."min_exec_time" is @until-end-tag; --><!-- end --> |
-| `max_exec_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."max_exec_time" is @until-end-tag; --><!-- end --> |
-| `mean_exec_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."mean_exec_time" is @until-end-tag; --><!-- end --> |
-| `stddev_exec_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."stddev_exec_time" is @until-end-tag; --><!-- end --> |
-| `rows` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."rows" is @until-end-tag; --><!-- end --> |
-| `shared_blks_hit` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."shared_blks_hit" is @until-end-tag; --><!-- end --> |
-| `shared_blks_read` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."shared_blks_read" is @until-end-tag; --><!-- end --> |
-| `shared_blks_dirtied` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."shared_blks_dirtied" is @until-end-tag; --><!-- end --> |
-| `shared_blks_written` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."shared_blks_written" is @until-end-tag; --><!-- end --> |
-| `local_blks_hit` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."local_blks_hit" is @until-end-tag; --><!-- end --> |
-| `local_blks_read` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."local_blks_read" is @until-end-tag; --><!-- end --> |
-| `local_blks_dirtied` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."local_blks_dirtied" is @until-end-tag; --><!-- end --> |
-| `local_blks_written` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."local_blks_written" is @until-end-tag; --><!-- end --> |
-| `temp_blks_read` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."temp_blks_read" is @until-end-tag; --><!-- end --> |
-| `temp_blks_written` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."temp_blks_written" is @until-end-tag; --><!-- end --> |
-| `blk_read_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."blk_read_time" is @until-end-tag; --><!-- end --> |
-| `blk_write_time` | `double precision(53,2)`| <!-- comment on column "public"."pg_stat_statements"."blk_write_time" is @until-end-tag; --><!-- end --> |
-| `wal_records` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."wal_records" is @until-end-tag; --><!-- end --> |
-| `wal_fpi` | `bigint`| <!-- comment on column "public"."pg_stat_statements"."wal_fpi" is @until-end-tag; --><!-- end --> |
-| `wal_bytes` | `numeric`| <!-- comment on column "public"."pg_stat_statements"."wal_bytes" is @until-end-tag; --><!-- end --> |
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### View `public.pg_stat_statements_info`
-
-<!-- comment on view "public"."pg_stat_statements_info" is @until-end-tag; -->
-<!-- end -->
-- Source: [/PDD.Database/Scripts/views/pg_stat_statements_info.sql](/PDD.Database/Scripts/views/pg_stat_statements_info.sql)
-
-| Column | Type | Comment |
-| ------ | ---- | --------|
-| `dealloc` | `bigint`| <!-- comment on column "public"."pg_stat_statements_info"."dealloc" is @until-end-tag; --><!-- end --> |
-| `stats_reset` | `timestamp with time zone`| <!-- comment on column "public"."pg_stat_statements_info"."stats_reset" is @until-end-tag; --><!-- end --> |
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
