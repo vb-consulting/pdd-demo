@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Norm;
 using Npgsql;
 using NpgsqlTypes;
-using PDDWebApp;
+using PDD.WebApp;
 using static Bogus.DataSets.Name;
 
 Console.WriteLine("Hello, World!");
@@ -18,7 +18,7 @@ if (c.Key != ConsoleKey.Enter)
 }
 
 var currentDir = Directory.GetCurrentDirectory();
-var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDDWebApp") : Path.Combine(currentDir, "../PDDWebApp");
+var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDD.WebApp") : Path.Combine(currentDir, "../PDD.WebApp");
 var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../Database") : Path.Combine(currentDir, "../Database");
 
 var config = new ConfigurationBuilder()
