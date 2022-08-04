@@ -16,7 +16,7 @@ public static class PgRoutineChart2
     public const string Name = "reporting.chart_2";
 
     /// <summary>
-    /// Executes plpgsql function "chart_2"
+    /// Executes plpgsql function reporting.chart_2()
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
@@ -32,7 +32,7 @@ public static class PgRoutineChart2
     }
 
     /// <summary>
-    /// Asynchronously executes plpgsql function "chart_2"
+    /// Asynchronously executes plpgsql function reporting.chart_2()
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`

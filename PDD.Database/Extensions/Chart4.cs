@@ -16,7 +16,7 @@ public static class PgRoutineChart4
     public const string Name = "reporting.chart_4";
 
     /// <summary>
-    /// Executes sql function "chart_4"
+    /// Executes sql function reporting.chart_4()
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 
@@ -33,7 +33,7 @@ public static class PgRoutineChart4
     }
 
     /// <summary>
-    /// Asynchronously executes sql function "chart_4"
+    /// Asynchronously executes sql function reporting.chart_4()
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 

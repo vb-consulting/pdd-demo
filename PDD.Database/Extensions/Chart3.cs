@@ -16,7 +16,7 @@ public static class PgRoutineChart3
     public const string Name = "reporting.chart_3";
 
     /// <summary>
-    /// Executes sql function "chart_3"
+    /// Executes sql function reporting.chart_3()
     /// Number of companies by business area.
     /// Json object where lables are companies name and it only have one series with the number of business area for each company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
@@ -32,7 +32,7 @@ public static class PgRoutineChart3
     }
 
     /// <summary>
-    /// Asynchronously executes sql function "chart_3"
+    /// Asynchronously executes sql function reporting.chart_3()
     /// Number of companies by business area.
     /// Json object where lables are companies name and it only have one series with the number of business area for each company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`

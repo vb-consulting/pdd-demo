@@ -87,20 +87,11 @@ DROP FUNCTION IF EXISTS reporting.chart_2();
 DROP FUNCTION IF EXISTS reporting.chart_1();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
-DROP EXTENSION IF EXISTS pg_stat_statements;
 DROP SCHEMA IF EXISTS reporting;
 --
 -- Name: reporting; Type: SCHEMA; Schema: -; Owner: -
 --
 CREATE SCHEMA reporting;
---
--- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
---
-CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
---
--- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
---
-COMMENT ON EXTENSION pg_stat_statements IS 'track planning and execution statistics of all SQL statements executed';
 --
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --

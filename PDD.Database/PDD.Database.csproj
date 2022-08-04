@@ -18,4 +18,8 @@
     <ProjectReference Include="..\DatabaseShared\DatabaseShared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

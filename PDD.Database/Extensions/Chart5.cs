@@ -16,7 +16,7 @@ public static class PgRoutineChart5
     public const string Name = "reporting.chart_5";
 
     /// <summary>
-    /// Executes sql function "chart_5"
+    /// Executes sql function reporting.chart_5()
     /// Top 10 comanies with highest number of user reviews.
     /// Json object where lables are companies names with average score and it only have one series with total number of reviews.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
@@ -32,7 +32,7 @@ public static class PgRoutineChart5
     }
 
     /// <summary>
-    /// Asynchronously executes sql function "chart_5"
+    /// Asynchronously executes sql function reporting.chart_5()
     /// Top 10 comanies with highest number of user reviews.
     /// Json object where lables are companies names with average score and it only have one series with total number of reviews.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`

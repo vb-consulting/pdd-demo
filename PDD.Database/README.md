@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-08-04T09:37:19.6272559+02:00`
+- Local time stamp: `2022-08-04T13:58:14.6752756+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
