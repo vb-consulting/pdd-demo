@@ -1,6 +1,3 @@
-DROP INDEX IF EXISTS public.idx_business_areas_name_normalized;
-DROP TABLE IF EXISTS public.business_areas;
-
 CREATE TABLE public.business_areas (
     id smallint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name character varying NOT NULL,

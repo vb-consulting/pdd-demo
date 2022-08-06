@@ -1,7 +1,3 @@
-DROP INDEX IF EXISTS public.idx_companies_name_normalized;
-DROP INDEX IF EXISTS public.idx_companies_country;
-DROP TABLE IF EXISTS public.companies;
-
 CREATE TABLE public.companies (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name character varying NOT NULL,

@@ -1,5 +1,3 @@
-DROP FUNCTION IF EXISTS reporting.chart_4();
-
 CREATE OR REPLACE FUNCTION reporting.chart_4() RETURNS json
     LANGUAGE sql
     AS $$

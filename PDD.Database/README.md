@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-08-04T13:58:14.6752756+02:00`
+- Local time stamp: `2022-08-06T13:02:46.2773275+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
@@ -176,8 +176,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`575`** | count=**`2.982`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`7.449`** | rows=**`2.982`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+| count=**`576`** | count=**`2.982`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`7.462`** | rows=**`2.982`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -225,8 +225,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`138.128`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`36`** | rows=**`138.128`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
+| count=**`5`** | count=**`138.146`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`36`** | rows=**`138.146`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -258,8 +258,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2.955`** | count=**`266.042`** | inserted=**`979`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`2.886.092`** | rows=**`265.065`** | live=**`979`**, dead=**`0`** | last auto=, rows inserted since=**`979`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
+| count=**`2.963`** | count=**`266.058`** | inserted=**`979`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`2.893.924`** | rows=**`265.081`** | live=**`979`**, dead=**`0`** | last auto=, rows inserted since=**`979`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -285,8 +285,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`577`** | count=**`2.997`** | inserted=**`2.982`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`1.705.704`** | rows=**`15`** | live=**`2.982`**, dead=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
+| count=**`578`** | count=**`2.997`** | inserted=**`2.982`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`1.708.686`** | rows=**`15`** | live=**`2.982`**, dead=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -314,8 +314,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`558`** | count=**`6.716`** | inserted=**`135.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`75.095.188`** | rows=**`1.601.655`** | live=**`135.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
+| count=**`559`** | count=**`6.728`** | inserted=**`135.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`75.230.984`** | rows=**`1.604.510`** | live=**`135.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -340,8 +340,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`559`** | count=**`52.085`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`138.195`** | rows=**`52.085`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
+| count=**`560`** | count=**`52.087`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`138.444`** | rows=**`52.087`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -369,8 +369,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`3.128`** | count=**`41.232`** | inserted=**`120.368`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`375.909.264`** | rows=**`10.443.708`** | live=**`120.368`**, dead=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows updated since=**`0`** |
+| count=**`3.139`** | count=**`41.456`** | inserted=**`120.368`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`377.233.312`** | rows=**`10.502.712`** | live=**`120.368`**, dead=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -455,8 +455,8 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`6`** | count=**`319.178`** | inserted=**`127.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`491.634`** | live=**`127.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows updated since=**`0`** |
+| count=**`6`** | count=**`319.512`** | inserted=**`127.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`492.492`** | live=**`127.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -486,8 +486,8 @@ System users. May or may not be a person (in people records).
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`3`** | count=**`488.900`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`488.900`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
+| count=**`5`** | count=**`488.900`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`2`** | rows=**`488.900`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

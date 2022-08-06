@@ -1,6 +1,3 @@
-DROP INDEX IF EXISTS public.idx_users_email;
-DROP TABLE IF EXISTS public.users;
-
 CREATE TABLE public.users (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email character varying NOT NULL,

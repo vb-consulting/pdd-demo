@@ -1,6 +1,3 @@
-DROP INDEX IF EXISTS public.idx_employee_records_person_id;
-DROP TABLE IF EXISTS public.employee_records;
-
 CREATE TABLE public.employee_records (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     company_id bigint NOT NULL,

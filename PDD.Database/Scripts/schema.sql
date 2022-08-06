@@ -159,7 +159,7 @@ declare
 begin
     _start := (select max(extract(year from employment_started_at)) from employee_records);
     _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 10, -1) year);
-    
+  
     return (
         
         select

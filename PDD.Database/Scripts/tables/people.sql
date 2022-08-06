@@ -1,8 +1,3 @@
-DROP INDEX IF EXISTS public.idx_people_name_normalized;
-DROP INDEX IF EXISTS public.idx_people_gender;
-DROP INDEX IF EXISTS public.idx_people_employee_status;
-DROP TABLE IF EXISTS public.people;
-
 CREATE TABLE public.people (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     first_name character varying NOT NULL,

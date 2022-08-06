@@ -1,6 +1,3 @@
-DROP INDEX IF EXISTS public.idx_company_areas_company_id;
-DROP TABLE IF EXISTS public.company_areas;
-
 CREATE TABLE public.company_areas (
     company_id bigint NOT NULL,
     area_id smallint NOT NULL,

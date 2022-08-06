@@ -1,8 +1,3 @@
-DROP INDEX IF EXISTS public.idx_countries_name_normalized;
-DROP INDEX IF EXISTS public.idx_countries_iso3;
-DROP INDEX IF EXISTS public.idx_countries_iso2;
-DROP TABLE IF EXISTS public.countries;
-
 CREATE TABLE public.countries (
     code smallint NOT NULL PRIMARY KEY,
     iso2 character(2) NOT NULL,

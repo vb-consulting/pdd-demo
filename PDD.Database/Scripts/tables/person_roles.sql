@@ -1,7 +1,3 @@
-DROP INDEX IF EXISTS public.idx_person_roles_role_id;
-DROP INDEX IF EXISTS public.idx_person_roles_person_id;
-DROP TABLE IF EXISTS public.person_roles;
-
 CREATE TABLE public.person_roles (
     person_id bigint NOT NULL,
     role_id smallint NOT NULL,

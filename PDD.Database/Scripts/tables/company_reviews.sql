@@ -1,6 +1,3 @@
-DROP INDEX IF EXISTS public.idx_company_reviews_company_id;
-DROP TABLE IF EXISTS public.company_reviews;
-
 CREATE TABLE public.company_reviews (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     company_id bigint NOT NULL,
