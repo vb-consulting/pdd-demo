@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_1() RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_1(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 select 
@@ -18,14 +18,14 @@ from (
             c.id, c.name
         order by 
             count(*) desc, c.name
-        limit 10
+        limit coalesce(_limit, 10)
     
     ) t left join lateral (    
         select avg(r.score)::numeric(3,2) from company_reviews r where r.company_id = t.id
     ) r on true
 $$;
 
-COMMENT ON FUNCTION reporting.chart_1() IS 'Top 10 comapnies by number of current employees.
+COMMENT ON FUNCTION reporting.chart_1(_limit integer) IS 'Top 10 comapnies by number of current employees.
 Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';

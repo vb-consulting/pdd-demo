@@ -8,7 +8,7 @@ public class Chart5UnitTests : PostgreSqlUnitTestFixture
     public Chart5UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_5().
+    /// Test method for sql function reporting.chart_5(integer).
     ///
     /// Top 10 comanies with highest number of user reviews.
     /// Json object where lables are companies names with average score and it only have one series with total number of reviews.
@@ -19,9 +19,10 @@ public class Chart5UnitTests : PostgreSqlUnitTestFixture
     public void Chart5_Test1()
     {
         // Arrange
+        int? limit = default;
 
         // Act
-        var result = Connection.Chart5();
+        var result = Connection.Chart5(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -37,12 +38,12 @@ public class Chart5UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public async Task Chart5Async_Test1()
+    public void Chart5_Test2()
     {
         // Arrange
 
         // Act
-        var result = await Connection.Chart5Async();
+        var result = Connection.Chart5();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

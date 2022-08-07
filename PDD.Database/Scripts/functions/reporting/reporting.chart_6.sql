@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_6() RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_6(_limit integer DEFAULT 3) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -11,7 +11,7 @@ with companies_cte as (
         c.id, c.name
     order by 
         count(*) desc, c.name
-    limit 3
+    limit coalesce(_limit, 3)
     
 ), curr_employees_cte as (
     select a.company_id, a.person_id, b.name, b.row_number
@@ -57,7 +57,7 @@ from
     agg2_cte
 $$;
 
-COMMENT ON FUNCTION reporting.chart_6() IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
+COMMENT ON FUNCTION reporting.chart_6(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
 Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 ';

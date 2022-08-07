@@ -8,7 +8,7 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     public Chart4UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_4().
+    /// Test method for sql function reporting.chart_4(integer).
     ///
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
@@ -20,9 +20,10 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     public void Chart4_Test1()
     {
         // Arrange
+        int? limit = default;
 
         // Act
-        var result = Connection.Chart4();
+        var result = Connection.Chart4(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -39,12 +40,12 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public async Task Chart4Async_Test1()
+    public void Chart4_Test2()
     {
         // Arrange
 
         // Act
-        var result = await Connection.Chart4Async();
+        var result = Connection.Chart4();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

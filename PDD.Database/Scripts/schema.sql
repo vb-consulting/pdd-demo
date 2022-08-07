@@ -79,12 +79,12 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS reporting.chart_6();
-DROP FUNCTION IF EXISTS reporting.chart_5();
-DROP FUNCTION IF EXISTS reporting.chart_4();
+DROP FUNCTION IF EXISTS reporting.chart_6(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_5(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_4(_limit integer);
 DROP FUNCTION IF EXISTS reporting.chart_3();
-DROP FUNCTION IF EXISTS reporting.chart_2();
-DROP FUNCTION IF EXISTS reporting.chart_1();
+DROP FUNCTION IF EXISTS reporting.chart_2(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_1(_limit integer);
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS reporting;
@@ -112,9 +112,9 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: chart_1(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_1(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_1() RETURNS json
+CREATE FUNCTION reporting.chart_1(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 select 
@@ -134,23 +134,23 @@ from (
             c.id, c.name
         order by 
             count(*) desc, c.name
-        limit 10
+        limit coalesce(_limit, 10)
     
     ) t left join lateral (    
         select avg(r.score)::numeric(3,2) from company_reviews r where r.company_id = t.id
     ) r on true
 $$;
 --
--- Name: FUNCTION chart_1(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_1(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_1() IS 'Top 10 comapnies by number of current employees.
+COMMENT ON FUNCTION reporting.chart_1(_limit integer) IS 'Top 10 comapnies by number of current employees.
 Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_2(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_2(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_2() RETURNS json
+CREATE FUNCTION reporting.chart_2(_limit integer DEFAULT 5) RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -188,7 +188,7 @@ begin
                         c.id, c.name
                     order by 
                         count(*) desc, c.name
-                    limit 5
+                    limit coalesce(_limit, 5)
                 ) c
                 join lateral (
                     select count(*) as value
@@ -206,9 +206,9 @@ begin
 end
 $$;
 --
--- Name: FUNCTION chart_2(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_2(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_2() IS 'Top 5 comapnies by number of employees for the last ten years.
+COMMENT ON FUNCTION reporting.chart_2(_limit integer) IS 'Top 5 comapnies by number of employees for the last ten years.
 Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';
@@ -244,9 +244,9 @@ Json object where lables are companies name and it only have one series with the
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_4(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_4(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_4() RETURNS json
+CREATE FUNCTION reporting.chart_4(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -270,26 +270,26 @@ select
 from (
     select name, count, row_number 
     from cte 
-    where row_number < 10
+    where row_number < coalesce(_limit, 10)
     union all
     select 'Other' as name, sum(count) as count, 10 as row_number 
     from cte 
-    where row_number >= 10
+    where row_number >= coalesce(_limit, 10)
     order by row_number
 ) sub
 $$;
 --
--- Name: FUNCTION chart_4(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_4(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_4() IS 'Number of companies by country.
+COMMENT ON FUNCTION reporting.chart_4(_limit integer) IS 'Number of companies by country.
 Json object where lables are country names and it only have one series with the number of companies for each country.
 It show only first 9 conutries and 10th is summed together as other. 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_5(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_5(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_5() RETURNS json
+CREATE FUNCTION reporting.chart_5(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 select 
@@ -309,20 +309,20 @@ from (
     group by
         c.name
     order by count(*) desc, c.name
-    limit 10
+    limit coalesce(_limit, 10)
 ) t
 $$;
 --
--- Name: FUNCTION chart_5(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_5(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_5() IS 'Top 10 comanies with highest number of user reviews.
+COMMENT ON FUNCTION reporting.chart_5(_limit integer) IS 'Top 10 comanies with highest number of user reviews.
 Json object where lables are companies names with average score and it only have one series with total number of reviews.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_6(); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_6(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_6() RETURNS json
+CREATE FUNCTION reporting.chart_6(_limit integer DEFAULT 3) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -335,7 +335,7 @@ with companies_cte as (
         c.id, c.name
     order by 
         count(*) desc, c.name
-    limit 3
+    limit coalesce(_limit, 3)
     
 ), curr_employees_cte as (
     select a.company_id, a.person_id, b.name, b.row_number
@@ -381,9 +381,9 @@ from
     agg2_cte
 $$;
 --
--- Name: FUNCTION chart_6(); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_6(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_6() IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
+COMMENT ON FUNCTION reporting.chart_6(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
 Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 ';

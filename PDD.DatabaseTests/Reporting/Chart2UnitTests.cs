@@ -8,7 +8,7 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     public Chart2UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for plpgsql function reporting.chart_2().
+    /// Test method for plpgsql function reporting.chart_2(integer).
     ///
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
@@ -19,9 +19,10 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     public void Chart2_Test1()
     {
         // Arrange
+        int? limit = default;
 
         // Act
-        var result = Connection.Chart2();
+        var result = Connection.Chart2(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -37,12 +38,12 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public async Task Chart2Async_Test1()
+    public void Chart2_Test2()
     {
         // Arrange
 
         // Act
-        var result = await Connection.Chart2Async();
+        var result = Connection.Chart2();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

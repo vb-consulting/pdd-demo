@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_4() RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_4(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -22,16 +22,16 @@ select
 from (
     select name, count, row_number 
     from cte 
-    where row_number < 10
+    where row_number < coalesce(_limit, 10)
     union all
     select 'Other' as name, sum(count) as count, 10 as row_number 
     from cte 
-    where row_number >= 10
+    where row_number >= coalesce(_limit, 10)
     order by row_number
 ) sub
 $$;
 
-COMMENT ON FUNCTION reporting.chart_4() IS 'Number of companies by country.
+COMMENT ON FUNCTION reporting.chart_4(_limit integer) IS 'Number of companies by country.
 Json object where lables are country names and it only have one series with the number of companies for each country.
 It show only first 9 conutries and 10th is summed together as other. 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
