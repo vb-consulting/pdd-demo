@@ -164,6 +164,9 @@
     :global(.offcanvas-nav > .offcanvas-body) {
         padding: 1rem 0;
     }
+    :global(.offcanvas-nav > .offcanvas-body) {
+        padding: 1rem 0;
+    }
     :global(.offcanvas-nav .nav-item) {
         padding-right: 3rem;
     }
