@@ -29,6 +29,9 @@ public static class ConnectionBuilder
             app.Configuration.GetConnectionString(connectionName) ??
             app.Configuration.GetValue<string>($"POSTGRESQLCONNSTR_{connectionName}");
 
+        var builder = new NpgsqlConnectionStringBuilder(connectionString);
+        builder.ApplicationName ??= Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar).LastOrDefault() ?? Consts.Title;
+        
         if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool?>(LogDatabaseCallsKey) == true)
         {
             NormOptions.Configure(options =>

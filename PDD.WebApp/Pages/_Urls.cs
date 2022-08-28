@@ -5,7 +5,7 @@ namespace PDD.WebApp;
 public partial class Urls
 {
     [JsonProperty] public const string IndexUrl = "/";
-    public const string ErrorUrl = "/error";
+    [JsonProperty] public const string ErrorUrl = "/error";
     [JsonProperty] public const string LogoutUrl = "/logout";
     public const string NotFoundUrl = "/404";
     public const string UnathorizedUrl = "/401";
