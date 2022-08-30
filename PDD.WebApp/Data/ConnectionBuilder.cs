@@ -1,4 +1,4 @@
-﻿namespace PDD.WebApp;
+﻿namespace PDD.WebApp.Data;
 
 public static class ConnectionBuilder
 {

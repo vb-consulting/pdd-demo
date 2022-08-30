@@ -3,8 +3,8 @@ BEGIN
 --
 -- PostgreSQL database dump
 --
--- Dumped from database version 14.0
--- Dumped by pg_dump version 14.0
+-- Dumped from database version 14.5 (Ubuntu 14.5-1.pgdg20.04+1)
+-- Dumped by pg_dump version 14.5
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -17,19 +17,19 @@ SET client_min_messages = warning;
 SET row_security = off;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS fk_type;
 ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_role_id;
-ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_person_id;
+ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_person_id;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_modified_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_employee_status;
-ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_created_by;
-ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_created_by;
+ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_created_by;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS fk_country;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS fk_country;
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS fk_company_id;
@@ -79,12 +79,9 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS reporting.chart_6(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_5(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_4(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_3();
-DROP FUNCTION IF EXISTS reporting.chart_2(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_1(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_year(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_area(_limit integer);
+DROP FUNCTION IF EXISTS reporting.chart_companies_by_country(_limit integer);
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS reporting;
@@ -112,141 +109,9 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: chart_1(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_1(_limit integer DEFAULT 10) RETURNS json
-    LANGUAGE sql
-    AS $$
-select 
-    json_build_object(
-        'labels', json_agg(t.name || ' (avg score: ' || r.avg || ')'),
-        'series', array[
-            json_build_object('data', json_agg(t.count))
-        ]
-    )
-from (
-    
-        select c.id, c.name, count(*)
-        from 
-            companies c
-            inner join employee_records er on c.id = er.company_id and er.employment_ended_at is null
-        group by 
-            c.id, c.name
-        order by 
-            count(*) desc, c.name
-        limit coalesce(_limit, 10)
-    
-    ) t left join lateral (    
-        select avg(r.score)::numeric(3,2) from company_reviews r where r.company_id = t.id
-    ) r on true
-$$;
---
--- Name: FUNCTION chart_1(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
---
-COMMENT ON FUNCTION reporting.chart_1(_limit integer) IS 'Top 10 comapnies by number of current employees.
-Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-';
---
--- Name: chart_2(integer); Type: FUNCTION; Schema: reporting; Owner: -
---
-CREATE FUNCTION reporting.chart_2(_limit integer DEFAULT 5) RETURNS json
-    LANGUAGE plpgsql
-    AS $$
-declare
-    _start bigint;
-    _years text[];
-begin
-    _start := (select max(extract(year from employment_started_at)) from employee_records);
-    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 10, -1) year);
-  
-    return (
-        
-        select
-            json_build_object(
-                'labels', _years::text[],
-                'series', array_agg(
-                    json_build_object(
-                        'data', data,
-                        'label', label
-                    )
-                )
-            )
-        from (
-            
-            select
-                array_agg(count.value order by year desc) as data,
-                c.name as label
-            from
-                unnest(_years) year
-                cross join (
-                    select c.id, c.name
-                    from 
-                        companies c
-                        inner join employee_records er on c.id = er.company_id and er.employment_ended_at is null
-                    group by 
-                        c.id, c.name
-                    order by 
-                        count(*) desc, c.name
-                    limit coalesce(_limit, 5)
-                ) c
-                join lateral (
-                    select count(*) as value
-                    from employee_records
-                    where 
-                        company_id = c.id 
-                        and extract(year from employment_started_at) <= year::numeric
-                        and (extract(year from employment_ended_at) > year::numeric or employment_ended_at is null)
-                ) count on true
-            group by
-                c.name
-        ) sub
-        
-    );
-end
-$$;
---
--- Name: FUNCTION chart_2(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
---
-COMMENT ON FUNCTION reporting.chart_2(_limit integer) IS 'Top 5 comapnies by number of employees for the last ten years.
-Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
-- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
-';
---
--- Name: chart_3(); Type: FUNCTION; Schema: reporting; Owner: -
---
-CREATE FUNCTION reporting.chart_3() RETURNS json
-    LANGUAGE sql
-    AS $$
-select 
-    json_build_object(
-        'labels', json_agg(t.name),
-        'series', array[
-            json_build_object('data', json_agg(t.count))
-        ]
-    )
-from (
-    select a.name, count(*)
-    from 
-        business_areas a
-        inner join company_areas c on a.id = c.area_id
-    group by 
-        a.name
-    order by 
-        count(*) desc, a.name
-) t
-$$;
---
--- Name: FUNCTION chart_3(); Type: COMMENT; Schema: reporting; Owner: -
---
-COMMENT ON FUNCTION reporting.chart_3() IS 'Number of companies by business area.
-Json object where lables are companies name and it only have one series with the number of business area for each company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-';
---
--- Name: chart_4(integer); Type: FUNCTION; Schema: reporting; Owner: -
---
-CREATE FUNCTION reporting.chart_4(_limit integer DEFAULT 10) RETURNS json
+CREATE FUNCTION reporting.chart_companies_by_country(_limit integer DEFAULT 10) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -279,50 +144,17 @@ from (
 ) sub
 $$;
 --
--- Name: FUNCTION chart_4(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_companies_by_country(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_4(_limit integer) IS 'Number of companies by country.
+COMMENT ON FUNCTION reporting.chart_companies_by_country(_limit integer) IS 'Number of companies by country.
 Json object where lables are country names and it only have one series with the number of companies for each country.
 It show only first 9 conutries and 10th is summed together as other. 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_5(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_employee_counts_by_area(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_5(_limit integer DEFAULT 10) RETURNS json
-    LANGUAGE sql
-    AS $$
-select 
-    json_build_object(
-        'labels', json_agg(t.name || ' (avg score: ' || t.avg || ')'),
-        'series', array[
-            json_build_object(
-                'data', json_agg(t.count)
-            )
-        ]
-    )
-from (
-    select c.name, count(*), avg(r.score)::numeric(3,2)
-    from 
-        company_reviews r
-        inner join companies c on r.company_id = c.id
-    group by
-        c.name
-    order by count(*) desc, c.name
-    limit coalesce(_limit, 10)
-) t
-$$;
---
--- Name: FUNCTION chart_5(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
---
-COMMENT ON FUNCTION reporting.chart_5(_limit integer) IS 'Top 10 comanies with highest number of user reviews.
-Json object where lables are companies names with average score and it only have one series with total number of reviews.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-';
---
--- Name: chart_6(integer); Type: FUNCTION; Schema: reporting; Owner: -
---
-CREATE FUNCTION reporting.chart_6(_limit integer DEFAULT 3) RETURNS json
+CREATE FUNCTION reporting.chart_employee_counts_by_area(_limit integer DEFAULT 3) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -381,11 +213,76 @@ from
     agg2_cte
 $$;
 --
--- Name: FUNCTION chart_6(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_employee_counts_by_area(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_6(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
+COMMENT ON FUNCTION reporting.chart_employee_counts_by_area(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
 Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
+';
+--
+-- Name: chart_employee_counts_by_year(integer); Type: FUNCTION; Schema: reporting; Owner: -
+--
+CREATE FUNCTION reporting.chart_employee_counts_by_year(_limit integer DEFAULT 5) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+declare
+    _start bigint;
+    _years text[];
+begin
+    _start := (select max(extract(year from employment_started_at)) from employee_records);
+    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 10, -1) year);
+  
+    return (
+        
+        select
+            json_build_object(
+                'labels', _years::text[],
+                'series', array_agg(
+                    json_build_object(
+                        'data', data,
+                        'label', label
+                    )
+                )
+            )
+        from (
+            
+            select
+                array_agg(count.value order by year desc) as data,
+                c.name as label
+            from
+                unnest(_years) year
+                cross join (
+                    select c.id, c.name
+                    from 
+                        companies c
+                        inner join employee_records er on c.id = er.company_id and er.employment_ended_at is null
+                    group by 
+                        c.id, c.name
+                    order by 
+                        count(*) desc, c.name
+                    limit coalesce(_limit, 5)
+                ) c
+                join lateral (
+                    select count(*) as value
+                    from employee_records
+                    where 
+                        company_id = c.id 
+                        and extract(year from employment_started_at) <= year::numeric
+                        and (extract(year from employment_ended_at) > year::numeric or employment_ended_at is null)
+                ) count on true
+            group by
+                c.name
+        ) sub
+        
+    );
+end
+$$;
+--
+-- Name: FUNCTION chart_employee_counts_by_year(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+--
+COMMENT ON FUNCTION reporting.chart_employee_counts_by_year(_limit integer) IS 'Top 5 comapnies by number of employees for the last ten years.
+Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
@@ -929,24 +826,14 @@ ALTER TABLE ONLY public.companies
 ALTER TABLE ONLY public.people
     ADD CONSTRAINT fk_country FOREIGN KEY (country) REFERENCES public.countries(code) DEFERRABLE;
 --
--- Name: companies fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.companies
-    ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
---
 -- Name: company_areas fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.company_areas
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
--- Name: people fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: companies fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE ONLY public.people
-    ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
---
--- Name: employee_records fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.employee_records
+ALTER TABLE ONLY public.companies
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: person_roles fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -954,9 +841,19 @@ ALTER TABLE ONLY public.employee_records
 ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
+-- Name: employee_records fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.employee_records
+    ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
+--
 -- Name: company_reviews fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.company_reviews
+    ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
+--
+-- Name: people fk_created_by; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.people
     ADD CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE;
 --
 -- Name: people fk_employee_status; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -974,14 +871,14 @@ ALTER TABLE ONLY public.companies
 ALTER TABLE ONLY public.people
     ADD CONSTRAINT fk_modified_by FOREIGN KEY (modified_by) REFERENCES public.users(id) DEFERRABLE;
 --
+-- Name: company_reviews fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.company_reviews
+    ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
+--
 -- Name: employee_records fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.employee_records
-    ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
---
--- Name: users fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.users
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: person_roles fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
@@ -989,9 +886,9 @@ ALTER TABLE ONLY public.users
 ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
--- Name: company_reviews fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: users fk_person_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
-ALTER TABLE ONLY public.company_reviews
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE;
 --
 -- Name: person_roles fk_role_id; Type: FK CONSTRAINT; Schema: public; Owner: -

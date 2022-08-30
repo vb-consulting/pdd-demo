@@ -3,12 +3,12 @@
 
 namespace PDD.DatabaseTests.Reporting;
 
-public class Chart4UnitTests : PostgreSqlUnitTestFixture
+public class ChartCompaniesByCountryUnitTests : PostgreSqlUnitTestFixture
 {
-    public Chart4UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
+    public ChartCompaniesByCountryUnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_4(integer).
+    /// Test method for sql function reporting.chart_companies_by_country(integer).
     ///
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
@@ -17,13 +17,13 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart4_Test1()
+    public void ChartCompaniesByCountry_Test1()
     {
         // Arrange
         int? limit = default;
 
         // Act
-        var result = Connection.Chart4(limit);
+        var result = Connection.ChartCompaniesByCountry(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -31,7 +31,7 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_4().
+    /// Test method for sql function reporting.chart_companies_by_country().
     ///
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
@@ -40,12 +40,12 @@ public class Chart4UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart4_Test2()
+    public void ChartCompaniesByCountry_Test2()
     {
         // Arrange
 
         // Act
-        var result = Connection.Chart4();
+        var result = Connection.ChartCompaniesByCountry();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

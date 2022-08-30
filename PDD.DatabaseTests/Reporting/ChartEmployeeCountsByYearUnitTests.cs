@@ -3,12 +3,12 @@
 
 namespace PDD.DatabaseTests.Reporting;
 
-public class Chart2UnitTests : PostgreSqlUnitTestFixture
+public class ChartEmployeeCountsByYearUnitTests : PostgreSqlUnitTestFixture
 {
-    public Chart2UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
+    public ChartEmployeeCountsByYearUnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for plpgsql function reporting.chart_2(integer).
+    /// Test method for plpgsql function reporting.chart_employee_counts_by_year(integer).
     ///
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
@@ -16,13 +16,13 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart2_Test1()
+    public void ChartEmployeeCountsByYear_Test1()
     {
         // Arrange
         int? limit = default;
 
         // Act
-        var result = Connection.Chart2(limit);
+        var result = Connection.ChartEmployeeCountsByYear(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -30,7 +30,7 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     }
 
     ///<summary>
-    /// Test method for plpgsql function reporting.chart_2().
+    /// Test method for plpgsql function reporting.chart_employee_counts_by_year().
     ///
     /// Top 5 comapnies by number of employees for the last ten years.
     /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
@@ -38,12 +38,12 @@ public class Chart2UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart2_Test2()
+    public void ChartEmployeeCountsByYear_Test2()
     {
         // Arrange
 
         // Act
-        var result = Connection.Chart2();
+        var result = Connection.ChartEmployeeCountsByYear();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

@@ -11,12 +11,12 @@ using System.Runtime.CompilerServices;
 
 namespace PDD.Database.Extensions;
 
-public static class PgRoutineChart4
+public static class PgRoutineChartCompaniesByCountry
 {
-    public const string Name = "reporting.chart_4";
+    public const string Name = "reporting.chart_companies_by_country";
 
     /// <summary>
-    /// Executes sql function reporting.chart_4(integer)
+    /// Executes sql function reporting.chart_companies_by_country(integer)
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 
@@ -24,7 +24,7 @@ public static class PgRoutineChart4
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>string?</returns>
-    public static string? Chart4(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? ChartCompaniesByCountry(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return connection
             .WithUnknownResultType()
@@ -36,7 +36,7 @@ public static class PgRoutineChart4
     }
 
     /// <summary>
-    /// Asynchronously executes sql function reporting.chart_4(integer)
+    /// Asynchronously executes sql function reporting.chart_companies_by_country(integer)
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 
@@ -44,7 +44,7 @@ public static class PgRoutineChart4
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> Chart4Async(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async ValueTask<string?> ChartCompaniesByCountryAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return await connection
             .WithUnknownResultType()
@@ -56,14 +56,14 @@ public static class PgRoutineChart4
     }
 
     /// <summary>
-    /// Executes sql function reporting.chart_4()
+    /// Executes sql function reporting.chart_companies_by_country()
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>string?</returns>
-    public static string? Chart4(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? ChartCompaniesByCountry(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return connection
             .WithUnknownResultType()
@@ -73,14 +73,14 @@ public static class PgRoutineChart4
     }
 
     /// <summary>
-    /// Asynchronously executes sql function reporting.chart_4()
+    /// Asynchronously executes sql function reporting.chart_companies_by_country()
     /// Number of companies by country.
     /// Json object where lables are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 conutries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> Chart4Async(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async ValueTask<string?> ChartCompaniesByCountryAsync(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return await connection
             .WithUnknownResultType()

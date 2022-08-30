@@ -17,4 +17,3 @@
         margin: auto;
     }
 </style>
-    

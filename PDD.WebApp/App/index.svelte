@@ -8,52 +8,30 @@
 <Layout title="PDD Dashboard">
 
     <div class="main container-fluid pt-4">
-        <div class="row">
-            <div class="col-md-4 border-top border-start chart">
-                <ChartBox 
-                    type="bar" 
-                    dataFunc={() => get(urls.chart1Url)}
-                    seriesLabel="Number of employees: " 
-                    title="Top 10 companies by the number of employees" />
-            </div>
-            <div class="col-md-4 border-top border-start chart">
-                <ChartBox 
-                    type="line" 
-                    dataFunc={() => get(urls.chart2Url)}
-                    title="Top 5 companies by the number of employees - employee growth last 10 years" />
-            </div>
-            <div class="col-md-4 border-top border-start border-end chart">
-                <ChartBox 
-                    type="doughnut" 
-                    dataFunc={() => get(urls.chart3Url)}
-                    minHeight="300px"
-                    displayLegend={true}
-                    title="Number of companies by business areas" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4 border-top border-start border-bottom chart">
+        
+        <div class="row chart-row border-bottom">
+            <div class="col-md-4 chart">
                 <ChartBox 
                     type="pie" 
-                    dataFunc={() => get(urls.chart4Url)}
+                    dataFunc={() => get(urls.chartCompaniesByCountryUrl)}
                     minHeight="300px"
                     displayLegend={true}
                     title="Top 10 companies by the country" />
             </div>
-            <div class="col-md-4 border-top border-start border-bottom chart">
+            <div class="col-md-4">
                 <ChartBox 
                     type="bar" 
-                    dataFunc={() => get(urls.chart5Url)}
-                    title="Top 10 companies by the number of employees" />
-            </div>
-            <div class="col-md-4 border-top border-start border-end border-bottom chart">
-                <ChartBox 
-                    type="bar" 
-                    dataFunc={() => get(urls.chart6Url)}
+                    dataFunc={() => get(urls.chartEmployeeCountsByAreaUrl)}
                     title="Number of employees by area - for the top 3 companies by the number of employees" />
             </div>
+            <div class="col-md-4">
+                <ChartBox 
+                    type="line" 
+                    dataFunc={() => get(urls.chartEmployeeCountsByYearUrl)}
+                    title="Top 5 companies by the number of employees - employee growth last 10 years" />
+            </div>
         </div>
+
     </div>
 </Layout>
 
@@ -63,7 +41,9 @@
         padding-left: 50px;
         padding-right: 50px;
     }
-    .chart {
-        padding: 25px;
+    .chart-row {
+        & > div {
+            padding: 25px;
+        }
     }
 </style>

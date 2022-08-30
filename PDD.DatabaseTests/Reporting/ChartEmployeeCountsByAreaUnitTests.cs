@@ -3,12 +3,12 @@
 
 namespace PDD.DatabaseTests.Reporting;
 
-public class Chart6UnitTests : PostgreSqlUnitTestFixture
+public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlUnitTestFixture
 {
-    public Chart6UnitTests(PostgreSqlFixture fixture) : base(fixture) { }
+    public ChartEmployeeCountsByAreaUnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_6(integer).
+    /// Test method for sql function reporting.chart_employee_counts_by_area(integer).
     ///
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
@@ -16,13 +16,13 @@ public class Chart6UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart6_Test1()
+    public void ChartEmployeeCountsByArea_Test1()
     {
         // Arrange
         int? limit = default;
 
         // Act
-        var result = Connection.Chart6(limit);
+        var result = Connection.ChartEmployeeCountsByArea(limit);
 
         // Assert
         // todo: adjust assert logic template to match actual logic
@@ -30,7 +30,7 @@ public class Chart6UnitTests : PostgreSqlUnitTestFixture
     }
 
     ///<summary>
-    /// Test method for sql function reporting.chart_6().
+    /// Test method for sql function reporting.chart_employee_counts_by_area().
     ///
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
@@ -38,12 +38,12 @@ public class Chart6UnitTests : PostgreSqlUnitTestFixture
     /// 
     ///</summary>
     [Fact]
-    public void Chart6_Test2()
+    public void ChartEmployeeCountsByArea_Test2()
     {
         // Arrange
 
         // Act
-        var result = Connection.Chart6();
+        var result = Connection.ChartEmployeeCountsByArea();
 
         // Assert
         // todo: adjust assert logic template to match actual logic

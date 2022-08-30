@@ -1,19 +1,16 @@
 # Dictionary for database `pdd`
 
-- Server: PostgreSQL `localhost:5436`, version `14.0`
-- Local time stamp: `2022-08-07T21:40:49.2503075+02:00`
+- Server: PostgreSQL `localhost:5433`, version `14.5 (Ubuntu 14.5-1.pgdg20.04+1)`
+- Local time stamp: `2022-08-30T12:08:38.9603896+02:00`
 - Schema's: `public`, `reporting`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
 
 ## Table of Contents
 
-- Function [`reporting.chart_1(integer)`](#function-reportingchart_1integer)
-- Function [`reporting.chart_2(integer)`](#function-reportingchart_2integer)
-- Function [`reporting.chart_3()`](#function-reportingchart_3)
-- Function [`reporting.chart_4(integer)`](#function-reportingchart_4integer)
-- Function [`reporting.chart_5(integer)`](#function-reportingchart_5integer)
-- Function [`reporting.chart_6(integer)`](#function-reportingchart_6integer)
+- Function [`reporting.chart_companies_by_country(integer)`](#function-reportingchart_companies_by_countryinteger)
+- Function [`reporting.chart_employee_counts_by_area(integer)`](#function-reportingchart_employee_counts_by_areainteger)
+- Function [`reporting.chart_employee_counts_by_year(integer)`](#function-reportingchart_employee_counts_by_yearinteger)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_role_types`](#table-publicbusiness_role_types)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
@@ -30,82 +27,19 @@
 
 ## Routines
 
-### Function `reporting.chart_1(integer)`
+### Function `reporting.chart_companies_by_country(integer)`
 
 - Returns `json`
 
 - Language is `sql`
 
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_1.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_1.sql)
+- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_companies_by_country.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_companies_by_country.sql)
 
-- Data Access Extension: [/PDD.Database/Extensions/Chart1.cs](/PDD.Database/Extensions/Chart1.cs)
+- Data Access Extension: [/PDD.Database/Extensions/ChartCompaniesByCountry.cs](/PDD.Database/Extensions/ChartCompaniesByCountry.cs)
 
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart1UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart1UnitTests.cs)
+- Unit Test: [/PDD.DatabaseTests/Reporting/ChartCompaniesByCountryUnitTests.cs](/PDD.DatabaseTests/Reporting/ChartCompaniesByCountryUnitTests.cs)
 
-<!-- comment on function "reporting"."chart_1"(integer) is @until-end-tag; -->
-Top 10 comapnies by number of current employees.
-Json object where lables are companies name with average score included and it only have one series with the number of current employees for each company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `reporting.chart_2(integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_2.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_2.sql)
-
-- Data Access Extension: [/PDD.Database/Extensions/Chart2.cs](/PDD.Database/Extensions/Chart2.cs)
-
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart2UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart2UnitTests.cs)
-
-<!-- comment on function "reporting"."chart_2"(integer) is @until-end-tag; -->
-Top 5 comapnies by number of employees for the last ten years.
-Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
-- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `reporting.chart_3()`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_3.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_3.sql)
-
-- Data Access Extension: [/PDD.Database/Extensions/Chart3.cs](/PDD.Database/Extensions/Chart3.cs)
-
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart3UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart3UnitTests.cs)
-
-<!-- comment on function "reporting"."chart_3"() is @until-end-tag; -->
-Number of companies by business area.
-Json object where lables are companies name and it only have one series with the number of business area for each company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `reporting.chart_4(integer)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_4.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_4.sql)
-
-- Data Access Extension: [/PDD.Database/Extensions/Chart4.cs](/PDD.Database/Extensions/Chart4.cs)
-
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart4UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart4UnitTests.cs)
-
-<!-- comment on function "reporting"."chart_4"(integer) is @until-end-tag; -->
+<!-- comment on function "reporting"."chart_companies_by_country"(integer) is @until-end-tag; -->
 Number of companies by country.
 Json object where lables are country names and it only have one series with the number of companies for each country.
 It show only first 9 conutries and 10th is summed together as other. 
@@ -115,43 +49,43 @@ It show only first 9 conutries and 10th is summed together as other.
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `reporting.chart_5(integer)`
+### Function `reporting.chart_employee_counts_by_area(integer)`
 
 - Returns `json`
 
 - Language is `sql`
 
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_5.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_5.sql)
+- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_employee_counts_by_area.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_employee_counts_by_area.sql)
 
-- Data Access Extension: [/PDD.Database/Extensions/Chart5.cs](/PDD.Database/Extensions/Chart5.cs)
+- Data Access Extension: [/PDD.Database/Extensions/ChartEmployeeCountsByArea.cs](/PDD.Database/Extensions/ChartEmployeeCountsByArea.cs)
 
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart5UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart5UnitTests.cs)
+- Unit Test: [/PDD.DatabaseTests/Reporting/ChartEmployeeCountsByAreaUnitTests.cs](/PDD.DatabaseTests/Reporting/ChartEmployeeCountsByAreaUnitTests.cs)
 
-<!-- comment on function "reporting"."chart_5"(integer) is @until-end-tag; -->
-Top 10 comanies with highest number of user reviews.
-Json object where lables are companies names with average score and it only have one series with total number of reviews.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+<!-- comment on function "reporting"."chart_employee_counts_by_area"(integer) is @until-end-tag; -->
+Business areas, the number of employees for top 3 companies by highest number of employees.
+Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `reporting.chart_6(integer)`
+### Function `reporting.chart_employee_counts_by_year(integer)`
 
 - Returns `json`
 
-- Language is `sql`
+- Language is `plpgsql`
 
-- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_6.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_6.sql)
+- Source: [/PDD.Database/Scripts/functions/reporting/reporting.chart_employee_counts_by_year.sql](/PDD.Database/Scripts/functions/reporting/reporting.chart_employee_counts_by_year.sql)
 
-- Data Access Extension: [/PDD.Database/Extensions/Chart6.cs](/PDD.Database/Extensions/Chart6.cs)
+- Data Access Extension: [/PDD.Database/Extensions/ChartEmployeeCountsByYear.cs](/PDD.Database/Extensions/ChartEmployeeCountsByYear.cs)
 
-- Unit Test: [/PDD.DatabaseTests/Reporting/Chart6UnitTests.cs](/PDD.DatabaseTests/Reporting/Chart6UnitTests.cs)
+- Unit Test: [/PDD.DatabaseTests/Reporting/ChartEmployeeCountsByYearUnitTests.cs](/PDD.DatabaseTests/Reporting/ChartEmployeeCountsByYearUnitTests.cs)
 
-<!-- comment on function "reporting"."chart_6"(integer) is @until-end-tag; -->
-Business areas, the number of employees for top 3 companies by highest number of employees.
-Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
+<!-- comment on function "reporting"."chart_employee_counts_by_year"(integer) is @until-end-tag; -->
+Top 5 comapnies by number of employees for the last ten years.
+Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 
 <!-- end -->
 
@@ -163,7 +97,7 @@ Json object where lables are business area names and three series with number of
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **13**
 - Source: [/PDD.Database/Scripts/tables/business_areas.sql](/PDD.Database/Scripts/tables/business_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -176,8 +110,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`581`** | count=**`2.982`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`7.527`** | rows=**`2.982`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
+| count=**`13`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`169`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -187,7 +121,7 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_role_types" is @until-end-tag; -->
 Types or groups of business roles.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **6**
 - Source: [/PDD.Database/Scripts/tables/business_role_types.sql](/PDD.Database/Scripts/tables/business_role_types.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -200,8 +134,8 @@ Types or groups of business roles.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`6`** | count=**`18`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`24`** | rows=**`18`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
+| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -211,7 +145,7 @@ Types or groups of business roles.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **18**
 - Source: [/PDD.Database/Scripts/tables/business_roles.sql](/PDD.Database/Scripts/tables/business_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -225,8 +159,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`138.236`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`36`** | rows=**`138.236`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
+| count=**`36`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`648`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -258,8 +192,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2.992`** | count=**`266.116`** | inserted=**`979`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`2.922.315`** | rows=**`265.139`** | live=**`979`**, dead=**`0`** | last auto=, rows inserted since=**`979`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
+| count=**`134`** | count=**`272`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`131.186`** | rows=**`272`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -285,8 +219,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`583`** | count=**`2.997`** | inserted=**`2.982`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`1.723.596`** | rows=**`15`** | live=**`2.982`**, dead=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:33Z`**, rows updated since=**`0`** |
+| count=**`13`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`38.766`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -314,8 +248,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`564`** | count=**`6.788`** | inserted=**`135.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`75.909.964`** | rows=**`1.618.785`** | live=**`135.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
+| count=**`13`** | count=**`156`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`1.765.348`** | rows=**`37.115`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -340,8 +274,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`569`** | count=**`52.105`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`140.685`** | rows=**`52.105`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-08-01 11:32:38Z`**, rows updated since=**`0`** |
+| count=**`37`** | count=**`74`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`9.213`** | rows=**`74`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -369,8 +303,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`3.164`** | count=**`41.751`** | inserted=**`120.368`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`380.242.512`** | rows=**`10.576.467`** | live=**`120.368`**, dead=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:34Z`**, rows updated since=**`0`** |
+| count=**`155`** | count=**`2.069`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`18.657.040`** | rows=**`516.285`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -380,7 +314,7 @@ History of employment in companies by people.
 <!-- comment on table "public"."employee_status" is @until-end-tag; -->
 List of possible statuses in regards to employment.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **6**
 - Source: [/PDD.Database/Scripts/tables/employee_status.sql](/PDD.Database/Scripts/tables/employee_status.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -393,8 +327,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`50.006`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`50.006`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
+| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -428,8 +362,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`8`** | count=**`433.960`** | inserted=**`50.000`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`384.488`** | live=**`50.000`**, dead=**`0`** | last auto=**`2022-08-01 11:32:39Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:41Z`**, rows updated since=**`0`** |
+| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -455,8 +389,8 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`6`** | count=**`321.182`** | inserted=**`127.796`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`496.782`** | live=**`127.796`**, dead=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows inserted since=**`0`** | last auto=**`2022-08-01 11:32:42Z`**, rows updated since=**`0`** |
+| count=**`0`** | count=**`12.024`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`30.888`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -466,7 +400,7 @@ Person - business roles
 <!-- comment on table "public"."users" is @until-end-tag; -->
 System users. May or may not be a person (in people records).
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **1**
 - Source: [/PDD.Database/Scripts/tables/users.sql](/PDD.Database/Scripts/tables/users.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -486,8 +420,8 @@ System users. May or may not be a person (in people records).
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`488.900`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`2`** | rows=**`488.900`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
+| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
