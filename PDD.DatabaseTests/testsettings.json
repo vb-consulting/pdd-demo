@@ -1,6 +1,5 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=pdd;Port=5436;Username=postgres"
   },
   "TestSettings": {
 
@@ -10,14 +9,14 @@
     // The real test database is re-created based on this connection string.
     // Connection string can be defined in this config file or in the config file defined by the ConfigPath value. 
     //
-    "TestConnection": "DefaultConnection",
+    "TestConnection": "DatabaseConnection",
 
     //
     // Path to the external JSON configuration file.
     // External configuration is only used to parse the ConnectionStrings section.
     // Use this setting to set TestConnection in a different configuration file, so that the connection string doesn't have to be duplicated.
     //
-    "ConfigPath": null,
+    "ConfigPath": "../../../../PDD.WebApp/appsettings.Development.json",
 
     //
     // Name of the database recreated on each testing session.
@@ -42,7 +41,7 @@
     //
     // List of the SQL scripts to be executed in order before the test database is dropped and after the last is finished.
     //
-    "DownScripts": [ ],
+    "DownScripts": [],
 
     //
     // Set this to true to run each test in an isolated transaction.

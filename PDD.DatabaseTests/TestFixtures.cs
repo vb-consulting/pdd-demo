@@ -1,4 +1,4 @@
-#pragma warning disable CS8632
+#pragma warning disable CA1816
 // pgroutiner auto-generated code
 global using System;
 global using System.Linq;
@@ -145,12 +145,15 @@ public sealed class PostgreSqlFixture : IDisposable
 [CollectionDefinition("PostgreSqlDatabase")]
 public class DatabaseFixtureCollection : ICollectionFixture<PostgreSqlFixture> { }
 
+/// <summary>
+/// PostgreSQL Unit Test Fixture using configuration settings from testsettings.json
+/// </summary>
 [Collection("PostgreSqlDatabase")]
-public abstract class PostgreSqlUnitTestFixture : IDisposable
+public abstract class PostgreSqlConfigurationFixture : IDisposable
 {
     protected NpgsqlConnection Connection { get; }
 
-    protected PostgreSqlUnitTestFixture(PostgreSqlFixture fixture)
+    protected PostgreSqlConfigurationFixture(PostgreSqlFixture fixture)
     {
         if (Config.Value.UnitTestsNewDatabaseFromTemplate)
         {
@@ -173,7 +176,6 @@ public abstract class PostgreSqlUnitTestFixture : IDisposable
         }
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
     public void Dispose()
     {
         if (Config.Value.UnitTestsUnderTransaction)
@@ -187,5 +189,71 @@ public abstract class PostgreSqlUnitTestFixture : IDisposable
             using var connection = new NpgsqlConnection(Config.ConnectionString);
             PostgreSqlFixture.DropDatabase(connection, Connection.Database);
         }
+    }
+}
+
+/// <summary>
+/// PostgreSQL Unit Test Fixture that uses a pre-created test database.
+/// </summary>
+[Collection("PostgreSqlDatabase")]
+public abstract class PostgreSqlTestDatabaseFixture : IDisposable
+{
+    protected NpgsqlConnection Connection { get; }
+
+    protected PostgreSqlTestDatabaseFixture(PostgreSqlFixture fixture)
+    {
+        Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+        Connection.Open();
+    }
+
+    public virtual void Dispose()
+    {
+        Connection.Close();
+        Connection.Dispose();
+    }
+}
+
+/// <summary>
+/// PostgreSQL Unit Test Fixture uses a pre-created test database that runs each test under a new transaction that is rolled-back automatically.
+/// </summary>
+[Collection("PostgreSqlDatabase")]
+public abstract class PostgreSqlTestDatabaseTransactionFixture : PostgreSqlTestDatabaseFixture, IDisposable
+{
+    protected PostgreSqlTestDatabaseTransactionFixture(PostgreSqlFixture fixture) : base(fixture)
+    {
+        Connection.Execute("begin");
+    }
+
+    public override void Dispose()
+    {
+        Connection.Execute("rollback");
+        base.Dispose();
+    }
+}
+
+/// <summary>
+/// PostgreSQL Unit Test Fixture using a a database that is created from the test database as a template for the each new tests and cleaned-up (dropped) after the test.
+/// </summary>
+[Collection("PostgreSqlDatabase")]
+public abstract class PostgreSqlTestTemplateDatabaseFixture : IDisposable
+{
+    protected NpgsqlConnection Connection { get; }
+
+    protected PostgreSqlTestTemplateDatabaseFixture(PostgreSqlFixture fixture)
+    {
+        var dbName = string.Concat(Config.Value.TestDatabaseName, "_", Guid.NewGuid().ToString().Replace("-", "_"));
+        using var connection = new NpgsqlConnection(Config.ConnectionString);
+        PostgreSqlFixture.CreateDatabase(connection, dbName, connection.Database);
+        Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+        Connection.Open();
+        Connection.ChangeDatabase(dbName);
+    }
+
+    public virtual void Dispose()
+    {
+        Connection.Close();
+        Connection.Dispose();
+        using var connection = new NpgsqlConnection(Config.ConnectionString);
+        PostgreSqlFixture.DropDatabase(connection, Connection.Database);
     }
 }

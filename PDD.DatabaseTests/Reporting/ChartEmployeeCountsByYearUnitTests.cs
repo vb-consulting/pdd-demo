@@ -3,7 +3,7 @@
 
 namespace PDD.DatabaseTests.Reporting;
 
-public class ChartEmployeeCountsByYearUnitTests : PostgreSqlUnitTestFixture
+public class ChartEmployeeCountsByYearUnitTests : PostgreSqlConfigurationFixture
 {
     public ChartEmployeeCountsByYearUnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 

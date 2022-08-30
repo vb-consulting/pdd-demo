@@ -129,7 +129,7 @@ select
     json_build_object(
         'labels', json_agg(sub.name),
         'series', array[
-            json_build_object('data', json_agg(sub.count))
+            json_build_object('data', json_agg(coalesce(sub.count, 0)))
         ]
     )
 from (
