@@ -1,69 +1,46 @@
 DO $pdd_data$
 BEGIN
---
--- PostgreSQL database dump
---
--- Dumped from database version 14.5 (Ubuntu 14.5-1.pgdg20.04+1)
--- Dumped by pg_dump version 14.5
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-PERFORM pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
---
 -- Data for Name: business_areas; Type: TABLE DATA; Schema: public; Owner: postgres
---
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (1, 'General', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (2, 'Enterprise', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (3, 'Fintech', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (4, 'Mobility', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (5, 'Insurtech', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (6, 'Big Data', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (7, 'Healthcare', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (8, 'Manufacturing', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (9, 'Hardware', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (10, 'Proptech', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (11, 'AI', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (12, 'Edtech', DEFAULT);
-INSERT INTO public.business_areas OVERRIDING SYSTEM VALUE VALUES (13, 'Consumer', DEFAULT);
---
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000001', 'General', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000002', 'Enterprise', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000003', 'Fintech', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000004', 'Mobility', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000005', 'Insurtech', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000006', 'Big Data', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000007', 'Healthcare', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000008', 'Manufacturing', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000009', 'Hardware', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000010', 'Proptech', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000011', 'AI', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000012', 'Edtech', DEFAULT);
+INSERT INTO public.business_areas VALUES ('00000000-0000-0000-0000-000000000013', 'Consumer', DEFAULT);
 -- Data for Name: business_role_types; Type: TABLE DATA; Schema: public; Owner: postgres
---
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (1, 'Managerial', DEFAULT);
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (2, 'Design', DEFAULT);
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (3, 'Development', DEFAULT);
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (4, 'Devops', DEFAULT);
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (5, 'QA', DEFAULT);
-INSERT INTO public.business_role_types OVERRIDING SYSTEM VALUE VALUES (6, 'Database', DEFAULT);
---
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000001', 'Managerial', DEFAULT);
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000002', 'Design', DEFAULT);
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000003', 'Development', DEFAULT);
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000004', 'Devops', DEFAULT);
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000005', 'QA', DEFAULT);
+INSERT INTO public.business_role_types VALUES ('00000000-0000-0000-0000-000000000006', 'Database', DEFAULT);
 -- Data for Name: business_roles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (1, 'Product Owner', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (2, 'Project Manager', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (3, 'UX Designer', DEFAULT, 2);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (4, 'UI Designer', DEFAULT, 2);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (5, 'Business Analyst', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (6, 'Software Developer', DEFAULT, 3);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (7, 'Software Architect', DEFAULT, 3);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (8, 'Devops', DEFAULT, 4);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (9, 'Devops Engineer', DEFAULT, 4);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (10, 'Devops Lead', DEFAULT, 4);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (11, 'Tester', DEFAULT, 5);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (12, 'QA Lead', DEFAULT, 5);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (13, 'QA Engineer', DEFAULT, 5);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (14, 'Tech lead', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (15, 'Scrum master', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (16, 'Software Development Manager', DEFAULT, 1);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (17, 'Database Administrator', DEFAULT, 6);
-INSERT INTO public.business_roles OVERRIDING SYSTEM VALUE VALUES (18, 'Database Developer', DEFAULT, 6);
---
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000001', 'Product Owner', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000002', 'Project Manager', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000003', 'UX Designer', DEFAULT, '00000000-0000-0000-0000-000000000002');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000004', 'UI Designer', DEFAULT, '00000000-0000-0000-0000-000000000002');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000005', 'Business Analyst', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000006', 'Software Developer', DEFAULT, '00000000-0000-0000-0000-000000000003');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000007', 'Software Architect', DEFAULT, '00000000-0000-0000-0000-000000000003');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000008', 'Devops', DEFAULT, '00000000-0000-0000-0000-000000000004');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000009', 'Devops Engineer', DEFAULT, '00000000-0000-0000-0000-000000000004');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000010', 'Devops Lead', DEFAULT, '00000000-0000-0000-0000-000000000004');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000012', 'Tester', DEFAULT, '00000000-0000-0000-0000-000000000005');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000013', 'QA Lead', DEFAULT, '00000000-0000-0000-0000-000000000005');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000014', 'QA Engineer', DEFAULT, '00000000-0000-0000-0000-000000000005');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000015', 'Tech lead', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000016', 'Scrum master', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000017', 'Software Development Manager', DEFAULT, '00000000-0000-0000-0000-000000000001');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000018', 'Database Administrator', DEFAULT, '00000000-0000-0000-0000-000000000006');
+INSERT INTO public.business_roles VALUES ('00000000-0000-0000-0000-000000000019', 'Database Developer', DEFAULT, '00000000-0000-0000-0000-000000000006');
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: postgres
---
 INSERT INTO public.countries VALUES (474, 'MQ', 'MTQ', 'Martinique', DEFAULT, NULL);
 INSERT INTO public.countries VALUES (478, 'MR', 'MRT', 'Mauritania', DEFAULT, NULL);
 INSERT INTO public.countries VALUES (480, 'MU', 'MUS', 'Mauritius', DEFAULT, NULL);
@@ -313,41 +290,14 @@ INSERT INTO public.countries VALUES (652, 'BL', 'BLM', 'Saint Barthelemy', DEFAU
 INSERT INTO public.countries VALUES (663, 'MF', 'MAF', 'Saint Martin', DEFAULT, NULL);
 INSERT INTO public.countries VALUES (534, 'SX', 'SXM', 'Sint Maarten', DEFAULT, NULL);
 INSERT INTO public.countries VALUES (728, 'SS', 'SSD', 'South Sudan', DEFAULT, NULL);
---
 -- Data for Name: employee_status; Type: TABLE DATA; Schema: public; Owner: postgres
---
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (1, 'Employed', DEFAULT);
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (2, 'Unemployed', DEFAULT);
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (3, 'Open to opportunity', DEFAULT);
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (4, 'Activly applying', DEFAULT);
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (5, 'Retired', DEFAULT);
-INSERT INTO public.employee_status OVERRIDING SYSTEM VALUE VALUES (6, 'Unemployable', DEFAULT);
---
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000001', 'Employed', DEFAULT);
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000002', 'Unemployed', DEFAULT);
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000003', 'Open to opportunity', DEFAULT);
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000004', 'Activly applying', DEFAULT);
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000005', 'Retired', DEFAULT);
+INSERT INTO public.employee_status VALUES ('00000000-0000-0000-0000-000000000006', 'Unemployable', DEFAULT);
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-INSERT INTO public.users OVERRIDING SYSTEM VALUE VALUES (1, 'system', 'system', '{}', '{}', 'UTC', 'en-US', NULL, '2022-05-01 14:55:35.90698+02', '2022-07-09 10:54:32.545377+02');
---
--- Name: business_areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-PERFORM pg_catalog.setval('public.business_areas_id_seq', 1, false);
---
--- Name: business_role_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-PERFORM pg_catalog.setval('public.business_role_types_id_seq', 5, true);
---
--- Name: business_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-PERFORM pg_catalog.setval('public.business_roles_id_seq', 18, true);
---
--- Name: employee_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-PERFORM pg_catalog.setval('public.employee_status_id_seq', 1, false);
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-PERFORM pg_catalog.setval('public.users_id_seq', 1, false);
---
--- PostgreSQL database dump complete
---
+INSERT INTO public.users VALUES ('00000000-0000-0000-0000-000000000000', 'system', 'system', '{}', '{}', 'UTC', 'en-US', NULL, '2022-05-01 14:55:35.90698+02', '2022-07-09 10:54:32.545377+02');
 END $pdd_data$
 LANGUAGE plpgsql;

@@ -1,12 +1,11 @@
 CREATE TABLE public.employee_records (
-    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
-    company_id bigint NOT NULL,
-    person_id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+    company_id uuid NOT NULL,
+    person_id uuid NOT NULL,
     employment_started_at date NOT NULL,
     employment_ended_at date,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL,
-    PRIMARY KEY (id, company_id),
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES public.companies(id) DEFERRABLE,
     CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE,
     CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE

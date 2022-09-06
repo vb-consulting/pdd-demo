@@ -1,8 +1,8 @@
 CREATE TABLE public.business_roles (
-    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
-    type smallint NOT NULL,
+    type uuid NOT NULL,
     CONSTRAINT fk_type FOREIGN KEY (type) REFERENCES public.business_role_types(id) DEFERRABLE
 );
 

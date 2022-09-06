@@ -1,12 +1,12 @@
 CREATE TABLE public.users (
-    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     email character varying NOT NULL,
     name character varying,
     data json DEFAULT '{}'::json NOT NULL,
     providers character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     timezone character varying NOT NULL,
     culture character varying NOT NULL,
-    person_id bigint,
+    person_id uuid,
     lockout_end timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES public.people(id) DEFERRABLE

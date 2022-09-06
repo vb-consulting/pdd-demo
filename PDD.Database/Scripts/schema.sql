@@ -55,15 +55,14 @@ DROP INDEX IF EXISTS public.idx_business_roles_name_normalized;
 DROP INDEX IF EXISTS public.idx_business_role_types_name_normalized;
 DROP INDEX IF EXISTS public.idx_business_areas_name_normalized;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_pkey;
-ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS pk_company_areas;
 ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS person_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS people_pkey;
 ALTER TABLE IF EXISTS ONLY public.employee_status DROP CONSTRAINT IF EXISTS employee_status_pkey;
 ALTER TABLE IF EXISTS ONLY public.employee_records DROP CONSTRAINT IF EXISTS employee_records_pkey;
 ALTER TABLE IF EXISTS ONLY public.countries DROP CONSTRAINT IF EXISTS countries_pkey;
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS company_reviews_pkey;
+ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS company_areas_pkey;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_pkey;
-ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_name_normalized_key;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS business_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_role_types DROP CONSTRAINT IF EXISTS business_role_types_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_areas DROP CONSTRAINT IF EXISTS business_areas_pkey;
@@ -290,7 +289,7 @@ SET default_table_access_method = heap;
 -- Name: business_areas; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_areas (
-    id smallint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -303,21 +302,10 @@ COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be 
 --
 COMMENT ON COLUMN public.business_areas.name_normalized IS 'lowercased';
 --
--- Name: business_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.business_areas ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.business_areas_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: business_role_types; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_role_types (
-    id smallint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -330,24 +318,13 @@ COMMENT ON TABLE public.business_role_types IS 'Types or groups of business role
 --
 COMMENT ON COLUMN public.business_role_types.name_normalized IS 'lowercased';
 --
--- Name: business_role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.business_role_types ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.business_role_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: business_roles; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_roles (
-    id smallint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
-    type smallint NOT NULL
+    type uuid NOT NULL
 );
 --
 -- Name: TABLE business_roles; Type: COMMENT; Schema: public; Owner: -
@@ -358,21 +335,10 @@ COMMENT ON TABLE public.business_roles IS 'Roles in a team that employees are sp
 --
 COMMENT ON COLUMN public.business_roles.name_normalized IS 'lowercased';
 --
--- Name: business_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.business_roles ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.business_roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.companies (
-    id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     web character varying,
@@ -383,8 +349,8 @@ CREATE TABLE public.companies (
     country smallint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL,
-    modified_by bigint DEFAULT 1 NOT NULL
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    modified_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
 --
 -- Name: COLUMN companies.name_normalized; Type: COMMENT; Schema: public; Owner: -
@@ -399,24 +365,13 @@ COMMENT ON COLUMN public.companies.company_line IS 'company moto';
 --
 COMMENT ON COLUMN public.companies.country IS 'headquaters country';
 --
--- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.companies ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.companies_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: company_areas; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.company_areas (
-    company_id bigint NOT NULL,
-    area_id smallint NOT NULL,
+    company_id uuid NOT NULL,
+    area_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
 --
 -- Name: TABLE company_areas; Type: COMMENT; Schema: public; Owner: -
@@ -426,14 +381,14 @@ COMMENT ON TABLE public.company_areas IS 'Companies - business areas.';
 -- Name: company_reviews; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.company_reviews (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    person_id bigint,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    company_id uuid NOT NULL,
+    person_id uuid,
     review character varying NOT NULL,
     score smallint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     CONSTRAINT company_reviews_rate_check CHECK (((score IS NULL) OR ((score > 0) AND (score <= 5))))
 );
 --
@@ -456,17 +411,6 @@ COMMENT ON COLUMN public.company_reviews.review IS 'written review by a person';
 -- Name: COLUMN company_reviews.score; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON COLUMN public.company_reviews.score IS 'score 1-5';
---
--- Name: company_reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.company_reviews ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.company_reviews_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
@@ -502,13 +446,13 @@ COMMENT ON COLUMN public.countries.culture IS 'The CultureInfo class specifies a
 -- Name: employee_records; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.employee_records (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    person_id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    company_id uuid NOT NULL,
+    person_id uuid NOT NULL,
     employment_started_at date NOT NULL,
     employment_ended_at date,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
 --
 -- Name: TABLE employee_records; Type: COMMENT; Schema: public; Owner: -
@@ -519,21 +463,10 @@ COMMENT ON TABLE public.employee_records IS 'History of employment in companies 
 --
 COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is null, it means person is still working there';
 --
--- Name: employee_records_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.employee_records ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.employee_records_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: employee_status; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.employee_status (
-    id smallint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -546,25 +479,14 @@ COMMENT ON TABLE public.employee_status IS 'List of possible statuses in regards
 --
 COMMENT ON COLUMN public.employee_status.name_normalized IS 'lowercased';
 --
--- Name: employee_status_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.employee_status ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.employee_status_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: people; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.people (
-    id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (((lower((first_name)::text) || ' '::text) || lower((last_name)::text))) STORED NOT NULL,
-    employee_status smallint NOT NULL,
+    employee_status uuid NOT NULL,
     gender public.valid_genders,
     email character varying,
     linkedin character varying,
@@ -573,8 +495,8 @@ CREATE TABLE public.people (
     country smallint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL,
-    modified_by bigint DEFAULT 1 NOT NULL
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    modified_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
 --
 -- Name: COLUMN people.name_normalized; Type: COMMENT; Schema: public; Owner: -
@@ -585,24 +507,13 @@ COMMENT ON COLUMN public.people.name_normalized IS 'first namer + last name, tri
 --
 COMMENT ON COLUMN public.people.gender IS 'M or F';
 --
--- Name: people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.people ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.people_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: person_roles; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.person_roles (
-    person_id bigint NOT NULL,
-    role_id smallint NOT NULL,
+    person_id uuid NOT NULL,
+    role_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
 --
 -- Name: TABLE person_roles; Type: COMMENT; Schema: public; Owner: -
@@ -612,14 +523,14 @@ COMMENT ON TABLE public.person_roles IS 'Person - business roles';
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.users (
-    id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     email character varying NOT NULL,
     name character varying,
     data json DEFAULT '{}'::json NOT NULL,
     providers character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     timezone character varying NOT NULL,
     culture character varying NOT NULL,
-    person_id bigint,
+    person_id uuid,
     lockout_end timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -648,17 +559,6 @@ COMMENT ON COLUMN public.users.timezone IS 'timezone from browser';
 --
 COMMENT ON COLUMN public.users.culture IS 'matching culture by browser timezone';
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-ALTER TABLE public.users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
---
 -- Name: business_areas business_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.business_areas
@@ -674,15 +574,15 @@ ALTER TABLE ONLY public.business_role_types
 ALTER TABLE ONLY public.business_roles
     ADD CONSTRAINT business_roles_pkey PRIMARY KEY (id);
 --
--- Name: companies companies_name_normalized_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.companies
-    ADD CONSTRAINT companies_name_normalized_key UNIQUE (name_normalized);
---
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.companies
     ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
+--
+-- Name: company_areas company_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.company_areas
+    ADD CONSTRAINT company_areas_pkey PRIMARY KEY (company_id, area_id);
 --
 -- Name: company_reviews company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -697,7 +597,7 @@ ALTER TABLE ONLY public.countries
 -- Name: employee_records employee_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.employee_records
-    ADD CONSTRAINT employee_records_pkey PRIMARY KEY (id, company_id);
+    ADD CONSTRAINT employee_records_pkey PRIMARY KEY (id);
 --
 -- Name: employee_status employee_status_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -713,11 +613,6 @@ ALTER TABLE ONLY public.people
 --
 ALTER TABLE ONLY public.person_roles
     ADD CONSTRAINT person_roles_pkey PRIMARY KEY (person_id, role_id);
---
--- Name: company_areas pk_company_areas; Type: CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.company_areas
-    ADD CONSTRAINT pk_company_areas PRIMARY KEY (company_id, area_id);
 --
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --

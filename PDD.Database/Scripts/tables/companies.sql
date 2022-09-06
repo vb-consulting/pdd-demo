@@ -1,7 +1,7 @@
 CREATE TABLE public.companies (
-    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL UNIQUE,
+    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     web character varying,
     linkedin character varying,
     tweeter character varying,
@@ -10,8 +10,8 @@ CREATE TABLE public.companies (
     country smallint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
-    created_by bigint DEFAULT 1 NOT NULL,
-    modified_by bigint DEFAULT 1 NOT NULL,
+    created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
+    modified_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     CONSTRAINT fk_country FOREIGN KEY (country) REFERENCES public.countries(code) DEFERRABLE,
     CONSTRAINT fk_created_by FOREIGN KEY (created_by) REFERENCES public.users(id) DEFERRABLE,
     CONSTRAINT fk_modified_by FOREIGN KEY (modified_by) REFERENCES public.users(id) DEFERRABLE
