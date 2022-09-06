@@ -18,8 +18,8 @@ public static class PgRoutineChartCompaniesByCountry
     /// <summary>
     /// Executes sql function reporting.chart_companies_by_country(integer)
     /// Number of companies by country.
-    /// Json object where lables are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 conutries and 10th is summed together as other. 
+    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
+    /// It show only first 9 countries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -38,8 +38,8 @@ public static class PgRoutineChartCompaniesByCountry
     /// <summary>
     /// Asynchronously executes sql function reporting.chart_companies_by_country(integer)
     /// Number of companies by country.
-    /// Json object where lables are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 conutries and 10th is summed together as other. 
+    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
+    /// It show only first 9 countries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -58,8 +58,8 @@ public static class PgRoutineChartCompaniesByCountry
     /// <summary>
     /// Executes sql function reporting.chart_companies_by_country()
     /// Number of companies by country.
-    /// Json object where lables are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 conutries and 10th is summed together as other. 
+    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
+    /// It show only first 9 countries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>string?</returns>
@@ -75,8 +75,8 @@ public static class PgRoutineChartCompaniesByCountry
     /// <summary>
     /// Asynchronously executes sql function reporting.chart_companies_by_country()
     /// Number of companies by country.
-    /// Json object where lables are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 conutries and 10th is summed together as other. 
+    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
+    /// It show only first 9 countries and 10th is summed together as other. 
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>

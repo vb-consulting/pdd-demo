@@ -1,4 +1,3 @@
-#pragma warning disable CA1816
 // pgroutiner auto-generated code
 global using System;
 global using System.Linq;
@@ -176,6 +175,7 @@ public abstract class PostgreSqlConfigurationFixture : IDisposable
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
     public void Dispose()
     {
         if (Config.Value.UnitTestsUnderTransaction)
@@ -206,6 +206,7 @@ public abstract class PostgreSqlTestDatabaseFixture : IDisposable
         Connection.Open();
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
     public virtual void Dispose()
     {
         Connection.Close();
@@ -224,6 +225,7 @@ public abstract class PostgreSqlTestDatabaseTransactionFixture : PostgreSqlTestD
         Connection.Execute("begin");
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
     public override void Dispose()
     {
         Connection.Execute("rollback");
@@ -249,6 +251,7 @@ public abstract class PostgreSqlTestTemplateDatabaseFixture : IDisposable
         Connection.ChangeDatabase(dbName);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
     public virtual void Dispose()
     {
         Connection.Close();

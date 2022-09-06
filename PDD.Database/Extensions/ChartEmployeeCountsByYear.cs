@@ -17,8 +17,8 @@ public static class PgRoutineChartEmployeeCountsByYear
 
     /// <summary>
     /// Executes plpgsql function reporting.chart_employee_counts_by_year(integer)
-    /// Top 5 comapnies by number of employees for the last ten years.
-    /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+    /// Top 5 companies by number of employees for the last ten years.
+    /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -36,8 +36,8 @@ public static class PgRoutineChartEmployeeCountsByYear
 
     /// <summary>
     /// Asynchronously executes plpgsql function reporting.chart_employee_counts_by_year(integer)
-    /// Top 5 comapnies by number of employees for the last ten years.
-    /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+    /// Top 5 companies by number of employees for the last ten years.
+    /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -55,8 +55,8 @@ public static class PgRoutineChartEmployeeCountsByYear
 
     /// <summary>
     /// Executes plpgsql function reporting.chart_employee_counts_by_year()
-    /// Top 5 comapnies by number of employees for the last ten years.
-    /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+    /// Top 5 companies by number of employees for the last ten years.
+    /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <returns>string?</returns>
@@ -71,8 +71,8 @@ public static class PgRoutineChartEmployeeCountsByYear
 
     /// <summary>
     /// Asynchronously executes plpgsql function reporting.chart_employee_counts_by_year()
-    /// Top 5 comapnies by number of employees for the last ten years.
-    /// Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+    /// Top 5 companies by number of employees for the last ten years.
+    /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>

@@ -1,23 +1,23 @@
 // pgroutiner auto-generated code
 
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace PDD.DatabaseTests.Reporting;
 
-public class ChartCompaniesByCountryUnitTests : PostgreSqlTestDatabaseFixture
+///<summary>
+/// Test method for sql function reporting.chart_companies_by_country
+///
+/// Number of companies by country.
+/// JSON object where labels are country names and it only have one series with the number of companies for each country.
+/// It show only first 9 countries and 10th is summed together as other. 
+/// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+/// 
+///</summary>
+public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
 {
     public ChartCompaniesByCountryUnitTests(PostgreSqlFixture fixture) : base(fixture) { }
 
-    ///<summary>
-    /// Test method for sql function reporting.chart_companies_by_country(integer).
-    ///
-    /// Number of companies by country.
-    /// Json object where lables are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 conutries and 10th is summed together as other. 
-    /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-    /// 
-    ///</summary>
     [Fact]
     public void ChartCompaniesByCountry_Empty_Companies_Table_Test1()
     {

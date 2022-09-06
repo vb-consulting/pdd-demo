@@ -18,7 +18,7 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// <summary>
     /// Executes sql function reporting.chart_employee_counts_by_area(integer)
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
-    /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+    /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -37,7 +37,7 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// <summary>
     /// Asynchronously executes sql function reporting.chart_employee_counts_by_area(integer)
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
-    /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+    /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
@@ -56,7 +56,7 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// <summary>
     /// Executes sql function reporting.chart_employee_counts_by_area()
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
-    /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+    /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <returns>string?</returns>
@@ -72,7 +72,7 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// <summary>
     /// Asynchronously executes sql function reporting.chart_employee_counts_by_area()
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
-    /// Json object where lables are business area names and three series with number of current employees for each area, each searies for one company.
+    /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
     /// </summary>
     /// <returns>ValueTask whose Result property is string?</returns>

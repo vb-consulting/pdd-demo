@@ -54,7 +54,7 @@ begin
 end
 $$;
 
-COMMENT ON FUNCTION reporting.chart_employee_counts_by_year(_limit integer) IS 'Top 5 comapnies by number of employees for the last ten years.
-Json object with only one series where labeles are last ten years names and values have data for number of employees for each year and label as company name.
+COMMENT ON FUNCTION reporting.chart_employee_counts_by_year(_limit integer) IS 'Top 5 companies by number of employees for the last ten years.
+JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';
