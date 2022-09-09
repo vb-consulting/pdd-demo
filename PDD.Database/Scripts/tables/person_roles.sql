@@ -1,6 +1,6 @@
 CREATE TABLE public.person_roles (
     person_id uuid NOT NULL,
-    role_id uuid NOT NULL,
+    role_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     PRIMARY KEY (person_id, role_id),

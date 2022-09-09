@@ -3,7 +3,7 @@ CREATE TABLE public.people (
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (((lower((first_name)::text) || ' '::text) || lower((last_name)::text))) STORED NOT NULL,
-    employee_status uuid NOT NULL,
+    employee_status smallint,
     gender public.valid_genders,
     email character varying,
     linkedin character varying,

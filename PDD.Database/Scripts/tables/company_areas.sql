@@ -1,6 +1,6 @@
 CREATE TABLE public.company_areas (
     company_id uuid NOT NULL,
-    area_id uuid NOT NULL,
+    area_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     PRIMARY KEY (company_id, area_id),

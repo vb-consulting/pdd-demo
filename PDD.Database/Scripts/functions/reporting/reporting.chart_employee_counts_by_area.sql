@@ -45,12 +45,18 @@ agg2_cte as (
 )
 select 
     json_build_object(
-        'labels', (select array_agg(distinct role order by role) from agg1_cte),
-        'series', array_agg(
-            json_build_object(
-                'data', data,
-                'label', name
-            ) order by row_number
+        'labels', coalesce(
+            (select array_agg(distinct role order by role) from agg1_cte), 
+            array[]::text[]
+        ),
+        'series', coalesce(
+            array_agg(
+                json_build_object(
+                    'data', data,
+                    'label', name
+                ) order by row_number
+            ),
+            array[]::json[]
         )
     )
 from 

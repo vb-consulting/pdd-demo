@@ -7,6 +7,8 @@ global using Xunit;
 global using Norm;
 global using FluentAssertions;
 global using PDD.Database.Extensions;
+global using Newtonsoft.Json.Linq;
+global using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -60,11 +62,11 @@ Set one of UnitTestsNewDatabaseFromTemplate or clear UpScripts and DownScripts."
     }
 }
 
-public sealed class PostgreSqlFixture : IDisposable
+public sealed class PostgreSqlUnitTests : IDisposable
 {
     public NpgsqlConnection Connection { get; }
 
-    public PostgreSqlFixture()
+    public PostgreSqlUnitTests()
     {
         Connection = new NpgsqlConnection(Config.ConnectionString);
         CreateTestDatabase(Connection);
@@ -142,30 +144,33 @@ public sealed class PostgreSqlFixture : IDisposable
 }
 
 [CollectionDefinition("PostgreSqlDatabase")]
-public class DatabaseFixtureCollection : ICollectionFixture<PostgreSqlFixture> { }
+public class DatabaseFixtureCollection : ICollectionFixture<PostgreSqlUnitTests> { }
+
+public abstract class PostgreSqlBaseFixture
+{
+    public NpgsqlConnection Connection { get; protected set; }
+}
 
 /// <summary>
 /// PostgreSQL Unit Test Fixture using configuration settings from testsettings.json
 /// </summary>
 [Collection("PostgreSqlDatabase")]
-public abstract class PostgreSqlConfigurationFixture : IDisposable
+public abstract class PostgreSqlConfigurationFixture : PostgreSqlBaseFixture, IDisposable
 {
-    protected NpgsqlConnection Connection { get; }
-
-    protected PostgreSqlConfigurationFixture(PostgreSqlFixture fixture)
+    protected PostgreSqlConfigurationFixture(PostgreSqlUnitTests tests)
     {
         if (Config.Value.UnitTestsNewDatabaseFromTemplate)
         {
             var dbName = string.Concat(Config.Value.TestDatabaseName, "_", Guid.NewGuid().ToString().Replace("-", "_"));
             using var connection = new NpgsqlConnection(Config.ConnectionString);
-            PostgreSqlFixture.CreateDatabase(connection, dbName, connection.Database);
-            Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+            PostgreSqlUnitTests.CreateDatabase(connection, dbName, connection.Database);
+            Connection = tests.Connection.CloneWith(tests.Connection.ConnectionString);
             Connection.Open();
             Connection.ChangeDatabase(dbName);
         }
         else
         {
-            Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+            Connection = tests.Connection.CloneWith(tests.Connection.ConnectionString);
             Connection.Open();
         }
 
@@ -187,7 +192,7 @@ public abstract class PostgreSqlConfigurationFixture : IDisposable
         if (Config.Value.UnitTestsNewDatabaseFromTemplate)
         {
             using var connection = new NpgsqlConnection(Config.ConnectionString);
-            PostgreSqlFixture.DropDatabase(connection, Connection.Database);
+            PostgreSqlUnitTests.DropDatabase(connection, Connection.Database);
         }
     }
 }
@@ -196,13 +201,11 @@ public abstract class PostgreSqlConfigurationFixture : IDisposable
 /// PostgreSQL Unit Test Fixture that uses a pre-created test database.
 /// </summary>
 [Collection("PostgreSqlDatabase")]
-public abstract class PostgreSqlTestDatabaseFixture : IDisposable
+public abstract class PostgreSqlTestDatabaseFixture : PostgreSqlBaseFixture, IDisposable
 {
-    protected NpgsqlConnection Connection { get; }
-
-    protected PostgreSqlTestDatabaseFixture(PostgreSqlFixture fixture)
+    protected PostgreSqlTestDatabaseFixture(PostgreSqlUnitTests tests)
     {
-        Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+        Connection = tests.Connection.CloneWith(tests.Connection.ConnectionString);
         Connection.Open();
     }
 
@@ -220,9 +223,10 @@ public abstract class PostgreSqlTestDatabaseFixture : IDisposable
 [Collection("PostgreSqlDatabase")]
 public abstract class PostgreSqlTestDatabaseTransactionFixture : PostgreSqlTestDatabaseFixture, IDisposable
 {
-    protected PostgreSqlTestDatabaseTransactionFixture(PostgreSqlFixture fixture) : base(fixture)
+    protected PostgreSqlTestDatabaseTransactionFixture(PostgreSqlUnitTests tests) : base(tests)
     {
-        Connection.Execute("begin");
+        Connection
+            .Execute("begin; set constraints all deferred");
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]
@@ -237,16 +241,14 @@ public abstract class PostgreSqlTestDatabaseTransactionFixture : PostgreSqlTestD
 /// PostgreSQL Unit Test Fixture using a a database that is created from the test database as a template for the each new tests and cleaned-up (dropped) after the test.
 /// </summary>
 [Collection("PostgreSqlDatabase")]
-public abstract class PostgreSqlTestTemplateDatabaseFixture : IDisposable
+public abstract class PostgreSqlTestTemplateDatabaseFixture : PostgreSqlBaseFixture, IDisposable
 {
-    protected NpgsqlConnection Connection { get; }
-
-    protected PostgreSqlTestTemplateDatabaseFixture(PostgreSqlFixture fixture)
+    protected PostgreSqlTestTemplateDatabaseFixture(PostgreSqlUnitTests tests)
     {
         var dbName = string.Concat(Config.Value.TestDatabaseName, "_", Guid.NewGuid().ToString().Replace("-", "_"));
         using var connection = new NpgsqlConnection(Config.ConnectionString);
-        PostgreSqlFixture.CreateDatabase(connection, dbName, connection.Database);
-        Connection = fixture.Connection.CloneWith(fixture.Connection.ConnectionString);
+        PostgreSqlUnitTests.CreateDatabase(connection, dbName, connection.Database);
+        Connection = tests.Connection.CloneWith(tests.Connection.ConnectionString);
         Connection.Open();
         Connection.ChangeDatabase(dbName);
     }
@@ -257,6 +259,6 @@ public abstract class PostgreSqlTestTemplateDatabaseFixture : IDisposable
         Connection.Close();
         Connection.Dispose();
         using var connection = new NpgsqlConnection(Config.ConnectionString);
-        PostgreSqlFixture.DropDatabase(connection, Connection.Database);
+        PostgreSqlUnitTests.DropDatabase(connection, Connection.Database);
     }
 }

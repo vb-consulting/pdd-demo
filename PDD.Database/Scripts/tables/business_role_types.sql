@@ -1,5 +1,5 @@
 CREATE TABLE public.business_role_types (
-    id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );

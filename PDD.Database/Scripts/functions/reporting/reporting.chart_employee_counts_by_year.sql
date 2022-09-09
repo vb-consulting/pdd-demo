@@ -12,12 +12,15 @@ begin
         
         select
             json_build_object(
-                'labels', _years::text[],
-                'series', array_agg(
-                    json_build_object(
-                        'data', data,
-                        'label', label
-                    )
+                'labels', coalesce(_years, array[]::text[]),
+                'series', coalesce(
+                    array_agg(
+                        json_build_object(
+                            'data', data,
+                            'label', label
+                        )
+                    ),
+                    array[]::json[]
                 )
             )
         from (

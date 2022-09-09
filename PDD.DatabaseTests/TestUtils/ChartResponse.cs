@@ -1,0 +1,1 @@
+﻿public record ChartResponse(string[] labels, ChartSeries[] series);

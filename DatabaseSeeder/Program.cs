@@ -55,7 +55,7 @@ using var connection = new NpgsqlConnection(connectionString);
 var countries = connection.Read<short>("select code from countries where culture is not null").ToArray();
 var usCode = 840;
 var euCodes = connection.Read<short>("select code from countries where iso2 in ('AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE')").ToArray();
-var areas = connection.Read<Guid>("select id from business_areas").ToArray();
+var areas = connection.Read<short>("select id from business_areas").ToArray();
 
 const int peopleCount = 50000;
 const int companyCount = 1000;
@@ -96,7 +96,7 @@ foreach (var company in new Faker<Company>()
         insert into company_areas
         (company_id, area_id)
         values
-        ('{companyId}'::uuid, '{a}'::uuid)
+        ('{companyId}'::uuid, {a})
         on conflict (company_id, area_id) do nothing;
     ") ?? Array.Empty<string>()));
 
@@ -104,55 +104,55 @@ foreach (var company in new Faker<Company>()
     companyNames.Add(company?.Name ?? "");
 }
 
-var employed = connection.Read<Guid>("select id from employee_status where name_normalized = 'employed'").Single();
-var unemployed = connection.Read<Guid>("select id from employee_status where name_normalized = 'unemployed'").Single();
-var opentoopportunity = connection.Read<Guid>("select id from employee_status where name_normalized = 'open to opportunity'").Single();
-var activlyapplying = connection.Read<Guid>("select id from employee_status where name_normalized = 'activly applying'").Single();
-var retired = connection.Read<Guid>("select id from employee_status where name_normalized = 'retired'").Single();
-var unemployable = connection.Read<Guid>("select id from employee_status where name_normalized = 'unemployable'").Single();
+var employed = connection.Read<short>("select id from employee_status where name_normalized = 'employed'").Single();
+var unemployed = connection.Read<short>("select id from employee_status where name_normalized = 'unemployed'").Single();
+var opentoopportunity = connection.Read<short>("select id from employee_status where name_normalized = 'open to opportunity'").Single();
+var activlyapplying = connection.Read<short>("select id from employee_status where name_normalized = 'activly applying'").Single();
+var retired = connection.Read<short>("select id from employee_status where name_normalized = 'retired'").Single();
+var unemployable = connection.Read<short>("select id from employee_status where name_normalized = 'unemployable'").Single();
 
-var productowner = connection.Read<Guid>("select id from business_roles where name_normalized = 'product owner'").Single();
-var projectmanager = connection.Read<Guid>("select id from business_roles where name_normalized = 'project manager'").Single();
-var uxdesigner = connection.Read<Guid>("select id from business_roles where name_normalized = 'ux designer'").Single();
-var uidesigner = connection.Read<Guid>("select id from business_roles where name_normalized = 'ui designer'").Single();
-var businessanalyst = connection.Read<Guid>("select id from business_roles where name_normalized = 'business analyst'").Single();
-var softwaredeveloper = connection.Read<Guid>("select id from business_roles where name_normalized = 'software developer'").Single();
-var softwarearchitect = connection.Read<Guid>("select id from business_roles where name_normalized = 'software architect'").Single();
-var devops = connection.Read<Guid>("select id from business_roles where name_normalized = 'devops'").Single();
-var devopsengineer = connection.Read<Guid>("select id from business_roles where name_normalized = 'devops engineer'").Single();
-var devopslead = connection.Read<Guid>("select id from business_roles where name_normalized = 'devops lead'").Single();
-var tester = connection.Read<Guid>("select id from business_roles where name_normalized = 'tester'").Single();
-var qalead = connection.Read<Guid>("select id from business_roles where name_normalized = 'qa lead'").Single();
-var qaengineer = connection.Read<Guid>("select id from business_roles where name_normalized = 'qa engineer'").Single();
-var techlead = connection.Read<Guid>("select id from business_roles where name_normalized = 'tech lead'").Single();
-var scrummaster = connection.Read<Guid>("select id from business_roles where name_normalized = 'scrum master'").Single();
-var softwaredevelopmentmanager = connection.Read<Guid>("select id from business_roles where name_normalized = 'software development manager'").Single();
-var databaseadministrator = connection.Read<Guid>("select id from business_roles where name_normalized = 'database administrator'").Single();
-var databasedeveloper = connection.Read<Guid>("select id from business_roles where name_normalized = 'database developer'").Single();
+var productowner = connection.Read<short>("select id from business_roles where name_normalized = 'product owner'").Single();
+var projectmanager = connection.Read<short>("select id from business_roles where name_normalized = 'project manager'").Single();
+var uxdesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ux designer'").Single();
+var uidesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ui designer'").Single();
+var businessanalyst = connection.Read<short>("select id from business_roles where name_normalized = 'business analyst'").Single();
+var softwaredeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'software developer'").Single();
+var softwarearchitect = connection.Read<short>("select id from business_roles where name_normalized = 'software architect'").Single();
+var devops = connection.Read<short>("select id from business_roles where name_normalized = 'devops'").Single();
+var devopsengineer = connection.Read<short>("select id from business_roles where name_normalized = 'devops engineer'").Single();
+var devopslead = connection.Read<short>("select id from business_roles where name_normalized = 'devops lead'").Single();
+var tester = connection.Read<short>("select id from business_roles where name_normalized = 'tester'").Single();
+var qalead = connection.Read<short>("select id from business_roles where name_normalized = 'qa lead'").Single();
+var qaengineer = connection.Read<short>("select id from business_roles where name_normalized = 'qa engineer'").Single();
+var techlead = connection.Read<short>("select id from business_roles where name_normalized = 'tech lead'").Single();
+var scrummaster = connection.Read<short>("select id from business_roles where name_normalized = 'scrum master'").Single();
+var softwaredevelopmentmanager = connection.Read<short>("select id from business_roles where name_normalized = 'software development manager'").Single();
+var databaseadministrator = connection.Read<short>("select id from business_roles where name_normalized = 'database administrator'").Single();
+var databasedeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'database developer'").Single();
 
-var managerRoles1 = new Guid[] { productowner, projectmanager, businessanalyst, scrummaster, softwaredevelopmentmanager };
-var managerRoles2 = new Guid[] { projectmanager, businessanalyst };
-var managerRoles3 = new Guid[] { productowner, softwaredevelopmentmanager };
+var managerRoles1 = new short[] { productowner, projectmanager, businessanalyst, scrummaster, softwaredevelopmentmanager };
+var managerRoles2 = new short[] { projectmanager, businessanalyst };
+var managerRoles3 = new short[] { productowner, softwaredevelopmentmanager };
 
-var uiRoles1 = new Guid[] { uxdesigner, uidesigner };
-var uiRoles2 = new Guid[] { uidesigner };
+var uiRoles1 = new short[] { uxdesigner, uidesigner };
+var uiRoles2 = new short[] { uidesigner };
 
-var devRoles1 = new Guid[] { softwaredeveloper, softwarearchitect, techlead, databaseadministrator, databasedeveloper };
-var devRoles2 = new Guid[] { softwarearchitect, techlead, databaseadministrator, databasedeveloper };
-var devRoles3 = new Guid[] { softwaredeveloper, softwarearchitect };
-var devRoles4 = new Guid[] { softwaredeveloper, databaseadministrator, databasedeveloper };
+var devRoles1 = new short[] { softwaredeveloper, softwarearchitect, techlead, databaseadministrator, databasedeveloper };
+var devRoles2 = new short[] { softwarearchitect, techlead, databaseadministrator, databasedeveloper };
+var devRoles3 = new short[] { softwaredeveloper, softwarearchitect };
+var devRoles4 = new short[] { softwaredeveloper, databaseadministrator, databasedeveloper };
 
-var devopsRoles1 = new Guid[] { devops, devopsengineer, techlead, devopslead };
-var devopsRoles2 = new Guid[] { devops, devopsengineer };
+var devopsRoles1 = new short[] { devops, devopsengineer, techlead, devopslead };
+var devopsRoles2 = new short[] { devops, devopsengineer };
 
-var qaRoles1 = new Guid[] { tester, qalead, qaengineer };
-var qaRoles2 = new Guid[] { tester };
-var qaRoles3 = new Guid[] { tester, qalead };
+var qaRoles1 = new short[] { tester, qalead, qaengineer };
+var qaRoles2 = new short[] { tester };
+var qaRoles3 = new short[] { tester, qalead };
 
-var dbRoles1 = new Guid[] { databaseadministrator, databasedeveloper };
-var dbRoles2 = new Guid[] { databaseadministrator };
+var dbRoles1 = new short[] { databaseadministrator, databasedeveloper };
+var dbRoles2 = new short[] { databaseadministrator };
 
-var roles = new Guid[][]
+var roles = new short[][]
 {
     managerRoles1, managerRoles2, managerRoles3,
     uiRoles1, uiRoles2,
@@ -280,21 +280,21 @@ foreach (var person in new Faker<Person>()
         .Generate();
 
     var randomizer = new Randomizer(DateTime.Now.Millisecond);
-    Guid status = unemployable;
+    short status = unemployable;
     if (!attr.EmployeeRecord.Any())
     {
-        status = randomizer.ArrayElement(new Guid[] { unemployed, activlyapplying, unemployable });
+        status = randomizer.ArrayElement(new short[] { unemployed, activlyapplying, unemployable });
     }
     else
     {
         var last = attr.EmployeeRecord.Last();
         if (last.ended == null)
         {
-            status = randomizer.ArrayElement(new Guid[] { retired, activlyapplying });
+            status = randomizer.ArrayElement(new short[] { retired, activlyapplying });
         }
         else
         {
-            status = randomizer.ArrayElement(new Guid[] { employed, opentoopportunity, activlyapplying });
+            status = randomizer.ArrayElement(new short[] { employed, opentoopportunity, activlyapplying });
         }
     }
 
@@ -325,7 +325,7 @@ foreach (var person in new Faker<Person>()
         insert into person_roles
         (person_id, role_id)
         values
-        ('{personId}'::uuid, '{r}'::uuid)
+        ('{personId}'::uuid, {r})
         on conflict (person_id, role_id) do nothing;
     ")));
 
@@ -362,7 +362,7 @@ public class Company
     public string? CompanyLine { get; set; }
     public string? About { get; set; }
     public int Country { get; set; }
-    public Guid[]? Areas { get; set; }
+    public short[]? Areas { get; set; }
 }
 
 public class Person
@@ -385,5 +385,5 @@ public class PersonAttributes
     public (Guid companyId, DateTime started, DateTime? ended)[] EmployeeRecord { get; set; } =
         Array.Empty<(Guid companyId, DateTime started, DateTime? ended)>();
 
-    public Guid[] Roles { get; set; } = Array.Empty<Guid>();
+    public short[] Roles { get; set; } = Array.Empty<short>();
 }

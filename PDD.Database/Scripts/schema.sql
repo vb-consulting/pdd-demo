@@ -63,6 +63,7 @@ ALTER TABLE IF EXISTS ONLY public.countries DROP CONSTRAINT IF EXISTS countries_
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS company_reviews_pkey;
 ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS company_areas_pkey;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_pkey;
+ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_name_normalized_key;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS business_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_role_types DROP CONSTRAINT IF EXISTS business_role_types_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_areas DROP CONSTRAINT IF EXISTS business_areas_pkey;
@@ -200,12 +201,18 @@ agg2_cte as (
 )
 select 
     json_build_object(
-        'labels', (select array_agg(distinct role order by role) from agg1_cte),
-        'series', array_agg(
-            json_build_object(
-                'data', data,
-                'label', name
-            ) order by row_number
+        'labels', coalesce(
+            (select array_agg(distinct role order by role) from agg1_cte), 
+            array[]::text[]
+        ),
+        'series', coalesce(
+            array_agg(
+                json_build_object(
+                    'data', data,
+                    'label', name
+                ) order by row_number
+            ),
+            array[]::json[]
         )
     )
 from 
@@ -235,12 +242,15 @@ begin
         
         select
             json_build_object(
-                'labels', _years::text[],
-                'series', array_agg(
-                    json_build_object(
-                        'data', data,
-                        'label', label
-                    )
+                'labels', coalesce(_years, array[]::text[]),
+                'series', coalesce(
+                    array_agg(
+                        json_build_object(
+                            'data', data,
+                            'label', label
+                        )
+                    ),
+                    array[]::json[]
                 )
             )
         from (
@@ -289,7 +299,7 @@ SET default_table_access_method = heap;
 -- Name: business_areas; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_areas (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id smallint NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -302,10 +312,21 @@ COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be 
 --
 COMMENT ON COLUMN public.business_areas.name_normalized IS 'lowercased';
 --
+-- Name: business_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.business_areas ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.business_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+--
 -- Name: business_role_types; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_role_types (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id smallint NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -318,13 +339,24 @@ COMMENT ON TABLE public.business_role_types IS 'Types or groups of business role
 --
 COMMENT ON COLUMN public.business_role_types.name_normalized IS 'lowercased';
 --
+-- Name: business_role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.business_role_types ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.business_role_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+--
 -- Name: business_roles; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.business_roles (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id smallint NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
-    type uuid NOT NULL
+    type smallint NOT NULL
 );
 --
 -- Name: TABLE business_roles; Type: COMMENT; Schema: public; Owner: -
@@ -334,6 +366,17 @@ COMMENT ON TABLE public.business_roles IS 'Roles in a team that employees are sp
 -- Name: COLUMN business_roles.name_normalized; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON COLUMN public.business_roles.name_normalized IS 'lowercased';
+--
+-- Name: business_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.business_roles ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.business_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
 --
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
@@ -346,7 +389,7 @@ CREATE TABLE public.companies (
     tweeter character varying,
     company_line character varying,
     about character varying,
-    country smallint,
+    country smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
@@ -369,7 +412,7 @@ COMMENT ON COLUMN public.companies.country IS 'headquaters country';
 --
 CREATE TABLE public.company_areas (
     company_id uuid NOT NULL,
-    area_id uuid NOT NULL,
+    area_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
@@ -466,7 +509,7 @@ COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is nul
 -- Name: employee_status; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.employee_status (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id smallint NOT NULL,
     name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
 );
@@ -479,6 +522,17 @@ COMMENT ON TABLE public.employee_status IS 'List of possible statuses in regards
 --
 COMMENT ON COLUMN public.employee_status.name_normalized IS 'lowercased';
 --
+-- Name: employee_status_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+ALTER TABLE public.employee_status ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.employee_status_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+--
 -- Name: people; Type: TABLE; Schema: public; Owner: -
 --
 CREATE TABLE public.people (
@@ -486,7 +540,7 @@ CREATE TABLE public.people (
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     name_normalized character varying GENERATED ALWAYS AS (((lower((first_name)::text) || ' '::text) || lower((last_name)::text))) STORED NOT NULL,
-    employee_status uuid NOT NULL,
+    employee_status smallint,
     gender public.valid_genders,
     email character varying,
     linkedin character varying,
@@ -511,7 +565,7 @@ COMMENT ON COLUMN public.people.gender IS 'M or F';
 --
 CREATE TABLE public.person_roles (
     person_id uuid NOT NULL,
-    role_id uuid NOT NULL,
+    role_id smallint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
@@ -573,6 +627,11 @@ ALTER TABLE ONLY public.business_role_types
 --
 ALTER TABLE ONLY public.business_roles
     ADD CONSTRAINT business_roles_pkey PRIMARY KEY (id);
+--
+-- Name: companies companies_name_normalized_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+ALTER TABLE ONLY public.companies
+    ADD CONSTRAINT companies_name_normalized_key UNIQUE (name_normalized);
 --
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
