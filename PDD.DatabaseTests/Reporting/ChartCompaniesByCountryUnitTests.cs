@@ -1,4 +1,5 @@
 // pgroutiner auto-generated code
+
 namespace PDD.DatabaseTests.Reporting;
 
 ///<summary>

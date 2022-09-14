@@ -79,6 +79,7 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
+DROP FUNCTION IF EXISTS reporting.top_rated_companies(_limit integer);
 DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_year(_limit integer);
 DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS reporting.chart_companies_by_country(_limit integer);
@@ -111,7 +112,7 @@ COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
 -- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_companies_by_country(_limit integer DEFAULT 10) RETURNS json
+CREATE FUNCTION reporting.chart_companies_by_country(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -154,7 +155,7 @@ It show only first 9 countries and 10th is summed together as other.
 --
 -- Name: chart_employee_counts_by_area(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_employee_counts_by_area(_limit integer DEFAULT 3) RETURNS json
+CREATE FUNCTION reporting.chart_employee_counts_by_area(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -228,7 +229,7 @@ JSON object where labels are business area names and three series with number of
 --
 -- Name: chart_employee_counts_by_year(integer); Type: FUNCTION; Schema: reporting; Owner: -
 --
-CREATE FUNCTION reporting.chart_employee_counts_by_year(_limit integer DEFAULT 5) RETURNS json
+CREATE FUNCTION reporting.chart_employee_counts_by_year(_limit integer) RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -293,6 +294,44 @@ COMMENT ON FUNCTION reporting.chart_employee_counts_by_year(_limit integer) IS '
 JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';
+--
+-- Name: top_rated_companies(integer); Type: FUNCTION; Schema: reporting; Owner: -
+--
+CREATE FUNCTION reporting.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, areas character varying[], score numeric, reviews bigint)
+    LANGUAGE sql
+    AS $$
+select 
+    comp.id,
+    comp.name,
+    company_line,
+    country.name as country,
+    ca.areas,
+    avg(rev.score) filter (where rev.score is not null)::numeric(3,2) as score,
+    count(rev.id) as reviews
+from 
+    companies comp 
+    inner join countries country on comp.country = country.code
+    left outer join company_reviews rev on comp.id = rev.company_id
+    join lateral (
+        select 
+            array_remove(array_agg(distinct ba.name), null) as areas
+        from company_areas ca
+        inner join business_areas ba on ca.area_id = ba.id
+        where 
+            ca.company_id = comp.id
+    ) ca on true
+group by
+    comp.id,
+    comp.name,
+    company_line,
+    country.name,
+    ca.areas
+order by
+    avg(rev.score) desc,
+    comp.created_at desc,
+    comp.name_normalized
+limit _limit;
+$$;
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 --
@@ -427,12 +466,13 @@ CREATE TABLE public.company_reviews (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     company_id uuid NOT NULL,
     person_id uuid,
-    review character varying NOT NULL,
+    review character varying,
     score smallint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     modified_at timestamp with time zone DEFAULT now() NOT NULL,
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
-    CONSTRAINT company_reviews_rate_check CHECK (((score IS NULL) OR ((score > 0) AND (score <= 5))))
+    CONSTRAINT company_reviews_rate_check CHECK (((score IS NULL) OR ((score > 0) AND (score <= 5)))),
+    CONSTRAINT company_reviews_review_and_rate_null_check CHECK (((review IS NOT NULL) OR (score IS NOT NULL)))
 );
 --
 -- Name: TABLE company_reviews; Type: COMMENT; Schema: public; Owner: -

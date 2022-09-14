@@ -54,38 +54,4 @@ public static class PgRoutineChartCompaniesByCountry
             .ReadAsync<string?>($"select {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
             .SingleOrDefaultAsync();
     }
-
-    /// <summary>
-    /// Executes sql function reporting.chart_companies_by_country()
-    /// Number of companies by country.
-    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 countries and 10th is summed together as other. 
-    /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-    /// </summary>
-    /// <returns>string?</returns>
-    public static string? ChartCompaniesByCountry(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
-    {
-        return connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .Read<string?>($"select {Name}()", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefault();
-    }
-
-    /// <summary>
-    /// Asynchronously executes sql function reporting.chart_companies_by_country()
-    /// Number of companies by country.
-    /// JSON object where labels are country names and it only have one series with the number of companies for each country.
-    /// It show only first 9 countries and 10th is summed together as other. 
-    /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-    /// </summary>
-    /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> ChartCompaniesByCountryAsync(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
-    {
-        return await connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .ReadAsync<string?>($"select {Name}()", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefaultAsync();
-    }
 }

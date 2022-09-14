@@ -36,7 +36,7 @@ public class ChartEmployeeCountsByYearUnitTests : PostgreSqlTestDatabaseTransact
     {
         // Arrange
         int? limit = 3;
-        // $ pgroutiner --inserts "select company_id, person_id, employment_started_at, employment_ended_at from employee_records order by company_id limit 50;select id, name, country from companies where id in (select distinct company_id from employee_records order by company_id limit 50)"
+        // $ pgroutiner --inserts "select company_id, person_id, employment_started_at, employment_ended_at from employee_records order by company_id limit 10;select id, name, country from companies where id in (select distinct company_id from employee_records order by company_id limit 10)"
         Connection.Execute(@"
         -- Data for Name: companies; Type: TABLE DATA; Schema: public; Owner: postgres
         INSERT INTO public.companies (id, name, country) VALUES ('02091ad4-a5ae-4b41-bef0-05c201f82a6e', 'Klocko, Schowalter and Bahringer', 196);

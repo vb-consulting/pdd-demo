@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_companies_by_country(_limit integer DEFAULT 10) RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_companies_by_country(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (

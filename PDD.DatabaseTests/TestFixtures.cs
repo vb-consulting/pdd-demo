@@ -7,8 +7,9 @@ global using Xunit;
 global using Norm;
 global using FluentAssertions;
 global using PDD.Database.Extensions;
-global using Newtonsoft.Json.Linq;
+global using PDD.Database.Models;
 global using Newtonsoft.Json;
+global using Newtonsoft.Json.Linq;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -218,15 +219,14 @@ public abstract class PostgreSqlTestDatabaseFixture : PostgreSqlBaseFixture, IDi
 }
 
 /// <summary>
-/// PostgreSQL Unit Test Fixture uses a pre-created test database that runs each test under a new transaction that is rolled-back automatically.
+/// PostgreSQL Unit Test Fixture uses a pre-created test database that runs each test under a new transaction with deferred constraint checks, that is rolled-back automatically.
 /// </summary>
 [Collection("PostgreSqlDatabase")]
 public abstract class PostgreSqlTestDatabaseTransactionFixture : PostgreSqlTestDatabaseFixture, IDisposable
 {
     protected PostgreSqlTestDatabaseTransactionFixture(PostgreSqlUnitTests tests) : base(tests)
     {
-        Connection
-            .Execute("begin; set constraints all deferred");
+        Connection.Execute("begin; set constraints all deferred;");
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "XUnit")]

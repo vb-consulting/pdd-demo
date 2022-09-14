@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "___SolutionFiles", "___SolutionFiles", "{C62E3D17-12AB-4A44-B8D6-0247CC06B105}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection

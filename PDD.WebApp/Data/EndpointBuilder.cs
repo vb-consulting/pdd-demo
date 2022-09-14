@@ -14,19 +14,22 @@ public static class EndpointBuilder
         app.MapGet(Urls.ChartCompaniesByCountryUrl, [AllowAnonymous] async (NpgsqlConnection connection, HttpResponse response) =>
         {
             response.ContentType = MediaTypeNames.Application.Json;
-            return await connection.ChartCompaniesByCountryAsync();
+            return await connection.ChartCompaniesByCountryAsync(10);
         });
 
         app.MapGet(Urls.ChartEmployeeCountsByAreaUrl, [AllowAnonymous] async (NpgsqlConnection connection, HttpResponse response) =>
         {
             response.ContentType = MediaTypeNames.Application.Json;
-            return await connection.ChartEmployeeCountsByAreaAsync();
+            return await connection.ChartEmployeeCountsByAreaAsync(3);
         });
 
         app.MapGet(Urls.ChartEmployeeCountsByYearUrl, [AllowAnonymous] async (NpgsqlConnection connection, HttpResponse response) =>
         {
             response.ContentType = MediaTypeNames.Application.Json;
-            return await connection.ChartEmployeeCountsByYearAsync();
+            return await connection.ChartEmployeeCountsByYearAsync(5);
         });
+
+        app.MapGet(Urls.TopRatedCompaniesUrl, [AllowAnonymous] (NpgsqlConnection connection) => 
+            connection.TopRatedCompaniesAsync(5));
     }
 }

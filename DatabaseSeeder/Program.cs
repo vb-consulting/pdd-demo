@@ -238,16 +238,29 @@ foreach (var person in new Faker<Person>()
             var n = f.Random.Int(0, 10).OrNull(f, .45f);
             if (n == null)
             {
-                return Array.Empty<(Guid companyId, string review, int score)>();
+                return Array.Empty<(Guid companyId, string review, int? score)>();
             }
-            var result = new (Guid companyId, string review, int score)[n.Value];
+            var result = new (Guid companyId, string review, int? score)[n.Value];
             var attrCompaniesIds = f.PickRandom(companyIds, n.Value).ToArray();
             for (int i = 0; i < n; i++)
             {
                 result[i] = (
                     attrCompaniesIds[i],
                     f.Rant.Review(companyNames[i]),
-                    f.Random.Int(1, 3) switch { 1 => 5, 2 => 4, 3 => f.Random.Int(1, 5), _ => 1 } 
+                    f.Random.Int(1, 10) switch 
+                    { 
+                        1 => null,
+                        2 => null,
+                        3 => null,
+                        4 => null,
+                        5 => 1,
+                        6 => 2,
+                        7 => f.Random.Int(3, 4),
+                        8 => f.Random.Int(3, 4),
+                        9 => f.Random.Int(3, 4),
+                        10 => f.Random.Int(4, 5),
+                        _ => 1
+                    } 
                 );
             }
             return result;
@@ -335,7 +348,7 @@ foreach (var person in new Faker<Person>()
             insert into company_reviews 
             (company_id, person_id, review, score)
             values 
-            ('{r.companyId}'::uuid, '{personId}'::uuid, $r${r.review}$r$, {r.score});
+            ('{r.companyId}'::uuid, '{personId}'::uuid, $r${r.review}$r$, {(r.score == null ? "NULL" : r.score.ToString())});
         ")));
     }
 
@@ -379,8 +392,8 @@ public class Person
 
 public class PersonAttributes
 {
-    public (Guid companyId, string review, int score)[] Reviews { get; set; } = 
-        Array.Empty<(Guid companyId, string review, int score)>();
+    public (Guid companyId, string review, int? score)[] Reviews { get; set; } = 
+        Array.Empty<(Guid companyId, string review, int? score)>();
 
     public (Guid companyId, DateTime started, DateTime? ended)[] EmployeeRecord { get; set; } =
         Array.Empty<(Guid companyId, DateTime started, DateTime? ended)>();

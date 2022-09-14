@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_employee_counts_by_area(_limit integer DEFAULT 3) RETURNS json
+CREATE OR REPLACE FUNCTION reporting.chart_employee_counts_by_area(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-pgroutiner": {
+      "version": "3.16.8",
+      "commands": [
+        "pgroutiner"
+      ]
+    }
+  }
+}

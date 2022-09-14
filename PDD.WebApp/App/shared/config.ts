@@ -37,4 +37,5 @@ export const urls = getValueFromJson<{
     chartCompaniesByCountryUrl: string;
     chartEmployeeCountsByAreaUrl: string;
     chartEmployeeCountsByYearUrl: string;
+    topRatedCompaniesUrl: string;
 }>("urls");
