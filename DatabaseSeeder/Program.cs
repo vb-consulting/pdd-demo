@@ -19,7 +19,7 @@ if (c.Key != ConsoleKey.Enter)
 
 var currentDir = Directory.GetCurrentDirectory();
 var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDD.WebApp") : Path.Combine(currentDir, "../PDD.WebApp");
-var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../Database") : Path.Combine(currentDir, "../PDD.Database");
+var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDD.Database") : Path.Combine(currentDir, "../PDD.Database");
 
 var config = new ConfigurationBuilder()
     .AddJsonFile(Path.Combine(currentDir, pgRoutinerPath, "appsettings.PgRoutiner.json"), optional: false, reloadOnChange: false)
@@ -294,9 +294,19 @@ foreach (var person in new Faker<Person>()
 
     var randomizer = new Randomizer(DateTime.Now.Millisecond);
     short status = unemployable;
+    var onetothree = randomizer.Int(1, 3);
+
     if (!attr.EmployeeRecord.Any())
     {
         status = randomizer.ArrayElement(new short[] { unemployed, activlyapplying, unemployable });
+    }
+    else if (DateTime.Now.Year - person.Birth.Year > 65)
+    {
+        status = retired;
+    }
+    else if (DateTime.Now.Year - person.Birth.Year > randomizer.Int(45, 65) && onetothree == 1 || onetothree == 2)
+    {
+        status = randomizer.ArrayElement(new short[] { retired, unemployable });
     }
     else
     {

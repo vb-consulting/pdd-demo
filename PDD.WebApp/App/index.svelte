@@ -1,11 +1,36 @@
 <script lang="ts">
     import Layout from "./shared/layout/default";
     import ChartBox from "./shared/components/chart-box.svelte";
+    import DataGrid from "./shared/components/data-grid.svelte";
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
+
+    let getTopCompanies = () => get<{
+        id: string;
+        name: string;
+        companyLine: string;
+        country: string;
+        countryCode: number;
+        areas: string[];
+        score: number;
+        reviews: number;
+    }[]>(urls.topRatedCompaniesUrl);
+
+    let getTopEmployees = () => get<{
+        id: string;
+        firstName: string;
+        lastName: string;
+        country: string;
+        countryCode: number;
+        yearsOfExperience: number;
+        numberOfCompanies: number;
+        employeeStatus: string;
+        roles: string[];
+    }[]>(urls.topExperincedPeopleUrl);
+
 </script>
 
-<Layout title="PDD Dashboard">
+<Layout title="">
 
     <div class="main container-fluid pt-4">
         
@@ -33,36 +58,66 @@
         </div>
 
         <div class="row">
-
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+            <div class="col">
+                <div class="text-secondary fw-bolder text-center fs-4 my-2">Top rated companies</div>
+                <DataGrid dataFunc={getTopCompanies} hover small>
+                    <tr slot="row" let:index let:data>
+                        <th scope="row">{index+1}</th>
+                        <td>
+                            <div class="grid-name-wrap">
+                                <div class="">{data.name}</div>
+                                <div class="text-muted fs-smaller">{data.companyLine}</div>
+                                <div class="badge">
+                                    <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
+                                    <span>{data.country}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {#each data.areas as area}
+                                <span class="badge rounded-pill text-bg-secondary grid-badge">{area}</span>
+                            {/each}
+                        </td>
+                        <td class="fs-smaller grid-info">
+                            <div class="float-end">
+                                <span class="text-muted">Score: </span><span class="font-monospace">{data.score.toFixed(2)}</span>
+                            </div>
+                            <br />
+                            <div class="float-end">
+                                <span class="text-muted">Reviews: </span><span class="font-monospace">{data.reviews}</span>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                </DataGrid>
+            </div>
+            <div class="col">
+                <div class="text-secondary fw-bolder text-center fs-4 my-2">Top experinced people</div>
+                <DataGrid dataFunc={getTopEmployees} hover small>
+                    <tr slot="row" let:index let:data>
+                        <th scope="row">{index+1}</th>
+                        <td>
+                            <div class="grid-name-wrap">
+                                <div class="">{data.firstName} {data.lastName}</div>
+                                <div class="text-muted fs-smaller">{data.employeeStatus}</div>
+                                <div class="badge">
+                                    <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
+                                    <span>{data.country}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {#each data.roles as role}
+                                <span class="badge rounded-pill text-bg-secondary grid-badge">{role}</span>
+                            {/each}
+                        </td>
+                        <td class="fs-smaller grid-info">
+                            <div class="float-end"><span class="text-muted">Years Of Experience: </span><span class="font-monospace">{data.yearsOfExperience}</span></div>
+                            <br />
+                            <div class="float-end"><span class="text-muted">Companies: </span><span class="font-monospace">{data.numberOfCompanies}</span></div>
+                        </td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                </tbody>
-            </table>
+                </DataGrid>
+            </div>
 
         </div>
 
@@ -78,6 +133,47 @@
     .chart-row {
         & > div {
             padding: 25px;
+        }
+    }
+
+    .fs-smaller {
+        font-size: smaller;
+    }
+    .grid-badge {
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    .grid-name-wrap {
+        display: grid;
+        & > div:nth-child(1) {
+            grid-column: 1/2;
+            grid-row: 1;
+        }
+        & > div:nth-child(2) {
+            grid-column: 1/2;
+            grid-row: 2;
+        }
+        & > div:nth-child(3) {
+            grid-column: 2;
+            grid-row: 1;
+            width: fit-content;
+            margin-left: auto;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    }
+    .country-flag {
+        width: 15px;
+        height: 15px;
+        background-size: contain;
+        display: inline-flex;
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
+    .grid-info {
+        white-space: nowrap;
+        & {
+            white-space: nowrap;
         }
     }
 </style>

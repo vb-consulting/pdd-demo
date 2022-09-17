@@ -31,5 +31,8 @@ public static class EndpointBuilder
 
         app.MapGet(Urls.TopRatedCompaniesUrl, [AllowAnonymous] (NpgsqlConnection connection) => 
             connection.TopRatedCompaniesAsync(5));
+
+        app.MapGet(Urls.TopExperincedPeopleUrl, [AllowAnonymous] (NpgsqlConnection connection) =>
+            connection.TopExperincedPeopleAsync(5));
     }
 }

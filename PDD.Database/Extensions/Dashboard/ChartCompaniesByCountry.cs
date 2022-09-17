@@ -9,14 +9,14 @@ using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
 
-namespace PDD.Database.Extensions;
+namespace PDD.Database.Extensions.Dashboard;
 
 public static class PgRoutineChartCompaniesByCountry
 {
-    public const string Name = "reporting.chart_companies_by_country";
+    public const string Name = "dashboard.chart_companies_by_country";
 
     /// <summary>
-    /// Executes sql function reporting.chart_companies_by_country(integer)
+    /// Executes sql function dashboard.chart_companies_by_country(integer)
     /// Number of companies by country.
     /// JSON object where labels are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 countries and 10th is summed together as other. 
@@ -36,7 +36,7 @@ public static class PgRoutineChartCompaniesByCountry
     }
 
     /// <summary>
-    /// Asynchronously executes sql function reporting.chart_companies_by_country(integer)
+    /// Asynchronously executes sql function dashboard.chart_companies_by_country(integer)
     /// Number of companies by country.
     /// JSON object where labels are country names and it only have one series with the number of companies for each country.
     /// It show only first 9 countries and 10th is summed together as other. 

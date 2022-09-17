@@ -9,14 +9,14 @@ using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
 
-namespace PDD.Database.Extensions;
+namespace PDD.Database.Extensions.Dashboard;
 
 public static class PgRoutineChartEmployeeCountsByArea
 {
-    public const string Name = "reporting.chart_employee_counts_by_area";
+    public const string Name = "dashboard.chart_employee_counts_by_area";
 
     /// <summary>
-    /// Executes sql function reporting.chart_employee_counts_by_area(integer)
+    /// Executes sql function dashboard.chart_employee_counts_by_area(integer)
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
@@ -35,7 +35,7 @@ public static class PgRoutineChartEmployeeCountsByArea
     }
 
     /// <summary>
-    /// Asynchronously executes sql function reporting.chart_employee_counts_by_area(integer)
+    /// Asynchronously executes sql function dashboard.chart_employee_counts_by_area(integer)
     /// Business areas, the number of employees for top 3 companies by highest number of employees.
     /// JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`

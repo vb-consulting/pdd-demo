@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_employee_counts_by_area(_limit integer) RETURNS json
+CREATE OR REPLACE FUNCTION dashboard.chart_employee_counts_by_area(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -63,7 +63,7 @@ from
     agg2_cte
 $$;
 
-COMMENT ON FUNCTION reporting.chart_employee_counts_by_area(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
+COMMENT ON FUNCTION dashboard.chart_employee_counts_by_area(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
 JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 ';

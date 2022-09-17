@@ -79,17 +79,18 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS reporting.top_rated_companies(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_year(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_employee_counts_by_area(_limit integer);
-DROP FUNCTION IF EXISTS reporting.chart_companies_by_country(_limit integer);
+DROP FUNCTION IF EXISTS dashboard.top_rated_companies(_limit integer);
+DROP FUNCTION IF EXISTS dashboard.top_experinced_people(_limit integer);
+DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_year(_limit integer);
+DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
+DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
-DROP SCHEMA IF EXISTS reporting;
+DROP SCHEMA IF EXISTS dashboard;
 --
--- Name: reporting; Type: SCHEMA; Schema: -; Owner: -
+-- Name: dashboard; Type: SCHEMA; Schema: -; Owner: -
 --
-CREATE SCHEMA reporting;
+CREATE SCHEMA dashboard;
 --
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
@@ -110,9 +111,9 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION reporting.chart_companies_by_country(_limit integer) RETURNS json
+CREATE FUNCTION dashboard.chart_companies_by_country(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -145,17 +146,17 @@ from (
 ) sub
 $$;
 --
--- Name: FUNCTION chart_companies_by_country(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_companies_by_country(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_companies_by_country(_limit integer) IS 'Number of companies by country.
+COMMENT ON FUNCTION dashboard.chart_companies_by_country(_limit integer) IS 'Number of companies by country.
 JSON object where labels are country names and it only have one series with the number of companies for each country.
 It show only first 9 countries and 10th is summed together as other. 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
 ';
 --
--- Name: chart_employee_counts_by_area(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_employee_counts_by_area(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION reporting.chart_employee_counts_by_area(_limit integer) RETURNS json
+CREATE FUNCTION dashboard.chart_employee_counts_by_area(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with companies_cte as (
@@ -220,16 +221,16 @@ from
     agg2_cte
 $$;
 --
--- Name: FUNCTION chart_employee_counts_by_area(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_employee_counts_by_area(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_employee_counts_by_area(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
+COMMENT ON FUNCTION dashboard.chart_employee_counts_by_area(_limit integer) IS 'Business areas, the number of employees for top 3 companies by highest number of employees.
 JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
 ';
 --
--- Name: chart_employee_counts_by_year(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: chart_employee_counts_by_year(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION reporting.chart_employee_counts_by_year(_limit integer) RETURNS json
+CREATE FUNCTION dashboard.chart_employee_counts_by_year(_limit integer) RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -288,16 +289,66 @@ begin
 end
 $$;
 --
--- Name: FUNCTION chart_employee_counts_by_year(_limit integer); Type: COMMENT; Schema: reporting; Owner: -
+-- Name: FUNCTION chart_employee_counts_by_year(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
 --
-COMMENT ON FUNCTION reporting.chart_employee_counts_by_year(_limit integer) IS 'Top 5 companies by number of employees for the last ten years.
+COMMENT ON FUNCTION dashboard.chart_employee_counts_by_year(_limit integer) IS 'Top companies by number of employees for the last ten years.
 JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
 - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
 ';
 --
--- Name: top_rated_companies(integer); Type: FUNCTION; Schema: reporting; Owner: -
+-- Name: top_experinced_people(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION reporting.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, areas character varying[], score numeric, reviews bigint)
+CREATE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, country_code smallint, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
+    LANGUAGE sql
+    AS $$
+select
+    p.id,
+    p.first_name,
+    p.last_name,
+    date_part('year', now()) - date_part('year', p.birth) as age,
+    country.name as country,
+    country.code as country_code,
+    years_of_experience,
+    number_of_companies,
+    es.name as employee_status,
+    array_agg(br.name) as roles
+from
+    people p
+    join lateral (
+        select 
+            sum(date_part('year', coalesce(employment_ended_at, now())) - date_part('year', employment_started_at))::int years_of_experience,
+            count(er.company_id) number_of_companies
+        from 
+            employee_records er
+        where er.person_id = p.id
+    ) er on true
+    left outer join employee_status es on p.employee_status = es.id
+    left outer join person_roles pr on pr.person_id = p.id
+    left outer join business_roles br on br.id = pr.role_id
+    left outer join countries country on p.country = country.code
+where
+    es.name_normalized in ('open to opportunity', 'activly applying', 'employed', 'unemployed')
+group by
+    p.id,
+    country.name,
+    country.code,
+    years_of_experience,
+    number_of_companies,
+    es.name
+order by
+    years_of_experience desc nulls last, 
+    last_name, 
+    first_name
+limit _limit
+$$;
+--
+-- Name: FUNCTION top_experinced_people(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
+--
+COMMENT ON FUNCTION dashboard.top_experinced_people(_limit integer) IS 'Top experienced people by the years of the working experience.';
+--
+-- Name: top_rated_companies(integer); Type: FUNCTION; Schema: dashboard; Owner: -
+--
+CREATE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, country_code smallint, areas character varying[], score numeric, reviews bigint)
     LANGUAGE sql
     AS $$
 select 
@@ -305,6 +356,7 @@ select
     comp.name,
     company_line,
     country.name as country,
+    country.code as country_code,
     ca.areas,
     avg(rev.score) filter (where rev.score is not null)::numeric(3,2) as score,
     count(rev.id) as reviews
@@ -325,6 +377,7 @@ group by
     comp.name,
     company_line,
     country.name,
+    country.code,
     ca.areas
 order by
     avg(rev.score) desc,
@@ -332,6 +385,10 @@ order by
     comp.name_normalized
 limit _limit;
 $$;
+--
+-- Name: FUNCTION top_rated_companies(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
+--
+COMMENT ON FUNCTION dashboard.top_rated_companies(_limit integer) IS 'Top rated companies by the user score.';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 --

@@ -38,4 +38,5 @@ export const urls = getValueFromJson<{
     chartEmployeeCountsByAreaUrl: string;
     chartEmployeeCountsByYearUrl: string;
     topRatedCompaniesUrl: string;
+    topExperincedPeopleUrl: string;
 }>("urls");

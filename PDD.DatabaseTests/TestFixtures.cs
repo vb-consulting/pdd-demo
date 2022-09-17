@@ -177,7 +177,7 @@ public abstract class PostgreSqlConfigurationFixture : PostgreSqlBaseFixture, ID
 
         if (Config.Value.UnitTestsUnderTransaction)
         {
-            Connection.Execute("begin");
+            Connection.Execute("begin; set constraints all deferred;");
         }
     }
 

@@ -7,4 +7,4 @@ global using Norm;
 global using Npgsql;
 global using PDD.WebApp.Pages;
 global using PDD.WebApp.Auth;
-global using PDD.Database.Extensions;
+global using PDD.Database.Extensions.Dashboard;

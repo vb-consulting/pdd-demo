@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.chart_companies_by_country(_limit integer) RETURNS json
+CREATE OR REPLACE FUNCTION dashboard.chart_companies_by_country(_limit integer) RETURNS json
     LANGUAGE sql
     AS $$
 with cte as (
@@ -31,7 +31,7 @@ from (
 ) sub
 $$;
 
-COMMENT ON FUNCTION reporting.chart_companies_by_country(_limit integer) IS 'Number of companies by country.
+COMMENT ON FUNCTION dashboard.chart_companies_by_country(_limit integer) IS 'Number of companies by country.
 JSON object where labels are country names and it only have one series with the number of companies for each country.
 It show only first 9 countries and 10th is summed together as other. 
 - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`

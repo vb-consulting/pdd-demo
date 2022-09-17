@@ -9,15 +9,15 @@ using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
 
-namespace PDD.Database.Extensions;
+namespace PDD.Database.Extensions.Dashboard;
 
 public static class PgRoutineChartEmployeeCountsByYear
 {
-    public const string Name = "reporting.chart_employee_counts_by_year";
+    public const string Name = "dashboard.chart_employee_counts_by_year";
 
     /// <summary>
-    /// Executes plpgsql function reporting.chart_employee_counts_by_year(integer)
-    /// Top 5 companies by number of employees for the last ten years.
+    /// Executes plpgsql function dashboard.chart_employee_counts_by_year(integer)
+    /// Top companies by number of employees for the last ten years.
     /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
@@ -35,8 +35,8 @@ public static class PgRoutineChartEmployeeCountsByYear
     }
 
     /// <summary>
-    /// Asynchronously executes plpgsql function reporting.chart_employee_counts_by_year(integer)
-    /// Top 5 companies by number of employees for the last ten years.
+    /// Asynchronously executes plpgsql function dashboard.chart_employee_counts_by_year(integer)
+    /// Top companies by number of employees for the last ten years.
     /// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>

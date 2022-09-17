@@ -1,15 +1,13 @@
 // pgroutiner auto-generated code
-namespace PDD.DatabaseTests.Reporting;
+
+namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
-/// Test method for plpgsql function reporting.chart_employee_counts_by_year
+/// Test method for plpgsql function dashboard.chart_employee_counts_by_year
 ///
-/// Top 5 companies by number of employees for the last ten years.
-/// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
-/// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
-/// 
+/// Top 5 companies by number of employees for the last ten years./// JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name./// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`/// 
 ///</summary>
-public class ChartEmployeeCountsByYearUnitTests : PostgreSqlTestDatabaseTransactionFixture
+public class ChartEmployeeCountsByYearUnitTests : PostgreSqlConfigurationFixture
 {
     public ChartEmployeeCountsByYearUnitTests(PostgreSqlUnitTests tests) : base(tests) { }
 

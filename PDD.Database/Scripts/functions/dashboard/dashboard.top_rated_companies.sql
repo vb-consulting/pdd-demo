@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION reporting.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, areas character varying[], score numeric, reviews bigint)
+CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, country_code smallint, areas character varying[], score numeric, reviews bigint)
     LANGUAGE sql
     AS $$
 select 
@@ -6,6 +6,7 @@ select
     comp.name,
     company_line,
     country.name as country,
+    country.code as country_code,
     ca.areas,
     avg(rev.score) filter (where rev.score is not null)::numeric(3,2) as score,
     count(rev.id) as reviews
@@ -26,6 +27,7 @@ group by
     comp.name,
     company_line,
     country.name,
+    country.code,
     ca.areas
 order by
     avg(rev.score) desc,
@@ -33,3 +35,5 @@ order by
     comp.name_normalized
 limit _limit;
 $$;
+
+COMMENT ON FUNCTION dashboard.top_rated_companies(_limit integer) IS 'Top rated companies by the user score.';

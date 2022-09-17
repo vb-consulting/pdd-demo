@@ -1,14 +1,13 @@
 // pgroutiner auto-generated code
 
-namespace PDD.DatabaseTests.Reporting;
+namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
-/// Test method for sql function reporting.top_rated_companies
+/// Test method for sql function dashboard.top_rated_companies
 ///</summary>
-public class TopRatedCompaniesUnitTests : PostgreSqlTestDatabaseTransactionFixture
+public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
 {
     public TopRatedCompaniesUnitTests(PostgreSqlUnitTests tests) : base(tests) { }
-
 
     [Fact]
     public void TopRatedCompanies_Test()
@@ -26,7 +25,7 @@ public class TopRatedCompaniesUnitTests : PostgreSqlTestDatabaseTransactionFixtu
         var result = Connection.TopRatedCompanies(limit).ToList();
 
         // Assert
-        result.Select(r => new {r.Name, r.Areas, r.Score}).Should().BeEquivalentTo(new object[]
+        result.Select(r => new { r.Name, r.Areas, r.Score }).Should().BeEquivalentTo(new object[]
         {
             new { Name = "company1", Areas = new string[]{ "General", "AI" }, Score = 4.67m },
             new { Name = "company2", Areas = new string[]{ "Hardware", "Enterprise" }, Score = 3.67m },

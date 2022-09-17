@@ -57,14 +57,11 @@ public static class ConnectionBuilder
     private static string GetConnectionName(IConfiguration config)
     {
         var result = config.GetValue<string>(NameKey);
-        if (result == null)
-        {
-            result = config
-                .AsEnumerable()
-                .Where(c => c.Key.StartsWith("ConnectionStrings:"))
-                .Select(c => c.Key.Split(':')[1])
-                .First();
-        }
+        result ??= config
+            .AsEnumerable()
+            .Where(c => c.Key.StartsWith("ConnectionStrings:"))
+            .Select(c => c.Key.Split(':')[1])
+            .First();
         return result;
     }
 
