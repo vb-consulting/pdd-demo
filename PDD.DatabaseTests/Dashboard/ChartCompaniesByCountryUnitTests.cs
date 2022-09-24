@@ -40,18 +40,32 @@ public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
         // Arrange
         int? limit = 3;
 
-        this.InsertCompanies(
-            ("company1", "US"), ("company2", "HR"),
-            ("company3", "US"), ("company4", "HR"),
-            ("company5", "FR"), ("company6", "DE"));
-
+        Connection.Execute(@"
+            insert into companies (name, country) values
+            (@name1, (select code from countries where iso2 = @country1)),
+            (@name2, (select code from countries where iso2 = @country2)),
+            (@name3, (select code from countries where iso2 = @country3)),
+            (@name4, (select code from countries where iso2 = @country4)),
+            (@name5, (select code from countries where iso2 = @country5)),
+            (@name6, (select code from countries where iso2 = @country6)),
+            (@name7, (select code from countries where iso2 = @country7))", new
+        {
+            name1 = "company1", country1 = "US",
+            name2 = "company2", country2 = "US",
+            name3 = "company3", country3 = "HR",
+            name4 = "company4", country4 = "US",
+            name5 = "company5", country5 = "HR",
+            name6 = "company6", country6 = "FR",
+            name7 = "company7", country7 = "DE",
+        });
+        
         // Act
         var result = JsonConvert.DeserializeObject<ChartResponse>(Connection.ChartCompaniesByCountry(limit));
 
         // Assert
-        result.labels.Should().BeEquivalentTo(new string[3] { "Croatia", "United States", "Other" });
+        result.labels.Should().BeEquivalentTo(new string[3] { "United States", "Croatia", "Other" });
         result.series.Length.Should().Be(1);
         result.series[0].label.Should().BeNull();
-        result.series[0].data.Should().BeEquivalentTo(new int[3] { 2, 2, 2 });
+        result.series[0].data.Should().BeEquivalentTo(new int[3] { 3, 2, 2 });
     }
 }

@@ -18,8 +18,8 @@ if (c.Key != ConsoleKey.Enter)
 }
 
 var currentDir = Directory.GetCurrentDirectory();
-var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDD.WebApp") : Path.Combine(currentDir, "../PDD.WebApp");
-var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../PDD.Database") : Path.Combine(currentDir, "../PDD.Database");
+var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../../PDD.WebApp") : Path.Combine(currentDir, "../../PDD.WebApp");
+var pgRoutinerPath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../../PDD.Database") : Path.Combine(currentDir, "../../PDD.Database");
 
 var config = new ConfigurationBuilder()
     .AddJsonFile(Path.Combine(currentDir, pgRoutinerPath, "appsettings.PgRoutiner.json"), optional: false, reloadOnChange: false)

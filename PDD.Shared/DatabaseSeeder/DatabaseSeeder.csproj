@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PDD.WebApp\PDD.WebApp.csproj" />
+    <ProjectReference Include="..\..\PDD.WebApp\PDD.WebApp.csproj" />
   </ItemGroup>
 
 </Project>

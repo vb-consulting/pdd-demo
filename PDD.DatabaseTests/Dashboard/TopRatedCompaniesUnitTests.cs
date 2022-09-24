@@ -1,5 +1,8 @@
 // pgroutiner auto-generated code
 
+using static System.Formats.Asn1.AsnWriter;
+using System.ComponentModel.Design;
+
 namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
@@ -14,12 +17,62 @@ public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         int? limit = 3;
-        var persionId = this.InsertPerson("person1");
-        this
-            .InsertCompanyWithScoreAndAreas(persionId, "company1", new int[] { 5, 5, 4 }, new string[] { "General", "AI" })
-            .InsertCompanyWithScoreAndAreas(persionId, "company2", new int[] { 4, 4, 3 }, new string[] { "Hardware", "Enterprise" })
-            .InsertCompanyWithScoreAndAreas(persionId, "company3", new int[] { 3, 3, 2 }, new string[] { "Edtech", "Consumer" })
-            .InsertCompanyWithScoreAndAreas(persionId, "company4", new int[] { 2, 2, 1 }, new string[] { "Mobility", "AI" });
+        var personId = Guid.NewGuid();
+
+        var companyIds = Connection.Read<Guid>(@"
+            insert into companies (name, country) values
+            (@name[1], 0),
+            (@name[2], 0),
+            (@name[3], 0),
+            (@name[4], 0),
+            (@name[5], 0),
+            (@name[6], 0)
+            returning id;", new
+        {
+            name = new string[] { "company1", "company2", "company3", "company4", "company5", "company6" }
+        }).ToArray();
+
+        Connection.Execute(@"
+            insert into company_reviews (company_id, person_id, score) 
+            values 
+            (@company[1], @personId, @score[5]),
+            (@company[1], @personId, @score[5]),
+            (@company[1], @personId, @score[4]),
+
+            (@company[2], @personId, @score[4]),
+            (@company[2], @personId, @score[4]),
+            (@company[2], @personId, @score[3]),
+
+            (@company[3], @personId, @score[3]),
+            (@company[3], @personId, @score[3]),
+            (@company[3], @personId, @score[2]),
+
+            (@company[4], @personId, @score[2]),
+            (@company[4], @personId, @score[2]),
+            (@company[4], @personId, @score[1])", new 
+        { 
+            company = companyIds, 
+            personId, 
+            score = new int[] {1,2,3,4,5} 
+        });
+
+        Connection.Execute(@"
+            insert into company_areas (company_id, area_id) values 
+            (@company[1], (select id from business_areas where name_normalized = lower(@area[1]) limit 1)),
+            (@company[1], (select id from business_areas where name_normalized = lower(@area[2]) limit 1)),
+            
+            (@company[2], (select id from business_areas where name_normalized = lower(@area[3]) limit 1)),
+            (@company[2], (select id from business_areas where name_normalized = lower(@area[4]) limit 1)),
+
+            (@company[3], (select id from business_areas where name_normalized = lower(@area[5]) limit 1)),
+            (@company[3], (select id from business_areas where name_normalized = lower(@area[6]) limit 1)),
+
+            (@company[4], (select id from business_areas where name_normalized = lower(@area[7]) limit 1)),
+            (@company[4], (select id from business_areas where name_normalized = lower(@area[8]) limit 1))", new
+        {
+            company = companyIds,
+            area = new string[] { "General", "AI", "Hardware", "Enterprise", "Edtech", "Consumer", "Mobility", "AI" }
+        }); 
 
         // Act
         var result = Connection.TopRatedCompanies(limit).ToList();

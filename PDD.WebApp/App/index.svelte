@@ -30,7 +30,7 @@
 
 </script>
 
-<Layout title="">
+<Layout>
 
     <div class="main container-fluid pt-4">
         
@@ -67,7 +67,7 @@
                             <div class="grid-name-wrap">
                                 <div class="">{data.name}</div>
                                 <div class="text-muted fs-smaller">{data.companyLine}</div>
-                                <div class="badge">
+                                <div>
                                     <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
                                     <span>{data.country}</span>
                                 </div>
@@ -97,9 +97,9 @@
                         <th scope="row">{index+1}</th>
                         <td>
                             <div class="grid-name-wrap">
-                                <div class="">{data.firstName} {data.lastName}</div>
+                                <div>{data.firstName} {data.lastName}</div>
                                 <div class="text-muted fs-smaller">{data.employeeStatus}</div>
-                                <div class="badge">
+                                <div>
                                     <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
                                     <span>{data.country}</span>
                                 </div>
@@ -160,6 +160,9 @@
             margin-left: auto;
             padding-top: 0px;
             padding-bottom: 0px;
+            font-size: x-small;
+            font-weight: bold;
+            white-space: nowrap;
         }
     }
     .country-flag {

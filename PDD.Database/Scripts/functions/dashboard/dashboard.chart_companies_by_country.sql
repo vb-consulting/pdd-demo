@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION dashboard.chart_companies_by_country(_limit integer) RETURNS json
-    LANGUAGE sql
-    AS $$
+LANGUAGE sql
+AS $$
 with cte as (
     select 
         b.name, count(*), row_number () over (order by count(*) desc, b.name)

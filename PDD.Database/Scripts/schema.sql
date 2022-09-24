@@ -172,26 +172,33 @@ with companies_cte as (
     limit coalesce(_limit, 3)
     
 ), curr_employees_cte as (
+    
     select a.company_id, a.person_id, b.name, b.row_number
     from employee_records a inner join companies_cte b on a.company_id = b.id
     where a.employment_ended_at is null
+    
+), roles_cte as (
+    
+    select br.id, br.name
+    from business_roles br 
+    inner join person_roles pr on br.id = pr.role_id 
+    inner join curr_employees_cte a on pr.person_id = a.person_id
+    group by br.id, br.name
+    order by br.name
+    
 ), agg1_cte as (
     
     select
-        a.name,
-        a.row_number,
-        c.name as role,
-        count(*)
-    from 
-        curr_employees_cte a
-        inner join person_roles b on a.person_id = b.person_id
-        inner join business_roles c on b.role_id = c.id
-    group by
-        a.name,
         c.name,
-        a.row_number
-),
-agg2_cte as (
+        c.row_number,
+        r.name as role,
+        (select count(*) from curr_employees_cte e inner join person_roles pr 
+         on e.company_id = c.id and  e.person_id = pr.person_id and pr.role_id = r.id  )
+    from 
+       roles_cte r
+       cross join companies_cte c
+    
+), agg2_cte as (
     select 
         array_agg(count order by role) as data,
         name,
@@ -238,7 +245,7 @@ declare
     _years text[];
 begin
     _start := (select max(extract(year from employment_started_at)) from employee_records);
-    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 10, -1) year);
+    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 9, -1) year);
   
     return (
         
@@ -278,8 +285,8 @@ begin
                     from employee_records
                     where 
                         company_id = c.id 
-                        and extract(year from employment_started_at) <= year::numeric
-                        and (extract(year from employment_ended_at) > year::numeric or employment_ended_at is null)
+                        and extract(year from employment_started_at) = year::numeric
+                        and (extract(year from employment_ended_at) >= year::numeric or employment_ended_at is null)
                 ) count on true
             group by
                 c.name
@@ -311,7 +318,7 @@ select
     years_of_experience,
     number_of_companies,
     es.name as employee_status,
-    array_agg(br.name) as roles
+    array_agg(br.name) filter (where br.name is not null) as roles
 from
     people p
     join lateral (
@@ -327,7 +334,7 @@ from
     left outer join business_roles br on br.id = pr.role_id
     left outer join countries country on p.country = country.code
 where
-    es.name_normalized in ('open to opportunity', 'activly applying', 'employed', 'unemployed')
+    es.name_normalized in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
 group by
     p.id,
     country.name,
@@ -380,7 +387,7 @@ group by
     country.code,
     ca.areas
 order by
-    avg(rev.score) desc,
+    avg(rev.score) desc nulls last,
     comp.created_at desc,
     comp.name_normalized
 limit _limit;

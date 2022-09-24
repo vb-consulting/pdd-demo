@@ -13,7 +13,7 @@
 </Layout>
 
 <style lang="scss">
-    :global(main) {
+    .container {
         margin: auto;
     }
 </style>

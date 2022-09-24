@@ -1,6 +1,15 @@
-CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, country_code smallint, areas character varying[], score numeric, reviews bigint)
-    LANGUAGE sql
-    AS $$
+CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(
+    id uuid,
+    name character varying,
+    company_line character varying,
+    country character varying,
+    country_code smallint,
+    areas character varying[],
+    score numeric,
+    reviews bigint
+)
+LANGUAGE sql
+AS $$
 select 
     comp.id,
     comp.name,
@@ -30,7 +39,7 @@ group by
     country.code,
     ca.areas
 order by
-    avg(rev.score) desc,
+    avg(rev.score) desc nulls last,
     comp.created_at desc,
     comp.name_normalized
 limit _limit;

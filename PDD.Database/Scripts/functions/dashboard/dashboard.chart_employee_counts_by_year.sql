@@ -1,12 +1,12 @@
 CREATE OR REPLACE FUNCTION dashboard.chart_employee_counts_by_year(_limit integer) RETURNS json
-    LANGUAGE plpgsql
-    AS $$
+LANGUAGE plpgsql
+AS $$
 declare
     _start bigint;
     _years text[];
 begin
     _start := (select max(extract(year from employment_started_at)) from employee_records);
-    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 10, -1) year);
+    _years := (select array_agg(year order by year desc) from generate_series(_start, _start - 9, -1) year);
   
     return (
         
@@ -46,8 +46,8 @@ begin
                     from employee_records
                     where 
                         company_id = c.id 
-                        and extract(year from employment_started_at) <= year::numeric
-                        and (extract(year from employment_ended_at) > year::numeric or employment_ended_at is null)
+                        and extract(year from employment_started_at) = year::numeric
+                        and (extract(year from employment_ended_at) >= year::numeric or employment_ended_at is null)
                 ) count on true
             group by
                 c.name

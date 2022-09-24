@@ -15,12 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseShared\DatabaseShared.csproj" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\PDD.Shared\DatabaseShared\DatabaseShared.csproj" />
   </ItemGroup>
 
 </Project>

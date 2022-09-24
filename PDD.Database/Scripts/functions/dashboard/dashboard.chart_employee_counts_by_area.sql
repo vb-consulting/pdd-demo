@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION dashboard.chart_employee_counts_by_area(_limit integer) RETURNS json
-    LANGUAGE sql
-    AS $$
+LANGUAGE sql
+AS $$
 with companies_cte as (
     
     select c.id, c.name, row_number () over (order by count(*) desc, c.name)
@@ -14,26 +14,33 @@ with companies_cte as (
     limit coalesce(_limit, 3)
     
 ), curr_employees_cte as (
+    
     select a.company_id, a.person_id, b.name, b.row_number
     from employee_records a inner join companies_cte b on a.company_id = b.id
     where a.employment_ended_at is null
+    
+), roles_cte as (
+    
+    select br.id, br.name
+    from business_roles br 
+    inner join person_roles pr on br.id = pr.role_id 
+    inner join curr_employees_cte a on pr.person_id = a.person_id
+    group by br.id, br.name
+    order by br.name
+    
 ), agg1_cte as (
     
     select
-        a.name,
-        a.row_number,
-        c.name as role,
-        count(*)
-    from 
-        curr_employees_cte a
-        inner join person_roles b on a.person_id = b.person_id
-        inner join business_roles c on b.role_id = c.id
-    group by
-        a.name,
         c.name,
-        a.row_number
-),
-agg2_cte as (
+        c.row_number,
+        r.name as role,
+        (select count(*) from curr_employees_cte e inner join person_roles pr 
+         on e.company_id = c.id and  e.person_id = pr.person_id and pr.role_id = r.id  )
+    from 
+       roles_cte r
+       cross join companies_cte c
+    
+), agg2_cte as (
     select 
         array_agg(count order by role) as data,
         name,

@@ -1,6 +1,17 @@
-CREATE OR REPLACE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, country_code smallint, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
-    LANGUAGE sql
-    AS $$
+CREATE OR REPLACE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(
+    id uuid,
+    first_name character varying,
+    last_name character varying,
+    age integer,
+    country character varying,
+    country_code smallint,
+    years_of_experience integer,
+    number_of_companies bigint,
+    employee_status character varying,
+    roles character varying[]
+)
+LANGUAGE sql
+AS $$
 select
     p.id,
     p.first_name,
@@ -11,7 +22,7 @@ select
     years_of_experience,
     number_of_companies,
     es.name as employee_status,
-    array_agg(br.name) as roles
+    array_agg(br.name) filter (where br.name is not null) as roles
 from
     people p
     join lateral (
@@ -27,7 +38,7 @@ from
     left outer join business_roles br on br.id = pr.role_id
     left outer join countries country on p.country = country.code
 where
-    es.name_normalized in ('open to opportunity', 'activly applying', 'employed', 'unemployed')
+    es.name_normalized in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
 group by
     p.id,
     country.name,
