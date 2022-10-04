@@ -48,7 +48,7 @@ public class TopExperincedPeopleUnitTests : PostgreSqlConfigurationFixture
         var result = Connection.TopExperincedPeople(limit).ToList();
 
         // Assert
-        result.Select(e => new { e.FirstName, e.LastName, e.EmployeeStatus }).Should().BeEquivalentTo(new object[]
+        result.Select(e => new { e.FirstName, e.LastName, e.EmployeeStatus }).Should().BeEquivalentTo(new[]
         {
             new { FirstName = "name1", LastName = "last name1", EmployeeStatus = "Open to opportunity" },
             new { FirstName = "name2", LastName = "last name2", EmployeeStatus = "Actively applying" },

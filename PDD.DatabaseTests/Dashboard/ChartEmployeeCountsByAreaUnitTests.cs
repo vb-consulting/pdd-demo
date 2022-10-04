@@ -1,5 +1,7 @@
 // pgroutiner auto-generated code
 
+using System.Reflection.Emit;
+
 namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
@@ -85,15 +87,26 @@ public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlConfigurationFixture
         });
 
         // Act
-        var result = JsonConvert.DeserializeObject<ChartResponse>(Connection.ChartEmployeeCountsByArea(limit));
+        var result = JsonConvert.DeserializeAnonymousType(Connection.ChartEmployeeCountsByArea(limit), new
+        {
+            labels = new string[] { },
+            series = new[]
+            {
+                new
+                {
+                    data = new int[] { },
+                    label = default(string)
+                }
+            }
+        });
 
         // Assert
         result.labels.Should().BeEquivalentTo(new string[] { "Devops", "QA Lead", "Tester", "UI Designer", "UX Designer" });
-        result.series.Should().BeEquivalentTo(new ChartSeries[]
+        result.series.Should().BeEquivalentTo(new[]
         {
-            new ChartSeries(new int[] {1,0,2,0,0}, "company1"),
-            new ChartSeries(new int[] {0,0,0,1,1}, "company2"),
-            new ChartSeries(new int[] {0,1,0,0,0}, "company3"),
+            new { data = new int[] {1, 0, 2, 0, 0}, label = "company1" },
+            new { data = new int[] {0, 0, 0, 1, 1}, label = "company2" },
+            new { data = new int[] {0, 1, 0, 0, 0}, label = "company3" }
         });
     }
 }

@@ -1,0 +1,11 @@
+﻿@page
+@attribute [RazorCompiledItemMetadata("RouteTemplate", Urls.CompaniesUrl)]
+@model CompaniesModel
+@{
+    ViewData["Title"] = "PDD Companies";
+}
+
+@section HeadSection {
+    <link href="~/build/companies.css" asp-append-version="true" rel="stylesheet" />
+    <script defer src="~/build/companies.js" asp-append-version="true"></script>
+}

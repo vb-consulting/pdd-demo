@@ -58,9 +58,20 @@ public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
             name6 = "company6", country6 = "FR",
             name7 = "company7", country7 = "DE",
         });
-        
+
         // Act
-        var result = JsonConvert.DeserializeObject<ChartResponse>(Connection.ChartCompaniesByCountry(limit));
+        var result = JsonConvert.DeserializeAnonymousType(Connection.ChartCompaniesByCountry(limit), new 
+        { 
+            labels = new string[] { }, 
+            series = new[] 
+            { 
+                new 
+                { 
+                    data = new int[] { }, 
+                    label = default(string)
+                } 
+            } 
+        });
 
         // Assert
         result.labels.Should().BeEquivalentTo(new string[3] { "United States", "Croatia", "Other" });

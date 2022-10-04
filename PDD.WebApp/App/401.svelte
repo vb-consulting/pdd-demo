@@ -15,6 +15,6 @@
 
 <style lang="scss">
     .container {
-        margin: auto;
+        margin-top: 25%;
     }
 </style>

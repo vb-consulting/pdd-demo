@@ -84,9 +84,15 @@ DROP FUNCTION IF EXISTS dashboard.top_experinced_people(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_year(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
+DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _skip integer, _take integer);
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS dashboard;
+DROP SCHEMA IF EXISTS companies;
+--
+-- Name: companies; Type: SCHEMA; Schema: -; Owner: -
+--
+CREATE SCHEMA companies;
 --
 -- Name: dashboard; Type: SCHEMA; Schema: -; Owner: -
 --
@@ -110,6 +116,60 @@ CREATE TYPE public.valid_genders AS ENUM (
 -- Name: TYPE valid_genders; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
+--
+-- Name: search_companies(character varying, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
+--
+CREATE FUNCTION companies.search_companies(_search character varying, _skip integer, _take integer) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+declare
+    _count bigint;
+begin    
+    if _search is not null then
+        _search = '%' || lower(_search) || '%';
+    end if;
+    
+    create temp table _tmp on commit drop as
+    select 
+        c.id
+    from 
+        companies c
+    where (
+        _search is null or name_normalized like _search
+    );
+    
+    get diagnostics _count = row_count;
+    
+    return json_build_object(
+        'count', _count,
+        'page', (
+            select json_agg(sub)
+            from ( 
+                select 
+                    cm.id, 
+                    cm.name, 
+                    company_line as companyLine, 
+                    about,
+                    cn.code as countryCode,
+                    cn.name as country,
+                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas
+                from 
+                    _tmp tmp
+                    inner join companies cm on tmp.id = cm.id
+                    inner join countries cn on cm.country = cn.code
+                    left outer join company_areas ca on cm.id = ca.company_id
+                    left outer join business_areas ba on ca.area_id = ba.id
+                group by
+                    cm.id, cn.code
+                order by 
+                    cm.name_normalized
+                limit _take 
+                offset _skip                
+            ) sub
+        )
+    );
+end
+$$;
 --
 -- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --

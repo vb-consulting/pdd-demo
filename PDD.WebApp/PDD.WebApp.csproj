@@ -18,12 +18,18 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Label="nesting">
 		<None Update="Pages\Index.rollup.config.js">
 			<DependentUpon>Index.cshtml</DependentUpon>
 		</None>
 		<None Update="Pages\Index.entry.ts">
 			<DependentUpon>Index.cshtml</DependentUpon>
+		</None>
+		<None Update="Pages\Companies.rollup.config.js">
+			<DependentUpon>Companies.cshtml</DependentUpon>
+		</None>
+		<None Update="Pages\Companies.entry.ts">
+			<DependentUpon>Companies.cshtml</DependentUpon>
 		</None>
 		<None Update="Pages\Error.rollup.config.js">
 			<DependentUpon>Error.cshtml</DependentUpon>

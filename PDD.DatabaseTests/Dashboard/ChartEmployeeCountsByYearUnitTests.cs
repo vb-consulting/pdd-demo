@@ -1,7 +1,5 @@
 // pgroutiner auto-generated code
 
-using System;
-
 namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
@@ -84,15 +82,26 @@ public class ChartEmployeeCountsByYearUnitTests : PostgreSqlConfigurationFixture
         });
 
         // Act
-        var result = JsonConvert.DeserializeObject<ChartResponse>(Connection.ChartEmployeeCountsByYear(limit));
+        var result = JsonConvert.DeserializeAnonymousType(Connection.ChartEmployeeCountsByYear(limit), new
+        {
+            labels = new string[] { },
+            series = new[]
+            {
+                new
+                {
+                    data = new int[] { },
+                    label = default(string)
+                }
+            }
+        });
 
         // Assert
         result.labels.Should().BeEquivalentTo(new string[] { "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013" });
-        result.series.Should().BeEquivalentTo(new ChartSeries[]
-        {
-            new ChartSeries(new int[] {3, 2, 1, 1, 1, 1, 1, 0, 0, 0}, "company1"),
-            new ChartSeries(new int[] {2, 1, 1, 0, 0, 0, 0, 0, 0, 0}, "company2"),
-            new ChartSeries(new int[] {1, 1, 1, 0, 0, 0, 0, 0, 0, 0}, "company3"),
+        result.series.Should().BeEquivalentTo(new[]
+{
+            new { data = new int[] {3, 2, 1, 1, 1, 1, 1, 0, 0, 0}, label = "company1" },
+            new { data = new int[] {2, 1, 1, 0, 0, 0, 0, 0, 0, 0}, label = "company2" },
+            new { data = new int[] {1, 1, 1, 0, 0, 0, 0, 0, 0, 0}, label = "company3" }
         });
     }
 }
