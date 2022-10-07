@@ -9,4 +9,5 @@ public partial class Urls
     [JsonProperty] public const string ChartEmployeeCountsByYearUrl = "api/chart/employee-counts-by-year";
     [JsonProperty] public const string TopRatedCompaniesUrl = "api/top-rated-companies";
     [JsonProperty] public const string TopExperincedPeopleUrl = "api/top-experinced-people";
+    [JsonProperty] public const string CompaniesSearchUrl = "api/companies-search";
 }

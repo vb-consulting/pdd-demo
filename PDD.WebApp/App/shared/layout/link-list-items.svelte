@@ -8,12 +8,3 @@
 <li class="nav-item py-0">
     <a class="nav-link " class:active={document.location.pathname == urls.companiesUrl} href="{urls.companiesUrl}">Companies</a>
 </li>
-<!-- <li class="nav-item py-0">
-    <a class="nav-link" class:active={document.location.pathname == urls.privacyUrl} href="{urls.privacyUrl}">Privacy</a>
-</li>
-<li class="nav-item py-0">
-    <a class="nav-link" class:active={document.location.pathname == urls.authorizedUrl} href="{urls.authorizedUrl}">Authorized Access</a>
-</li>
-<li class="nav-item py-0">
-    <a class="nav-link" class:active={document.location.pathname == urls.spaUrl} href="{urls.spaUrl}">Spa Example</a>
-</li> -->

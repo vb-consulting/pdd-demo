@@ -25,8 +25,7 @@
     "pg-schema": "cd ../PDD.Database/ && dotnet tool run pgroutiner -db -sd",
     "pg-data": "cd ../PDD.Database/ && dotnet tool run pgroutiner -dd",
     "pg-readme": "cd ../PDD.Database/ && dotnet tool run pgroutiner -md",
-    "pg-readme-commit": "cd ../PDD.Database/ && dotnet tool run pgroutiner --commit-md",
-    "pg-tests-crud": "cd ../PDD.DatabaseTests/ && dotnet tool run pgroutiner --crud"
+    "pg-readme-commit": "cd ../PDD.Database/ && dotnet tool run pgroutiner --commit-md"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",

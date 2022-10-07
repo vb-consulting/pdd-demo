@@ -1,12 +1,15 @@
 <script lang="ts">
+    import PlaceholderRow from "./data-grid/placeholder-row.svelte";
+
     type T = $$Generic;
     export let headers: (string | {
         text: string; 
         width?: string; 
         minWidth?: string
     })[] = [];
-    export let dataFunc: (() => Promise<T[]>);
-    
+    export let dataFunc: (() => Promise<T[]>) | undefined = undefined;
+    export let dataPageFunc: ((skip: number, take: number) => Promise<{count: number; page: T[]}>) | undefined = undefined;
+
     export let primary = false;
     export let secondary = false;
     export let success = false;
@@ -33,12 +36,34 @@
 
     export let headerGroupDivider = false;
 
+    export let placeholderHeight = "25vh"
+
+    export let take: number = 50;
+    export let pager: "top-start" | "top-center" | "top-end" | "bottom-start" | "bottom-center" | "bottom-end" = "bottom-end";
+
+    let skip: number = 0; 
+    let count: number;
+
     interface $$Slots {
         row: { data: T, index: number };
         caption: {};
     }
 </script>
 
+{#if dataPageFunc && (pager == "top-start" || pager == "top-center" || pager == "top-end")}
+<nav>
+    <ul class="pagination" 
+        class:justify-content-start={pager == "top-start"} 
+        class:justify-content-center={pager == "top-center"} 
+        class:justify-content-end={pager == "top-end"}>
+    <li class="page-item disabled"><button class="page-link">Previous</button></li>
+    <li class="page-item active"><button class="page-link">1</button></li>
+    <li class="page-item"><button class="page-link">2</button></li>
+    <li class="page-item"><button class="page-link">3</button></li>
+    <li class="page-item"><button class="page-link">Next</button></li>
+    </ul>
+</nav>
+{/if}
 <table class="table"
     class:table-primary={primary}
     class:table-secondary={secondary}
@@ -79,21 +104,41 @@
         </tr>
     </thead>
     <tbody class:table-group-divider={headerGroupDivider}>
-        {#await dataFunc()}
-        <tr>
-            <td colspan=99999>
-                <div class="placeholder-glow">
-                    <span class="placeholder placeholder-lg col-12"></span>
-                </div>
-            </td>
-        </tr>
-        {:then response}
-            {#each response as data, index}
-                <slot name="row" {data} {index}></slot>
-            {/each}
-        {/await}
+        {#if dataFunc}
+            {#await dataFunc()}
+                <PlaceholderRow placeholderHeight={placeholderHeight} />
+            {:then response}
+                {#each response as data, index}
+                    <slot name="row" {data} {index}></slot>
+                {/each}
+            {/await}
+        {/if}
+        {#if dataPageFunc}
+            {#await dataPageFunc(skip, take)}
+                <PlaceholderRow placeholderHeight={placeholderHeight} />
+            {:then response}
+                {#each response.page as data, index}
+                    <slot name="row" {data} {index}></slot>
+                {/each}
+            {/await}
+        {/if}
     </tbody>
 </table>
-
-<style lang="scss">
-</style>
+<!-- {#if dataPageFunc && (pager == "bottom-start" || pager == "bottom-center" || pager == "bottom-end")}
+<nav aria-label="Page navigation example">
+    <ul class="pagination" 
+        class:justify-content-start={pager == "bottom-start"} 
+        class:justify-content-center={pager == "bottom-center"} 
+        class:justify-content-end={pager == "bottom-end"}>
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+{/if} -->

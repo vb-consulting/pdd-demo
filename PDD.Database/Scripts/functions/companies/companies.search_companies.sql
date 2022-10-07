@@ -4,6 +4,12 @@ AS $$
 declare
     _count bigint;
 begin    
+    _search = trim(_search);
+    
+    if _search = '' then
+        _search = null;
+    end if;
+    
     if _search is not null then
         _search = '%' || lower(_search) || '%';
     end if;
