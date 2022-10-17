@@ -210,15 +210,47 @@ var unauthorized = (function () {
             throw new Error('Function called outside component initialization');
         return current_component;
     }
+    /**
+     * Schedules a callback to run immediately before the component is updated after any state change.
+     *
+     * The first time the callback runs will be before the initial `onMount`
+     *
+     * https://svelte.dev/docs#run-time-svelte-beforeupdate
+     */
     function beforeUpdate(fn) {
         get_current_component().$$.before_update.push(fn);
     }
+    /**
+     * Schedules a callback to run immediately after the component has been updated.
+     *
+     * The first time the callback runs will be after the initial `onMount`
+     */
     function afterUpdate(fn) {
         get_current_component().$$.after_update.push(fn);
     }
+    /**
+     * Schedules a callback to run immediately before the component is unmounted.
+     *
+     * Out of `onMount`, `beforeUpdate`, `afterUpdate` and `onDestroy`, this is the
+     * only one that runs inside a server-side component.
+     *
+     * https://svelte.dev/docs#run-time-svelte-ondestroy
+     */
     function onDestroy(fn) {
         get_current_component().$$.on_destroy.push(fn);
     }
+    /**
+     * Creates an event dispatcher that can be used to dispatch [component events](/docs#template-syntax-component-directives-on-eventname).
+     * Event dispatchers are functions that can take two arguments: `name` and `detail`.
+     *
+     * Component events created with `createEventDispatcher` create a
+     * [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent).
+     * These events do not [bubble](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).
+     * The `detail` argument corresponds to the [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
+     * property and can contain any type of data.
+     *
+     * https://svelte.dev/docs#run-time-svelte-createeventdispatcher
+     */
     function createEventDispatcher() {
         const component = get_current_component();
         return (type, detail, { cancelable = false } = {}) => {
@@ -449,14 +481,17 @@ var unauthorized = (function () {
         block && block.c();
     }
     function mount_component(component, target, anchor, customElement) {
-        const { fragment, on_mount, on_destroy, after_update } = component.$$;
+        const { fragment, after_update } = component.$$;
         fragment && fragment.m(target, anchor);
         if (!customElement) {
             // onMount happens before the initial afterUpdate
             add_render_callback(() => {
-                const new_on_destroy = on_mount.map(run$1).filter(is_function);
-                if (on_destroy) {
-                    on_destroy.push(...new_on_destroy);
+                const new_on_destroy = component.$$.on_mount.map(run$1).filter(is_function);
+                // if the component was destroyed immediately
+                // it will update the `$$.on_destroy` reference to `null`.
+                // the destructured on_destroy may still reference to the old array
+                if (component.$$.on_destroy) {
+                    component.$$.on_destroy.push(...new_on_destroy);
                 }
                 else {
                     // Edge case - component was destroyed immediately,
@@ -492,7 +527,7 @@ var unauthorized = (function () {
         set_current_component(component);
         const $$ = component.$$ = {
             fragment: null,
-            ctx: null,
+            ctx: [],
             // state
             props,
             update: noop,
@@ -557,6 +592,9 @@ var unauthorized = (function () {
             this.$destroy = noop;
         }
         $on(type, callback) {
+            if (!is_function(callback)) {
+                return noop;
+            }
             const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
             callbacks.push(callback);
             return () => {
@@ -575,7 +613,7 @@ var unauthorized = (function () {
     }
 
     function dispatch_dev(type, detail) {
-        document.dispatchEvent(custom_event(type, Object.assign({ version: '3.50.1' }, detail), { bubbles: true }));
+        document.dispatchEvent(custom_event(type, Object.assign({ version: '3.52.0' }, detail), { bubbles: true }));
     }
     function append_dev(target, node) {
         dispatch_dev('SvelteDOMInsert', { target, node });
@@ -2699,7 +2737,7 @@ var unauthorized = (function () {
     var util = {exports: {}};
 
     /*!
-      * Bootstrap index.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap index.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -2715,7 +2753,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function (exports) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/index.js
+    		   * Bootstrap (v5.2.2): util/index.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3060,7 +3098,7 @@ var unauthorized = (function () {
     var sanitizer = {exports: {}};
 
     /*!
-      * Bootstrap sanitizer.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap sanitizer.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3076,7 +3114,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function (exports) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/sanitizer.js
+    		   * Bootstrap (v5.2.2): util/sanitizer.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3193,7 +3231,7 @@ var unauthorized = (function () {
     var eventHandler = {exports: {}};
 
     /*!
-      * Bootstrap event-handler.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap event-handler.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3209,7 +3247,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function (index) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/event-handler.js
+    		   * Bootstrap (v5.2.2): dom/event-handler.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3487,7 +3525,7 @@ var unauthorized = (function () {
     var manipulator = {exports: {}};
 
     /*!
-      * Bootstrap manipulator.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap manipulator.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3503,7 +3541,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function () {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/manipulator.js
+    		   * Bootstrap (v5.2.2): dom/manipulator.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3584,7 +3622,7 @@ var unauthorized = (function () {
     var data = {exports: {}};
 
     /*!
-      * Bootstrap data.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap data.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3600,7 +3638,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function () {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/data.js
+    		   * Bootstrap (v5.2.2): dom/data.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3661,7 +3699,7 @@ var unauthorized = (function () {
     var config = {exports: {}};
 
     /*!
-      * Bootstrap config.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap config.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3681,7 +3719,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/config.js
+    		   * Bootstrap (v5.2.2): util/config.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3749,7 +3787,7 @@ var unauthorized = (function () {
     }
 
     /*!
-      * Bootstrap base-component.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap base-component.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3771,7 +3809,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): base-component.js
+    		   * Bootstrap (v5.2.2): base-component.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3779,7 +3817,7 @@ var unauthorized = (function () {
     		   * Constants
     		   */
 
-    		  const VERSION = '5.2.1';
+    		  const VERSION = '5.2.2';
     		  /**
     		   * Class definition
     		   */
@@ -3861,7 +3899,7 @@ var unauthorized = (function () {
     var selectorEngine = {exports: {}};
 
     /*!
-      * Bootstrap selector-engine.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap selector-engine.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3877,7 +3915,7 @@ var unauthorized = (function () {
     		})(commonjsGlobal, (function (index) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/selector-engine.js
+    		   * Bootstrap (v5.2.2): dom/selector-engine.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3955,7 +3993,7 @@ var unauthorized = (function () {
     }
 
     /*!
-      * Bootstrap template-factory.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap template-factory.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3976,7 +4014,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/template-factory.js
+    		   * Bootstrap (v5.2.2): util/template-factory.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -4141,7 +4179,7 @@ var unauthorized = (function () {
     }
 
     /*!
-      * Bootstrap tooltip.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap tooltip.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -4178,7 +4216,7 @@ var unauthorized = (function () {
 
     	  /**
     	   * --------------------------------------------------------------------------
-    	   * Bootstrap (v5.2.1): tooltip.js
+    	   * Bootstrap (v5.2.2): tooltip.js
     	   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     	   * --------------------------------------------------------------------------
     	   */
@@ -4276,6 +4314,10 @@ var unauthorized = (function () {
     	      this.tip = null;
 
     	      this._setListeners();
+
+    	      if (!this._config.selector) {
+    	        this._fixTitle();
+    	      }
     	    } // Getters
 
 
@@ -4304,24 +4346,12 @@ var unauthorized = (function () {
     	      this._isEnabled = !this._isEnabled;
     	    }
 
-    	    toggle(event) {
+    	    toggle() {
     	      if (!this._isEnabled) {
     	        return;
     	      }
 
-    	      if (event) {
-    	        const context = this._initializeOnDelegatedTarget(event);
-
-    	        context._activeTrigger.click = !context._activeTrigger.click;
-
-    	        if (context._isWithActiveTrigger()) {
-    	          context._enter();
-    	        } else {
-    	          context._leave();
-    	        }
-
-    	        return;
-    	      }
+    	      this._activeTrigger.click = !this._activeTrigger.click;
 
     	      if (this._isShown()) {
     	        this._leave();
@@ -4340,8 +4370,8 @@ var unauthorized = (function () {
     	        this.tip.remove();
     	      }
 
-    	      if (this._config.originalTitle) {
-    	        this._element.setAttribute('title', this._config.originalTitle);
+    	      if (this._element.getAttribute('data-bs-original-title')) {
+    	        this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
     	      }
 
     	      this._disposePopper();
@@ -4534,7 +4564,7 @@ var unauthorized = (function () {
     	    }
 
     	    _getTitle() {
-    	      return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
+    	      return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
     	    } // Private
 
 
@@ -4620,7 +4650,11 @@ var unauthorized = (function () {
 
     	      for (const trigger of triggers) {
     	        if (trigger === 'click') {
-    	          EventHandler__default.default.on(this._element, this.constructor.eventName(EVENT_CLICK), this._config.selector, event => this.toggle(event));
+    	          EventHandler__default.default.on(this._element, this.constructor.eventName(EVENT_CLICK), this._config.selector, event => {
+    	            const context = this._initializeOnDelegatedTarget(event);
+
+    	            context.toggle();
+    	          });
     	        } else if (trigger !== TRIGGER_MANUAL) {
     	          const eventIn = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN);
     	          const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT);
@@ -4648,19 +4682,10 @@ var unauthorized = (function () {
     	      };
 
     	      EventHandler__default.default.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-    	      if (this._config.selector) {
-    	        this._config = { ...this._config,
-    	          trigger: 'manual',
-    	          selector: ''
-    	        };
-    	      } else {
-    	        this._fixTitle();
-    	      }
     	    }
 
     	    _fixTitle() {
-    	      const title = this._config.originalTitle;
+    	      const title = this._element.getAttribute('title');
 
     	      if (!title) {
     	        return;
@@ -4669,6 +4694,9 @@ var unauthorized = (function () {
     	      if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
     	        this._element.setAttribute('aria-label', title);
     	      }
+
+    	      this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+
 
     	      this._element.removeAttribute('title');
     	    }
@@ -4741,8 +4769,6 @@ var unauthorized = (function () {
     	        };
     	      }
 
-    	      config.originalTitle = this._element.getAttribute('title') || '';
-
     	      if (typeof config.title === 'number') {
     	        config.title = config.title.toString();
     	      }
@@ -4761,10 +4787,12 @@ var unauthorized = (function () {
     	        if (this.constructor.Default[key] !== this._config[key]) {
     	          config[key] = this._config[key];
     	        }
-    	      } // In the future can be replaced with:
+    	      }
+
+    	      config.selector = false;
+    	      config.trigger = 'manual'; // In the future can be replaced with:
     	      // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
     	      // `Object.fromEntries(keysWithDifferentValues)`
-
 
     	      return config;
     	    }
@@ -4835,7 +4863,7 @@ var unauthorized = (function () {
     var scrollbar = {exports: {}};
 
     /*!
-      * Bootstrap scrollbar.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap scrollbar.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -4856,7 +4884,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/scrollBar.js
+    		   * Bootstrap (v5.2.2): util/scrollBar.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -4984,7 +5012,7 @@ var unauthorized = (function () {
     var backdrop = {exports: {}};
 
     /*!
-      * Bootstrap backdrop.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap backdrop.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5005,7 +5033,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/backdrop.js
+    		   * Bootstrap (v5.2.2): util/backdrop.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5160,7 +5188,7 @@ var unauthorized = (function () {
     var focustrap = {exports: {}};
 
     /*!
-      * Bootstrap focustrap.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap focustrap.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5182,7 +5210,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/focustrap.js
+    		   * Bootstrap (v5.2.2): util/focustrap.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5300,7 +5328,7 @@ var unauthorized = (function () {
     var componentFunctions = {exports: {}};
 
     /*!
-      * Bootstrap component-functions.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap component-functions.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5320,7 +5348,7 @@ var unauthorized = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/component-functions.js
+    		   * Bootstrap (v5.2.2): util/component-functions.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5355,7 +5383,7 @@ var unauthorized = (function () {
     }
 
     /*!
-      * Bootstrap offcanvas.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap offcanvas.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5375,7 +5403,7 @@ var unauthorized = (function () {
 
     	  /**
     	   * --------------------------------------------------------------------------
-    	   * Bootstrap (v5.2.1): offcanvas.js
+    	   * Bootstrap (v5.2.2): offcanvas.js
     	   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     	   * --------------------------------------------------------------------------
     	   */
@@ -5655,7 +5683,7 @@ var unauthorized = (function () {
 
     var offcanvas = offcanvas$1.exports;
 
-    /* App\shared\components\offcanvas.svelte generated by Svelte v3.50.1 */
+    /* App\shared\components\offcanvas.svelte generated by Svelte v3.52.0 */
     const file$3 = "App\\shared\\components\\offcanvas.svelte";
     const get_title_slot_changes = dirty => ({});
     const get_title_slot_context = ctx => ({});
@@ -6590,7 +6618,7 @@ var unauthorized = (function () {
     const title = getValue("title");
     const urls = getValueFromJson("urls");
 
-    /* App\shared\layout\link-list-items.svelte generated by Svelte v3.50.1 */
+    /* App\shared\layout\link-list-items.svelte generated by Svelte v3.52.0 */
     const file$2 = "App\\shared\\layout\\link-list-items.svelte";
 
     function create_fragment$2(ctx) {
@@ -6765,7 +6793,7 @@ var unauthorized = (function () {
         });
     }
 
-    /* App\shared\layout\offcanvas-layout.svelte generated by Svelte v3.50.1 */
+    /* App\shared\layout\offcanvas-layout.svelte generated by Svelte v3.52.0 */
 
     const { document: document_1 } = globals;
     const file$1 = "App\\shared\\layout\\offcanvas-layout.svelte";
@@ -7536,7 +7564,7 @@ var unauthorized = (function () {
     	}
     }
 
-    /* App\401.svelte generated by Svelte v3.50.1 */
+    /* App\401.svelte generated by Svelte v3.52.0 */
     const file = "App\\401.svelte";
 
     // (5:0) <Layout>

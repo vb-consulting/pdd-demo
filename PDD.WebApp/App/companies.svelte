@@ -4,7 +4,7 @@
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
 
-    let getCompanies = (skip: number, take: number) => get<{
+    const getCompanies = (skip: number, take: number) => get<{
         count: number,
         page: {
             id: string,
@@ -22,9 +22,11 @@
 <Layout>
     <div class="main container-fluid pt-4">
 
-        <DataGrid dataPageFunc={getCompanies} take={10} pager="top-end" hover>
+        <DataGrid dataPageFunc={getCompanies} take={10} pagerHorizontalPos="end" hover striped bordered>
             <tr slot="row" let:data>
                 <td>{data.name}</td>
+                <td>{data.companyline}</td>
+                <td>{data.about}</td>
             </tr>
         </DataGrid>
 

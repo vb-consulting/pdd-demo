@@ -216,15 +216,47 @@ var companies = (function () {
             throw new Error('Function called outside component initialization');
         return current_component;
     }
+    /**
+     * Schedules a callback to run immediately before the component is updated after any state change.
+     *
+     * The first time the callback runs will be before the initial `onMount`
+     *
+     * https://svelte.dev/docs#run-time-svelte-beforeupdate
+     */
     function beforeUpdate(fn) {
         get_current_component().$$.before_update.push(fn);
     }
+    /**
+     * Schedules a callback to run immediately after the component has been updated.
+     *
+     * The first time the callback runs will be after the initial `onMount`
+     */
     function afterUpdate(fn) {
         get_current_component().$$.after_update.push(fn);
     }
+    /**
+     * Schedules a callback to run immediately before the component is unmounted.
+     *
+     * Out of `onMount`, `beforeUpdate`, `afterUpdate` and `onDestroy`, this is the
+     * only one that runs inside a server-side component.
+     *
+     * https://svelte.dev/docs#run-time-svelte-ondestroy
+     */
     function onDestroy(fn) {
         get_current_component().$$.on_destroy.push(fn);
     }
+    /**
+     * Creates an event dispatcher that can be used to dispatch [component events](/docs#template-syntax-component-directives-on-eventname).
+     * Event dispatchers are functions that can take two arguments: `name` and `detail`.
+     *
+     * Component events created with `createEventDispatcher` create a
+     * [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent).
+     * These events do not [bubble](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).
+     * The `detail` argument corresponds to the [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
+     * property and can contain any type of data.
+     *
+     * https://svelte.dev/docs#run-time-svelte-createeventdispatcher
+     */
     function createEventDispatcher() {
         const component = get_current_component();
         return (type, detail, { cancelable = false } = {}) => {
@@ -455,14 +487,17 @@ var companies = (function () {
         block && block.c();
     }
     function mount_component(component, target, anchor, customElement) {
-        const { fragment, on_mount, on_destroy, after_update } = component.$$;
+        const { fragment, after_update } = component.$$;
         fragment && fragment.m(target, anchor);
         if (!customElement) {
             // onMount happens before the initial afterUpdate
             add_render_callback(() => {
-                const new_on_destroy = on_mount.map(run$1).filter(is_function);
-                if (on_destroy) {
-                    on_destroy.push(...new_on_destroy);
+                const new_on_destroy = component.$$.on_mount.map(run$1).filter(is_function);
+                // if the component was destroyed immediately
+                // it will update the `$$.on_destroy` reference to `null`.
+                // the destructured on_destroy may still reference to the old array
+                if (component.$$.on_destroy) {
+                    component.$$.on_destroy.push(...new_on_destroy);
                 }
                 else {
                     // Edge case - component was destroyed immediately,
@@ -498,7 +533,7 @@ var companies = (function () {
         set_current_component(component);
         const $$ = component.$$ = {
             fragment: null,
-            ctx: null,
+            ctx: [],
             // state
             props,
             update: noop,
@@ -563,6 +598,9 @@ var companies = (function () {
             this.$destroy = noop;
         }
         $on(type, callback) {
+            if (!is_function(callback)) {
+                return noop;
+            }
             const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
             callbacks.push(callback);
             return () => {
@@ -581,7 +619,7 @@ var companies = (function () {
     }
 
     function dispatch_dev(type, detail) {
-        document.dispatchEvent(custom_event(type, Object.assign({ version: '3.50.1' }, detail), { bubbles: true }));
+        document.dispatchEvent(custom_event(type, Object.assign({ version: '3.52.0' }, detail), { bubbles: true }));
     }
     function append_dev(target, node) {
         dispatch_dev('SvelteDOMInsert', { target, node });
@@ -2714,7 +2752,7 @@ var companies = (function () {
     var util = {exports: {}};
 
     /*!
-      * Bootstrap index.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap index.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -2730,7 +2768,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function (exports) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/index.js
+    		   * Bootstrap (v5.2.2): util/index.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3075,7 +3113,7 @@ var companies = (function () {
     var sanitizer = {exports: {}};
 
     /*!
-      * Bootstrap sanitizer.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap sanitizer.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3091,7 +3129,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function (exports) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/sanitizer.js
+    		   * Bootstrap (v5.2.2): util/sanitizer.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3208,7 +3246,7 @@ var companies = (function () {
     var eventHandler = {exports: {}};
 
     /*!
-      * Bootstrap event-handler.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap event-handler.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3224,7 +3262,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function (index) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/event-handler.js
+    		   * Bootstrap (v5.2.2): dom/event-handler.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3502,7 +3540,7 @@ var companies = (function () {
     var manipulator = {exports: {}};
 
     /*!
-      * Bootstrap manipulator.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap manipulator.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3518,7 +3556,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function () {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/manipulator.js
+    		   * Bootstrap (v5.2.2): dom/manipulator.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3599,7 +3637,7 @@ var companies = (function () {
     var data = {exports: {}};
 
     /*!
-      * Bootstrap data.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap data.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3615,7 +3653,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function () {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/data.js
+    		   * Bootstrap (v5.2.2): dom/data.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3676,7 +3714,7 @@ var companies = (function () {
     var config = {exports: {}};
 
     /*!
-      * Bootstrap config.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap config.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3696,7 +3734,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/config.js
+    		   * Bootstrap (v5.2.2): util/config.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3764,7 +3802,7 @@ var companies = (function () {
     }
 
     /*!
-      * Bootstrap base-component.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap base-component.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3786,7 +3824,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): base-component.js
+    		   * Bootstrap (v5.2.2): base-component.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3794,7 +3832,7 @@ var companies = (function () {
     		   * Constants
     		   */
 
-    		  const VERSION = '5.2.1';
+    		  const VERSION = '5.2.2';
     		  /**
     		   * Class definition
     		   */
@@ -3876,7 +3914,7 @@ var companies = (function () {
     var selectorEngine = {exports: {}};
 
     /*!
-      * Bootstrap selector-engine.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap selector-engine.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3892,7 +3930,7 @@ var companies = (function () {
     		})(commonjsGlobal, (function (index) {
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): dom/selector-engine.js
+    		   * Bootstrap (v5.2.2): dom/selector-engine.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -3970,7 +4008,7 @@ var companies = (function () {
     }
 
     /*!
-      * Bootstrap template-factory.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap template-factory.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -3991,7 +4029,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/template-factory.js
+    		   * Bootstrap (v5.2.2): util/template-factory.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -4156,7 +4194,7 @@ var companies = (function () {
     }
 
     /*!
-      * Bootstrap tooltip.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap tooltip.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -4193,7 +4231,7 @@ var companies = (function () {
 
     	  /**
     	   * --------------------------------------------------------------------------
-    	   * Bootstrap (v5.2.1): tooltip.js
+    	   * Bootstrap (v5.2.2): tooltip.js
     	   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     	   * --------------------------------------------------------------------------
     	   */
@@ -4291,6 +4329,10 @@ var companies = (function () {
     	      this.tip = null;
 
     	      this._setListeners();
+
+    	      if (!this._config.selector) {
+    	        this._fixTitle();
+    	      }
     	    } // Getters
 
 
@@ -4319,24 +4361,12 @@ var companies = (function () {
     	      this._isEnabled = !this._isEnabled;
     	    }
 
-    	    toggle(event) {
+    	    toggle() {
     	      if (!this._isEnabled) {
     	        return;
     	      }
 
-    	      if (event) {
-    	        const context = this._initializeOnDelegatedTarget(event);
-
-    	        context._activeTrigger.click = !context._activeTrigger.click;
-
-    	        if (context._isWithActiveTrigger()) {
-    	          context._enter();
-    	        } else {
-    	          context._leave();
-    	        }
-
-    	        return;
-    	      }
+    	      this._activeTrigger.click = !this._activeTrigger.click;
 
     	      if (this._isShown()) {
     	        this._leave();
@@ -4355,8 +4385,8 @@ var companies = (function () {
     	        this.tip.remove();
     	      }
 
-    	      if (this._config.originalTitle) {
-    	        this._element.setAttribute('title', this._config.originalTitle);
+    	      if (this._element.getAttribute('data-bs-original-title')) {
+    	        this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
     	      }
 
     	      this._disposePopper();
@@ -4549,7 +4579,7 @@ var companies = (function () {
     	    }
 
     	    _getTitle() {
-    	      return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
+    	      return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
     	    } // Private
 
 
@@ -4635,7 +4665,11 @@ var companies = (function () {
 
     	      for (const trigger of triggers) {
     	        if (trigger === 'click') {
-    	          EventHandler__default.default.on(this._element, this.constructor.eventName(EVENT_CLICK), this._config.selector, event => this.toggle(event));
+    	          EventHandler__default.default.on(this._element, this.constructor.eventName(EVENT_CLICK), this._config.selector, event => {
+    	            const context = this._initializeOnDelegatedTarget(event);
+
+    	            context.toggle();
+    	          });
     	        } else if (trigger !== TRIGGER_MANUAL) {
     	          const eventIn = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN);
     	          const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT);
@@ -4663,19 +4697,10 @@ var companies = (function () {
     	      };
 
     	      EventHandler__default.default.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-    	      if (this._config.selector) {
-    	        this._config = { ...this._config,
-    	          trigger: 'manual',
-    	          selector: ''
-    	        };
-    	      } else {
-    	        this._fixTitle();
-    	      }
     	    }
 
     	    _fixTitle() {
-    	      const title = this._config.originalTitle;
+    	      const title = this._element.getAttribute('title');
 
     	      if (!title) {
     	        return;
@@ -4684,6 +4709,9 @@ var companies = (function () {
     	      if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
     	        this._element.setAttribute('aria-label', title);
     	      }
+
+    	      this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+
 
     	      this._element.removeAttribute('title');
     	    }
@@ -4756,8 +4784,6 @@ var companies = (function () {
     	        };
     	      }
 
-    	      config.originalTitle = this._element.getAttribute('title') || '';
-
     	      if (typeof config.title === 'number') {
     	        config.title = config.title.toString();
     	      }
@@ -4776,10 +4802,12 @@ var companies = (function () {
     	        if (this.constructor.Default[key] !== this._config[key]) {
     	          config[key] = this._config[key];
     	        }
-    	      } // In the future can be replaced with:
+    	      }
+
+    	      config.selector = false;
+    	      config.trigger = 'manual'; // In the future can be replaced with:
     	      // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
     	      // `Object.fromEntries(keysWithDifferentValues)`
-
 
     	      return config;
     	    }
@@ -4850,7 +4878,7 @@ var companies = (function () {
     var scrollbar = {exports: {}};
 
     /*!
-      * Bootstrap scrollbar.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap scrollbar.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -4871,7 +4899,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/scrollBar.js
+    		   * Bootstrap (v5.2.2): util/scrollBar.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -4999,7 +5027,7 @@ var companies = (function () {
     var backdrop = {exports: {}};
 
     /*!
-      * Bootstrap backdrop.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap backdrop.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5020,7 +5048,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/backdrop.js
+    		   * Bootstrap (v5.2.2): util/backdrop.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5175,7 +5203,7 @@ var companies = (function () {
     var focustrap = {exports: {}};
 
     /*!
-      * Bootstrap focustrap.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap focustrap.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5197,7 +5225,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/focustrap.js
+    		   * Bootstrap (v5.2.2): util/focustrap.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5315,7 +5343,7 @@ var companies = (function () {
     var componentFunctions = {exports: {}};
 
     /*!
-      * Bootstrap component-functions.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap component-functions.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5335,7 +5363,7 @@ var companies = (function () {
 
     		  /**
     		   * --------------------------------------------------------------------------
-    		   * Bootstrap (v5.2.1): util/component-functions.js
+    		   * Bootstrap (v5.2.2): util/component-functions.js
     		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     		   * --------------------------------------------------------------------------
     		   */
@@ -5370,7 +5398,7 @@ var companies = (function () {
     }
 
     /*!
-      * Bootstrap offcanvas.js v5.2.1 (https://getbootstrap.com/)
+      * Bootstrap offcanvas.js v5.2.2 (https://getbootstrap.com/)
       * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
       */
@@ -5390,7 +5418,7 @@ var companies = (function () {
 
     	  /**
     	   * --------------------------------------------------------------------------
-    	   * Bootstrap (v5.2.1): offcanvas.js
+    	   * Bootstrap (v5.2.2): offcanvas.js
     	   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
     	   * --------------------------------------------------------------------------
     	   */
@@ -5670,7 +5698,7 @@ var companies = (function () {
 
     var offcanvas = offcanvas$1.exports;
 
-    /* App\shared\components\offcanvas.svelte generated by Svelte v3.50.1 */
+    /* App\shared\components\offcanvas.svelte generated by Svelte v3.52.0 */
     const file$5 = "App\\shared\\components\\offcanvas.svelte";
     const get_title_slot_changes = dirty => ({});
     const get_title_slot_context = ctx => ({});
@@ -6605,7 +6633,7 @@ var companies = (function () {
     const title = getValue("title");
     const urls = getValueFromJson("urls");
 
-    /* App\shared\layout\link-list-items.svelte generated by Svelte v3.50.1 */
+    /* App\shared\layout\link-list-items.svelte generated by Svelte v3.52.0 */
     const file$4 = "App\\shared\\layout\\link-list-items.svelte";
 
     function create_fragment$4(ctx) {
@@ -6780,7 +6808,7 @@ var companies = (function () {
         });
     }
 
-    /* App\shared\layout\offcanvas-layout.svelte generated by Svelte v3.50.1 */
+    /* App\shared\layout\offcanvas-layout.svelte generated by Svelte v3.52.0 */
 
     const { document: document_1 } = globals;
     const file$3 = "App\\shared\\layout\\offcanvas-layout.svelte";
@@ -7551,7 +7579,7 @@ var companies = (function () {
     	}
     }
 
-    /* App\shared\components\data-grid\placeholder-row.svelte generated by Svelte v3.50.1 */
+    /* App\shared\components\data-grid\placeholder-row.svelte generated by Svelte v3.52.0 */
 
     const file$2 = "App\\shared\\components\\data-grid\\placeholder-row.svelte";
 
@@ -7657,146 +7685,148 @@ var companies = (function () {
     	}
     }
 
-    /* App\shared\components\data-grid.svelte generated by Svelte v3.50.1 */
+    /* App\shared\components\data-grid.svelte generated by Svelte v3.52.0 */
     const file$1 = "App\\shared\\components\\data-grid.svelte";
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[34] = list[i];
-    	child_ctx[36] = i;
+    	child_ctx[36] = list[i];
+    	child_ctx[38] = i;
     	return child_ctx;
     }
 
-    const get_row_slot_changes_1 = dirty => ({
-    	data: dirty[0] & /*dataPageFunc, take*/ 67108868
-    });
+    const get_row_slot_changes_1 = dirty => ({});
 
     const get_row_slot_context_1 = ctx => ({
-    	data: /*data*/ ctx[34],
-    	index: /*index*/ ctx[36]
+    	data: /*data*/ ctx[36],
+    	index: /*index*/ ctx[38]
     });
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[34] = list[i];
-    	child_ctx[36] = i;
+    	child_ctx[36] = list[i];
+    	child_ctx[38] = i;
     	return child_ctx;
     }
 
     const get_row_slot_changes = dirty => ({ data: dirty[0] & /*dataFunc*/ 2 });
 
     const get_row_slot_context = ctx => ({
-    	data: /*data*/ ctx[34],
-    	index: /*index*/ ctx[36]
+    	data: /*data*/ ctx[36],
+    	index: /*index*/ ctx[38]
     });
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[38] = list[i];
+    	child_ctx[40] = list[i];
     	return child_ctx;
     }
 
     const get_caption_slot_changes = dirty => ({});
     const get_caption_slot_context = ctx => ({});
 
-    // (34:0) {#if dataPageFunc && (pager == "top-start" || pager == "top-center" || pager == "top-end")}
+    // (43:0) {#if dataPageFunc && pagerVerticalPos == "top"}
     function create_if_block_4(ctx) {
     	let nav;
+    	let div;
+    	let t1;
     	let ul;
     	let li0;
     	let button0;
-    	let t1;
+    	let t3;
     	let li1;
     	let button1;
-    	let t3;
+    	let t5;
     	let li2;
     	let button2;
-    	let t5;
+    	let t7;
     	let li3;
     	let button3;
-    	let t7;
+    	let t9;
     	let li4;
     	let button4;
+    	let ul_class_value;
+    	let nav_class_value;
 
     	const block = {
     		c: function create() {
     			nav = element("nav");
+    			div = element("div");
+    			div.textContent = "some text";
+    			t1 = space();
     			ul = element("ul");
     			li0 = element("li");
     			button0 = element("button");
     			button0.textContent = "Previous";
-    			t1 = space();
+    			t3 = space();
     			li1 = element("li");
     			button1 = element("button");
     			button1.textContent = "1";
-    			t3 = space();
+    			t5 = space();
     			li2 = element("li");
     			button2 = element("button");
     			button2.textContent = "2";
-    			t5 = space();
+    			t7 = space();
     			li3 = element("li");
     			button3 = element("button");
     			button3.textContent = "3";
-    			t7 = space();
+    			t9 = space();
     			li4 = element("li");
     			button4 = element("button");
     			button4.textContent = "Next";
+    			add_location(div, file$1, 44, 4, 1343);
     			attr_dev(button0, "class", "page-link");
-    			add_location(button0, file$1, 39, 35, 1339);
+    			add_location(button0, file$1, 47, 39, 1472);
     			attr_dev(li0, "class", "page-item disabled");
-    			add_location(li0, file$1, 39, 4, 1308);
+    			add_location(li0, file$1, 47, 8, 1441);
     			attr_dev(button1, "class", "page-link");
-    			add_location(button1, file$1, 40, 33, 1422);
+    			add_location(button1, file$1, 48, 37, 1559);
     			attr_dev(li1, "class", "page-item active");
-    			add_location(li1, file$1, 40, 4, 1393);
+    			add_location(li1, file$1, 48, 8, 1530);
     			attr_dev(button2, "class", "page-link");
-    			add_location(button2, file$1, 41, 26, 1491);
+    			add_location(button2, file$1, 49, 30, 1632);
     			attr_dev(li2, "class", "page-item");
-    			add_location(li2, file$1, 41, 4, 1469);
+    			add_location(li2, file$1, 49, 8, 1610);
     			attr_dev(button3, "class", "page-link");
-    			add_location(button3, file$1, 42, 26, 1560);
+    			add_location(button3, file$1, 50, 30, 1705);
     			attr_dev(li3, "class", "page-item");
-    			add_location(li3, file$1, 42, 4, 1538);
+    			add_location(li3, file$1, 50, 8, 1683);
     			attr_dev(button4, "class", "page-link");
-    			add_location(button4, file$1, 43, 26, 1629);
+    			add_location(button4, file$1, 51, 30, 1778);
     			attr_dev(li4, "class", "page-item");
-    			add_location(li4, file$1, 43, 4, 1607);
-    			attr_dev(ul, "class", "pagination");
-    			toggle_class(ul, "justify-content-start", /*pager*/ ctx[27] == "top-start");
-    			toggle_class(ul, "justify-content-center", /*pager*/ ctx[27] == "top-center");
-    			toggle_class(ul, "justify-content-end", /*pager*/ ctx[27] == "top-end");
-    			add_location(ul, file$1, 35, 4, 1098);
-    			add_location(nav, file$1, 34, 0, 1087);
+    			add_location(li4, file$1, 51, 8, 1756);
+    			attr_dev(ul, "class", ul_class_value = "pagination justify-content-" + /*pagerHorizontalPos*/ ctx[27]);
+    			add_location(ul, file$1, 46, 4, 1371);
+    			attr_dev(nav, "class", nav_class_value = "d-flex justify-content-" + /*pagerHorizontalPos*/ ctx[27]);
+    			add_location(nav, file$1, 43, 0, 1280);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, nav, anchor);
+    			append_dev(nav, div);
+    			append_dev(nav, t1);
     			append_dev(nav, ul);
     			append_dev(ul, li0);
     			append_dev(li0, button0);
-    			append_dev(ul, t1);
+    			append_dev(ul, t3);
     			append_dev(ul, li1);
     			append_dev(li1, button1);
-    			append_dev(ul, t3);
+    			append_dev(ul, t5);
     			append_dev(ul, li2);
     			append_dev(li2, button2);
-    			append_dev(ul, t5);
+    			append_dev(ul, t7);
     			append_dev(ul, li3);
     			append_dev(li3, button3);
-    			append_dev(ul, t7);
+    			append_dev(ul, t9);
     			append_dev(ul, li4);
     			append_dev(li4, button4);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pager*/ 134217728) {
-    				toggle_class(ul, "justify-content-start", /*pager*/ ctx[27] == "top-start");
+    			if (dirty[0] & /*pagerHorizontalPos*/ 134217728 && ul_class_value !== (ul_class_value = "pagination justify-content-" + /*pagerHorizontalPos*/ ctx[27])) {
+    				attr_dev(ul, "class", ul_class_value);
     			}
 
-    			if (dirty[0] & /*pager*/ 134217728) {
-    				toggle_class(ul, "justify-content-center", /*pager*/ ctx[27] == "top-center");
-    			}
-
-    			if (dirty[0] & /*pager*/ 134217728) {
-    				toggle_class(ul, "justify-content-end", /*pager*/ ctx[27] == "top-end");
+    			if (dirty[0] & /*pagerHorizontalPos*/ 134217728 && nav_class_value !== (nav_class_value = "d-flex justify-content-" + /*pagerHorizontalPos*/ ctx[27])) {
+    				attr_dev(nav, "class", nav_class_value);
     			}
     		},
     		d: function destroy(detaching) {
@@ -7808,21 +7838,21 @@ var companies = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(34:0) {#if dataPageFunc && (pager == \\\"top-start\\\" || pager == \\\"top-center\\\" || pager == \\\"top-end\\\")}",
+    		source: "(43:0) {#if dataPageFunc && pagerVerticalPos == \\\"top\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:4) {#if caption || $$slots.caption}
+    // (78:4) {#if caption || $$slots.caption}
     function create_if_block_3(ctx) {
     	let caption_1;
     	let t0;
     	let t1;
     	let current;
-    	const caption_slot_template = /*#slots*/ ctx[31].caption;
-    	const caption_slot = create_slot(caption_slot_template, ctx, /*$$scope*/ ctx[30], get_caption_slot_context);
+    	const caption_slot_template = /*#slots*/ ctx[32].caption;
+    	const caption_slot = create_slot(caption_slot_template, ctx, /*$$scope*/ ctx[31], get_caption_slot_context);
 
     	const block = {
     		c: function create() {
@@ -7830,7 +7860,7 @@ var companies = (function () {
     			t0 = text(/*caption*/ ctx[23]);
     			t1 = space();
     			if (caption_slot) caption_slot.c();
-    			add_location(caption_1, file$1, 70, 8, 2583);
+    			add_location(caption_1, file$1, 78, 8, 2732);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, caption_1, anchor);
@@ -7847,15 +7877,15 @@ var companies = (function () {
     			if (!current || dirty[0] & /*caption*/ 8388608) set_data_dev(t0, /*caption*/ ctx[23]);
 
     			if (caption_slot) {
-    				if (caption_slot.p && (!current || dirty[0] & /*$$scope*/ 1073741824)) {
+    				if (caption_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
     					update_slot_base(
     						caption_slot,
     						caption_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[30],
+    						/*$$scope*/ ctx[31],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[30])
-    						: get_slot_changes(caption_slot_template, /*$$scope*/ ctx[30], dirty, get_caption_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
+    						: get_slot_changes(caption_slot_template, /*$$scope*/ ctx[31], dirty, get_caption_slot_changes),
     						get_caption_slot_context
     					);
     				}
@@ -7880,17 +7910,17 @@ var companies = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(70:4) {#if caption || $$slots.caption}",
+    		source: "(78:4) {#if caption || $$slots.caption}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (81:16) {:else}
+    // (89:16) {:else}
     function create_else_block(ctx) {
     	let th;
-    	let t_value = /*row*/ ctx[38].text + "";
+    	let t_value = /*row*/ ctx[40].text + "";
     	let t;
     	let th_style_value;
 
@@ -7900,25 +7930,25 @@ var companies = (function () {
     			t = text(t_value);
     			attr_dev(th, "scope", "col");
 
-    			attr_dev(th, "style", th_style_value = "" + ((/*row*/ ctx[38].width
-    			? "width: " + /*row*/ ctx[38].width + "; "
-    			: "") + (/*row*/ ctx[38].minWidth
-    			? "min-width: " + /*row*/ ctx[38].minWidth + "; "
+    			attr_dev(th, "style", th_style_value = "" + ((/*row*/ ctx[40].width
+    			? "width: " + /*row*/ ctx[40].width + "; "
+    			: "") + (/*row*/ ctx[40].minWidth
+    			? "min-width: " + /*row*/ ctx[40].minWidth + "; "
     			: "")));
 
-    			add_location(th, file$1, 81, 20, 2892);
+    			add_location(th, file$1, 89, 20, 3041);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
     			append_dev(th, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[38].text + "")) set_data_dev(t, t_value);
+    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[40].text + "")) set_data_dev(t, t_value);
 
-    			if (dirty[0] & /*headers*/ 1 && th_style_value !== (th_style_value = "" + ((/*row*/ ctx[38].width
-    			? "width: " + /*row*/ ctx[38].width + "; "
-    			: "") + (/*row*/ ctx[38].minWidth
-    			? "min-width: " + /*row*/ ctx[38].minWidth + "; "
+    			if (dirty[0] & /*headers*/ 1 && th_style_value !== (th_style_value = "" + ((/*row*/ ctx[40].width
+    			? "width: " + /*row*/ ctx[40].width + "; "
+    			: "") + (/*row*/ ctx[40].minWidth
+    			? "min-width: " + /*row*/ ctx[40].minWidth + "; "
     			: "")))) {
     				attr_dev(th, "style", th_style_value);
     			}
@@ -7932,17 +7962,17 @@ var companies = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(81:16) {:else}",
+    		source: "(89:16) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (79:16) {#if typeof row == "string"}
+    // (87:16) {#if typeof row == "string"}
     function create_if_block_2(ctx) {
     	let th;
-    	let t_value = /*row*/ ctx[38] + "";
+    	let t_value = /*row*/ ctx[40] + "";
     	let t;
 
     	const block = {
@@ -7950,14 +7980,14 @@ var companies = (function () {
     			th = element("th");
     			t = text(t_value);
     			attr_dev(th, "scope", "col");
-    			add_location(th, file$1, 79, 20, 2819);
+    			add_location(th, file$1, 87, 20, 2968);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
     			append_dev(th, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[38] + "")) set_data_dev(t, t_value);
+    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[40] + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(th);
@@ -7968,19 +7998,19 @@ var companies = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(79:16) {#if typeof row == \\\"string\\\"}",
+    		source: "(87:16) {#if typeof row == \\\"string\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:12) {#each headers as row}
+    // (86:12) {#each headers as row}
     function create_each_block_2(ctx) {
     	let if_block_anchor;
 
     	function select_block_type(ctx, dirty) {
-    		if (typeof /*row*/ ctx[38] == "string") return create_if_block_2;
+    		if (typeof /*row*/ ctx[40] == "string") return create_if_block_2;
     		return create_else_block;
     	}
 
@@ -8019,14 +8049,14 @@ var companies = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(78:12) {#each headers as row}",
+    		source: "(86:12) {#each headers as row}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (88:8) {#if dataFunc}
+    // (96:8) {#if dataFunc}
     function create_if_block_1(ctx) {
     	let await_block_anchor;
     	let promise;
@@ -8040,7 +8070,7 @@ var companies = (function () {
     		pending: create_pending_block_1,
     		then: create_then_block_1,
     		catch: create_catch_block_1,
-    		value: 33,
+    		value: 35,
     		blocks: [,,,]
     	};
 
@@ -8091,14 +8121,14 @@ var companies = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(88:8) {#if dataFunc}",
+    		source: "(96:8) {#if dataFunc}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "25vh";  export let take = 50;  export let pager = "bottom-end";  let skip = 0;  let count;  </script>    {#if dataPageFunc && (pager == "top-start" || pager == "top-center" || pager == "top-end")}
+    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "50vh";  export let take = 50;  export let pagerVerticalPos = "top";  export let pagerHorizontalPos = "end";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }
     function create_catch_block_1(ctx) {
     	const block = {
     		c: noop,
@@ -8113,18 +8143,18 @@ var companies = (function () {
     		block,
     		id: create_catch_block_1.name,
     		type: "catch",
-    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"25vh\\\";  export let take = 50;  export let pager = \\\"bottom-end\\\";  let skip = 0;  let count;  </script>    {#if dataPageFunc && (pager == \\\"top-start\\\" || pager == \\\"top-center\\\" || pager == \\\"top-end\\\")}",
+    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"50vh\\\";  export let take = 50;  export let pagerVerticalPos = \\\"top\\\";  export let pagerHorizontalPos = \\\"end\\\";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:12) {:then response}
+    // (99:12) {:then response}
     function create_then_block_1(ctx) {
     	let each_1_anchor;
     	let current;
-    	let each_value_1 = /*response*/ ctx[33];
+    	let each_value_1 = /*response*/ ctx[35];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -8153,8 +8183,8 @@ var companies = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*$$scope, dataFunc*/ 1073741826) {
-    				each_value_1 = /*response*/ ctx[33];
+    			if (dirty[0] & /*dataFunc*/ 2 | dirty[1] & /*$$scope*/ 1) {
+    				each_value_1 = /*response*/ ctx[35];
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -8209,18 +8239,18 @@ var companies = (function () {
     		block,
     		id: create_then_block_1.name,
     		type: "then",
-    		source: "(91:12) {:then response}",
+    		source: "(99:12) {:then response}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:16) {#each response as data, index}
+    // (100:16) {#each response as data, index}
     function create_each_block_1(ctx) {
     	let current;
-    	const row_slot_template = /*#slots*/ ctx[31].row;
-    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[30], get_row_slot_context);
+    	const row_slot_template = /*#slots*/ ctx[32].row;
+    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[31], get_row_slot_context);
 
     	const block = {
     		c: function create() {
@@ -8235,15 +8265,15 @@ var companies = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (row_slot) {
-    				if (row_slot.p && (!current || dirty[0] & /*$$scope, dataFunc*/ 1073741826)) {
+    				if (row_slot.p && (!current || dirty[0] & /*dataFunc*/ 2 | dirty[1] & /*$$scope*/ 1)) {
     					update_slot_base(
     						row_slot,
     						row_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[30],
+    						/*$$scope*/ ctx[31],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[30])
-    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[30], dirty, get_row_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
+    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[31], dirty, get_row_slot_changes),
     						get_row_slot_context
     					);
     				}
@@ -8267,14 +8297,14 @@ var companies = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(92:16) {#each response as data, index}",
+    		source: "(100:16) {#each response as data, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}
+    // (97:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}
     function create_pending_block_1(ctx) {
     	let placeholderrow;
     	let current;
@@ -8317,17 +8347,16 @@ var companies = (function () {
     		block,
     		id: create_pending_block_1.name,
     		type: "pending",
-    		source: "(89:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
+    		source: "(97:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (97:8) {#if dataPageFunc}
+    // (105:8) {#if dataPageFunc}
     function create_if_block(ctx) {
     	let await_block_anchor;
-    	let promise;
     	let current;
 
     	let info_1 = {
@@ -8338,11 +8367,11 @@ var companies = (function () {
     		pending: create_pending_block,
     		then: create_then_block,
     		catch: create_catch_block,
-    		value: 33,
+    		value: 35,
     		blocks: [,,,]
     	};
 
-    	handle_promise(promise = /*dataPageFunc*/ ctx[2](/*skip*/ ctx[28], /*take*/ ctx[26]), info_1);
+    	handle_promise(/*readDataPage*/ ctx[28](), info_1);
 
     	const block = {
     		c: function create() {
@@ -8358,11 +8387,7 @@ var companies = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			info_1.ctx = ctx;
-
-    			if (dirty[0] & /*dataPageFunc, take*/ 67108868 && promise !== (promise = /*dataPageFunc*/ ctx[2](/*skip*/ ctx[28], /*take*/ ctx[26])) && handle_promise(promise, info_1)) ; else {
-    				update_await_block_branch(info_1, ctx, dirty);
-    			}
+    			update_await_block_branch(info_1, ctx, dirty);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -8389,14 +8414,14 @@ var companies = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(97:8) {#if dataPageFunc}",
+    		source: "(105:8) {#if dataPageFunc}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "25vh";  export let take = 50;  export let pager = "bottom-end";  let skip = 0;  let count;  </script>    {#if dataPageFunc && (pager == "top-start" || pager == "top-center" || pager == "top-end")}
+    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "50vh";  export let take = 50;  export let pagerVerticalPos = "top";  export let pagerHorizontalPos = "end";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }
     function create_catch_block(ctx) {
     	const block = {
     		c: noop,
@@ -8411,18 +8436,18 @@ var companies = (function () {
     		block,
     		id: create_catch_block.name,
     		type: "catch",
-    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"25vh\\\";  export let take = 50;  export let pager = \\\"bottom-end\\\";  let skip = 0;  let count;  </script>    {#if dataPageFunc && (pager == \\\"top-start\\\" || pager == \\\"top-center\\\" || pager == \\\"top-end\\\")}",
+    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"50vh\\\";  export let take = 50;  export let pagerVerticalPos = \\\"top\\\";  export let pagerHorizontalPos = \\\"end\\\";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:12) {:then response}
+    // (108:12) {:then response}
     function create_then_block(ctx) {
     	let each_1_anchor;
     	let current;
-    	let each_value = /*response*/ ctx[33].page;
+    	let each_value = /*response*/ ctx[35];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -8451,8 +8476,8 @@ var companies = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*$$scope, dataPageFunc, skip, take*/ 1409286148) {
-    				each_value = /*response*/ ctx[33].page;
+    			if (dirty[0] & /*readDataPage*/ 268435456 | dirty[1] & /*$$scope*/ 1) {
+    				each_value = /*response*/ ctx[35];
     				validate_each_argument(each_value);
     				let i;
 
@@ -8507,18 +8532,18 @@ var companies = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(100:12) {:then response}",
+    		source: "(108:12) {:then response}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:16) {#each response.page as data, index}
+    // (109:16) {#each response as data, index}
     function create_each_block(ctx) {
     	let current;
-    	const row_slot_template = /*#slots*/ ctx[31].row;
-    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[30], get_row_slot_context_1);
+    	const row_slot_template = /*#slots*/ ctx[32].row;
+    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[31], get_row_slot_context_1);
 
     	const block = {
     		c: function create() {
@@ -8533,15 +8558,15 @@ var companies = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (row_slot) {
-    				if (row_slot.p && (!current || dirty[0] & /*$$scope, dataPageFunc, take*/ 1140850692)) {
+    				if (row_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
     					update_slot_base(
     						row_slot,
     						row_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[30],
+    						/*$$scope*/ ctx[31],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[30])
-    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[30], dirty, get_row_slot_changes_1),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
+    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[31], dirty, get_row_slot_changes_1),
     						get_row_slot_context_1
     					);
     				}
@@ -8565,14 +8590,14 @@ var companies = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(101:16) {#each response.page as data, index}",
+    		source: "(109:16) {#each response as data, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (98:45)                   <PlaceholderRow placeholderHeight={placeholderHeight}
+    // (106:35)                   <PlaceholderRow placeholderHeight={placeholderHeight}
     function create_pending_block(ctx) {
     	let placeholderrow;
     	let current;
@@ -8615,7 +8640,7 @@ var companies = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(98:45)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
+    		source: "(106:35)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
     		ctx
     	});
 
@@ -8632,7 +8657,7 @@ var companies = (function () {
     	let tbody;
     	let t3;
     	let current;
-    	let if_block0 = /*dataPageFunc*/ ctx[2] && (/*pager*/ ctx[27] == "top-start" || /*pager*/ ctx[27] == "top-center" || /*pager*/ ctx[27] == "top-end") && create_if_block_4(ctx);
+    	let if_block0 = /*dataPageFunc*/ ctx[2] && /*pagerVerticalPos*/ ctx[26] == "top" && create_if_block_4(ctx);
     	let if_block1 = (/*caption*/ ctx[23] || /*$$slots*/ ctx[29].caption) && create_if_block_3(ctx);
     	let each_value_2 = /*headers*/ ctx[0];
     	validate_each_argument(each_value_2);
@@ -8664,10 +8689,10 @@ var companies = (function () {
     			if (if_block2) if_block2.c();
     			t3 = space();
     			if (if_block3) if_block3.c();
-    			add_location(tr, file$1, 76, 8, 2711);
-    			add_location(thead, file$1, 75, 4, 2694);
+    			add_location(tr, file$1, 84, 8, 2860);
+    			add_location(thead, file$1, 83, 4, 2843);
     			toggle_class(tbody, "table-group-divider", /*headerGroupDivider*/ ctx[24]);
-    			add_location(tbody, file$1, 86, 4, 3117);
+    			add_location(tbody, file$1, 94, 4, 3266);
     			attr_dev(table, "class", "table");
     			toggle_class(table, "table-primary", /*primary*/ ctx[3]);
     			toggle_class(table, "table-secondary", /*secondary*/ ctx[4]);
@@ -8690,7 +8715,7 @@ var companies = (function () {
     			toggle_class(table, "table-responsive-lg", /*responsiveLg*/ ctx[20]);
     			toggle_class(table, "table-responsive-xl", /*responsiveXl*/ ctx[21]);
     			toggle_class(table, "table-responsive-xxl", /*responsiveXxl*/ ctx[22]);
-    			add_location(table, file$1, 47, 0, 1701);
+    			add_location(table, file$1, 55, 0, 1850);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -8716,7 +8741,7 @@ var companies = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*dataPageFunc*/ ctx[2] && (/*pager*/ ctx[27] == "top-start" || /*pager*/ ctx[27] == "top-center" || /*pager*/ ctx[27] == "top-end")) {
+    			if (/*dataPageFunc*/ ctx[2] && /*pagerVerticalPos*/ ctx[26] == "top") {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
@@ -8974,11 +8999,22 @@ var companies = (function () {
     	let { responsiveXxl = false } = $$props;
     	let { caption = "" } = $$props;
     	let { headerGroupDivider = false } = $$props;
-    	let { placeholderHeight = "25vh" } = $$props;
+    	let { placeholderHeight = "50vh" } = $$props;
     	let { take = 50 } = $$props;
-    	let { pager = "bottom-end" } = $$props;
+    	let { pagerVerticalPos = "top" } = $$props;
+    	let { pagerHorizontalPos = "end" } = $$props;
     	let skip = 0;
     	let count;
+
+    	async function readDataPage() {
+    		if (!dataPageFunc) {
+    			return [];
+    		}
+
+    		const result = await dataPageFunc(skip, take);
+    		count = result.count;
+    		return result.page;
+    	}
 
     	const writable_props = [
     		'headers',
@@ -9008,7 +9044,8 @@ var companies = (function () {
     		'headerGroupDivider',
     		'placeholderHeight',
     		'take',
-    		'pager'
+    		'pagerVerticalPos',
+    		'pagerHorizontalPos'
     	];
 
     	Object.keys($$props).forEach(key => {
@@ -9042,9 +9079,10 @@ var companies = (function () {
     		if ('caption' in $$props) $$invalidate(23, caption = $$props.caption);
     		if ('headerGroupDivider' in $$props) $$invalidate(24, headerGroupDivider = $$props.headerGroupDivider);
     		if ('placeholderHeight' in $$props) $$invalidate(25, placeholderHeight = $$props.placeholderHeight);
-    		if ('take' in $$props) $$invalidate(26, take = $$props.take);
-    		if ('pager' in $$props) $$invalidate(27, pager = $$props.pager);
-    		if ('$$scope' in $$props) $$invalidate(30, $$scope = $$props.$$scope);
+    		if ('take' in $$props) $$invalidate(30, take = $$props.take);
+    		if ('pagerVerticalPos' in $$props) $$invalidate(26, pagerVerticalPos = $$props.pagerVerticalPos);
+    		if ('pagerHorizontalPos' in $$props) $$invalidate(27, pagerHorizontalPos = $$props.pagerHorizontalPos);
+    		if ('$$scope' in $$props) $$invalidate(31, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -9076,9 +9114,11 @@ var companies = (function () {
     		headerGroupDivider,
     		placeholderHeight,
     		take,
-    		pager,
+    		pagerVerticalPos,
+    		pagerHorizontalPos,
     		skip,
-    		count
+    		count,
+    		readDataPage
     	});
 
     	$$self.$inject_state = $$props => {
@@ -9108,9 +9148,10 @@ var companies = (function () {
     		if ('caption' in $$props) $$invalidate(23, caption = $$props.caption);
     		if ('headerGroupDivider' in $$props) $$invalidate(24, headerGroupDivider = $$props.headerGroupDivider);
     		if ('placeholderHeight' in $$props) $$invalidate(25, placeholderHeight = $$props.placeholderHeight);
-    		if ('take' in $$props) $$invalidate(26, take = $$props.take);
-    		if ('pager' in $$props) $$invalidate(27, pager = $$props.pager);
-    		if ('skip' in $$props) $$invalidate(28, skip = $$props.skip);
+    		if ('take' in $$props) $$invalidate(30, take = $$props.take);
+    		if ('pagerVerticalPos' in $$props) $$invalidate(26, pagerVerticalPos = $$props.pagerVerticalPos);
+    		if ('pagerHorizontalPos' in $$props) $$invalidate(27, pagerHorizontalPos = $$props.pagerHorizontalPos);
+    		if ('skip' in $$props) skip = $$props.skip;
     		if ('count' in $$props) count = $$props.count;
     	};
 
@@ -9145,10 +9186,11 @@ var companies = (function () {
     		caption,
     		headerGroupDivider,
     		placeholderHeight,
-    		take,
-    		pager,
-    		skip,
+    		pagerVerticalPos,
+    		pagerHorizontalPos,
+    		readDataPage,
     		$$slots,
+    		take,
     		$$scope,
     		slots
     	];
@@ -9191,8 +9233,9 @@ var companies = (function () {
     				caption: 23,
     				headerGroupDivider: 24,
     				placeholderHeight: 25,
-    				take: 26,
-    				pager: 27
+    				take: 30,
+    				pagerVerticalPos: 26,
+    				pagerHorizontalPos: 27
     			},
     			null,
     			[-1, -1]
@@ -9422,11 +9465,19 @@ var companies = (function () {
     		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get pager() {
+    	get pagerVerticalPos() {
     		throw new Error("<Data_grid>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set pager(value) {
+    	set pagerVerticalPos(value) {
+    		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get pagerHorizontalPos() {
+    		throw new Error("<Data_grid>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set pagerHorizontalPos(value) {
     		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -9470,32 +9521,56 @@ var companies = (function () {
     const parseUrl = (url, query = null) => query ? `${url}?${parseQuery(query)}` : url;
     const get = async (url, query = null) => _fetch(parseUrl(url, query), "GET", "json");
 
-    /* App\companies.svelte generated by Svelte v3.50.1 */
+    /* App\companies.svelte generated by Svelte v3.52.0 */
     const file = "App\\companies.svelte";
 
     // (12:12) 
     function create_row_slot(ctx) {
     	let tr;
-    	let td;
-    	let t_value = /*data*/ ctx[1].name + "";
-    	let t;
+    	let td0;
+    	let t0_value = /*data*/ ctx[1].name + "";
+    	let t0;
+    	let t1;
+    	let td1;
+    	let t2_value = /*data*/ ctx[1].companyline + "";
+    	let t2;
+    	let t3;
+    	let td2;
+    	let t4_value = /*data*/ ctx[1].about + "";
+    	let t4;
 
     	const block = {
     		c: function create() {
     			tr = element("tr");
-    			td = element("td");
-    			t = text(t_value);
-    			add_location(td, file, 12, 16, 505);
+    			td0 = element("td");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			td1 = element("td");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			td2 = element("td");
+    			t4 = text(t4_value);
+    			add_location(td0, file, 12, 16, 533);
+    			add_location(td1, file, 13, 16, 571);
+    			add_location(td2, file, 14, 16, 616);
     			attr_dev(tr, "slot", "row");
-    			add_location(tr, file, 11, 12, 463);
+    			add_location(tr, file, 11, 12, 491);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
-    			append_dev(tr, td);
-    			append_dev(td, t);
+    			append_dev(tr, td0);
+    			append_dev(td0, t0);
+    			append_dev(tr, t1);
+    			append_dev(tr, td1);
+    			append_dev(td1, t2);
+    			append_dev(tr, t3);
+    			append_dev(tr, td2);
+    			append_dev(td2, t4);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*data*/ 2 && t_value !== (t_value = /*data*/ ctx[1].name + "")) set_data_dev(t, t_value);
+    			if (dirty & /*data*/ 2 && t0_value !== (t0_value = /*data*/ ctx[1].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*data*/ 2 && t2_value !== (t2_value = /*data*/ ctx[1].companyline + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*data*/ 2 && t4_value !== (t4_value = /*data*/ ctx[1].about + "")) set_data_dev(t4, t4_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(tr);
@@ -9523,8 +9598,10 @@ var companies = (function () {
     			props: {
     				dataPageFunc: /*getCompanies*/ ctx[0],
     				take: 10,
-    				pager: "top-end",
+    				pagerHorizontalPos: "end",
     				hover: true,
+    				striped: true,
+    				bordered: true,
     				$$slots: {
     					row: [
     						create_row_slot,
@@ -9542,7 +9619,7 @@ var companies = (function () {
     			div = element("div");
     			create_component(datagrid.$$.fragment);
     			attr_dev(div, "class", "main container-fluid pt-4");
-    			add_location(div, file, 8, 4, 328);
+    			add_location(div, file, 8, 4, 330);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -9644,7 +9721,7 @@ var companies = (function () {
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Companies', slots, []);
-    	let getCompanies = (skip, take) => get(urls.companiesSearchUrl, { search: "", skip, take });
+    	const getCompanies = (skip, take) => get(urls.companiesSearchUrl, { search: "", skip, take });
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -9658,14 +9735,6 @@ var companies = (function () {
     		get,
     		getCompanies
     	});
-
-    	$$self.$inject_state = $$props => {
-    		if ('getCompanies' in $$props) $$invalidate(0, getCompanies = $$props.getCompanies);
-    	};
-
-    	if ($$props && "$$inject" in $$props) {
-    		$$self.$inject_state($$props.$$inject);
-    	}
 
     	return [getCompanies];
     }

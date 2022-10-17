@@ -107,7 +107,7 @@ foreach (var company in new Faker<Company>()
 var employed = connection.Read<short>("select id from employee_status where name_normalized = 'employed'").Single();
 var unemployed = connection.Read<short>("select id from employee_status where name_normalized = 'unemployed'").Single();
 var opentoopportunity = connection.Read<short>("select id from employee_status where name_normalized = 'open to opportunity'").Single();
-var activlyapplying = connection.Read<short>("select id from employee_status where name_normalized = 'activly applying'").Single();
+var activlyapplying = connection.Read<short>("select id from employee_status where name_normalized = 'actively applying'").Single();
 var retired = connection.Read<short>("select id from employee_status where name_normalized = 'retired'").Single();
 var unemployable = connection.Read<short>("select id from employee_status where name_normalized = 'unemployable'").Single();
 

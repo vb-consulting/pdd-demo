@@ -5,7 +5,7 @@
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
 
-    let getTopCompanies = () => get<{
+    const getTopCompanies = () => get<{
         id: string;
         name: string;
         companyLine: string;
@@ -16,7 +16,7 @@
         reviews: number;
     }[]>(urls.topRatedCompaniesUrl);
 
-    let getTopEmployees = () => get<{
+    const getTopEmployees = () => get<{
         id: string;
         firstName: string;
         lastName: string;

@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
-- Server: PostgreSQL `localhost:5433`, version `14.5 (Ubuntu 14.5-1.pgdg20.04+1)`
-- Local time stamp: `2022-10-06T11:33:28.7994965+02:00`
+- Server: PostgreSQL `localhost:5434`, version `15.0 (Ubuntu 15.0-1.pgdg20.04+1)`
+- Local time stamp: `2022-10-17T13:02:52.6902644+02:00`
 - Schema's: `public`, `dashboard`, `companies`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
@@ -155,7 +155,7 @@ Top rated companies by the user score.
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
 Business areas that companies may be invloved.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **13**
 - Source: [/PDD.Database/Scripts/tables/business_areas.sql](/PDD.Database/Scripts/tables/business_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -168,8 +168,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`14.855`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`65`** | rows=**`14.855`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`6`** | count=**`3.023`** | inserted=**`13`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`52`** | rows=**`3.023`** | live=**`13`**, dead=**`0`** | last auto=, rows inserted since=**`13`** | last auto=, rows updated since=**`13`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -179,7 +179,7 @@ Business areas that companies may be invloved.
 <!-- comment on table "public"."business_role_types" is @until-end-tag; -->
 Types or groups of business roles.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **6**
 - Source: [/PDD.Database/Scripts/tables/business_role_types.sql](/PDD.Database/Scripts/tables/business_role_types.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -192,8 +192,8 @@ Types or groups of business roles.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`5`** | count=**`18`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`18`** | rows=**`18`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -203,7 +203,7 @@ Types or groups of business roles.
 <!-- comment on table "public"."business_roles" is @until-end-tag; -->
 Roles in a team that employees are specialized working with.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **18**
 - Source: [/PDD.Database/Scripts/tables/business_roles.sql](/PDD.Database/Scripts/tables/business_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -217,8 +217,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`90`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`90`** | rows=**`90`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`6`** | count=**`127.964`** | inserted=**`18`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`54`** | rows=**`127.964`** | live=**`18`**, dead=**`0`** | last auto=, rows inserted since=**`18`** | last auto=, rows updated since=**`18`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -227,7 +227,7 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **975**
+- Count estimate: **969**
 - Source: [/PDD.Database/Scripts/tables/companies.sql](/PDD.Database/Scripts/tables/companies.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -250,8 +250,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`25`** | count=**`75`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`24.375`** | rows=**`4.945`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`12`** | count=**`261.891`** | inserted=**`969`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`4.845`** | rows=**`260.924`** | live=**`969`**, dead=**`0`** | last auto=, rows inserted since=**`969`** | last auto=**`2022-10-17 11:02:31Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -261,7 +261,7 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
-- Count estimate: **2.971**
+- Count estimate: **3.023**
 - Source: [/PDD.Database/Scripts/tables/company_areas.sql](/PDD.Database/Scripts/tables/company_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -277,8 +277,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`4.885`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`14.855`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`8`** | count=**`3.046`** | inserted=**`3.023`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`9.069`** | rows=**`23`** | live=**`3.023`**, dead=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows inserted since=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -288,7 +288,7 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
-- Count estimate: **137.083**
+- Count estimate: **137.636**
 - Source: [/PDD.Database/Scripts/tables/company_reviews.sql](/PDD.Database/Scripts/tables/company_reviews.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -306,8 +306,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`15`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`685.415`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`10`** | count=**`0`** | inserted=**`137.636`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`412.908`** | rows=**`0`** | live=**`137.636`**, dead=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows inserted since=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -332,8 +332,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`14`** | count=**`1.050`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`3.486`** | rows=**`1.050`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`11`** | count=**`50.969`** | inserted=**`249`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`1.743`** | rows=**`50.969`** | live=**`249`**, dead=**`0`** | last auto=, rows inserted since=**`249`** | last auto=**`2022-10-17 11:02:31Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -343,7 +343,7 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
-- Count estimate: **120.198**
+- Count estimate: **120.232**
 - Source: [/PDD.Database/Scripts/tables/employee_records.sql](/PDD.Database/Scripts/tables/employee_records.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -360,8 +360,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`270`** | count=**`69.220`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`32.453.460`** | rows=**`100.305`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`10`** | count=**`0`** | inserted=**`120.232`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`360.696`** | rows=**`0`** | live=**`120.232`**, dead=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows inserted since=**`0`** | last auto=**`2022-10-17 11:02:31Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -371,7 +371,7 @@ History of employment in companies by people.
 <!-- comment on table "public"."employee_status" is @until-end-tag; -->
 List of possible statuses in regards to employment.
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **6**
 - Source: [/PDD.Database/Scripts/tables/employee_status.sql](/PDD.Database/Scripts/tables/employee_status.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -384,8 +384,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`20`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`20`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`5`** | count=**`50.006`** | inserted=**`6`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`18`** | rows=**`50.006`** | live=**`6`**, dead=**`0`** | last auto=, rows inserted since=**`6`** | last auto=, rows updated since=**`6`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -419,8 +419,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`5`** | count=**`10`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`250.000`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`16`** | count=**`435.814`** | inserted=**`50.000`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`250.000`** | rows=**`386.355`** | live=**`50.000`**, dead=**`0`** | last auto=**`2022-10-17 11:02:32Z`**, rows inserted since=**`0`** | last auto=**`2022-10-17 11:02:32Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -430,7 +430,7 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
-- Count estimate: **127.890**
+- Count estimate: **127.946**
 - Source: [/PDD.Database/Scripts/tables/person_roles.sql](/PDD.Database/Scripts/tables/person_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -446,8 +446,8 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`97.540`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`13`** | count=**`127.946`** | inserted=**`127.946`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`511.784`** | rows=**`0`** | live=**`127.946`**, dead=**`0`** | last auto=**`2022-10-17 11:02:32Z`**, rows inserted since=**`0`** | last auto=**`2022-10-17 11:02:32Z`**, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -457,7 +457,7 @@ Person - business roles
 <!-- comment on table "public"."users" is @until-end-tag; -->
 System users. May or may not be a person (in people records).
 <!-- end -->
-- Count estimate: **-1**
+- Count estimate: **1**
 - Source: [/PDD.Database/Scripts/tables/users.sql](/PDD.Database/Scripts/tables/users.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -477,8 +477,8 @@ System users. May or may not be a person (in people records).
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`6`** | count=**`490.775`** | inserted=**`1`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`3`** | rows=**`490.775`** | live=**`1`**, dead=**`0`** | last auto=, rows inserted since=**`1`** | last auto=, rows updated since=**`1`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>

@@ -33,16 +33,25 @@
     export let responsiveXxl = false;
 
     export let caption = "";
-
     export let headerGroupDivider = false;
 
-    export let placeholderHeight = "25vh"
+    export let placeholderHeight = "50vh";
 
     export let take: number = 50;
-    export let pager: "top-start" | "top-center" | "top-end" | "bottom-start" | "bottom-center" | "bottom-end" = "bottom-end";
+    export let pagerVerticalPos: "top" | "bottom" = "top";
+    export let pagerHorizontalPos: "start" | "center" | "end" | "between" | "around" | "evenly" = "end";
 
     let skip: number = 0; 
     let count: number;
+
+    async function readDataPage() {
+        if (!dataPageFunc) {
+            return [];
+        }
+        const result = await dataPageFunc(skip, take);
+        count = result.count;
+        return result.page;
+    }
 
     interface $$Slots {
         row: { data: T, index: number };
@@ -50,17 +59,16 @@
     }
 </script>
 
-{#if dataPageFunc && (pager == "top-start" || pager == "top-center" || pager == "top-end")}
-<nav>
-    <ul class="pagination" 
-        class:justify-content-start={pager == "top-start"} 
-        class:justify-content-center={pager == "top-center"} 
-        class:justify-content-end={pager == "top-end"}>
-    <li class="page-item disabled"><button class="page-link">Previous</button></li>
-    <li class="page-item active"><button class="page-link">1</button></li>
-    <li class="page-item"><button class="page-link">2</button></li>
-    <li class="page-item"><button class="page-link">3</button></li>
-    <li class="page-item"><button class="page-link">Next</button></li>
+{#if dataPageFunc && pagerVerticalPos == "top"}
+<nav class="d-flex justify-content-{pagerHorizontalPos}">
+    <div>some text</div>
+
+    <ul class="pagination justify-content-{pagerHorizontalPos}">
+        <li class="page-item disabled"><button class="page-link">Previous</button></li>
+        <li class="page-item active"><button class="page-link">1</button></li>
+        <li class="page-item"><button class="page-link">2</button></li>
+        <li class="page-item"><button class="page-link">3</button></li>
+        <li class="page-item"><button class="page-link">Next</button></li>
     </ul>
 </nav>
 {/if}
@@ -114,10 +122,10 @@
             {/await}
         {/if}
         {#if dataPageFunc}
-            {#await dataPageFunc(skip, take)}
+            {#await readDataPage()}
                 <PlaceholderRow placeholderHeight={placeholderHeight} />
             {:then response}
-                {#each response.page as data, index}
+                {#each response as data, index}
                     <slot name="row" {data} {index}></slot>
                 {/each}
             {/await}
