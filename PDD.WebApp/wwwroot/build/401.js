@@ -6816,7 +6816,7 @@ var unauthorized = (function () {
     			$$inline: true
     		});
 
-    	offcanvas_1.$on("hidden", /*hidden_handler*/ ctx[11]);
+    	offcanvas_1.$on("hidden", /*hidden_handler*/ ctx[12]);
 
     	const block = {
     		c: function create() {
@@ -6847,7 +6847,7 @@ var unauthorized = (function () {
     			const offcanvas_1_changes = {};
     			if (dirty & /*offcanvas*/ 4) offcanvas_1_changes.state = /*offcanvas*/ ctx[2];
 
-    			if (dirty & /*$$scope*/ 16384) {
+    			if (dirty & /*$$scope*/ 32768) {
     				offcanvas_1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -6898,7 +6898,8 @@ var unauthorized = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(div, "mouseover", /*gutterMouseover*/ ctx[6], false, false, false),
-    					listen_dev(div, "click", /*click_handler*/ ctx[10], false, false, false)
+    					listen_dev(div, "click", /*click_handler*/ ctx[10], false, false, false),
+    					listen_dev(div, "keypress", /*keypress_handler*/ ctx[11], false, false, false)
     				];
 
     				mounted = true;
@@ -6943,9 +6944,9 @@ var unauthorized = (function () {
     			attr_dev(button, "class", "btn btn-sm btn-primary pin bi-pin-angle svelte-34qebo");
     			attr_dev(button, "data-bs-toggle", "tooltip");
     			attr_dev(button, "title", "Pin sidebar");
-    			add_location(button, file$1, 85, 8, 2601);
+    			add_location(button, file$1, 85, 8, 2643);
     			attr_dev(ul, "class", "navbar-nav navbar-dark flex-column mt-4");
-    			add_location(ul, file$1, 86, 8, 2742);
+    			add_location(ul, file$1, 86, 8, 2784);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -7002,10 +7003,10 @@ var unauthorized = (function () {
     			i = element("i");
     			t = text("\r\n                        Login");
     			attr_dev(i, "class", "bi-person");
-    			add_location(i, file$1, 113, 24, 3919);
+    			add_location(i, file$1, 113, 24, 3961);
     			attr_dev(a, "class", "btn btn-sm btn-primary");
     			attr_dev(a, "href", urls.loginUrl);
-    			add_location(a, file$1, 112, 20, 3836);
+    			add_location(a, file$1, 112, 20, 3878);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -7049,14 +7050,14 @@ var unauthorized = (function () {
     			attr_dev(pre, "class", "user-info text-nowrap svelte-34qebo");
     			attr_dev(pre, "data-bs-toggle", "tooltip");
     			attr_dev(pre, "title", "Current user");
-    			add_location(pre, file$1, 105, 20, 3433);
+    			add_location(pre, file$1, 105, 20, 3475);
     			attr_dev(i, "class", "bi bi-box-arrow-right");
-    			add_location(i, file$1, 109, 24, 3726);
+    			add_location(i, file$1, 109, 24, 3768);
     			attr_dev(a, "class", "btn btn-sm btn-primary");
     			attr_dev(a, "href", urls.logoutUrl);
     			attr_dev(a, "data-bs-toggle", "tooltip");
     			attr_dev(a, "title", "Logout");
-    			add_location(a, file$1, 108, 20, 3602);
+    			add_location(a, file$1, 108, 20, 3644);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, pre, anchor);
@@ -7126,7 +7127,7 @@ var unauthorized = (function () {
     	let if_block1 = current_block_type(ctx);
     	links = new Link_list_items({ $$inline: true });
     	const default_slot_template = /*#slots*/ ctx[9].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[14], null);
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[15], null);
 
     	const block = {
     		c: function create() {
@@ -7163,46 +7164,46 @@ var unauthorized = (function () {
     			? "bi-x"
     			: "bi-list");
 
-    			add_location(i0, file$1, 98, 20, 3152);
+    			add_location(i0, file$1, 98, 20, 3194);
     			attr_dev(span, "class", "font-monospace");
-    			add_location(span, file$1, 99, 20, 3238);
+    			add_location(span, file$1, 99, 20, 3280);
     			attr_dev(button0, "class", "btn btn-primary");
-    			add_location(button0, file$1, 97, 16, 3063);
+    			add_location(button0, file$1, 97, 16, 3105);
     			attr_dev(div0, "class", "d-flex float-start");
-    			add_location(div0, file$1, 96, 12, 3013);
+    			add_location(div0, file$1, 96, 12, 3055);
 
     			attr_dev(i1, "class", i1_class_value = /*$isDarkTheme*/ ctx[3]
     			? "bi-lightbulb"
     			: "bi-lightbulb-off");
 
-    			add_location(i1, file$1, 118, 20, 4231);
+    			add_location(i1, file$1, 118, 20, 4273);
     			attr_dev(button1, "class", "btn btn-sm btn-primary mx-1");
     			attr_dev(button1, "data-bs-toggle", "tooltip");
     			attr_dev(button1, "title", button1_title_value = /*$isDarkTheme*/ ctx[3] ? "Lights On" : "Lights Off");
-    			add_location(button1, file$1, 117, 16, 4042);
+    			add_location(button1, file$1, 117, 16, 4084);
     			attr_dev(div1, "class", "d-flex float-end");
-    			add_location(div1, file$1, 103, 12, 3344);
+    			add_location(div1, file$1, 103, 12, 3386);
     			attr_dev(div2, "class", "container-fluid");
-    			add_location(div2, file$1, 94, 8, 2968);
+    			add_location(div2, file$1, 94, 8, 3010);
     			attr_dev(nav, "class", "navbar navbar-expand-md navbar-dark fixed-top bg-primary py-0 py-md-0");
-    			add_location(nav, file$1, 93, 4, 2875);
+    			add_location(nav, file$1, 93, 4, 2917);
     			attr_dev(header, "class", "svelte-34qebo");
-    			add_location(header, file$1, 92, 0, 2861);
+    			add_location(header, file$1, 92, 0, 2903);
     			attr_dev(button2, "type", "button");
     			attr_dev(button2, "class", "btn btn-sm btn-primary pin bi-pin svelte-34qebo");
     			attr_dev(button2, "data-bs-toggle", "tooltip");
     			attr_dev(button2, "title", "Unpin sidebar");
-    			add_location(button2, file$1, 128, 12, 4564);
+    			add_location(button2, file$1, 128, 12, 4606);
     			attr_dev(div3, "class", "position-fixed pin-wrap svelte-34qebo");
-    			add_location(div3, file$1, 127, 8, 4513);
+    			add_location(div3, file$1, 127, 8, 4555);
     			attr_dev(ul, "class", "navbar-nav navbar-dark flex-column mt-4 position-fixed");
-    			add_location(ul, file$1, 130, 8, 4731);
+    			add_location(ul, file$1, 130, 8, 4773);
     			attr_dev(div4, "class", "offcanvas-nav navbar-dark bg-primary svelte-34qebo");
     			toggle_class(div4, "d-none", !/*pinned*/ ctx[1]);
-    			add_location(div4, file$1, 126, 4, 4430);
+    			add_location(div4, file$1, 126, 4, 4472);
     			attr_dev(main, "class", "svelte-34qebo");
     			toggle_class(main, "pinned-layout", /*pinned*/ ctx[1]);
-    			add_location(main, file$1, 125, 0, 4389);
+    			add_location(main, file$1, 125, 0, 4431);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -7245,8 +7246,8 @@ var unauthorized = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(document_1.body, "mouseover", /*bodyMouseover*/ ctx[7], false, false, false),
-    					listen_dev(button0, "click", /*click_handler_1*/ ctx[12], false, false, false),
-    					listen_dev(button1, "click", /*click_handler_2*/ ctx[13], false, false, false),
+    					listen_dev(button0, "click", /*click_handler_1*/ ctx[13], false, false, false),
+    					listen_dev(button1, "click", /*click_handler_2*/ ctx[14], false, false, false),
     					listen_dev(button2, "click", /*togglePin*/ ctx[8], false, false, false)
     				];
 
@@ -7301,15 +7302,15 @@ var unauthorized = (function () {
     			}
 
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty & /*$$scope*/ 16384)) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 32768)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[14],
+    						/*$$scope*/ ctx[15],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[14], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[15])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[15], dirty, null),
     						null
     					);
     				}
@@ -7466,13 +7467,14 @@ var unauthorized = (function () {
     	});
 
     	const click_handler = () => toggleOffcanvas(true);
+    	const keypress_handler = () => toggleOffcanvas(true);
     	const hidden_handler = () => toggleOffcanvas(false);
     	const click_handler_1 = () => toggleOffcanvas();
     	const click_handler_2 = () => set_store_value(isDarkTheme, $isDarkTheme = !$isDarkTheme, $isDarkTheme);
 
     	$$self.$$set = $$props => {
     		if ('title' in $$props) $$invalidate(0, title$1 = $$props.title);
-    		if ('$$scope' in $$props) $$invalidate(14, $$scope = $$props.$$scope);
+    		if ('$$scope' in $$props) $$invalidate(15, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -7535,6 +7537,7 @@ var unauthorized = (function () {
     		togglePin,
     		slots,
     		click_handler,
+    		keypress_handler,
     		hidden_handler,
     		click_handler_1,
     		click_handler_2,

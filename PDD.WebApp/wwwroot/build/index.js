@@ -692,6 +692,25 @@ var index = (function () {
             }
         }
     }
+    function construct_svelte_component_dev(component, props) {
+        const error_message = 'this={...} of <svelte:component> should specify a Svelte component.';
+        try {
+            const instance = new component(props);
+            if (!instance.$$ || !instance.$set || !instance.$on || !instance.$destroy) {
+                throw new Error(error_message);
+            }
+            return instance;
+        }
+        catch (err) {
+            const { message } = err;
+            if (typeof message === 'string' && message.indexOf('is not a constructor') !== -1) {
+                throw new Error(error_message);
+            }
+            else {
+                throw err;
+            }
+        }
+    }
     /**
      * Base class for Svelte components with some minor dev-enhancements. Used when dev=true.
      */
@@ -5726,7 +5745,7 @@ var index = (function () {
     	let t0;
     	let t1;
     	let current;
-    	let if_block0 = /*title*/ ctx[4] && create_if_block_5$1(ctx);
+    	let if_block0 = /*title*/ ctx[4] && create_if_block_5$2(ctx);
     	const title_slot_template = /*#slots*/ ctx[18].title;
     	const title_slot = create_slot(title_slot_template, ctx, /*$$scope*/ ctx[17], get_title_slot_context$1);
     	let if_block1 = /*titleCloseButton*/ ctx[5] && create_if_block_4$3(ctx);
@@ -5764,7 +5783,7 @@ var index = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_5$1(ctx);
+    					if_block0 = create_if_block_5$2(ctx);
     					if_block0.c();
     					if_block0.m(h5, t0);
     				}
@@ -5830,7 +5849,7 @@ var index = (function () {
     }
 
     // (137:16) {#if title}
-    function create_if_block_5$1(ctx) {
+    function create_if_block_5$2(ctx) {
     	let html_tag;
     	let html_anchor;
 
@@ -5855,7 +5874,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_5$1.name,
+    		id: create_if_block_5$2.name,
     		type: "if",
     		source: "(137:16) {#if title}",
     		ctx
@@ -6847,7 +6866,7 @@ var index = (function () {
     			$$inline: true
     		});
 
-    	offcanvas_1.$on("hidden", /*hidden_handler*/ ctx[11]);
+    	offcanvas_1.$on("hidden", /*hidden_handler*/ ctx[12]);
 
     	const block = {
     		c: function create() {
@@ -6878,7 +6897,7 @@ var index = (function () {
     			const offcanvas_1_changes = {};
     			if (dirty & /*offcanvas*/ 4) offcanvas_1_changes.state = /*offcanvas*/ ctx[2];
 
-    			if (dirty & /*$$scope*/ 16384) {
+    			if (dirty & /*$$scope*/ 32768) {
     				offcanvas_1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -6929,7 +6948,8 @@ var index = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(div, "mouseover", /*gutterMouseover*/ ctx[6], false, false, false),
-    					listen_dev(div, "click", /*click_handler*/ ctx[10], false, false, false)
+    					listen_dev(div, "click", /*click_handler*/ ctx[10], false, false, false),
+    					listen_dev(div, "keypress", /*keypress_handler*/ ctx[11], false, false, false)
     				];
 
     				mounted = true;
@@ -6974,9 +6994,9 @@ var index = (function () {
     			attr_dev(button, "class", "btn btn-sm btn-primary pin bi-pin-angle svelte-34qebo");
     			attr_dev(button, "data-bs-toggle", "tooltip");
     			attr_dev(button, "title", "Pin sidebar");
-    			add_location(button, file$6, 85, 8, 2601);
+    			add_location(button, file$6, 85, 8, 2643);
     			attr_dev(ul, "class", "navbar-nav navbar-dark flex-column mt-4");
-    			add_location(ul, file$6, 86, 8, 2742);
+    			add_location(ul, file$6, 86, 8, 2784);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -7022,7 +7042,7 @@ var index = (function () {
     }
 
     // (112:16) {:else}
-    function create_else_block$2(ctx) {
+    function create_else_block$1(ctx) {
     	let a;
     	let i;
     	let t;
@@ -7033,10 +7053,10 @@ var index = (function () {
     			i = element("i");
     			t = text("\r\n                        Login");
     			attr_dev(i, "class", "bi-person");
-    			add_location(i, file$6, 113, 24, 3919);
+    			add_location(i, file$6, 113, 24, 3961);
     			attr_dev(a, "class", "btn btn-sm btn-primary");
     			attr_dev(a, "href", urls.loginUrl);
-    			add_location(a, file$6, 112, 20, 3836);
+    			add_location(a, file$6, 112, 20, 3878);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -7051,7 +7071,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$2.name,
+    		id: create_else_block$1.name,
     		type: "else",
     		source: "(112:16) {:else}",
     		ctx
@@ -7080,14 +7100,14 @@ var index = (function () {
     			attr_dev(pre, "class", "user-info text-nowrap svelte-34qebo");
     			attr_dev(pre, "data-bs-toggle", "tooltip");
     			attr_dev(pre, "title", "Current user");
-    			add_location(pre, file$6, 105, 20, 3433);
+    			add_location(pre, file$6, 105, 20, 3475);
     			attr_dev(i, "class", "bi bi-box-arrow-right");
-    			add_location(i, file$6, 109, 24, 3726);
+    			add_location(i, file$6, 109, 24, 3768);
     			attr_dev(a, "class", "btn btn-sm btn-primary");
     			attr_dev(a, "href", urls.logoutUrl);
     			attr_dev(a, "data-bs-toggle", "tooltip");
     			attr_dev(a, "title", "Logout");
-    			add_location(a, file$6, 108, 20, 3602);
+    			add_location(a, file$6, 108, 20, 3644);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, pre, anchor);
@@ -7150,14 +7170,14 @@ var index = (function () {
 
     	function select_block_type(ctx, dirty) {
     		if (user.isSigned) return create_if_block$4;
-    		return create_else_block$2;
+    		return create_else_block$1;
     	}
 
     	let current_block_type = select_block_type();
     	let if_block1 = current_block_type(ctx);
     	links = new Link_list_items({ $$inline: true });
     	const default_slot_template = /*#slots*/ ctx[9].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[14], null);
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[15], null);
 
     	const block = {
     		c: function create() {
@@ -7194,46 +7214,46 @@ var index = (function () {
     			? "bi-x"
     			: "bi-list");
 
-    			add_location(i0, file$6, 98, 20, 3152);
+    			add_location(i0, file$6, 98, 20, 3194);
     			attr_dev(span, "class", "font-monospace");
-    			add_location(span, file$6, 99, 20, 3238);
+    			add_location(span, file$6, 99, 20, 3280);
     			attr_dev(button0, "class", "btn btn-primary");
-    			add_location(button0, file$6, 97, 16, 3063);
+    			add_location(button0, file$6, 97, 16, 3105);
     			attr_dev(div0, "class", "d-flex float-start");
-    			add_location(div0, file$6, 96, 12, 3013);
+    			add_location(div0, file$6, 96, 12, 3055);
 
     			attr_dev(i1, "class", i1_class_value = /*$isDarkTheme*/ ctx[3]
     			? "bi-lightbulb"
     			: "bi-lightbulb-off");
 
-    			add_location(i1, file$6, 118, 20, 4231);
+    			add_location(i1, file$6, 118, 20, 4273);
     			attr_dev(button1, "class", "btn btn-sm btn-primary mx-1");
     			attr_dev(button1, "data-bs-toggle", "tooltip");
     			attr_dev(button1, "title", button1_title_value = /*$isDarkTheme*/ ctx[3] ? "Lights On" : "Lights Off");
-    			add_location(button1, file$6, 117, 16, 4042);
+    			add_location(button1, file$6, 117, 16, 4084);
     			attr_dev(div1, "class", "d-flex float-end");
-    			add_location(div1, file$6, 103, 12, 3344);
+    			add_location(div1, file$6, 103, 12, 3386);
     			attr_dev(div2, "class", "container-fluid");
-    			add_location(div2, file$6, 94, 8, 2968);
+    			add_location(div2, file$6, 94, 8, 3010);
     			attr_dev(nav, "class", "navbar navbar-expand-md navbar-dark fixed-top bg-primary py-0 py-md-0");
-    			add_location(nav, file$6, 93, 4, 2875);
+    			add_location(nav, file$6, 93, 4, 2917);
     			attr_dev(header, "class", "svelte-34qebo");
-    			add_location(header, file$6, 92, 0, 2861);
+    			add_location(header, file$6, 92, 0, 2903);
     			attr_dev(button2, "type", "button");
     			attr_dev(button2, "class", "btn btn-sm btn-primary pin bi-pin svelte-34qebo");
     			attr_dev(button2, "data-bs-toggle", "tooltip");
     			attr_dev(button2, "title", "Unpin sidebar");
-    			add_location(button2, file$6, 128, 12, 4564);
+    			add_location(button2, file$6, 128, 12, 4606);
     			attr_dev(div3, "class", "position-fixed pin-wrap svelte-34qebo");
-    			add_location(div3, file$6, 127, 8, 4513);
+    			add_location(div3, file$6, 127, 8, 4555);
     			attr_dev(ul, "class", "navbar-nav navbar-dark flex-column mt-4 position-fixed");
-    			add_location(ul, file$6, 130, 8, 4731);
+    			add_location(ul, file$6, 130, 8, 4773);
     			attr_dev(div4, "class", "offcanvas-nav navbar-dark bg-primary svelte-34qebo");
     			toggle_class(div4, "d-none", !/*pinned*/ ctx[1]);
-    			add_location(div4, file$6, 126, 4, 4430);
+    			add_location(div4, file$6, 126, 4, 4472);
     			attr_dev(main, "class", "svelte-34qebo");
     			toggle_class(main, "pinned-layout", /*pinned*/ ctx[1]);
-    			add_location(main, file$6, 125, 0, 4389);
+    			add_location(main, file$6, 125, 0, 4431);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -7276,8 +7296,8 @@ var index = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(document_1.body, "mouseover", /*bodyMouseover*/ ctx[7], false, false, false),
-    					listen_dev(button0, "click", /*click_handler_1*/ ctx[12], false, false, false),
-    					listen_dev(button1, "click", /*click_handler_2*/ ctx[13], false, false, false),
+    					listen_dev(button0, "click", /*click_handler_1*/ ctx[13], false, false, false),
+    					listen_dev(button1, "click", /*click_handler_2*/ ctx[14], false, false, false),
     					listen_dev(button2, "click", /*togglePin*/ ctx[8], false, false, false)
     				];
 
@@ -7332,15 +7352,15 @@ var index = (function () {
     			}
 
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty & /*$$scope*/ 16384)) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 32768)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[14],
+    						/*$$scope*/ ctx[15],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[14], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[15])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[15], dirty, null),
     						null
     					);
     				}
@@ -7497,13 +7517,14 @@ var index = (function () {
     	});
 
     	const click_handler = () => toggleOffcanvas(true);
+    	const keypress_handler = () => toggleOffcanvas(true);
     	const hidden_handler = () => toggleOffcanvas(false);
     	const click_handler_1 = () => toggleOffcanvas();
     	const click_handler_2 = () => set_store_value(isDarkTheme, $isDarkTheme = !$isDarkTheme, $isDarkTheme);
 
     	$$self.$$set = $$props => {
     		if ('title' in $$props) $$invalidate(0, title$1 = $$props.title);
-    		if ('$$scope' in $$props) $$invalidate(14, $$scope = $$props.$$scope);
+    		if ('$$scope' in $$props) $$invalidate(15, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -7566,6 +7587,7 @@ var index = (function () {
     		togglePin,
     		slots,
     		click_handler,
+    		keypress_handler,
     		hidden_handler,
     		click_handler_1,
     		click_handler_2,
@@ -20963,7 +20985,7 @@ var index = (function () {
 
     /* App\shared\components\chart.svelte generated by Svelte v3.52.0 */
 
-    const { Object: Object_1 } = globals;
+    const { Object: Object_1$1 } = globals;
     const file$5 = "App\\shared\\components\\chart.svelte";
 
     // (164:4) {#if loading}
@@ -21195,7 +21217,7 @@ var index = (function () {
     		'seriesColor'
     	];
 
-    	Object_1.keys($$props).forEach(key => {
+    	Object_1$1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Chart> was created with unknown prop '${key}'`);
     	});
 
@@ -22122,8 +22144,8 @@ var index = (function () {
     	let t0;
     	let t1;
     	let current;
-    	let if_block0 = /*promise*/ ctx[13] && create_if_block_6(ctx);
-    	let if_block1 = /*content*/ ctx[15] && create_if_block_5(ctx);
+    	let if_block0 = /*promise*/ ctx[13] && create_if_block_6$1(ctx);
+    	let if_block1 = /*content*/ ctx[15] && create_if_block_5$1(ctx);
     	const default_slot_template = /*#slots*/ ctx[25].default;
     	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[24], null);
 
@@ -22152,7 +22174,7 @@ var index = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_6(ctx);
+    					if_block0 = create_if_block_6$1(ctx);
     					if_block0.c();
     					if_block0.m(t0.parentNode, t0);
     				}
@@ -22165,7 +22187,7 @@ var index = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_5(ctx);
+    					if_block1 = create_if_block_5$1(ctx);
     					if_block1.c();
     					if_block1.m(t1.parentNode, t1);
     				}
@@ -22219,7 +22241,7 @@ var index = (function () {
     }
 
     // (214:20) {#if promise}
-    function create_if_block_6(ctx) {
+    function create_if_block_6$1(ctx) {
     	let await_block_anchor;
     	let promise_1;
 
@@ -22265,7 +22287,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_6.name,
+    		id: create_if_block_6$1.name,
     		type: "if",
     		source: "(214:20) {#if promise}",
     		ctx
@@ -22363,7 +22385,7 @@ var index = (function () {
     }
 
     // (223:20) {#if content}
-    function create_if_block_5(ctx) {
+    function create_if_block_5$1(ctx) {
     	let html_tag;
     	let html_anchor;
 
@@ -22388,7 +22410,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_5.name,
+    		id: create_if_block_5$1.name,
     		type: "if",
     		source: "(223:20) {#if content}",
     		ctx
@@ -23436,7 +23458,11 @@ var index = (function () {
     			insert_dev(target, i, anchor);
 
     			if (!mounted) {
-    				dispose = listen_dev(i, "click", /*click_handler*/ ctx[15], false, false, false);
+    				dispose = [
+    					listen_dev(i, "click", /*click_handler*/ ctx[15], false, false, false),
+    					listen_dev(i, "keypress", /*keypress_handler*/ ctx[16], false, false, false)
+    				];
+
     				mounted = true;
     			}
     		},
@@ -23444,7 +23470,7 @@ var index = (function () {
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(i);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -23472,7 +23498,7 @@ var index = (function () {
     	};
 
     	chart_1 = new Chart_1({ props: chart_1_props, $$inline: true });
-    	/*chart_1_binding_1*/ ctx[17](chart_1);
+    	/*chart_1_binding_1*/ ctx[18](chart_1);
 
     	const block = {
     		c: function create() {
@@ -23500,7 +23526,7 @@ var index = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			/*chart_1_binding_1*/ ctx[17](null);
+    			/*chart_1_binding_1*/ ctx[18](null);
     			destroy_component(chart_1, detaching);
     		}
     	};
@@ -23530,7 +23556,7 @@ var index = (function () {
     	};
 
     	chart_1 = new Chart_1({ props: chart_1_props, $$inline: true });
-    	/*chart_1_binding*/ ctx[16](chart_1);
+    	/*chart_1_binding*/ ctx[17](chart_1);
 
     	const block = {
     		c: function create() {
@@ -23539,7 +23565,7 @@ var index = (function () {
     			attr_dev(div, "class", "chart-fixed-size svelte-13oms1i");
     			set_style(div, "min-height", /*minHeight*/ ctx[4]);
     			set_style(div, "width", /*minHeight*/ ctx[4]);
-    			add_location(div, file$3, 79, 4, 1735);
+    			add_location(div, file$3, 79, 4, 1773);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -23573,7 +23599,7 @@ var index = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-    			/*chart_1_binding*/ ctx[16](null);
+    			/*chart_1_binding*/ ctx[17](null);
     			destroy_component(chart_1);
     		}
     	};
@@ -23620,7 +23646,7 @@ var index = (function () {
     			const modal_1_changes = {};
     			if (dirty & /*modal*/ 512) modal_1_changes.state = /*modal*/ ctx[9];
 
-    			if (dirty & /*$$scope, refreshing, showModalControls, title, zoom, type, dataFunc, chart*/ 527751) {
+    			if (dirty & /*$$scope, refreshing, showModalControls, title, zoom, type, dataFunc, chart*/ 1052039) {
     				modal_1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -23672,7 +23698,7 @@ var index = (function () {
     			create_component(chart_1.$$.fragment);
     			attr_dev(div, "class", "modal-wrap svelte-13oms1i");
     			set_style(div, "grid-template-columns", /*zoom*/ ctx[10] + "%");
-    			add_location(div, file$3, 112, 4, 3361);
+    			add_location(div, file$3, 112, 4, 3399);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -23732,7 +23758,7 @@ var index = (function () {
 
     	function select_block_type_1(ctx, dirty) {
     		if (/*refreshing*/ ctx[11]) return create_if_block_2$1;
-    		return create_else_block$1;
+    		return create_else_block;
     	}
 
     	let current_block_type = select_block_type_1(ctx);
@@ -23751,29 +23777,29 @@ var index = (function () {
     			button2 = element("button");
     			if_block.c();
     			attr_dev(i0, "class", "bi bi-zoom-out svelte-13oms1i");
-    			add_location(i0, file$3, 93, 20, 2474);
+    			add_location(i0, file$3, 93, 20, 2512);
     			attr_dev(button0, "type", "button");
     			attr_dev(button0, "class", "btn btn-light");
     			attr_dev(button0, "data-bs-toggle", "tooltip");
     			attr_dev(button0, "title", "Zoom In");
-    			add_location(button0, file$3, 92, 16, 2349);
+    			add_location(button0, file$3, 92, 16, 2387);
     			attr_dev(i1, "class", "bi bi-zoom-in svelte-13oms1i");
-    			add_location(i1, file$3, 96, 20, 2676);
+    			add_location(i1, file$3, 96, 20, 2714);
     			attr_dev(button1, "type", "button");
     			attr_dev(button1, "class", "btn btn-light");
     			attr_dev(button1, "data-bs-toggle", "tooltip");
     			attr_dev(button1, "title", "Zoom Out");
-    			add_location(button1, file$3, 95, 16, 2549);
+    			add_location(button1, file$3, 95, 16, 2587);
     			attr_dev(div0, "class", "btn-group");
-    			add_location(div0, file$3, 91, 12, 2308);
+    			add_location(div0, file$3, 91, 12, 2346);
     			attr_dev(button2, "type", "button");
     			button2.disabled = /*refreshing*/ ctx[11];
     			attr_dev(button2, "class", "btn btn-light");
     			attr_dev(button2, "data-bs-toggle", "tooltip");
     			attr_dev(button2, "title", "Refresh");
-    			add_location(button2, file$3, 100, 16, 2807);
+    			add_location(button2, file$3, 100, 16, 2845);
     			attr_dev(div1, "class", "btn-group");
-    			add_location(div1, file$3, 99, 12, 2766);
+    			add_location(div1, file$3, 99, 12, 2804);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -23834,14 +23860,14 @@ var index = (function () {
     }
 
     // (106:20) {:else}
-    function create_else_block$1(ctx) {
+    function create_else_block(ctx) {
     	let i;
 
     	const block = {
     		c: function create() {
     			i = element("i");
     			attr_dev(i, "class", "bi bi-arrow-clockwise svelte-13oms1i");
-    			add_location(i, file$3, 106, 24, 3217);
+    			add_location(i, file$3, 106, 24, 3255);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, i, anchor);
@@ -23853,7 +23879,7 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$1.name,
+    		id: create_else_block.name,
     		type: "else",
     		source: "(106:20) {:else}",
     		ctx
@@ -23873,10 +23899,10 @@ var index = (function () {
     			span = element("span");
     			span.textContent = "Loading...";
     			attr_dev(span, "class", "visually-hidden");
-    			add_location(span, file$3, 103, 28, 3083);
+    			add_location(span, file$3, 103, 28, 3121);
     			attr_dev(div, "class", "spinner-border spinner-small svelte-13oms1i");
     			attr_dev(div, "role", "status");
-    			add_location(div, file$3, 102, 24, 2997);
+    			add_location(div, file$3, 102, 24, 3035);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -23914,10 +23940,10 @@ var index = (function () {
     			t1 = space();
     			if (if_block) if_block.c();
     			attr_dev(h5, "class", "modal-title");
-    			add_location(h5, file$3, 89, 8, 2224);
+    			add_location(h5, file$3, 89, 8, 2262);
     			attr_dev(div, "slot", "header");
     			attr_dev(div, "class", "modal-header");
-    			add_location(div, file$3, 88, 4, 2174);
+    			add_location(div, file$3, 88, 4, 2212);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -24177,6 +24203,7 @@ var index = (function () {
     	});
 
     	const click_handler = () => $$invalidate(9, modal.open = true, modal);
+    	const keypress_handler = () => $$invalidate(9, modal.open = true, modal);
 
     	function chart_1_binding($$value) {
     		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
@@ -24262,6 +24289,7 @@ var index = (function () {
     		zoomOut,
     		refresh,
     		click_handler,
+    		keypress_handler,
     		chart_1_binding,
     		chart_1_binding_1
     	];
@@ -24355,38 +24383,29 @@ var index = (function () {
     	}
     }
 
-    /* App\shared\components\data-grid\placeholder-row.svelte generated by Svelte v3.52.0 */
+    /* App\shared\components\data-grid\placeholder.svelte generated by Svelte v3.52.0 */
 
-    const file$2 = "App\\shared\\components\\data-grid\\placeholder-row.svelte";
+    const file$2 = "App\\shared\\components\\data-grid\\placeholder.svelte";
 
     function create_fragment$2(ctx) {
-    	let tr;
-    	let td;
     	let div;
     	let span;
 
     	const block = {
     		c: function create() {
-    			tr = element("tr");
-    			td = element("td");
     			div = element("div");
     			span = element("span");
     			attr_dev(span, "class", "placeholder placeholder-lg col-12 rounded");
     			set_style(span, "height", /*placeholderHeight*/ ctx[0]);
-    			add_location(span, file$2, 5, 12, 151);
+    			add_location(span, file$2, 3, 4, 105);
     			attr_dev(div, "class", "placeholder-glow");
-    			add_location(div, file$2, 4, 8, 107);
-    			attr_dev(td, "colspan", "99999");
-    			add_location(td, file$2, 3, 4, 79);
-    			add_location(tr, file$2, 2, 0, 69);
+    			add_location(div, file$2, 2, 0, 69);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, tr, anchor);
-    			append_dev(tr, td);
-    			append_dev(td, div);
+    			insert_dev(target, div, anchor);
     			append_dev(div, span);
     		},
     		p: function update(ctx, [dirty]) {
@@ -24397,7 +24416,7 @@ var index = (function () {
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(tr);
+    			if (detaching) detach_dev(div);
     		}
     	};
 
@@ -24414,12 +24433,12 @@ var index = (function () {
 
     function instance$2($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots('Placeholder_row', slots, []);
+    	validate_slots('Placeholder', slots, []);
     	let { placeholderHeight = "25vh" } = $$props;
     	const writable_props = ['placeholderHeight'];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Placeholder_row> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Placeholder> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$$set = $$props => {
@@ -24439,30 +24458,36 @@ var index = (function () {
     	return [placeholderHeight];
     }
 
-    class Placeholder_row extends SvelteComponentDev {
+    class Placeholder extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
     		init(this, options, instance$2, create_fragment$2, safe_not_equal, { placeholderHeight: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
-    			tagName: "Placeholder_row",
+    			tagName: "Placeholder",
     			options,
     			id: create_fragment$2.name
     		});
     	}
 
     	get placeholderHeight() {
-    		throw new Error("<Placeholder_row>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    		throw new Error("<Placeholder>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
     	set placeholderHeight(value) {
-    		throw new Error("<Placeholder_row>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    		throw new Error("<Placeholder>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
     /* App\shared\components\data-grid.svelte generated by Svelte v3.52.0 */
+
+    const { Object: Object_1 } = globals;
     const file$1 = "App\\shared\\components\\data-grid.svelte";
+    const get_bottom_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_bottom_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
+    const get_bottomRow_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_bottomRow_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
@@ -24471,11 +24496,15 @@ var index = (function () {
     	return child_ctx;
     }
 
-    const get_row_slot_changes_1 = dirty => ({});
+    const get_row_slot_changes_1 = dirty => ({
+    	data: dirty[0] & /*page*/ 268435456,
+    	grid: dirty[0] & /*grid*/ 134217728
+    });
 
     const get_row_slot_context_1 = ctx => ({
     	data: /*data*/ ctx[36],
-    	index: /*index*/ ctx[38]
+    	index: /*index*/ ctx[38],
+    	grid: /*grid*/ ctx[27]
     });
 
     function get_each_context_1$1(ctx, list, i) {
@@ -24485,158 +24514,52 @@ var index = (function () {
     	return child_ctx;
     }
 
-    const get_row_slot_changes = dirty => ({ data: dirty[0] & /*dataFunc*/ 2 });
+    const get_row_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
 
     const get_row_slot_context = ctx => ({
     	data: /*data*/ ctx[36],
-    	index: /*index*/ ctx[38]
+    	index: /*index*/ ctx[38],
+    	grid: /*grid*/ ctx[27]
     });
 
-    function get_each_context_2(ctx, list, i) {
+    const get_topRow_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_topRow_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
+
+    function get_each_context_3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[40] = list[i];
+    	child_ctx[41] = list[i];
     	return child_ctx;
     }
 
-    const get_caption_slot_changes = dirty => ({});
-    const get_caption_slot_context = ctx => ({});
-
-    // (43:0) {#if dataPageFunc && pagerVerticalPos == "top"}
-    function create_if_block_4(ctx) {
-    	let nav;
-    	let div;
-    	let t1;
-    	let ul;
-    	let li0;
-    	let button0;
-    	let t3;
-    	let li1;
-    	let button1;
-    	let t5;
-    	let li2;
-    	let button2;
-    	let t7;
-    	let li3;
-    	let button3;
-    	let t9;
-    	let li4;
-    	let button4;
-    	let ul_class_value;
-    	let nav_class_value;
-
-    	const block = {
-    		c: function create() {
-    			nav = element("nav");
-    			div = element("div");
-    			div.textContent = "some text";
-    			t1 = space();
-    			ul = element("ul");
-    			li0 = element("li");
-    			button0 = element("button");
-    			button0.textContent = "Previous";
-    			t3 = space();
-    			li1 = element("li");
-    			button1 = element("button");
-    			button1.textContent = "1";
-    			t5 = space();
-    			li2 = element("li");
-    			button2 = element("button");
-    			button2.textContent = "2";
-    			t7 = space();
-    			li3 = element("li");
-    			button3 = element("button");
-    			button3.textContent = "3";
-    			t9 = space();
-    			li4 = element("li");
-    			button4 = element("button");
-    			button4.textContent = "Next";
-    			add_location(div, file$1, 44, 4, 1343);
-    			attr_dev(button0, "class", "page-link");
-    			add_location(button0, file$1, 47, 39, 1472);
-    			attr_dev(li0, "class", "page-item disabled");
-    			add_location(li0, file$1, 47, 8, 1441);
-    			attr_dev(button1, "class", "page-link");
-    			add_location(button1, file$1, 48, 37, 1559);
-    			attr_dev(li1, "class", "page-item active");
-    			add_location(li1, file$1, 48, 8, 1530);
-    			attr_dev(button2, "class", "page-link");
-    			add_location(button2, file$1, 49, 30, 1632);
-    			attr_dev(li2, "class", "page-item");
-    			add_location(li2, file$1, 49, 8, 1610);
-    			attr_dev(button3, "class", "page-link");
-    			add_location(button3, file$1, 50, 30, 1705);
-    			attr_dev(li3, "class", "page-item");
-    			add_location(li3, file$1, 50, 8, 1683);
-    			attr_dev(button4, "class", "page-link");
-    			add_location(button4, file$1, 51, 30, 1778);
-    			attr_dev(li4, "class", "page-item");
-    			add_location(li4, file$1, 51, 8, 1756);
-    			attr_dev(ul, "class", ul_class_value = "pagination justify-content-" + /*pagerHorizontalPos*/ ctx[27]);
-    			add_location(ul, file$1, 46, 4, 1371);
-    			attr_dev(nav, "class", nav_class_value = "d-flex justify-content-" + /*pagerHorizontalPos*/ ctx[27]);
-    			add_location(nav, file$1, 43, 0, 1280);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, nav, anchor);
-    			append_dev(nav, div);
-    			append_dev(nav, t1);
-    			append_dev(nav, ul);
-    			append_dev(ul, li0);
-    			append_dev(li0, button0);
-    			append_dev(ul, t3);
-    			append_dev(ul, li1);
-    			append_dev(li1, button1);
-    			append_dev(ul, t5);
-    			append_dev(ul, li2);
-    			append_dev(li2, button2);
-    			append_dev(ul, t7);
-    			append_dev(ul, li3);
-    			append_dev(li3, button3);
-    			append_dev(ul, t9);
-    			append_dev(ul, li4);
-    			append_dev(li4, button4);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pagerHorizontalPos*/ 134217728 && ul_class_value !== (ul_class_value = "pagination justify-content-" + /*pagerHorizontalPos*/ ctx[27])) {
-    				attr_dev(ul, "class", ul_class_value);
-    			}
-
-    			if (dirty[0] & /*pagerHorizontalPos*/ 134217728 && nav_class_value !== (nav_class_value = "d-flex justify-content-" + /*pagerHorizontalPos*/ ctx[27])) {
-    				attr_dev(nav, "class", nav_class_value);
-    			}
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(nav);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_4.name,
-    		type: "if",
-    		source: "(43:0) {#if dataPageFunc && pagerVerticalPos == \\\"top\\\"}",
-    		ctx
-    	});
-
-    	return block;
+    function get_each_context_2(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[41] = list[i];
+    	return child_ctx;
     }
 
-    // (78:4) {#if caption || $$slots.caption}
-    function create_if_block_3(ctx) {
+    const get_headerRow_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_headerRow_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
+    const get_caption_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_caption_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
+    const get_top_slot_changes = dirty => ({ grid: dirty[0] & /*grid*/ 134217728 });
+    const get_top_slot_context = ctx => ({ grid: /*grid*/ ctx[27] });
+
+    // (116:4) {#if caption || $$slots.caption}
+    function create_if_block_6(ctx) {
     	let caption_1;
     	let t0;
     	let t1;
     	let current;
-    	const caption_slot_template = /*#slots*/ ctx[32].caption;
-    	const caption_slot = create_slot(caption_slot_template, ctx, /*$$scope*/ ctx[31], get_caption_slot_context);
+    	const caption_slot_template = /*#slots*/ ctx[35].caption;
+    	const caption_slot = create_slot(caption_slot_template, ctx, /*$$scope*/ ctx[34], get_caption_slot_context);
 
     	const block = {
     		c: function create() {
     			caption_1 = element("caption");
-    			t0 = text(/*caption*/ ctx[23]);
+    			t0 = text(/*caption*/ ctx[24]);
     			t1 = space();
     			if (caption_slot) caption_slot.c();
-    			add_location(caption_1, file$1, 78, 8, 2732);
+    			add_location(caption_1, file$1, 116, 8, 3503);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, caption_1, anchor);
@@ -24650,18 +24573,18 @@ var index = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (!current || dirty[0] & /*caption*/ 8388608) set_data_dev(t0, /*caption*/ ctx[23]);
+    			if (!current || dirty[0] & /*caption*/ 16777216) set_data_dev(t0, /*caption*/ ctx[24]);
 
     			if (caption_slot) {
-    				if (caption_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (caption_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
     					update_slot_base(
     						caption_slot,
     						caption_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[34],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(caption_slot_template, /*$$scope*/ ctx[31], dirty, get_caption_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(caption_slot_template, /*$$scope*/ ctx[34], dirty, get_caption_slot_changes),
     						get_caption_slot_context
     					);
     				}
@@ -24684,47 +24607,262 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_6.name,
     		type: "if",
-    		source: "(78:4) {#if caption || $$slots.caption}",
+    		source: "(116:4) {#if caption || $$slots.caption}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:16) {:else}
-    function create_else_block(ctx) {
+    // (138:77) 
+    function create_if_block_5(ctx) {
+    	let tr;
+    	let each_value_3 = /*_headers*/ ctx[29];
+    	validate_each_argument(each_value_3);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_3.length; i += 1) {
+    		each_blocks[i] = create_each_block_3(get_each_context_3(ctx, each_value_3, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			tr = element("tr");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			add_location(tr, file$1, 138, 12, 4407);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, tr, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(tr, null);
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty[0] & /*_headers*/ 536870912) {
+    				each_value_3 = /*_headers*/ ctx[29];
+    				validate_each_argument(each_value_3);
+    				let i;
+
+    				for (i = 0; i < each_value_3.length; i += 1) {
+    					const child_ctx = get_each_context_3(ctx, each_value_3, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_3(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(tr, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_3.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(tr);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_5.name,
+    		type: "if",
+    		source: "(138:77) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (124:8) {#if (typeof headers != "boolean" && headers.length)}
+    function create_if_block_2(ctx) {
+    	let tr;
+    	let each_value_2 = /*headers*/ ctx[0];
+    	validate_each_argument(each_value_2);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_2.length; i += 1) {
+    		each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			tr = element("tr");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			add_location(tr, file$1, 124, 12, 3752);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, tr, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(tr, null);
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty[0] & /*headers*/ 1) {
+    				each_value_2 = /*headers*/ ctx[0];
+    				validate_each_argument(each_value_2);
+    				let i;
+
+    				for (i = 0; i < each_value_2.length; i += 1) {
+    					const child_ctx = get_each_context_2(ctx, each_value_2, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_2(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(tr, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_2.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(tr);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(124:8) {#if (typeof headers != \\\"boolean\\\" && headers.length)}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (140:16) {#each _headers as row}
+    function create_each_block_3(ctx) {
     	let th;
-    	let t_value = /*row*/ ctx[40].text + "";
+    	let t_value = /*row*/ ctx[41] + "";
     	let t;
-    	let th_style_value;
 
     	const block = {
     		c: function create() {
     			th = element("th");
     			t = text(t_value);
     			attr_dev(th, "scope", "col");
-
-    			attr_dev(th, "style", th_style_value = "" + ((/*row*/ ctx[40].width
-    			? "width: " + /*row*/ ctx[40].width + "; "
-    			: "") + (/*row*/ ctx[40].minWidth
-    			? "min-width: " + /*row*/ ctx[40].minWidth + "; "
-    			: "")));
-
-    			add_location(th, file$1, 89, 20, 3041);
+    			add_location(th, file$1, 140, 20, 4474);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
     			append_dev(th, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[40].text + "")) set_data_dev(t, t_value);
+    			if (dirty[0] & /*_headers*/ 536870912 && t_value !== (t_value = /*row*/ ctx[41] + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(th);
+    		}
+    	};
 
-    			if (dirty[0] & /*headers*/ 1 && th_style_value !== (th_style_value = "" + ((/*row*/ ctx[40].width
-    			? "width: " + /*row*/ ctx[40].width + "; "
-    			: "") + (/*row*/ ctx[40].minWidth
-    			? "min-width: " + /*row*/ ctx[40].minWidth + "; "
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block_3.name,
+    		type: "each",
+    		source: "(140:16) {#each _headers as row}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (133:53) 
+    function create_if_block_4(ctx) {
+    	let th;
+    	let t_value = /*row*/ ctx[41] + "";
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			th = element("th");
+    			t = text(t_value);
+    			attr_dev(th, "scope", "col");
+    			add_location(th, file$1, 133, 24, 4217);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, th, anchor);
+    			append_dev(th, t);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[41] + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(th);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_4.name,
+    		type: "if",
+    		source: "(133:53) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (127:20) {#if (instanceOfIHeader(row))}
+    function create_if_block_3(ctx) {
+    	let th;
+    	let t0_value = /*row*/ ctx[41].text + "";
+    	let t0;
+    	let t1;
+    	let th_style_value;
+
+    	const block = {
+    		c: function create() {
+    			th = element("th");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			attr_dev(th, "scope", "col");
+
+    			attr_dev(th, "style", th_style_value = "" + ((/*row*/ ctx[41].width
+    			? "width: " + /*row*/ ctx[41].width + "; "
+    			: "") + (/*row*/ ctx[41].minWidth
+    			? "min-width: " + /*row*/ ctx[41].minWidth + "; "
+    			: "")));
+
+    			add_location(th, file$1, 127, 24, 3874);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, th, anchor);
+    			append_dev(th, t0);
+    			append_dev(th, t1);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty[0] & /*headers*/ 1 && t0_value !== (t0_value = /*row*/ ctx[41].text + "")) set_data_dev(t0, t0_value);
+
+    			if (dirty[0] & /*headers*/ 1 && th_style_value !== (th_style_value = "" + ((/*row*/ ctx[41].width
+    			? "width: " + /*row*/ ctx[41].width + "; "
+    			: "") + (/*row*/ ctx[41].minWidth
+    			? "min-width: " + /*row*/ ctx[41].minWidth + "; "
     			: "")))) {
     				attr_dev(th, "style", th_style_value);
     			}
@@ -24736,78 +24874,45 @@ var index = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block.name,
-    		type: "else",
-    		source: "(89:16) {:else}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (87:16) {#if typeof row == "string"}
-    function create_if_block_2(ctx) {
-    	let th;
-    	let t_value = /*row*/ ctx[40] + "";
-    	let t;
-
-    	const block = {
-    		c: function create() {
-    			th = element("th");
-    			t = text(t_value);
-    			attr_dev(th, "scope", "col");
-    			add_location(th, file$1, 87, 20, 2968);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, th, anchor);
-    			append_dev(th, t);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*headers*/ 1 && t_value !== (t_value = /*row*/ ctx[40] + "")) set_data_dev(t, t_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(th);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_3.name,
     		type: "if",
-    		source: "(87:16) {#if typeof row == \\\"string\\\"}",
+    		source: "(127:20) {#if (instanceOfIHeader(row))}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (86:12) {#each headers as row}
+    // (126:16) {#each headers as row}
     function create_each_block_2(ctx) {
+    	let show_if;
     	let if_block_anchor;
 
-    	function select_block_type(ctx, dirty) {
-    		if (typeof /*row*/ ctx[40] == "string") return create_if_block_2;
-    		return create_else_block;
+    	function select_block_type_1(ctx, dirty) {
+    		if (dirty[0] & /*headers*/ 1) show_if = null;
+    		if (show_if == null) show_if = !!instanceOfIHeader(/*row*/ ctx[41]);
+    		if (show_if) return create_if_block_3;
+    		if (typeof /*row*/ ctx[41] == "string") return create_if_block_4;
     	}
 
-    	let current_block_type = select_block_type(ctx);
-    	let if_block = current_block_type(ctx);
+    	let current_block_type = select_block_type_1(ctx, [-1, -1]);
+    	let if_block = current_block_type && current_block_type(ctx);
 
     	const block = {
     		c: function create() {
-    			if_block.c();
+    			if (if_block) if_block.c();
     			if_block_anchor = empty();
     		},
     		m: function mount(target, anchor) {
-    			if_block.m(target, anchor);
+    			if (if_block) if_block.m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    			if (current_block_type === (current_block_type = select_block_type_1(ctx, dirty)) && if_block) {
     				if_block.p(ctx, dirty);
     			} else {
-    				if_block.d(1);
-    				if_block = current_block_type(ctx);
+    				if (if_block) if_block.d(1);
+    				if_block = current_block_type && current_block_type(ctx);
 
     				if (if_block) {
     					if_block.c();
@@ -24816,7 +24921,10 @@ var index = (function () {
     			}
     		},
     		d: function destroy(detaching) {
-    			if_block.d(detaching);
+    			if (if_block) {
+    				if_block.d(detaching);
+    			}
+
     			if (detaching) detach_dev(if_block_anchor);
     		}
     	};
@@ -24825,17 +24933,16 @@ var index = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(86:12) {#each headers as row}",
+    		source: "(126:16) {#each headers as row}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (96:8) {#if dataFunc}
+    // (148:8) {#if dataFunc}
     function create_if_block_1(ctx) {
     	let await_block_anchor;
-    	let promise;
     	let current;
 
     	let info_1 = {
@@ -24846,11 +24953,11 @@ var index = (function () {
     		pending: create_pending_block_1,
     		then: create_then_block_1,
     		catch: create_catch_block_1,
-    		value: 35,
+    		value: 39,
     		blocks: [,,,]
     	};
 
-    	handle_promise(promise = /*dataFunc*/ ctx[1](), info_1);
+    	handle_promise(/*readData*/ ctx[30](), info_1);
 
     	const block = {
     		c: function create() {
@@ -24866,11 +24973,7 @@ var index = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			info_1.ctx = ctx;
-
-    			if (dirty[0] & /*dataFunc*/ 2 && promise !== (promise = /*dataFunc*/ ctx[1]()) && handle_promise(promise, info_1)) ; else {
-    				update_await_block_branch(info_1, ctx, dirty);
-    			}
+    			update_await_block_branch(info_1, ctx, dirty);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -24897,14 +25000,14 @@ var index = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(96:8) {#if dataFunc}",
+    		source: "(148:8) {#if dataFunc}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "50vh";  export let take = 50;  export let pagerVerticalPos = "top";  export let pagerHorizontalPos = "end";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }
+    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder.svelte";  function instanceOfIHeader(value) {      if (typeof value == "string") {          return false;      }
     function create_catch_block_1(ctx) {
     	const block = {
     		c: noop$1,
@@ -24919,18 +25022,18 @@ var index = (function () {
     		block,
     		id: create_catch_block_1.name,
     		type: "catch",
-    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"50vh\\\";  export let take = 50;  export let pagerVerticalPos = \\\"top\\\";  export let pagerHorizontalPos = \\\"end\\\";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }",
+    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder.svelte\\\";  function instanceOfIHeader(value) {      if (typeof value == \\\"string\\\") {          return false;      }",
     		ctx
     	});
 
     	return block;
     }
 
-    // (99:12) {:then response}
+    // (155:12) {:then response}
     function create_then_block_1(ctx) {
     	let each_1_anchor;
     	let current;
-    	let each_value_1 = /*response*/ ctx[35];
+    	let each_value_1 = /*response*/ ctx[39];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -24959,8 +25062,8 @@ var index = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*dataFunc*/ 2 | dirty[1] & /*$$scope*/ 1) {
-    				each_value_1 = /*response*/ ctx[35];
+    			if (dirty[0] & /*readData, grid*/ 1207959552 | dirty[1] & /*$$scope*/ 8) {
+    				each_value_1 = /*response*/ ctx[39];
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -25015,18 +25118,18 @@ var index = (function () {
     		block,
     		id: create_then_block_1.name,
     		type: "then",
-    		source: "(99:12) {:then response}",
+    		source: "(155:12) {:then response}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:16) {#each response as data, index}
+    // (156:16) {#each response as data, index}
     function create_each_block_1$1(ctx) {
     	let current;
-    	const row_slot_template = /*#slots*/ ctx[32].row;
-    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[31], get_row_slot_context);
+    	const row_slot_template = /*#slots*/ ctx[35].row;
+    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[34], get_row_slot_context);
 
     	const block = {
     		c: function create() {
@@ -25041,15 +25144,15 @@ var index = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (row_slot) {
-    				if (row_slot.p && (!current || dirty[0] & /*dataFunc*/ 2 | dirty[1] & /*$$scope*/ 1)) {
+    				if (row_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
     					update_slot_base(
     						row_slot,
     						row_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[34],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[31], dirty, get_row_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[34], dirty, get_row_slot_changes),
     						get_row_slot_context
     					);
     				}
@@ -25073,49 +25176,89 @@ var index = (function () {
     		block,
     		id: create_each_block_1$1.name,
     		type: "each",
-    		source: "(100:16) {#each response as data, index}",
+    		source: "(156:16) {#each response as data, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (97:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}
+    // (149:31)                   <tr>                      <td colspan=99999>                          <svelte:component this={placeholder}
     function create_pending_block_1(ctx) {
-    	let placeholderrow;
+    	let tr;
+    	let td;
+    	let switch_instance;
     	let current;
+    	var switch_value = /*placeholder*/ ctx[3];
 
-    	placeholderrow = new Placeholder_row({
+    	function switch_props(ctx) {
+    		return {
     			props: {
-    				placeholderHeight: /*placeholderHeight*/ ctx[25]
+    				placeholderHeight: /*placeholderHeight*/ ctx[26]
     			},
     			$$inline: true
-    		});
+    		};
+    	}
+
+    	if (switch_value) {
+    		switch_instance = construct_svelte_component_dev(switch_value, switch_props(ctx));
+    	}
 
     	const block = {
     		c: function create() {
-    			create_component(placeholderrow.$$.fragment);
+    			tr = element("tr");
+    			td = element("td");
+    			if (switch_instance) create_component(switch_instance.$$.fragment);
+    			attr_dev(td, "colspan", "99999");
+    			add_location(td, file$1, 150, 20, 4779);
+    			add_location(tr, file$1, 149, 16, 4753);
     		},
     		m: function mount(target, anchor) {
-    			mount_component(placeholderrow, target, anchor);
+    			insert_dev(target, tr, anchor);
+    			append_dev(tr, td);
+    			if (switch_instance) mount_component(switch_instance, td, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			const placeholderrow_changes = {};
-    			if (dirty[0] & /*placeholderHeight*/ 33554432) placeholderrow_changes.placeholderHeight = /*placeholderHeight*/ ctx[25];
-    			placeholderrow.$set(placeholderrow_changes);
+    			const switch_instance_changes = {};
+    			if (dirty[0] & /*placeholderHeight*/ 67108864) switch_instance_changes.placeholderHeight = /*placeholderHeight*/ ctx[26];
+
+    			if (switch_value !== (switch_value = /*placeholder*/ ctx[3])) {
+    				if (switch_instance) {
+    					group_outros();
+    					const old_component = switch_instance;
+
+    					transition_out(old_component.$$.fragment, 1, 0, () => {
+    						destroy_component(old_component, 1);
+    					});
+
+    					check_outros();
+    				}
+
+    				if (switch_value) {
+    					switch_instance = construct_svelte_component_dev(switch_value, switch_props(ctx));
+    					create_component(switch_instance.$$.fragment);
+    					transition_in(switch_instance.$$.fragment, 1);
+    					mount_component(switch_instance, td, null);
+    				} else {
+    					switch_instance = null;
+    				}
+    			} else if (switch_value) {
+    				switch_instance.$set(switch_instance_changes);
+    			}
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(placeholderrow.$$.fragment, local);
+    			if (switch_instance) transition_in(switch_instance.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(placeholderrow.$$.fragment, local);
+    			if (switch_instance) transition_out(switch_instance.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			destroy_component(placeholderrow, detaching);
+    			if (detaching) detach_dev(tr);
+    			if (switch_instance) destroy_component(switch_instance);
     		}
     	};
 
@@ -25123,14 +25266,14 @@ var index = (function () {
     		block,
     		id: create_pending_block_1.name,
     		type: "pending",
-    		source: "(97:31)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
+    		source: "(149:31)                   <tr>                      <td colspan=99999>                          <svelte:component this={placeholder}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (105:8) {#if dataPageFunc}
+    // (161:8) {#if dataPageFunc}
     function create_if_block(ctx) {
     	let await_block_anchor;
     	let current;
@@ -25143,11 +25286,10 @@ var index = (function () {
     		pending: create_pending_block,
     		then: create_then_block,
     		catch: create_catch_block,
-    		value: 35,
     		blocks: [,,,]
     	};
 
-    	handle_promise(/*readDataPage*/ ctx[28](), info_1);
+    	handle_promise(/*readDataPage*/ ctx[31](), info_1);
 
     	const block = {
     		c: function create() {
@@ -25190,14 +25332,14 @@ var index = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(105:8) {#if dataPageFunc}",
+    		source: "(161:8) {#if dataPageFunc}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder-row.svelte";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = "";  export let headerGroupDivider = false;  export let placeholderHeight = "50vh";  export let take = 50;  export let pagerVerticalPos = "top";  export let pagerHorizontalPos = "end";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }
+    // (1:0) <script lang="ts">import PlaceholderRow from "./data-grid/placeholder.svelte";  function instanceOfIHeader(value) {      if (typeof value == "string") {          return false;      }
     function create_catch_block(ctx) {
     	const block = {
     		c: noop$1,
@@ -25212,18 +25354,18 @@ var index = (function () {
     		block,
     		id: create_catch_block.name,
     		type: "catch",
-    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder-row.svelte\\\";  export let headers = [];  export let dataFunc = undefined;  export let dataPageFunc = undefined;  export let primary = false;  export let secondary = false;  export let success = false;  export let danger = false;  export let warning = false;  export let info = false;  export let light = false;  export let dark = false;  export let striped = false;  export let stripedColumns = false;  export let hover = false;  export let bordered = false;  export let borderless = false;  export let small = false;  export let responsive = false;  export let responsiveSm = false;  export let responsiveMd = false;  export let responsiveLg = false;  export let responsiveXl = false;  export let responsiveXxl = false;  export let caption = \\\"\\\";  export let headerGroupDivider = false;  export let placeholderHeight = \\\"50vh\\\";  export let take = 50;  export let pagerVerticalPos = \\\"top\\\";  export let pagerHorizontalPos = \\\"end\\\";  let skip = 0;  let count;  async function readDataPage() {      if (!dataPageFunc) {          return [];      }",
+    		source: "(1:0) <script lang=\\\"ts\\\">import PlaceholderRow from \\\"./data-grid/placeholder.svelte\\\";  function instanceOfIHeader(value) {      if (typeof value == \\\"string\\\") {          return false;      }",
     		ctx
     	});
 
     	return block;
     }
 
-    // (108:12) {:then response}
+    // (168:12) {:then}
     function create_then_block(ctx) {
     	let each_1_anchor;
     	let current;
-    	let each_value = /*response*/ ctx[35];
+    	let each_value = /*page*/ ctx[28];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -25252,8 +25394,8 @@ var index = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*readDataPage*/ 268435456 | dirty[1] & /*$$scope*/ 1) {
-    				each_value = /*response*/ ctx[35];
+    			if (dirty[0] & /*page, grid*/ 402653184 | dirty[1] & /*$$scope*/ 8) {
+    				each_value = /*page*/ ctx[28];
     				validate_each_argument(each_value);
     				let i;
 
@@ -25308,18 +25450,18 @@ var index = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(108:12) {:then response}",
+    		source: "(168:12) {:then}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:16) {#each response as data, index}
+    // (169:16) {#each page as data, index}
     function create_each_block$1(ctx) {
     	let current;
-    	const row_slot_template = /*#slots*/ ctx[32].row;
-    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[31], get_row_slot_context_1);
+    	const row_slot_template = /*#slots*/ ctx[35].row;
+    	const row_slot = create_slot(row_slot_template, ctx, /*$$scope*/ ctx[34], get_row_slot_context_1);
 
     	const block = {
     		c: function create() {
@@ -25334,15 +25476,15 @@ var index = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (row_slot) {
-    				if (row_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (row_slot.p && (!current || dirty[0] & /*page, grid*/ 402653184 | dirty[1] & /*$$scope*/ 8)) {
     					update_slot_base(
     						row_slot,
     						row_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[34],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[31], dirty, get_row_slot_changes_1),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(row_slot_template, /*$$scope*/ ctx[34], dirty, get_row_slot_changes_1),
     						get_row_slot_context_1
     					);
     				}
@@ -25366,49 +25508,89 @@ var index = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(109:16) {#each response as data, index}",
+    		source: "(169:16) {#each page as data, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (106:35)                   <PlaceholderRow placeholderHeight={placeholderHeight}
+    // (162:35)                   <tr>                      <td colspan=99999>                          <svelte:component this={placeholder}
     function create_pending_block(ctx) {
-    	let placeholderrow;
+    	let tr;
+    	let td;
+    	let switch_instance;
     	let current;
+    	var switch_value = /*placeholder*/ ctx[3];
 
-    	placeholderrow = new Placeholder_row({
+    	function switch_props(ctx) {
+    		return {
     			props: {
-    				placeholderHeight: /*placeholderHeight*/ ctx[25]
+    				placeholderHeight: /*placeholderHeight*/ ctx[26]
     			},
     			$$inline: true
-    		});
+    		};
+    	}
+
+    	if (switch_value) {
+    		switch_instance = construct_svelte_component_dev(switch_value, switch_props(ctx));
+    	}
 
     	const block = {
     		c: function create() {
-    			create_component(placeholderrow.$$.fragment);
+    			tr = element("tr");
+    			td = element("td");
+    			if (switch_instance) create_component(switch_instance.$$.fragment);
+    			attr_dev(td, "colspan", "99999");
+    			add_location(td, file$1, 163, 20, 5267);
+    			add_location(tr, file$1, 162, 16, 5241);
     		},
     		m: function mount(target, anchor) {
-    			mount_component(placeholderrow, target, anchor);
+    			insert_dev(target, tr, anchor);
+    			append_dev(tr, td);
+    			if (switch_instance) mount_component(switch_instance, td, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			const placeholderrow_changes = {};
-    			if (dirty[0] & /*placeholderHeight*/ 33554432) placeholderrow_changes.placeholderHeight = /*placeholderHeight*/ ctx[25];
-    			placeholderrow.$set(placeholderrow_changes);
+    			const switch_instance_changes = {};
+    			if (dirty[0] & /*placeholderHeight*/ 67108864) switch_instance_changes.placeholderHeight = /*placeholderHeight*/ ctx[26];
+
+    			if (switch_value !== (switch_value = /*placeholder*/ ctx[3])) {
+    				if (switch_instance) {
+    					group_outros();
+    					const old_component = switch_instance;
+
+    					transition_out(old_component.$$.fragment, 1, 0, () => {
+    						destroy_component(old_component, 1);
+    					});
+
+    					check_outros();
+    				}
+
+    				if (switch_value) {
+    					switch_instance = construct_svelte_component_dev(switch_value, switch_props(ctx));
+    					create_component(switch_instance.$$.fragment);
+    					transition_in(switch_instance.$$.fragment, 1);
+    					mount_component(switch_instance, td, null);
+    				} else {
+    					switch_instance = null;
+    				}
+    			} else if (switch_value) {
+    				switch_instance.$set(switch_instance_changes);
+    			}
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(placeholderrow.$$.fragment, local);
+    			if (switch_instance) transition_in(switch_instance.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(placeholderrow.$$.fragment, local);
+    			if (switch_instance) transition_out(switch_instance.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			destroy_component(placeholderrow, detaching);
+    			if (detaching) detach_dev(tr);
+    			if (switch_instance) destroy_component(switch_instance);
     		}
     	};
 
@@ -25416,7 +25598,7 @@ var index = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(106:35)                   <PlaceholderRow placeholderHeight={placeholderHeight}",
+    		source: "(162:35)                   <tr>                      <td colspan=99999>                          <svelte:component this={placeholder}",
     		ctx
     	});
 
@@ -25428,153 +25610,209 @@ var index = (function () {
     	let table;
     	let t1;
     	let thead;
-    	let tr;
     	let t2;
-    	let tbody;
     	let t3;
+    	let tbody;
+    	let t4;
+    	let t5;
+    	let t6;
+    	let t7;
     	let current;
-    	let if_block0 = /*dataPageFunc*/ ctx[2] && /*pagerVerticalPos*/ ctx[26] == "top" && create_if_block_4(ctx);
-    	let if_block1 = (/*caption*/ ctx[23] || /*$$slots*/ ctx[29].caption) && create_if_block_3(ctx);
-    	let each_value_2 = /*headers*/ ctx[0];
-    	validate_each_argument(each_value_2);
-    	let each_blocks = [];
+    	const top_slot_template = /*#slots*/ ctx[35].top;
+    	const top_slot = create_slot(top_slot_template, ctx, /*$$scope*/ ctx[34], get_top_slot_context);
+    	let if_block0 = (/*caption*/ ctx[24] || /*$$slots*/ ctx[32].caption) && create_if_block_6(ctx);
+    	const headerRow_slot_template = /*#slots*/ ctx[35].headerRow;
+    	const headerRow_slot = create_slot(headerRow_slot_template, ctx, /*$$scope*/ ctx[34], get_headerRow_slot_context);
 
-    	for (let i = 0; i < each_value_2.length; i += 1) {
-    		each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
+    	function select_block_type(ctx, dirty) {
+    		if (typeof /*headers*/ ctx[0] != "boolean" && /*headers*/ ctx[0].length) return create_if_block_2;
+    		if (typeof /*headers*/ ctx[0] == "boolean" && /*headers*/ ctx[0] == true && /*_headers*/ ctx[29]) return create_if_block_5;
     	}
 
+    	let current_block_type = select_block_type(ctx);
+    	let if_block1 = current_block_type && current_block_type(ctx);
+    	const topRow_slot_template = /*#slots*/ ctx[35].topRow;
+    	const topRow_slot = create_slot(topRow_slot_template, ctx, /*$$scope*/ ctx[34], get_topRow_slot_context);
     	let if_block2 = /*dataFunc*/ ctx[1] && create_if_block_1(ctx);
     	let if_block3 = /*dataPageFunc*/ ctx[2] && create_if_block(ctx);
+    	const bottomRow_slot_template = /*#slots*/ ctx[35].bottomRow;
+    	const bottomRow_slot = create_slot(bottomRow_slot_template, ctx, /*$$scope*/ ctx[34], get_bottomRow_slot_context);
+    	const bottom_slot_template = /*#slots*/ ctx[35].bottom;
+    	const bottom_slot = create_slot(bottom_slot_template, ctx, /*$$scope*/ ctx[34], get_bottom_slot_context);
 
     	const block = {
     		c: function create() {
-    			if (if_block0) if_block0.c();
+    			if (top_slot) top_slot.c();
     			t0 = space();
     			table = element("table");
-    			if (if_block1) if_block1.c();
+    			if (if_block0) if_block0.c();
     			t1 = space();
     			thead = element("thead");
-    			tr = element("tr");
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
+    			if (headerRow_slot) headerRow_slot.c();
     			t2 = space();
-    			tbody = element("tbody");
-    			if (if_block2) if_block2.c();
+    			if (if_block1) if_block1.c();
     			t3 = space();
+    			tbody = element("tbody");
+    			if (topRow_slot) topRow_slot.c();
+    			t4 = space();
+    			if (if_block2) if_block2.c();
+    			t5 = space();
     			if (if_block3) if_block3.c();
-    			add_location(tr, file$1, 84, 8, 2860);
-    			add_location(thead, file$1, 83, 4, 2843);
-    			toggle_class(tbody, "table-group-divider", /*headerGroupDivider*/ ctx[24]);
-    			add_location(tbody, file$1, 94, 4, 3266);
+    			t6 = space();
+    			if (bottomRow_slot) bottomRow_slot.c();
+    			t7 = space();
+    			if (bottom_slot) bottom_slot.c();
+    			add_location(thead, file$1, 121, 4, 3621);
+    			toggle_class(tbody, "table-group-divider", /*headerGroupDivider*/ ctx[25]);
+    			add_location(tbody, file$1, 145, 4, 4580);
     			attr_dev(table, "class", "table");
-    			toggle_class(table, "table-primary", /*primary*/ ctx[3]);
-    			toggle_class(table, "table-secondary", /*secondary*/ ctx[4]);
-    			toggle_class(table, "table-success", /*success*/ ctx[5]);
-    			toggle_class(table, "table-danger", /*danger*/ ctx[6]);
-    			toggle_class(table, "table-warning", /*warning*/ ctx[7]);
-    			toggle_class(table, "table-info", /*info*/ ctx[8]);
-    			toggle_class(table, "table-light", /*light*/ ctx[9]);
-    			toggle_class(table, "table-dark", /*dark*/ ctx[10]);
-    			toggle_class(table, "table-striped", /*striped*/ ctx[11]);
-    			toggle_class(table, "table-striped-columns", /*stripedColumns*/ ctx[12]);
-    			toggle_class(table, "table-hover", /*hover*/ ctx[13]);
-    			toggle_class(table, "table-bordered", /*bordered*/ ctx[14]);
-    			toggle_class(table, "table-borderless", /*borderless*/ ctx[15]);
-    			toggle_class(table, "table-sm", /*small*/ ctx[16]);
-    			toggle_class(table, "caption-top", /*caption*/ ctx[23] || /*$$slots*/ ctx[29].caption);
-    			toggle_class(table, "table-responsive", /*responsive*/ ctx[17]);
-    			toggle_class(table, "table-responsive-sm", /*responsiveSm*/ ctx[18]);
-    			toggle_class(table, "table-responsive-md", /*responsiveMd*/ ctx[19]);
-    			toggle_class(table, "table-responsive-lg", /*responsiveLg*/ ctx[20]);
-    			toggle_class(table, "table-responsive-xl", /*responsiveXl*/ ctx[21]);
-    			toggle_class(table, "table-responsive-xxl", /*responsiveXxl*/ ctx[22]);
-    			add_location(table, file$1, 55, 0, 1850);
+    			toggle_class(table, "table-primary", /*primary*/ ctx[4]);
+    			toggle_class(table, "table-secondary", /*secondary*/ ctx[5]);
+    			toggle_class(table, "table-success", /*success*/ ctx[6]);
+    			toggle_class(table, "table-danger", /*danger*/ ctx[7]);
+    			toggle_class(table, "table-warning", /*warning*/ ctx[8]);
+    			toggle_class(table, "table-info", /*info*/ ctx[9]);
+    			toggle_class(table, "table-light", /*light*/ ctx[10]);
+    			toggle_class(table, "table-dark", /*dark*/ ctx[11]);
+    			toggle_class(table, "table-striped", /*striped*/ ctx[12]);
+    			toggle_class(table, "table-striped-columns", /*stripedColumns*/ ctx[13]);
+    			toggle_class(table, "table-hover", /*hover*/ ctx[14]);
+    			toggle_class(table, "table-bordered", /*bordered*/ ctx[15]);
+    			toggle_class(table, "table-borderless", /*borderless*/ ctx[16]);
+    			toggle_class(table, "table-sm", /*small*/ ctx[17]);
+    			toggle_class(table, "caption-top", /*caption*/ ctx[24] || /*$$slots*/ ctx[32].caption);
+    			toggle_class(table, "table-responsive", /*responsive*/ ctx[18]);
+    			toggle_class(table, "table-responsive-sm", /*responsiveSm*/ ctx[19]);
+    			toggle_class(table, "table-responsive-md", /*responsiveMd*/ ctx[20]);
+    			toggle_class(table, "table-responsive-lg", /*responsiveLg*/ ctx[21]);
+    			toggle_class(table, "table-responsive-xl", /*responsiveXl*/ ctx[22]);
+    			toggle_class(table, "table-responsive-xxl", /*responsiveXxl*/ ctx[23]);
+    			add_location(table, file$1, 93, 0, 2621);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			if (if_block0) if_block0.m(target, anchor);
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, table, anchor);
-    			if (if_block1) if_block1.m(table, null);
-    			append_dev(table, t1);
-    			append_dev(table, thead);
-    			append_dev(thead, tr);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(tr, null);
+    			if (top_slot) {
+    				top_slot.m(target, anchor);
     			}
 
-    			append_dev(table, t2);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, table, anchor);
+    			if (if_block0) if_block0.m(table, null);
+    			append_dev(table, t1);
+    			append_dev(table, thead);
+
+    			if (headerRow_slot) {
+    				headerRow_slot.m(thead, null);
+    			}
+
+    			append_dev(thead, t2);
+    			if (if_block1) if_block1.m(thead, null);
+    			append_dev(table, t3);
     			append_dev(table, tbody);
+
+    			if (topRow_slot) {
+    				topRow_slot.m(tbody, null);
+    			}
+
+    			append_dev(tbody, t4);
     			if (if_block2) if_block2.m(tbody, null);
-    			append_dev(tbody, t3);
+    			append_dev(tbody, t5);
     			if (if_block3) if_block3.m(tbody, null);
+    			append_dev(tbody, t6);
+
+    			if (bottomRow_slot) {
+    				bottomRow_slot.m(tbody, null);
+    			}
+
+    			insert_dev(target, t7, anchor);
+
+    			if (bottom_slot) {
+    				bottom_slot.m(target, anchor);
+    			}
+
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*dataPageFunc*/ ctx[2] && /*pagerVerticalPos*/ ctx[26] == "top") {
-    				if (if_block0) {
-    					if_block0.p(ctx, dirty);
-    				} else {
-    					if_block0 = create_if_block_4(ctx);
-    					if_block0.c();
-    					if_block0.m(t0.parentNode, t0);
+    			if (top_slot) {
+    				if (top_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
+    					update_slot_base(
+    						top_slot,
+    						top_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[34],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(top_slot_template, /*$$scope*/ ctx[34], dirty, get_top_slot_changes),
+    						get_top_slot_context
+    					);
     				}
-    			} else if (if_block0) {
-    				if_block0.d(1);
-    				if_block0 = null;
     			}
 
-    			if (/*caption*/ ctx[23] || /*$$slots*/ ctx[29].caption) {
-    				if (if_block1) {
-    					if_block1.p(ctx, dirty);
+    			if (/*caption*/ ctx[24] || /*$$slots*/ ctx[32].caption) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
 
-    					if (dirty[0] & /*caption, $$slots*/ 545259520) {
-    						transition_in(if_block1, 1);
+    					if (dirty[0] & /*caption*/ 16777216 | dirty[1] & /*$$slots*/ 2) {
+    						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block1 = create_if_block_3(ctx);
-    					if_block1.c();
-    					transition_in(if_block1, 1);
-    					if_block1.m(table, t1);
+    					if_block0 = create_if_block_6(ctx);
+    					if_block0.c();
+    					transition_in(if_block0, 1);
+    					if_block0.m(table, t1);
     				}
-    			} else if (if_block1) {
+    			} else if (if_block0) {
     				group_outros();
 
-    				transition_out(if_block1, 1, 1, () => {
-    					if_block1 = null;
+    				transition_out(if_block0, 1, 1, () => {
+    					if_block0 = null;
     				});
 
     				check_outros();
     			}
 
-    			if (dirty[0] & /*headers*/ 1) {
-    				each_value_2 = /*headers*/ ctx[0];
-    				validate_each_argument(each_value_2);
-    				let i;
-
-    				for (i = 0; i < each_value_2.length; i += 1) {
-    					const child_ctx = get_each_context_2(ctx, each_value_2, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block_2(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(tr, null);
-    					}
+    			if (headerRow_slot) {
+    				if (headerRow_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
+    					update_slot_base(
+    						headerRow_slot,
+    						headerRow_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[34],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(headerRow_slot_template, /*$$scope*/ ctx[34], dirty, get_headerRow_slot_changes),
+    						get_headerRow_slot_context
+    					);
     				}
+    			}
 
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
+    				if_block1.p(ctx, dirty);
+    			} else {
+    				if (if_block1) if_block1.d(1);
+    				if_block1 = current_block_type && current_block_type(ctx);
+
+    				if (if_block1) {
+    					if_block1.c();
+    					if_block1.m(thead, null);
     				}
+    			}
 
-    				each_blocks.length = each_value_2.length;
+    			if (topRow_slot) {
+    				if (topRow_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
+    					update_slot_base(
+    						topRow_slot,
+    						topRow_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[34],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(topRow_slot_template, /*$$scope*/ ctx[34], dirty, get_topRow_slot_changes),
+    						get_topRow_slot_context
+    					);
+    				}
     			}
 
     			if (/*dataFunc*/ ctx[1]) {
@@ -25588,7 +25826,7 @@ var index = (function () {
     					if_block2 = create_if_block_1(ctx);
     					if_block2.c();
     					transition_in(if_block2, 1);
-    					if_block2.m(tbody, t3);
+    					if_block2.m(tbody, t5);
     				}
     			} else if (if_block2) {
     				group_outros();
@@ -25611,7 +25849,7 @@ var index = (function () {
     					if_block3 = create_if_block(ctx);
     					if_block3.c();
     					transition_in(if_block3, 1);
-    					if_block3.m(tbody, null);
+    					if_block3.m(tbody, t6);
     				}
     			} else if (if_block3) {
     				group_outros();
@@ -25623,115 +25861,164 @@ var index = (function () {
     				check_outros();
     			}
 
-    			if (!current || dirty[0] & /*headerGroupDivider*/ 16777216) {
-    				toggle_class(tbody, "table-group-divider", /*headerGroupDivider*/ ctx[24]);
+    			if (bottomRow_slot) {
+    				if (bottomRow_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
+    					update_slot_base(
+    						bottomRow_slot,
+    						bottomRow_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[34],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(bottomRow_slot_template, /*$$scope*/ ctx[34], dirty, get_bottomRow_slot_changes),
+    						get_bottomRow_slot_context
+    					);
+    				}
     			}
 
-    			if (!current || dirty[0] & /*primary*/ 8) {
-    				toggle_class(table, "table-primary", /*primary*/ ctx[3]);
+    			if (!current || dirty[0] & /*headerGroupDivider*/ 33554432) {
+    				toggle_class(tbody, "table-group-divider", /*headerGroupDivider*/ ctx[25]);
     			}
 
-    			if (!current || dirty[0] & /*secondary*/ 16) {
-    				toggle_class(table, "table-secondary", /*secondary*/ ctx[4]);
+    			if (!current || dirty[0] & /*primary*/ 16) {
+    				toggle_class(table, "table-primary", /*primary*/ ctx[4]);
     			}
 
-    			if (!current || dirty[0] & /*success*/ 32) {
-    				toggle_class(table, "table-success", /*success*/ ctx[5]);
+    			if (!current || dirty[0] & /*secondary*/ 32) {
+    				toggle_class(table, "table-secondary", /*secondary*/ ctx[5]);
     			}
 
-    			if (!current || dirty[0] & /*danger*/ 64) {
-    				toggle_class(table, "table-danger", /*danger*/ ctx[6]);
+    			if (!current || dirty[0] & /*success*/ 64) {
+    				toggle_class(table, "table-success", /*success*/ ctx[6]);
     			}
 
-    			if (!current || dirty[0] & /*warning*/ 128) {
-    				toggle_class(table, "table-warning", /*warning*/ ctx[7]);
+    			if (!current || dirty[0] & /*danger*/ 128) {
+    				toggle_class(table, "table-danger", /*danger*/ ctx[7]);
     			}
 
-    			if (!current || dirty[0] & /*info*/ 256) {
-    				toggle_class(table, "table-info", /*info*/ ctx[8]);
+    			if (!current || dirty[0] & /*warning*/ 256) {
+    				toggle_class(table, "table-warning", /*warning*/ ctx[8]);
     			}
 
-    			if (!current || dirty[0] & /*light*/ 512) {
-    				toggle_class(table, "table-light", /*light*/ ctx[9]);
+    			if (!current || dirty[0] & /*info*/ 512) {
+    				toggle_class(table, "table-info", /*info*/ ctx[9]);
     			}
 
-    			if (!current || dirty[0] & /*dark*/ 1024) {
-    				toggle_class(table, "table-dark", /*dark*/ ctx[10]);
+    			if (!current || dirty[0] & /*light*/ 1024) {
+    				toggle_class(table, "table-light", /*light*/ ctx[10]);
     			}
 
-    			if (!current || dirty[0] & /*striped*/ 2048) {
-    				toggle_class(table, "table-striped", /*striped*/ ctx[11]);
+    			if (!current || dirty[0] & /*dark*/ 2048) {
+    				toggle_class(table, "table-dark", /*dark*/ ctx[11]);
     			}
 
-    			if (!current || dirty[0] & /*stripedColumns*/ 4096) {
-    				toggle_class(table, "table-striped-columns", /*stripedColumns*/ ctx[12]);
+    			if (!current || dirty[0] & /*striped*/ 4096) {
+    				toggle_class(table, "table-striped", /*striped*/ ctx[12]);
     			}
 
-    			if (!current || dirty[0] & /*hover*/ 8192) {
-    				toggle_class(table, "table-hover", /*hover*/ ctx[13]);
+    			if (!current || dirty[0] & /*stripedColumns*/ 8192) {
+    				toggle_class(table, "table-striped-columns", /*stripedColumns*/ ctx[13]);
     			}
 
-    			if (!current || dirty[0] & /*bordered*/ 16384) {
-    				toggle_class(table, "table-bordered", /*bordered*/ ctx[14]);
+    			if (!current || dirty[0] & /*hover*/ 16384) {
+    				toggle_class(table, "table-hover", /*hover*/ ctx[14]);
     			}
 
-    			if (!current || dirty[0] & /*borderless*/ 32768) {
-    				toggle_class(table, "table-borderless", /*borderless*/ ctx[15]);
+    			if (!current || dirty[0] & /*bordered*/ 32768) {
+    				toggle_class(table, "table-bordered", /*bordered*/ ctx[15]);
     			}
 
-    			if (!current || dirty[0] & /*small*/ 65536) {
-    				toggle_class(table, "table-sm", /*small*/ ctx[16]);
+    			if (!current || dirty[0] & /*borderless*/ 65536) {
+    				toggle_class(table, "table-borderless", /*borderless*/ ctx[16]);
     			}
 
-    			if (!current || dirty[0] & /*caption, $$slots*/ 545259520) {
-    				toggle_class(table, "caption-top", /*caption*/ ctx[23] || /*$$slots*/ ctx[29].caption);
+    			if (!current || dirty[0] & /*small*/ 131072) {
+    				toggle_class(table, "table-sm", /*small*/ ctx[17]);
     			}
 
-    			if (!current || dirty[0] & /*responsive*/ 131072) {
-    				toggle_class(table, "table-responsive", /*responsive*/ ctx[17]);
+    			if (!current || dirty[0] & /*caption*/ 16777216 | dirty[1] & /*$$slots*/ 2) {
+    				toggle_class(table, "caption-top", /*caption*/ ctx[24] || /*$$slots*/ ctx[32].caption);
     			}
 
-    			if (!current || dirty[0] & /*responsiveSm*/ 262144) {
-    				toggle_class(table, "table-responsive-sm", /*responsiveSm*/ ctx[18]);
+    			if (!current || dirty[0] & /*responsive*/ 262144) {
+    				toggle_class(table, "table-responsive", /*responsive*/ ctx[18]);
     			}
 
-    			if (!current || dirty[0] & /*responsiveMd*/ 524288) {
-    				toggle_class(table, "table-responsive-md", /*responsiveMd*/ ctx[19]);
+    			if (!current || dirty[0] & /*responsiveSm*/ 524288) {
+    				toggle_class(table, "table-responsive-sm", /*responsiveSm*/ ctx[19]);
     			}
 
-    			if (!current || dirty[0] & /*responsiveLg*/ 1048576) {
-    				toggle_class(table, "table-responsive-lg", /*responsiveLg*/ ctx[20]);
+    			if (!current || dirty[0] & /*responsiveMd*/ 1048576) {
+    				toggle_class(table, "table-responsive-md", /*responsiveMd*/ ctx[20]);
     			}
 
-    			if (!current || dirty[0] & /*responsiveXl*/ 2097152) {
-    				toggle_class(table, "table-responsive-xl", /*responsiveXl*/ ctx[21]);
+    			if (!current || dirty[0] & /*responsiveLg*/ 2097152) {
+    				toggle_class(table, "table-responsive-lg", /*responsiveLg*/ ctx[21]);
     			}
 
-    			if (!current || dirty[0] & /*responsiveXxl*/ 4194304) {
-    				toggle_class(table, "table-responsive-xxl", /*responsiveXxl*/ ctx[22]);
+    			if (!current || dirty[0] & /*responsiveXl*/ 4194304) {
+    				toggle_class(table, "table-responsive-xl", /*responsiveXl*/ ctx[22]);
+    			}
+
+    			if (!current || dirty[0] & /*responsiveXxl*/ 8388608) {
+    				toggle_class(table, "table-responsive-xxl", /*responsiveXxl*/ ctx[23]);
+    			}
+
+    			if (bottom_slot) {
+    				if (bottom_slot.p && (!current || dirty[0] & /*grid*/ 134217728 | dirty[1] & /*$$scope*/ 8)) {
+    					update_slot_base(
+    						bottom_slot,
+    						bottom_slot_template,
+    						ctx,
+    						/*$$scope*/ ctx[34],
+    						!current
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[34])
+    						: get_slot_changes(bottom_slot_template, /*$$scope*/ ctx[34], dirty, get_bottom_slot_changes),
+    						get_bottom_slot_context
+    					);
+    				}
     			}
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(if_block1);
+    			transition_in(top_slot, local);
+    			transition_in(if_block0);
+    			transition_in(headerRow_slot, local);
+    			transition_in(topRow_slot, local);
     			transition_in(if_block2);
     			transition_in(if_block3);
+    			transition_in(bottomRow_slot, local);
+    			transition_in(bottom_slot, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(if_block1);
+    			transition_out(top_slot, local);
+    			transition_out(if_block0);
+    			transition_out(headerRow_slot, local);
+    			transition_out(topRow_slot, local);
     			transition_out(if_block2);
     			transition_out(if_block3);
+    			transition_out(bottomRow_slot, local);
+    			transition_out(bottom_slot, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (if_block0) if_block0.d(detaching);
+    			if (top_slot) top_slot.d(detaching);
     			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(table);
-    			if (if_block1) if_block1.d();
-    			destroy_each(each_blocks, detaching);
+    			if (if_block0) if_block0.d();
+    			if (headerRow_slot) headerRow_slot.d(detaching);
+
+    			if (if_block1) {
+    				if_block1.d();
+    			}
+
+    			if (topRow_slot) topRow_slot.d(detaching);
     			if (if_block2) if_block2.d();
     			if (if_block3) if_block3.d();
+    			if (bottomRow_slot) bottomRow_slot.d(detaching);
+    			if (detaching) detach_dev(t7);
+    			if (bottom_slot) bottom_slot.d(detaching);
     		}
     	};
 
@@ -25746,13 +26033,22 @@ var index = (function () {
     	return block;
     }
 
+    function instanceOfIHeader(value) {
+    	if (typeof value == "string") {
+    		return false;
+    	}
+
+    	return "text" in value;
+    }
+
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots('Data_grid', slots, ['caption','row']);
+    	validate_slots('Data_grid', slots, ['top','caption','headerRow','topRow','row','bottomRow','bottom']);
     	const $$slots = compute_slots(slots);
     	let { headers = [] } = $$props;
     	let { dataFunc = undefined } = $$props;
     	let { dataPageFunc = undefined } = $$props;
+    	let { placeholder = Placeholder } = $$props;
     	let { primary = false } = $$props;
     	let { secondary = false } = $$props;
     	let { success = false } = $$props;
@@ -25777,25 +26073,90 @@ var index = (function () {
     	let { headerGroupDivider = false } = $$props;
     	let { placeholderHeight = "50vh" } = $$props;
     	let { take = 50 } = $$props;
-    	let { pagerVerticalPos = "top" } = $$props;
-    	let { pagerHorizontalPos = "end" } = $$props;
-    	let skip = 0;
-    	let count;
 
-    	async function readDataPage() {
-    		if (!dataPageFunc) {
+    	const grid = {
+    		initialized: false,
+    		working: false,
+    		skip: 0,
+    		count: 0,
+    		take,
+    		page: 0,
+    		pageCount: 0,
+    		setPage(page) {
+    			if (page == 1) {
+    				this.skip = 0;
+    			} else {
+    				this.skip = (page - 1) * this.take;
+    			}
+
+    			readDataPage();
+    		}
+    	};
+
+    	let page;
+    	let _headers;
+
+    	async function readData() {
+    		if (!dataFunc) {
     			return [];
     		}
 
-    		const result = await dataPageFunc(skip, take);
-    		count = result.count;
-    		return result.page;
+    		$$invalidate(27, grid.working = true, grid);
+    		const result = await dataFunc();
+    		$$invalidate(27, grid.count = result.length, grid);
+    		$$invalidate(27, grid.working = false, grid);
+
+    		if (!grid.initialized) {
+    			$$invalidate(27, grid.initialized = true, grid);
+    		}
+
+    		if (typeof headers == "boolean" && headers == true && result.length) {
+    			$$invalidate(29, _headers = Object.keys(result[0]));
+    		}
+
+    		return result;
+    	}
+
+    	async function readDataPage() {
+    		if (!dataPageFunc || grid.working) {
+    			return;
+    		}
+
+    		$$invalidate(27, grid.working = true, grid);
+
+    		// await one second
+    		// await new Promise(resolve => setTimeout(resolve, 1000));
+    		const result = await dataPageFunc(grid);
+
+    		$$invalidate(27, grid.count = result.count, grid);
+
+    		$$invalidate(
+    			27,
+    			grid.page = grid.skip == 0
+    			? 1
+    			: Math.round(grid.skip / grid.take) + 1,
+    			grid
+    		);
+
+    		$$invalidate(27, grid.pageCount = Math.ceil(grid.count / grid.take), grid);
+    		$$invalidate(27, grid.working = false, grid);
+
+    		if (!grid.initialized) {
+    			$$invalidate(27, grid.initialized = true, grid);
+    		}
+
+    		if (typeof headers == "boolean" && headers == true && result.page.length) {
+    			$$invalidate(29, _headers = Object.keys(result.page[0]));
+    		}
+
+    		$$invalidate(28, page = result.page);
     	}
 
     	const writable_props = [
     		'headers',
     		'dataFunc',
     		'dataPageFunc',
+    		'placeholder',
     		'primary',
     		'secondary',
     		'success',
@@ -25819,12 +26180,10 @@ var index = (function () {
     		'caption',
     		'headerGroupDivider',
     		'placeholderHeight',
-    		'take',
-    		'pagerVerticalPos',
-    		'pagerHorizontalPos'
+    		'take'
     	];
 
-    	Object.keys($$props).forEach(key => {
+    	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Data_grid> was created with unknown prop '${key}'`);
     	});
 
@@ -25832,40 +26191,41 @@ var index = (function () {
     		if ('headers' in $$props) $$invalidate(0, headers = $$props.headers);
     		if ('dataFunc' in $$props) $$invalidate(1, dataFunc = $$props.dataFunc);
     		if ('dataPageFunc' in $$props) $$invalidate(2, dataPageFunc = $$props.dataPageFunc);
-    		if ('primary' in $$props) $$invalidate(3, primary = $$props.primary);
-    		if ('secondary' in $$props) $$invalidate(4, secondary = $$props.secondary);
-    		if ('success' in $$props) $$invalidate(5, success = $$props.success);
-    		if ('danger' in $$props) $$invalidate(6, danger = $$props.danger);
-    		if ('warning' in $$props) $$invalidate(7, warning = $$props.warning);
-    		if ('info' in $$props) $$invalidate(8, info = $$props.info);
-    		if ('light' in $$props) $$invalidate(9, light = $$props.light);
-    		if ('dark' in $$props) $$invalidate(10, dark = $$props.dark);
-    		if ('striped' in $$props) $$invalidate(11, striped = $$props.striped);
-    		if ('stripedColumns' in $$props) $$invalidate(12, stripedColumns = $$props.stripedColumns);
-    		if ('hover' in $$props) $$invalidate(13, hover = $$props.hover);
-    		if ('bordered' in $$props) $$invalidate(14, bordered = $$props.bordered);
-    		if ('borderless' in $$props) $$invalidate(15, borderless = $$props.borderless);
-    		if ('small' in $$props) $$invalidate(16, small = $$props.small);
-    		if ('responsive' in $$props) $$invalidate(17, responsive = $$props.responsive);
-    		if ('responsiveSm' in $$props) $$invalidate(18, responsiveSm = $$props.responsiveSm);
-    		if ('responsiveMd' in $$props) $$invalidate(19, responsiveMd = $$props.responsiveMd);
-    		if ('responsiveLg' in $$props) $$invalidate(20, responsiveLg = $$props.responsiveLg);
-    		if ('responsiveXl' in $$props) $$invalidate(21, responsiveXl = $$props.responsiveXl);
-    		if ('responsiveXxl' in $$props) $$invalidate(22, responsiveXxl = $$props.responsiveXxl);
-    		if ('caption' in $$props) $$invalidate(23, caption = $$props.caption);
-    		if ('headerGroupDivider' in $$props) $$invalidate(24, headerGroupDivider = $$props.headerGroupDivider);
-    		if ('placeholderHeight' in $$props) $$invalidate(25, placeholderHeight = $$props.placeholderHeight);
-    		if ('take' in $$props) $$invalidate(30, take = $$props.take);
-    		if ('pagerVerticalPos' in $$props) $$invalidate(26, pagerVerticalPos = $$props.pagerVerticalPos);
-    		if ('pagerHorizontalPos' in $$props) $$invalidate(27, pagerHorizontalPos = $$props.pagerHorizontalPos);
-    		if ('$$scope' in $$props) $$invalidate(31, $$scope = $$props.$$scope);
+    		if ('placeholder' in $$props) $$invalidate(3, placeholder = $$props.placeholder);
+    		if ('primary' in $$props) $$invalidate(4, primary = $$props.primary);
+    		if ('secondary' in $$props) $$invalidate(5, secondary = $$props.secondary);
+    		if ('success' in $$props) $$invalidate(6, success = $$props.success);
+    		if ('danger' in $$props) $$invalidate(7, danger = $$props.danger);
+    		if ('warning' in $$props) $$invalidate(8, warning = $$props.warning);
+    		if ('info' in $$props) $$invalidate(9, info = $$props.info);
+    		if ('light' in $$props) $$invalidate(10, light = $$props.light);
+    		if ('dark' in $$props) $$invalidate(11, dark = $$props.dark);
+    		if ('striped' in $$props) $$invalidate(12, striped = $$props.striped);
+    		if ('stripedColumns' in $$props) $$invalidate(13, stripedColumns = $$props.stripedColumns);
+    		if ('hover' in $$props) $$invalidate(14, hover = $$props.hover);
+    		if ('bordered' in $$props) $$invalidate(15, bordered = $$props.bordered);
+    		if ('borderless' in $$props) $$invalidate(16, borderless = $$props.borderless);
+    		if ('small' in $$props) $$invalidate(17, small = $$props.small);
+    		if ('responsive' in $$props) $$invalidate(18, responsive = $$props.responsive);
+    		if ('responsiveSm' in $$props) $$invalidate(19, responsiveSm = $$props.responsiveSm);
+    		if ('responsiveMd' in $$props) $$invalidate(20, responsiveMd = $$props.responsiveMd);
+    		if ('responsiveLg' in $$props) $$invalidate(21, responsiveLg = $$props.responsiveLg);
+    		if ('responsiveXl' in $$props) $$invalidate(22, responsiveXl = $$props.responsiveXl);
+    		if ('responsiveXxl' in $$props) $$invalidate(23, responsiveXxl = $$props.responsiveXxl);
+    		if ('caption' in $$props) $$invalidate(24, caption = $$props.caption);
+    		if ('headerGroupDivider' in $$props) $$invalidate(25, headerGroupDivider = $$props.headerGroupDivider);
+    		if ('placeholderHeight' in $$props) $$invalidate(26, placeholderHeight = $$props.placeholderHeight);
+    		if ('take' in $$props) $$invalidate(33, take = $$props.take);
+    		if ('$$scope' in $$props) $$invalidate(34, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
-    		PlaceholderRow: Placeholder_row,
+    		PlaceholderRow: Placeholder,
+    		instanceOfIHeader,
     		headers,
     		dataFunc,
     		dataPageFunc,
+    		placeholder,
     		primary,
     		secondary,
     		success,
@@ -25890,10 +26250,10 @@ var index = (function () {
     		headerGroupDivider,
     		placeholderHeight,
     		take,
-    		pagerVerticalPos,
-    		pagerHorizontalPos,
-    		skip,
-    		count,
+    		grid,
+    		page,
+    		_headers,
+    		readData,
     		readDataPage
     	});
 
@@ -25901,34 +26261,33 @@ var index = (function () {
     		if ('headers' in $$props) $$invalidate(0, headers = $$props.headers);
     		if ('dataFunc' in $$props) $$invalidate(1, dataFunc = $$props.dataFunc);
     		if ('dataPageFunc' in $$props) $$invalidate(2, dataPageFunc = $$props.dataPageFunc);
-    		if ('primary' in $$props) $$invalidate(3, primary = $$props.primary);
-    		if ('secondary' in $$props) $$invalidate(4, secondary = $$props.secondary);
-    		if ('success' in $$props) $$invalidate(5, success = $$props.success);
-    		if ('danger' in $$props) $$invalidate(6, danger = $$props.danger);
-    		if ('warning' in $$props) $$invalidate(7, warning = $$props.warning);
-    		if ('info' in $$props) $$invalidate(8, info = $$props.info);
-    		if ('light' in $$props) $$invalidate(9, light = $$props.light);
-    		if ('dark' in $$props) $$invalidate(10, dark = $$props.dark);
-    		if ('striped' in $$props) $$invalidate(11, striped = $$props.striped);
-    		if ('stripedColumns' in $$props) $$invalidate(12, stripedColumns = $$props.stripedColumns);
-    		if ('hover' in $$props) $$invalidate(13, hover = $$props.hover);
-    		if ('bordered' in $$props) $$invalidate(14, bordered = $$props.bordered);
-    		if ('borderless' in $$props) $$invalidate(15, borderless = $$props.borderless);
-    		if ('small' in $$props) $$invalidate(16, small = $$props.small);
-    		if ('responsive' in $$props) $$invalidate(17, responsive = $$props.responsive);
-    		if ('responsiveSm' in $$props) $$invalidate(18, responsiveSm = $$props.responsiveSm);
-    		if ('responsiveMd' in $$props) $$invalidate(19, responsiveMd = $$props.responsiveMd);
-    		if ('responsiveLg' in $$props) $$invalidate(20, responsiveLg = $$props.responsiveLg);
-    		if ('responsiveXl' in $$props) $$invalidate(21, responsiveXl = $$props.responsiveXl);
-    		if ('responsiveXxl' in $$props) $$invalidate(22, responsiveXxl = $$props.responsiveXxl);
-    		if ('caption' in $$props) $$invalidate(23, caption = $$props.caption);
-    		if ('headerGroupDivider' in $$props) $$invalidate(24, headerGroupDivider = $$props.headerGroupDivider);
-    		if ('placeholderHeight' in $$props) $$invalidate(25, placeholderHeight = $$props.placeholderHeight);
-    		if ('take' in $$props) $$invalidate(30, take = $$props.take);
-    		if ('pagerVerticalPos' in $$props) $$invalidate(26, pagerVerticalPos = $$props.pagerVerticalPos);
-    		if ('pagerHorizontalPos' in $$props) $$invalidate(27, pagerHorizontalPos = $$props.pagerHorizontalPos);
-    		if ('skip' in $$props) skip = $$props.skip;
-    		if ('count' in $$props) count = $$props.count;
+    		if ('placeholder' in $$props) $$invalidate(3, placeholder = $$props.placeholder);
+    		if ('primary' in $$props) $$invalidate(4, primary = $$props.primary);
+    		if ('secondary' in $$props) $$invalidate(5, secondary = $$props.secondary);
+    		if ('success' in $$props) $$invalidate(6, success = $$props.success);
+    		if ('danger' in $$props) $$invalidate(7, danger = $$props.danger);
+    		if ('warning' in $$props) $$invalidate(8, warning = $$props.warning);
+    		if ('info' in $$props) $$invalidate(9, info = $$props.info);
+    		if ('light' in $$props) $$invalidate(10, light = $$props.light);
+    		if ('dark' in $$props) $$invalidate(11, dark = $$props.dark);
+    		if ('striped' in $$props) $$invalidate(12, striped = $$props.striped);
+    		if ('stripedColumns' in $$props) $$invalidate(13, stripedColumns = $$props.stripedColumns);
+    		if ('hover' in $$props) $$invalidate(14, hover = $$props.hover);
+    		if ('bordered' in $$props) $$invalidate(15, bordered = $$props.bordered);
+    		if ('borderless' in $$props) $$invalidate(16, borderless = $$props.borderless);
+    		if ('small' in $$props) $$invalidate(17, small = $$props.small);
+    		if ('responsive' in $$props) $$invalidate(18, responsive = $$props.responsive);
+    		if ('responsiveSm' in $$props) $$invalidate(19, responsiveSm = $$props.responsiveSm);
+    		if ('responsiveMd' in $$props) $$invalidate(20, responsiveMd = $$props.responsiveMd);
+    		if ('responsiveLg' in $$props) $$invalidate(21, responsiveLg = $$props.responsiveLg);
+    		if ('responsiveXl' in $$props) $$invalidate(22, responsiveXl = $$props.responsiveXl);
+    		if ('responsiveXxl' in $$props) $$invalidate(23, responsiveXxl = $$props.responsiveXxl);
+    		if ('caption' in $$props) $$invalidate(24, caption = $$props.caption);
+    		if ('headerGroupDivider' in $$props) $$invalidate(25, headerGroupDivider = $$props.headerGroupDivider);
+    		if ('placeholderHeight' in $$props) $$invalidate(26, placeholderHeight = $$props.placeholderHeight);
+    		if ('take' in $$props) $$invalidate(33, take = $$props.take);
+    		if ('page' in $$props) $$invalidate(28, page = $$props.page);
+    		if ('_headers' in $$props) $$invalidate(29, _headers = $$props._headers);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -25939,6 +26298,7 @@ var index = (function () {
     		headers,
     		dataFunc,
     		dataPageFunc,
+    		placeholder,
     		primary,
     		secondary,
     		success,
@@ -25962,8 +26322,10 @@ var index = (function () {
     		caption,
     		headerGroupDivider,
     		placeholderHeight,
-    		pagerVerticalPos,
-    		pagerHorizontalPos,
+    		grid,
+    		page,
+    		_headers,
+    		readData,
     		readDataPage,
     		$$slots,
     		take,
@@ -25986,32 +26348,31 @@ var index = (function () {
     				headers: 0,
     				dataFunc: 1,
     				dataPageFunc: 2,
-    				primary: 3,
-    				secondary: 4,
-    				success: 5,
-    				danger: 6,
-    				warning: 7,
-    				info: 8,
-    				light: 9,
-    				dark: 10,
-    				striped: 11,
-    				stripedColumns: 12,
-    				hover: 13,
-    				bordered: 14,
-    				borderless: 15,
-    				small: 16,
-    				responsive: 17,
-    				responsiveSm: 18,
-    				responsiveMd: 19,
-    				responsiveLg: 20,
-    				responsiveXl: 21,
-    				responsiveXxl: 22,
-    				caption: 23,
-    				headerGroupDivider: 24,
-    				placeholderHeight: 25,
-    				take: 30,
-    				pagerVerticalPos: 26,
-    				pagerHorizontalPos: 27
+    				placeholder: 3,
+    				primary: 4,
+    				secondary: 5,
+    				success: 6,
+    				danger: 7,
+    				warning: 8,
+    				info: 9,
+    				light: 10,
+    				dark: 11,
+    				striped: 12,
+    				stripedColumns: 13,
+    				hover: 14,
+    				bordered: 15,
+    				borderless: 16,
+    				small: 17,
+    				responsive: 18,
+    				responsiveSm: 19,
+    				responsiveMd: 20,
+    				responsiveLg: 21,
+    				responsiveXl: 22,
+    				responsiveXxl: 23,
+    				caption: 24,
+    				headerGroupDivider: 25,
+    				placeholderHeight: 26,
+    				take: 33
     			},
     			null,
     			[-1, -1]
@@ -26046,6 +26407,14 @@ var index = (function () {
     	}
 
     	set dataPageFunc(value) {
+    		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get placeholder() {
+    		throw new Error("<Data_grid>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set placeholder(value) {
     		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -26238,22 +26607,6 @@ var index = (function () {
     	}
 
     	set take(value) {
-    		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get pagerVerticalPos() {
-    		throw new Error("<Data_grid>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set pagerVerticalPos(value) {
-    		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get pagerHorizontalPos() {
-    		throw new Error("<Data_grid>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set pagerHorizontalPos(value) {
     		throw new Error("<Data_grid>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }

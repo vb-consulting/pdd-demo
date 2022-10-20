@@ -1,14 +1,36 @@
 <script lang="ts">
-    import PlaceholderRow from "./data-grid/placeholder-row.svelte";
+    import type { ComponentType } from 'svelte';
+    import PlaceholderRow from "./data-grid/placeholder.svelte";
 
     type T = $$Generic;
-    export let headers: (string | {
+
+    interface $$Slots {
+        row: { data: T, index: number, grid: IDataGrid };
+        caption: { grid: IDataGrid };
+        headerRow: { grid: IDataGrid };
+        top: { grid: IDataGrid };
+        bottom: { grid: IDataGrid };
+        topRow: { grid: IDataGrid };
+        bottomRow: { grid: IDataGrid };
+    }
+    
+    interface IHeader {
         text: string; 
-        width?: string; 
+        width?: 
+        string; 
         minWidth?: string
-    })[] = [];
+    }
+    function instanceOfIHeader(value: any): value is IHeader {
+        if (typeof value == "string") {
+            return false;
+        }
+        return "text" in value;
+    }
+
+    export let headers: boolean | string[] | IHeader[] = [];
     export let dataFunc: (() => Promise<T[]>) | undefined = undefined;
-    export let dataPageFunc: ((skip: number, take: number) => Promise<{count: number; page: T[]}>) | undefined = undefined;
+    export let dataPageFunc: ((grid: IDataGrid) => Promise<{count: number; page: T[]}>) | undefined = undefined;
+    export let placeholder: ComponentType = PlaceholderRow;
 
     export let primary = false;
     export let secondary = false;
@@ -38,40 +60,69 @@
     export let placeholderHeight = "50vh";
 
     export let take: number = 50;
-    export let pagerVerticalPos: "top" | "bottom" = "top";
-    export let pagerHorizontalPos: "start" | "center" | "end" | "between" | "around" | "evenly" = "end";
 
-    let skip: number = 0; 
-    let count: number;
+    const grid: IDataGrid = {
+        initialized: false,
+        working: false,
+        skip: 0,
+        count: 0,
+        take,
+        page: 0,
+        pageCount: 0,
 
-    async function readDataPage() {
-        if (!dataPageFunc) {
+        setPage: function (page: number) {
+            if (page == 1) {
+                this.skip = 0;
+            } else {
+                this.skip = (page - 1) * this.take;
+            }
+            readDataPage();
+        }
+    };
+
+    let page: T[];
+    let _headers: string[];
+
+    async function readData() {
+        if (!dataFunc) {
             return [];
         }
-        const result = await dataPageFunc(skip, take);
-        count = result.count;
-        return result.page;
+        grid.working = true;
+        const result = await dataFunc();
+        grid.count = result.length;
+        grid.working = false;
+        if (!grid.initialized) {
+            grid.initialized = true;
+        }
+        if (typeof headers == "boolean" && headers == true && result.length) {
+            _headers = Object.keys(result[0] as any);
+        }
+        return result;
     }
 
-    interface $$Slots {
-        row: { data: T, index: number };
-        caption: {};
+    async function readDataPage() {
+        if (!dataPageFunc || grid.working) {
+            return;
+        }
+        grid.working = true;
+        // await one second
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        const result = await dataPageFunc(grid);
+        
+        grid.count = result.count;
+        grid.page = grid.skip == 0 ? 1 : Math.round(grid.skip / grid.take) + 1;
+        grid.pageCount = Math.ceil(grid.count / grid.take);
+        grid.working = false;
+        if (!grid.initialized) {
+            grid.initialized = true;
+        }
+        if (typeof headers == "boolean" && headers == true && result.page.length) {
+            _headers = Object.keys(result.page[0] as any);
+        }
+        page = result.page;
     }
 </script>
-
-{#if dataPageFunc && pagerVerticalPos == "top"}
-<nav class="d-flex justify-content-{pagerHorizontalPos}">
-    <div>some text</div>
-
-    <ul class="pagination justify-content-{pagerHorizontalPos}">
-        <li class="page-item disabled"><button class="page-link">Previous</button></li>
-        <li class="page-item active"><button class="page-link">1</button></li>
-        <li class="page-item"><button class="page-link">2</button></li>
-        <li class="page-item"><button class="page-link">3</button></li>
-        <li class="page-item"><button class="page-link">Next</button></li>
-    </ul>
-</nav>
-{/if}
+<slot name="top" {grid}></slot>
 <table class="table"
     class:table-primary={primary}
     class:table-secondary={secondary}
@@ -97,56 +148,62 @@
     {#if caption || $$slots.caption}
         <caption>
             {caption}
-            <slot name="caption"></slot>
+            <slot name="caption" {grid}></slot>
         </caption>
     {/if}
     <thead>
-        <tr>
-            {#each headers as row}
-                {#if typeof row == "string"}
-                    <th scope="col">{row}</th>
-                {:else}
-                    <th scope="col" style="{(row.width ? "width: " + row.width +"; " : "")}{(row.minWidth ? "min-width: " + row.minWidth +"; " : "")}">{row.text}</th>
-                {/if}
-            {/each}
-        </tr>
+        <slot name="headerRow" {grid}></slot>
+        {#if (typeof headers != "boolean" && headers.length)}
+            <tr>
+                {#each headers as row}
+                    {#if (instanceOfIHeader(row))}
+                        <th 
+                            scope="col" 
+                            style="{(row.width ? "width: " + row.width +"; " : "")}{(row.minWidth ? "min-width: " + row.minWidth +"; " : "")}">
+                            {row.text}
+                        </th>
+                    {:else if typeof row == "string"}
+                        <th scope="col">{row}</th>
+                    {/if}
+                {/each}
+            </tr>
+        {:else if typeof headers == "boolean" && headers == true && _headers}
+            <tr>
+                {#each _headers as row}
+                    <th scope="col"> {row}</th>
+                {/each}
+            </tr>
+        {/if}
     </thead>
     <tbody class:table-group-divider={headerGroupDivider}>
+        <slot name="topRow" {grid}></slot>
         {#if dataFunc}
-            {#await dataFunc()}
-                <PlaceholderRow placeholderHeight={placeholderHeight} />
+            {#await readData()}
+                <tr>
+                    <td colspan=99999>
+                        <svelte:component this={placeholder} placeholderHeight={placeholderHeight}/>
+                    </td>
+                </tr>
             {:then response}
                 {#each response as data, index}
-                    <slot name="row" {data} {index}></slot>
+                    <slot name="row" {data} {index} {grid}></slot>
                 {/each}
             {/await}
         {/if}
         {#if dataPageFunc}
             {#await readDataPage()}
-                <PlaceholderRow placeholderHeight={placeholderHeight} />
-            {:then response}
-                {#each response as data, index}
-                    <slot name="row" {data} {index}></slot>
+                <tr>
+                    <td colspan=99999>
+                        <svelte:component this={placeholder} placeholderHeight={placeholderHeight}/>
+                    </td>
+                </tr>
+            {:then}
+                {#each page as data, index}
+                    <slot name="row" {data} {index} {grid}></slot>
                 {/each}
             {/await}
         {/if}
+        <slot name="bottomRow" {grid}></slot>
     </tbody>
 </table>
-<!-- {#if dataPageFunc && (pager == "bottom-start" || pager == "bottom-center" || pager == "bottom-end")}
-<nav aria-label="Page navigation example">
-    <ul class="pagination" 
-        class:justify-content-start={pager == "bottom-start"} 
-        class:justify-content-center={pager == "bottom-center"} 
-        class:justify-content-end={pager == "bottom-end"}>
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1">Previous</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
-    </ul>
-  </nav>
-{/if} -->
+<slot name="bottom" {grid}></slot>

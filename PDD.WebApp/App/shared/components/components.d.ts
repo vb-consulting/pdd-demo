@@ -40,3 +40,14 @@ type ChartType = "line" | "bar" | "pie" | "doughnut";
 interface Date {
     format(): string
 }
+
+interface IDataGrid {
+    initialized: boolean;
+    working: boolean;
+    skip: number; 
+    take: number;
+    count: number;
+    page:  number;
+    pageCount: number;
+    setPage: (number) => void;
+}
