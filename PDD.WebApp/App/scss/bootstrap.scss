@@ -8,3 +8,18 @@
 
 // https://icons.getbootstrap.com/
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
+
+.country-flag {
+    width: 15px;
+    height: 15px;
+    background-size: contain;
+    display: inline-flex;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+.fs-smaller {
+    font-size: smaller;
+}
+.thumb {
+    margin-right: 5px;
+}

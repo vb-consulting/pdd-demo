@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, createEventDispatcher } from "svelte"
+    import { onDestroy, createEventDispatcher } from "svelte";
     import modal from "bootstrap/js/dist/modal";
 
     interface $$Slots {

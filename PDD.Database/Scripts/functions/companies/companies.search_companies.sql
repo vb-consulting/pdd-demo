@@ -37,15 +37,27 @@ begin
                     about,
                     cn.code as countryCode,
                     cn.name as country,
-                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas
+                    cm.web,
+                    cm.twitter,
+                    cm.linkedin,
+                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas,
+                    reviews.count as reviews,
+                    reviews.score
                 from 
                     _tmp tmp
                     inner join companies cm on tmp.id = cm.id
                     inner join countries cn on cm.country = cn.code
                     left outer join company_areas ca on cm.id = ca.company_id
                     left outer join business_areas ba on ca.area_id = ba.id
+                    join lateral (
+                        select 
+                            count(id), 
+                            avg(score) filter (where score is not null)::numeric(3,2) as score
+                        from public.company_reviews
+                        where company_id = cm.id
+                    ) reviews on true
                 group by
-                    cm.id, cn.code
+                    cm.id, cn.code, reviews.count, reviews.score
                 order by 
                     cm.name_normalized
                 limit _take 

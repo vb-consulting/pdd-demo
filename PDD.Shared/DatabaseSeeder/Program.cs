@@ -58,7 +58,7 @@ var euCodes = connection.Read<short>("select code from countries where iso2 in (
 var areas = connection.Read<short>("select id from business_areas").ToArray();
 
 const int peopleCount = 50000;
-const int companyCount = 1000;
+const int companyCount = 5000;
 
 List<Guid> companyIds = new();
 List<string> companyNames = new();
@@ -76,7 +76,7 @@ foreach (var company in new Faker<Company>()
     .RuleFor(c => c.Twitter, (f, c) => string.Concat("https://twitter.com/", sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()).OrNull(f, .4f))
     .RuleFor(c => c.Linkedin, (f, c) => string.Concat("https://linkedin.com/", sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()).OrNull(f, .8f))
     .RuleFor(c => c.CompanyLine, f => f.Company.CatchPhrase())
-    .RuleFor(c => c.About, f => f.Company.Bs())
+    .RuleFor(c => c.About, f => string.Join(" ", Enumerable.Range(1, f.Random.Int(1, 20)).Select(i => f.Company.Bs()))) // f.Company.Bs())
     .RuleFor(c => c.Country, f => f.Random.Number(1, 3) switch { 1 => usCode, 2 => f.Random.ArrayElement(euCodes), 3 => f.Random.ArrayElement(countries), _ => usCode })
     .RuleFor(c => c.Areas, f => f.PickRandom(areas, f.Random.Int(1, 5)).ToArray())
     .Generate(companyCount))
@@ -86,7 +86,7 @@ foreach (var company in new Faker<Company>()
     {
         companyId = connection.Read<Guid>(@"
         insert into companies 
-        (name, web, tweeter, Linkedin, company_line, about, country)
+        (name, web, twitter, linkedin, company_line, about, country)
         values
         (@Name, @Web, @Twitter, @Linkedin, @CompanyLine, @About, @Country)
         returning id;", company

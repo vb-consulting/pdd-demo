@@ -4,7 +4,7 @@ CREATE TABLE public.companies (
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL UNIQUE,
     web character varying,
     linkedin character varying,
-    tweeter character varying,
+    twitter character varying,
     company_line character varying,
     about character varying,
     country smallint NOT NULL,

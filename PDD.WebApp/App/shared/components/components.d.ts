@@ -37,8 +37,11 @@ type ComponentSizeType = "sm"|"md"|"lg"|"xl"|"xxl";
 
 type ChartType = "line" | "bar" | "pie" | "doughnut";
 
-interface Date {
-    format(): string
+interface IGridHeader {
+    text: string; 
+    width?: 
+    string; 
+    minWidth?: string
 }
 
 interface IDataGrid {
@@ -49,5 +52,6 @@ interface IDataGrid {
     count: number;
     page:  number;
     pageCount: number;
-    setPage: (number) => void;
+    setPage: (number) => Promise<void>;
+    refresh: () => Promise<void>;
 }

@@ -2,6 +2,7 @@
     import Layout from "./shared/layout/default";
     import ChartBox from "./shared/components/chart-box.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
+    import Placeholder from "./shared/components/placeholder.svelte";
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
 
@@ -61,6 +62,11 @@
             <div class="col">
                 <div class="text-secondary fw-bolder text-center fs-4 my-2">Top rated companies</div>
                 <DataGrid dataFunc={getTopCompanies} hover small>
+                    <tr slot="placeholderRow">
+                        <td colspan=99999>
+                            <Placeholder height="30vh" />
+                        </td>
+                    </tr>
                     <tr slot="row" let:index let:data>
                         <th scope="row">{index+1}</th>
                         <td>
@@ -93,6 +99,11 @@
             <div class="col">
                 <div class="text-secondary fw-bolder text-center fs-4 my-2">Top experinced people</div>
                 <DataGrid dataFunc={getTopEmployees} hover small>
+                    <tr slot="placeholderRow">
+                        <td colspan=99999>
+                            <Placeholder height="30vh" />
+                        </td>
+                    </tr>
                     <tr slot="row" let:index let:data>
                         <th scope="row">{index+1}</th>
                         <td>
@@ -135,10 +146,6 @@
             padding: 25px;
         }
     }
-
-    .fs-smaller {
-        font-size: smaller;
-    }
     .grid-badge {
         margin-right: 0.25rem;
         margin-bottom: 0.25rem;
@@ -164,14 +171,6 @@
             font-weight: bold;
             white-space: nowrap;
         }
-    }
-    .country-flag {
-        width: 15px;
-        height: 15px;
-        background-size: contain;
-        display: inline-flex;
-        background-repeat: no-repeat;
-        background-position: bottom;
     }
     .grid-info {
         white-space: nowrap;

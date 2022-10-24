@@ -3,8 +3,8 @@ BEGIN
 --
 -- PostgreSQL database dump
 --
--- Dumped from database version 14.5 (Ubuntu 14.5-1.pgdg20.04+1)
--- Dumped by pg_dump version 14.5
+-- Dumped from database version 15.0 (Ubuntu 15.0-1.pgdg20.04+1)
+-- Dumped by pg_dump version 15.0
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -158,15 +158,27 @@ begin
                     about,
                     cn.code as countryCode,
                     cn.name as country,
-                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas
+                    cm.web,
+                    cm.twitter,
+                    cm.linkedin,
+                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas,
+                    reviews.count as reviews,
+                    reviews.score
                 from 
                     _tmp tmp
                     inner join companies cm on tmp.id = cm.id
                     inner join countries cn on cm.country = cn.code
                     left outer join company_areas ca on cm.id = ca.company_id
                     left outer join business_areas ba on ca.area_id = ba.id
+                    join lateral (
+                        select 
+                            count(id), 
+                            avg(score) filter (where score is not null)::numeric(3,2) as score
+                        from public.company_reviews
+                        where company_id = cm.id
+                    ) reviews on true
                 group by
-                    cm.id, cn.code
+                    cm.id, cn.code, reviews.count, reviews.score
                 order by 
                     cm.name_normalized
                 limit _take 
@@ -555,7 +567,7 @@ CREATE TABLE public.companies (
     name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     web character varying,
     linkedin character varying,
-    tweeter character varying,
+    twitter character varying,
     company_line character varying,
     about character varying,
     country smallint NOT NULL,

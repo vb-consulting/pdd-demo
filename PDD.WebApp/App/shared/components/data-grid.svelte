@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { ComponentType } from 'svelte';
-    import PlaceholderRow from "./data-grid/placeholder.svelte";
+    import { createEventDispatcher } from "svelte";
 
     type T = $$Generic;
 
     interface $$Slots {
         row: { data: T, index: number, grid: IDataGrid };
         caption: { grid: IDataGrid };
+        placeholderRow: { grid: IDataGrid };
         headerRow: { grid: IDataGrid };
         top: { grid: IDataGrid };
         bottom: { grid: IDataGrid };
@@ -14,23 +14,9 @@
         bottomRow: { grid: IDataGrid };
     }
     
-    interface IHeader {
-        text: string; 
-        width?: 
-        string; 
-        minWidth?: string
-    }
-    function instanceOfIHeader(value: any): value is IHeader {
-        if (typeof value == "string") {
-            return false;
-        }
-        return "text" in value;
-    }
-
-    export let headers: boolean | string[] | IHeader[] = [];
+    export let headers: boolean | string[] | IGridHeader[] = [];
     export let dataFunc: (() => Promise<T[]>) | undefined = undefined;
     export let dataPageFunc: ((grid: IDataGrid) => Promise<{count: number; page: T[]}>) | undefined = undefined;
-    export let placeholder: ComponentType = PlaceholderRow;
 
     export let primary = false;
     export let secondary = false;
@@ -57,11 +43,9 @@
     export let caption = "";
     export let headerGroupDivider = false;
 
-    export let placeholderHeight = "50vh";
-
     export let take: number = 50;
 
-    const grid: IDataGrid = {
+    export const grid: IDataGrid = {
         initialized: false,
         working: false,
         skip: 0,
@@ -69,25 +53,42 @@
         take,
         page: 0,
         pageCount: 0,
-
-        setPage: function (page: number) {
+        setPage: async function (page: number) {
             if (page == 1) {
                 this.skip = 0;
             } else {
                 this.skip = (page - 1) * this.take;
             }
-            readDataPage();
+            await this.refresh();
+        },
+        refresh: async function () {
+            if (dataFunc) {
+                await readData();
+            } else {
+                await readDataPage();
+            }
         }
     };
 
-    let page: T[];
+    let data: T[];
     let _headers: string[];
+    const dispatch = createEventDispatcher();
+
+    function instanceOfIGridHeader(value: any): value is IGridHeader {
+        if (typeof value == "string") {
+            return false;
+        }
+        return "text" in value;
+    }
 
     async function readData() {
-        if (!dataFunc) {
-            return [];
+        if (!dataFunc || grid.working) {
+            return;
         }
+        dispatch("render", {grid});
         grid.working = true;
+        // await one second
+        // await new Promise(resolve => setTimeout(resolve, 1000));
         const result = await dataFunc();
         grid.count = result.length;
         grid.working = false;
@@ -97,13 +98,15 @@
         if (typeof headers == "boolean" && headers == true && result.length) {
             _headers = Object.keys(result[0] as any);
         }
-        return result;
+        data = result;
+        setTimeout(() => dispatch("rendered", {grid, data}));
     }
 
     async function readDataPage() {
         if (!dataPageFunc || grid.working) {
             return;
         }
+        dispatch("render", {grid});
         grid.working = true;
         // await one second
         // await new Promise(resolve => setTimeout(resolve, 1000));
@@ -119,8 +122,10 @@
         if (typeof headers == "boolean" && headers == true && result.page.length) {
             _headers = Object.keys(result.page[0] as any);
         }
-        page = result.page;
+        data = result.page;
+        setTimeout(() => dispatch("rendered", {grid, data}));
     }
+
 </script>
 <slot name="top" {grid}></slot>
 <table class="table"
@@ -156,7 +161,7 @@
         {#if (typeof headers != "boolean" && headers.length)}
             <tr>
                 {#each headers as row}
-                    {#if (instanceOfIHeader(row))}
+                    {#if (instanceOfIGridHeader(row))}
                         <th 
                             scope="col" 
                             style="{(row.width ? "width: " + row.width +"; " : "")}{(row.minWidth ? "min-width: " + row.minWidth +"; " : "")}">
@@ -179,26 +184,18 @@
         <slot name="topRow" {grid}></slot>
         {#if dataFunc}
             {#await readData()}
-                <tr>
-                    <td colspan=99999>
-                        <svelte:component this={placeholder} placeholderHeight={placeholderHeight}/>
-                    </td>
-                </tr>
-            {:then response}
-                {#each response as data, index}
+            <slot name="placeholderRow" {grid}></slot>
+            {:then}
+                {#each data as data, index}
                     <slot name="row" {data} {index} {grid}></slot>
                 {/each}
             {/await}
         {/if}
         {#if dataPageFunc}
             {#await readDataPage()}
-                <tr>
-                    <td colspan=99999>
-                        <svelte:component this={placeholder} placeholderHeight={placeholderHeight}/>
-                    </td>
-                </tr>
+            <slot name="placeholderRow" {grid}></slot>
             {:then}
-                {#each page as data, index}
+                {#each data as data, index}
                     <slot name="row" {data} {index} {grid}></slot>
                 {/each}
             {/await}
