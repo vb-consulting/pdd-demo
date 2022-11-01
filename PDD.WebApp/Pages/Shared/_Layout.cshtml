@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims
 @using Microsoft.IdentityModel.JsonWebTokens
+@inject IOptionsMonitor<PDD.WebApp.Endpoints.Cache> cacheConfig
 @{
     var user = JsonSerializer.Serialize(new
     {
@@ -29,6 +30,7 @@
     <input id="theme-key" type="hidden" value='@Consts.ThemeKey' />
     <input id="error-key" type="hidden" value='@Consts.ErrorKey' />
     <input id="title" type="hidden" value='@Consts.Title' />
+    <input id="cache-version" type="hidden" value='@(cacheConfig.CurrentValue.Version ?? "")' />
     @RenderBody()
 </body>
 </html>

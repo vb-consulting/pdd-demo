@@ -74,14 +74,14 @@
                                 <div class="">{data.name}</div>
                                 <div class="text-muted fs-smaller">{data.companyLine}</div>
                                 <div>
-                                    <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
+                                    <span class="image-15px" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
                                     <span>{data.country}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
                             {#each data.areas as area}
-                                <span class="badge rounded-pill text-bg-secondary grid-badge">{area}</span>
+                                <span class="badge rounded-pill text-bg-secondary ms-1 mb-1">{area}</span>
                             {/each}
                         </td>
                         <td class="fs-smaller grid-info">
@@ -111,14 +111,14 @@
                                 <div>{data.firstName} {data.lastName}</div>
                                 <div class="text-muted fs-smaller">{data.employeeStatus}</div>
                                 <div>
-                                    <span class="country-flag" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
+                                    <span class="image-15px" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
                                     <span>{data.country}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
                             {#each data.roles as role}
-                                <span class="badge rounded-pill text-bg-secondary grid-badge">{role}</span>
+                                <span class="badge rounded-pill text-bg-secondary ms-1 mb-1">{role}</span>
                             {/each}
                         </td>
                         <td class="fs-smaller grid-info">
@@ -145,10 +145,6 @@
         & > div {
             padding: 25px;
         }
-    }
-    .grid-badge {
-        margin-right: 0.25rem;
-        margin-bottom: 0.25rem;
     }
     .grid-name-wrap {
         display: grid;

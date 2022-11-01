@@ -22,6 +22,7 @@ export let user = getValueFromJson<{isSigned: boolean, name?: string, email?: st
 export const errorKey = getValue<string>("error-key");
 export const themeKey = getValue<string>("theme-key");
 export const title = getValue<string>("title");
+export const cacheVersion = getValue<string>("cache-version");
 export const urls = getValueFromJson<{
     indexUrl: string;
     companiesUrl: string;
@@ -40,4 +41,5 @@ export const urls = getValueFromJson<{
     topRatedCompaniesUrl: string;
     topExperincedPeopleUrl: string;
     companiesSearchUrl: string;
+    countriesSearchUrl: string;
 }>("urls");

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Norm;
 using Npgsql;
 using NpgsqlTypes;
-using PDD.WebApp.Data;
+using PDD.WebApp.Database;
 using static Bogus.DataSets.Name;
 
 Console.WriteLine("Hello, World!");
@@ -235,7 +235,7 @@ foreach (var person in new Faker<Person>()
     var attr = new Faker<PersonAttributes>()
         .RuleFor(a => a.Reviews, (f, a) =>
         {
-            var n = f.Random.Int(0, 10).OrNull(f, .45f);
+            var n = f.Random.Int(0, 5).OrNull(f, .45f);
             if (n == null)
             {
                 return Array.Empty<(Guid companyId, string review, int? score)>();

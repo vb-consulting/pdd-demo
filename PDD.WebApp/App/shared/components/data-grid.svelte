@@ -8,10 +8,9 @@
         caption: { grid: IDataGrid };
         placeholderRow: { grid: IDataGrid };
         headerRow: { grid: IDataGrid };
-        top: { grid: IDataGrid };
-        bottom: { grid: IDataGrid };
         topRow: { grid: IDataGrid };
         bottomRow: { grid: IDataGrid };
+        noResultsRow: { grid: IDataGrid };
     }
     
     export let headers: boolean | string[] | IGridHeader[] = [];
@@ -69,6 +68,17 @@
             }
         }
     };
+    /**
+     * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
+     */
+    export { classes as class };
+    /*
+    * Contains CSS styling declarations to be applied to the element. Note that it is recommended for styles to be defined in a separate file or files. This attribute and the style element have mainly the purpose of allowing for quick styling, for example for testing purposes.
+    */
+    export { styles as style };
+    
+    let classes: string = "";
+    let styles: string = "";
 
     let data: T[];
     let _headers: string[];
@@ -87,8 +97,6 @@
         }
         dispatch("render", {grid});
         grid.working = true;
-        // await one second
-        // await new Promise(resolve => setTimeout(resolve, 1000));
         const result = await dataFunc();
         grid.count = result.length;
         grid.working = false;
@@ -109,9 +117,8 @@
         dispatch("render", {grid});
         grid.working = true;
         // await one second
-        // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await new Promise(resolve => setTimeout(resolve, 5000));
         const result = await dataPageFunc(grid);
-        
         grid.count = result.count;
         grid.page = grid.skip == 0 ? 1 : Math.round(grid.skip / grid.take) + 1;
         grid.pageCount = Math.ceil(grid.count / grid.take);
@@ -127,8 +134,7 @@
     }
 
 </script>
-<slot name="top" {grid}></slot>
-<table class="table"
+<table class="table {classes || ''}" style="{styles || ''}"
     class:table-primary={primary}
     class:table-secondary={secondary}
     class:table-success={success}
@@ -195,12 +201,15 @@
             {#await readDataPage()}
             <slot name="placeholderRow" {grid}></slot>
             {:then}
-                {#each data as data, index}
-                    <slot name="row" {data} {index} {grid}></slot>
-                {/each}
+                {#if data && data.length}
+                    {#each data as data, index}
+                        <slot name="row" {data} {index} {grid}></slot>
+                    {/each}
+                {:else}
+                    <slot name="noResultsRow" {grid}></slot>
+                {/if}
             {/await}
         {/if}
         <slot name="bottomRow" {grid}></slot>
     </tbody>
 </table>
-<slot name="bottom" {grid}></slot>

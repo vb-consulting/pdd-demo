@@ -44,14 +44,14 @@ public class JwtManager
             return;
         }
         var jwtToken = CreateJwtToken(new List<Claim>()
-            {
-                new(ClaimTypes.Name, externalLoginResponse.Email),
-                new(ClaimTypes.Email, externalLoginResponse.Email),
-                new(ClaimTypes.NameIdentifier, externalLoginResponse.Name),
-                new("timezone", externalLoginResponse.Timezone),
-                new(JwtRegisteredClaimNames.AuthTime, DateTime.Now.ToString("u")),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            });
+        {
+            new(ClaimTypes.Name, externalLoginResponse.Email),
+            new(ClaimTypes.Email, externalLoginResponse.Email),
+            new(ClaimTypes.NameIdentifier, externalLoginResponse.Name),
+            new("timezone", externalLoginResponse.Timezone),
+            new(JwtRegisteredClaimNames.AuthTime, DateTime.Now.ToString("u")),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        });
         if (config.RefreshTokenExpirationMin.HasValue)
         {
             var (refreshToken, refreshTokenExpiryDate) = CreateRefreshToken();

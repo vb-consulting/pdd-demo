@@ -2,6 +2,17 @@
     import Placeholder from "./placeholder.svelte";
     export let grid: IDataGrid;
     export let numberCount: number = 3;
+    /**
+     * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
+     */
+    export { classes as class };
+    /*
+    * Contains CSS styling declarations to be applied to the element. Note that it is recommended for styles to be defined in a separate file or files. This attribute and the style element have mainly the purpose of allowing for quick styling, for example for testing purposes.
+    */
+    export { styles as style };
+    
+    let classes: string = "";
+    let styles: string = "";
 
     let numbers: number[];
     let lastPage = 0;
@@ -39,9 +50,9 @@
 </script>
 
 {#if !grid?.initialized}
-    <Placeholder height="35px" width="250px"/>
-{:else}
-    <nav>
+    <Placeholder class="{classes || ''}" height="45px" width="250px"/>
+{:else if grid.pageCount > 0}
+    <nav class="{classes || ''}" style="{styles || ''}">
         <ul class="pagination">
             {#if numbers && numbers.indexOf(1) == -1}
                 <li class="page-item" class:disabled={grid.working}>
@@ -70,16 +81,18 @@
             {/if}
         </ul>
     </nav>
-    <div class="text-primary info" class:text-muted={grid.working}>
+    <div class="text-primary info float-end" class:text-muted={grid.working}>
+        {#if grid.working}<div class="spinner-border"></div>{/if}
         Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
-        {#if grid.working}
-        <div class="spinner-border"></div>
-        {/if}
     </div>
 {/if}
 
 <style lang="scss">
+    nav {
+        user-select: none;
+    }
     .info {
+        user-select: none;
         font-size: 0.85rem;
         white-space: nowrap;
         & > div {

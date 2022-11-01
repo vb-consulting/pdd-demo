@@ -20,9 +20,10 @@ begin
     from 
         companies c
     where (
-        _search is null or name_normalized like _search
+        _search is null 
+        or name_normalized like _search
+        or company_line ilike _search
     );
-    
     get diagnostics _count = row_count;
     
     return json_build_object(
@@ -61,7 +62,7 @@ begin
                 order by 
                     cm.name_normalized
                 limit _take 
-                offset _skip                
+                offset _skip
             ) sub
         )
     );

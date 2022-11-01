@@ -1,4 +1,4 @@
-import { errorKey, urls } from "./config";
+import { errorKey, urls, cacheVersion } from "./config";
 
 const _fetch = async <T> (url: string, method: string, func: "json" | "text", content?: any, raw = false) => {
     let init: RequestInit;
@@ -43,5 +43,15 @@ export const  parseUrl = (url: string, query: Record<any, any> | null = null) =>
 export const get = async <T> (url: string, query: Record<any, any> | null = null) => 
     _fetch<T>(parseUrl(url, query), "GET", "json") as Promise<T>;
 
+export const getCached = async <T> (url: string, query: Record<any, any> | null = null) => {
+    if (cacheVersion) {
+        if (!query) {
+            query = {"_v": cacheVersion}
+        } else {
+            query["_v"] = cacheVersion;
+        }
+    }
+    return _fetch<T>(parseUrl(url, query), "GET", "json") as Promise<T>;
+}
 export const post = async <T> (url: string, query: Record<any, any> | null = null, content: Record<any, any> | null = null) => 
     _fetch<T>(parseUrl(url, query), "POST", "json", content) as Promise<T>;

@@ -9,7 +9,19 @@
 // https://icons.getbootstrap.com/
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 
-.country-flag {
+body.dark .search-mark.active,
+body:not(.dark) .search-mark:not(.active) {
+    padding: 0;
+    background-color: var(--bs-highlight-bg);
+}
+
+body:not(.dark) .search-mark.active,
+body.dark .search-mark:not(.active) {
+    padding: 0;
+    color: $black;
+}
+
+.image-15px {
     width: 15px;
     height: 15px;
     background-size: contain;
@@ -20,6 +32,4 @@
 .fs-smaller {
     font-size: smaller;
 }
-.thumb {
-    margin-right: 5px;
-}
+

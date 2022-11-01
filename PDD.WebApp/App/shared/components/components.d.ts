@@ -55,3 +55,19 @@ interface IDataGrid {
     setPage: (number) => Promise<void>;
     refresh: () => Promise<void>;
 }
+
+interface IValueName {
+    value: any, 
+    name: string
+};
+
+interface IMultiselectResponse {
+    count: number, 
+    page: IOption[]
+};
+
+interface IMultiselectRequest {
+    search: string, 
+    limit: number, 
+    offset: number
+}

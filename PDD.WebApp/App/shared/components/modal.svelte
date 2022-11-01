@@ -97,12 +97,6 @@
      */
     export let small = false;
     /**
-     * List of extra classes space-separated added to the modal-dialog element
-     * 
-     * @default undefined
-     */
-    export let classes: string | undefined = undefined;
-    /**
      * Adds close button to footer which, well, closes the dialog
      * 
      * @default false
@@ -133,6 +127,17 @@
      * @default undefined
      */
     export let use: ComponentUseCallbackType = undefined;
+    /**
+     * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
+     */
+    export { classes as class };
+    /*
+    * Contains CSS styling declarations to be applied to the element. Note that it is recommended for styles to be defined in a separate file or files. This attribute and the style element have mainly the purpose of allowing for quick styling, for example for testing purposes.
+    */
+    export { styles as style };
+    
+    let classes: string = "";
+    let styles: string = "";
 
     const dispatch = createEventDispatcher();
     const show = (event: Event) => dispatch("show", event);
@@ -201,7 +206,7 @@
 </script>
 
 <div class="modal" class:fade={fade} tabindex="-1" use:useElement>
-    <div class="modal-dialog {classes ? classes : ""}"
+    <div class="modal-dialog {classes || ''}" style="{styles || ''}"
     class:modal-dialog-scrollable={scrollable} 
     class:modal-fullscreen={fullscreen}
     class:modal-dialog-centered={centered}

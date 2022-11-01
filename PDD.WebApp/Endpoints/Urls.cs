@@ -10,4 +10,5 @@ public partial class Urls
     [JsonProperty] public const string TopRatedCompaniesUrl = "api/top-rated-companies";
     [JsonProperty] public const string TopExperincedPeopleUrl = "api/top-experinced-people";
     [JsonProperty] public const string CompaniesSearchUrl = "api/companies-search";
+    [JsonProperty] public const string CountriesSearchUrl = "api/countries-search";
 }
