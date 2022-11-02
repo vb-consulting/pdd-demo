@@ -9,25 +9,22 @@
 // https://icons.getbootstrap.com/
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 
-body.dark .search-mark.active,
-body:not(.dark) .search-mark:not(.active) {
+.search-mark {
     padding: 0;
     background-color: var(--bs-highlight-bg);
 }
-
-body:not(.dark) .search-mark.active,
+.search-mark.active,
 body.dark .search-mark:not(.active) {
     padding: 0;
     color: $black;
 }
 
 .image-15px {
-    width: 15px;
-    height: 15px;
-    background-size: contain;
-    display: inline-flex;
+    background-size: 15px;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position-x: left;
+    background-position-y: 3px;
+    padding-left: 18px;
 }
 .fs-smaller {
     font-size: smaller;

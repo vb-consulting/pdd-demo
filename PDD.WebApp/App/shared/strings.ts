@@ -13,3 +13,7 @@ export function take(source: string, n: number, extra = "...") {
     }
     return source.substring(0, n) + extra;
 }
+
+export function flagUrl(value: any) {
+    return `https://countryflagsapi.com/svg/${value.toString().padStart(3, "0")}`;
+}

@@ -9,7 +9,7 @@
     import { urls } from "./shared/config";
     import { get, getCached } from "./shared/fetch";
     import { mark } from "./shared/components/strings";
-    import { urlToHandle, take, } from "./shared/strings";
+    import { urlToHandle, take, flagUrl } from "./shared/strings";
 
     interface ICompanyItem {
         id: string,
@@ -52,21 +52,17 @@
         grid.setPage(1);
     }
 
-    // function markSearch(value: string) {
-    //     return mark(value, search, "<span class='search-mark'>", "</span>")
-    // }
-    
     let selectedCountires: IValueName[];
 
     $: {
-        console.log(selectedCountires?.map(c => c.value));
+        //console.log(selectedCountires?.map(c => c.value));
     }
 </script>
 
 <Layout>
     <div class="main container-fluid pt-4">
 
-        <div style="display: grid; grid-template-columns: 60% auto min-content;">
+        <div style="display: grid; grid-template-columns: 60% auto;">
             <div class="filter">
                 <Search 
                     placeholder="Search by Company Name or by Company Line" 
@@ -76,18 +72,29 @@
                     searching={grid?.working}
                     initialized={grid?.initialized} />
 
-                    <Multiselect 
+                    <Multiselect
                         bind:selected={selectedCountires}
                         searchFunc={getCountries} 
-                        placeholder="Search Countries" />
+                        searchTimeoutMs={0}
+                        searching={grid?.working}
+                        placeholder="Search Countries"
+                        initialized={grid?.initialized}>
+                        <div slot="token" let:item class="image-15px" style="background-position-y: center; background-image: url({flagUrl(item.value)});">
+                            {item.name}
+                        </div>
+                        <span slot="option" let:item class="image-15px" style="background-position-y: center; background-image: url({flagUrl(item.value)});" let:markup>
+                            {@html markup}
+                        </span>
+                    </Multiselect>
             </div>
-            <div></div>
             <div style="align-self: end;">
-                <Pager {grid} />
+                <Pager small {grid} class="float-end" />
             </div>
         </div>
         <hr />
-        <DataGrid hover striped
+        <DataGrid 
+            hover 
+            striped
             bind:grid={grid}
             on:render={hideTooltips}
             on:rendered={createTooltips}
@@ -119,9 +126,8 @@
                 <td class="" class:text-muted={grid.working}>
                     <div>{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
-                    <div class="fs-smaller text-muted">
-                        <span class="image-15px" style="background-image: url(https://countryflagsapi.com/svg/{data.countrycode});"></span>
-                        <span data-bs-toggle="tooltip" title={data.country}>{data.country}</span>
+                    <div class="fs-smaller text-muted image-15px" style="background-position-y: center; background-image: url({flagUrl(data.countrycode)});" data-bs-toggle="tooltip" title={data.country}>
+                        {data.country}
                     </div>
                 </td>
                 <td class="fs-smaller text-nowrap" class:text-muted={grid.working}>
@@ -169,7 +175,7 @@
         <div class="mb-5" style="display: grid; grid-template-columns: auto min-content;">
             <div></div>
             <div>
-                <Pager {grid} />
+                <Pager small {grid} class="float-end" />
             </div>
         </div>
     </div>

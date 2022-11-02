@@ -5,6 +5,7 @@
     import Placeholder from "./shared/components/placeholder.svelte";
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
+    import { flagUrl } from "./shared/strings";
 
     const getTopCompanies = () => get<{
         id: string;
@@ -73,9 +74,8 @@
                             <div class="grid-name-wrap">
                                 <div class="">{data.name}</div>
                                 <div class="text-muted fs-smaller">{data.companyLine}</div>
-                                <div>
-                                    <span class="image-15px" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
-                                    <span>{data.country}</span>
+                                <div class="image-15px" style="background-image: url({flagUrl(data.countryCode)});">
+                                    {data.country}
                                 </div>
                             </div>
                         </td>
@@ -110,9 +110,8 @@
                             <div class="grid-name-wrap">
                                 <div>{data.firstName} {data.lastName}</div>
                                 <div class="text-muted fs-smaller">{data.employeeStatus}</div>
-                                <div>
-                                    <span class="image-15px" style="background-image: url(https://countryflagsapi.com/svg/{data.countryCode});"></span>
-                                    <span>{data.country}</span>
+                                <div class="image-15px" style="background-image: url({flagUrl(data.countryCode)});">
+                                    {data.country}
                                 </div>
                             </div>
                         </td>

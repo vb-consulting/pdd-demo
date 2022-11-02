@@ -2,6 +2,8 @@
     import Placeholder from "./placeholder.svelte";
     export let grid: IDataGrid;
     export let numberCount: number = 3;
+    export let small: boolean = false;
+    export let large: boolean = false;
     /**
      * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
      */
@@ -50,40 +52,42 @@
 </script>
 
 {#if !grid?.initialized}
-    <Placeholder class="{classes || ''}" height="45px" width="250px"/>
+    <Placeholder class="{classes || ''}" style="{styles || ''}" height="45px" width="250px"/>
 {:else if grid.pageCount > 0}
-    <nav class="{classes || ''}" style="{styles || ''}">
-        <ul class="pagination">
-            {#if numbers && numbers.indexOf(1) == -1}
-                <li class="page-item" class:disabled={grid.working}>
-                    <button class="page-link" on:click={() => setPage(1)}>First</button>
-                </li>
-            {/if}
-            {#if grid.page > 1}
-                <li class="page-item" class:disabled={grid.working}>
-                    <button class="page-link" on:click={() => setPage(grid.page-1)}>Previous</button>
-                </li>
-            {/if}
-            {#each numbers as number}
-                <li class="page-item" class:active={grid.page == number} class:disabled={grid.working}>
-                    <button class="page-link" class:disabled={grid.page == number} class:active={grid.page == number} on:click={() => setPage(number)}>{number}</button>
-                </li>
-            {/each}
-            {#if grid.page < grid.pageCount}
-                <li class="page-item" class:disabled={grid.working}>
-                    <button class="page-link" on:click={() => setPage(grid.page+1)}>Next</button>
-                </li>
-            {/if}
-            {#if numbers && numbers.indexOf(grid.pageCount) == -1}
-                <li class="page-item" class:disabled={grid.working}>
-                    <button class="page-link" on:click={() => setPage(grid.pageCount)}>Last</button>
-                </li>
-            {/if}
-        </ul>
-    </nav>
-    <div class="text-primary info float-end" class:text-muted={grid.working}>
-        {#if grid.working}<div class="spinner-border"></div>{/if}
-        Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
+    <div class="{classes || ''}" style="{styles || ''}">
+        <nav>
+            <ul class="pagination" class:pagination-sm={small} class:pagination-lg={large}>
+                {#if numbers && numbers.indexOf(1) == -1}
+                    <li class="page-item" class:disabled={grid.working}>
+                        <button class="page-link" on:click={() => setPage(1)}>First</button>
+                    </li>
+                {/if}
+                {#if grid.page > 1}
+                    <li class="page-item" class:disabled={grid.working}>
+                        <button class="page-link" on:click={() => setPage(grid.page-1)}>Previous</button>
+                    </li>
+                {/if}
+                {#each numbers as number}
+                    <li class="page-item" class:active={grid.page == number} class:disabled={grid.working}>
+                        <button class="page-link" class:disabled={grid.page == number} class:active={grid.page == number} on:click={() => setPage(number)}>{number}</button>
+                    </li>
+                {/each}
+                {#if grid.page < grid.pageCount}
+                    <li class="page-item" class:disabled={grid.working}>
+                        <button class="page-link" on:click={() => setPage(grid.page+1)}>Next</button>
+                    </li>
+                {/if}
+                {#if numbers && numbers.indexOf(grid.pageCount) == -1}
+                    <li class="page-item" class:disabled={grid.working}>
+                        <button class="page-link" on:click={() => setPage(grid.pageCount)}>Last</button>
+                    </li>
+                {/if}
+            </ul>
+        </nav>
+        <div class="text-primary info text-center" class:text-muted={grid.working} style="{small ? "font-size: 0.75rem;" : ""}">
+            {#if grid.working}<div class="spinner-border"></div>{/if}
+            Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
+        </div>
     </div>
 {/if}
 

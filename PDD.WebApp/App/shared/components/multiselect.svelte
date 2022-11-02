@@ -1,16 +1,27 @@
 <script lang="ts">
     import { fly } from "svelte/transition";
+    import Placeholder from "./placeholder.svelte";
     import { hideTooltips } from "./tooltips"
     import { mark, generateId } from "./strings";
 
-    export let id: string = "ms-" + generateId();
+    interface $$Slots {
+        token: { item: IValueName };
+        option: { item: IValueName, markup: string };
+    }
+
+    export let id: string = "ms-" + generateId().toLowerCase();
     export let placeholder = "";
     export let searchFunc: (request: IMultiselectRequest) => Promise<IMultiselectResponse>;
     export let selected: IValueName[] = [];
+    export let autoShow = true;
     export let limit = 200;
     export let page = 50;
     export let count: number = 0;
-    export const searchTimeoutMs = 500;
+    export let small: boolean = false;
+    export let large: boolean = false;
+    export let searching: boolean = false;
+    export let initialized: boolean = true;
+    export let searchTimeoutMs = 500;
     /**
      * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
      */
@@ -33,7 +44,6 @@
     let options: IValueName[];
     let showOptions = false;
     let focused: boolean;
-    let loading = false;
     let lastQuery: string;
     let offset = 0;
 
@@ -55,12 +65,12 @@
     const load = async () => {
         const query = inputValue ?? "";
         offset = 0;
-        loading = true;
+        searching = true;
         options = [];
         const response = await searchFunc({search: query, limit, offset});
         options = response.page;
         count = response.count;
-        loading = false;
+        searching = false;
         activeIdx = undefined;
         lastQuery = query;
     }
@@ -72,12 +82,15 @@
         }
         searchTimeout = setTimeout(() => {
             searchTimeout = undefined;
-            if (loading) {
+            if (searching) {
                 search();
             } else {
                 load();
             }
         }, searchTimeoutMs);
+        if (!showOptions) {
+            optionsVisibility(true);
+        }
     }
 
     function addSelected(token: IValueName) {
@@ -102,13 +115,13 @@
 
     function optionsVisibility(show: boolean) {
         showOptions = show;
-        if (show && !options && !loading) {
+        if (show && !options && !searching) {
             load();
         }
     }
 
     function handleKey(e: KeyboardEvent) {
-        if (loading) {
+        if (searching) {
             return;
         }
 
@@ -120,8 +133,7 @@
         }
 
         if (e.code == "Backspace" && !inputValue && hasSelected) {
-            console.log("Remove last");
-            //!!!!
+            removeSelectedByValue(selected[selected.length-1].value);
             return;
         }
 
@@ -206,15 +218,18 @@
     }
 
     function inputBlur(e: FocusEvent) {
-        if (e.relatedTarget == null || !(e.relatedTarget as Element).classList.contains("token")) {
-            optionsVisibility(false);
-        }
         focused = false;
+        setTimeout(() => {
+            optionsVisibility(false);
+            console.log(document.activeElement?.id);
+        }, 100);
     }
 
     function inputFocus() {
         focused = true;
-        optionsVisibility(true);
+        if (autoShow) {
+            optionsVisibility(true);
+        }
         input.select();
     }
 
@@ -230,10 +245,10 @@
             const scroll = async () => {
                 offset = offsetFunc();
                 const query = inputValue ?? "";
-                loading = true;
+                searching = true;
                 const response = await searchFunc({search: query, limit, offset});
                 options = optionsFunc(response);
-                loading = false;
+                searching = false;
             };
             if (immidiate) {
                 scroll();
@@ -265,7 +280,7 @@
     }
 
     function iconClick() {
-        if (!loading && hasSelected) {
+        if (!searching && hasSelected) {
             clearAllSelected();
         } 
         input.focus();
@@ -276,65 +291,88 @@
         removeSelectedByValue(item.value);
     }
 
+    function handleCaretClick() {
+        if (showOptions) {
+            optionsVisibility(false);
+        } else {
+            optionsVisibility(true);
+            input.focus();
+        }
+    }
+
     $: hasSelected = selected.length;
 </script>
 
-<div class="multiselect {classes || ''}" style="{styles || ''}">
+{#if !initialized}
+    <Placeholder class="{classes || ''}" style="{styles || ''}" height={(large ? "50px" : (small ? "32px" : "38px"))} />
+{:else}
+    <div class="multiselect {classes || ''}" style="{styles || ''}" class:input-group-sm={small} class:input-group-lg={large}>
 
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span 
-        class="multiselect-icon {loading ? "spinner-border" : (hasSelected ? "bi-x-circle-fill" : "bi-search")}" 
-        on:click={() => iconClick()} 
-        data-bs-toggle="tooltip"
-        title="{loading ? "Loading..." : (hasSelected ? "Clear All" : (placeholder || "Search"))}">
-    </span>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <span 
+            class="multiselect-icon {searching ? "spinner-border" : (hasSelected ? "bi-x-circle" : "bi-search")}" 
+            on:click={() => iconClick()} 
+            data-bs-toggle="tooltip"
+            title="{searching ? "Loading..." : (hasSelected ? "Clear All" : (placeholder || "Search"))}">
+        </span>
 
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="tokens form-control" class:focused class:showOptions on:click={() => input.focus()}>
-        {#each selected as item, i}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="token badge rounded-pill text-bg-secondary" 
-                data-bs-toggle="tooltip"
-                title="click to remove '{item.name}'" 
-                style="{i == 0 ? "margin-left: 15px" : ""}"
-                on:click={e => handleTokenClick(e, item)}>
-                <span>{item.name}</span>
-            </div>
-        {/each}
-        <div class="actions">
-            <input id={id} 
-                class=""
-                style="{hasSelected ? "" : "text-indent: 18px"}"
-                class:ms-1={hasSelected}
-                autocomplete="off" 
-                autocorrect="off"
-                spellcheck="false"
-                bind:value={inputValue} 
-                bind:this={input} 
-                on:keydown={handleKey} 
-                on:blur={inputBlur} 
-                on:focus={inputFocus} 
-                on:input={search}
-                placeholder={placeholder} />
-            <span class="dropdown-arrow bi-caret-down" on:click={() => input.focus()}></span>
-        </div>
-    </div>
-
-    {#if options}
-        <ul class="options shadow" 
-            bind:this={list} 
-            class:d-none={!showOptions} 
-            transition:fly="{{duration: 200, y: 5}}" 
-            on:mousedown|preventDefault={handleOptionMousedown}
-            on:scroll={() => listScroll()}>
-            {#each options as option, index}
-                <li id="{listItemId(index)}" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
-                    {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
-                </li>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="tokens form-control" class:focused class:showOptions>
+            {#each selected as item, i}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="token badge rounded-pill text-bg-secondary" 
+                    data-bs-toggle="tooltip"
+                    title="click to remove '{item.name}'" 
+                    style="{i == 0 ? "margin-left: 15px" : ""}"
+                    on:click={e => handleTokenClick(e, item)}>
+                    {#if $$slots.token}
+                        <slot name="token" {item}></slot>
+                    {:else}
+                        <span>{item.name}</span>
+                    {/if}
+                </div>
             {/each}
-        </ul>
-    {/if}
-</div>
+            <div class="actions">
+                <input 
+                    id={id} 
+                    name={id} 
+                    style="{hasSelected ? "" : "text-indent: 18px"}"
+                    class:ms-1={hasSelected}
+                    autocomplete={id}
+                    autocorrect="off"
+                    spellcheck="false"
+                    type="text"
+                    bind:value={inputValue} 
+                    bind:this={input} 
+                    on:keydown={handleKey} 
+                    on:blur={inputBlur} 
+                    on:focus={inputFocus} 
+                    on:input={search}
+                    placeholder={placeholder} />
+                <span class="dropdown-arrow {showOptions ? "bi-caret-up" : "bi-caret-down"}" on:click={handleCaretClick}></span>
+            </div>
+        </div>
+
+        {#if options}
+            <ul class="options shadow-lg" 
+                bind:this={list} 
+                class:d-none={!showOptions} 
+                transition:fly="{{duration: 200, y: 5}}" 
+                on:mousedown|preventDefault={handleOptionMousedown}
+                on:scroll={() => listScroll()}>
+                {#each options as option, index}
+                    <li id="{listItemId(index)}" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
+                        {#if $$slots.option}
+                            <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
+                        {:else}
+                            {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
+                        {/if}
+                    </li>
+                {/each}
+            </ul>
+        {/if}
+    </div>
+{/if}
 
 <style lang="scss">
     @import "../../scss/colors";
@@ -372,10 +410,10 @@
             transition: background-color .3s;
             white-space: nowrap;
             cursor: pointer;
-            font-size: 0.9rem;
-            & span {
-                font-weight: initial;
-            }
+            font-weight: normal;
+        }
+        & .token:hover {
+            filter: brightness(60%);
         }
 
         & .actions {
@@ -383,6 +421,9 @@
             display: flex;
             flex: 1;
             min-width: 15rem;
+            & > .dropdown-arrow {
+                cursor: pointer;
+            }
         }
         & input {
             border: none;
@@ -401,7 +442,8 @@
             overflow: auto;
             padding-inline-start: 0;
             position: absolute;
-            top: calc(100% + 5px);
+            top: calc(100% + 1px);
+            filter: brightness(93%);
             width: 100%;
             & > li {
                 background-color: $multiselect-option-item-background-color;
@@ -409,7 +451,10 @@
                 padding: .5rem;
             }
             & > li:hover {
-                filter: brightness(85%);
+                filter: brightness(90%);
+            }
+            & > li.active {
+                filter: brightness(75%);
             }
             & > li.selected {
                 background-color: $multiselect-option-selected-item-background-color;

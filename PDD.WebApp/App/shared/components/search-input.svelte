@@ -8,7 +8,7 @@
     export let small: boolean = false;
     export let large: boolean = false;
     export let searchTimeoutMs = 500;
-    export let searching: boolean = true;
+    export let searching: boolean = false;
     export let initialized: boolean = true;
     /**
      * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
@@ -42,7 +42,7 @@
 </script>
 
 {#if !initialized}
-    <Placeholder class="{classes || ''}" height={(large ? "50px" : (small ? "32px" : "38px"))} />
+    <Placeholder class="{classes || ''}" style="{styles || ''}"  height={(large ? "50px" : (small ? "32px" : "38px"))} />
 {:else}
     <div class="input {classes || ''}" style="{styles || ''}" class:input-group-sm={small} class:input-group-lg={large}>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -57,6 +57,7 @@
             autocomplete="off" 
             autocorrect="off"
             spellcheck="false"
+            type="text"
             bind:value={value} 
             bind:this={input} 
             on:input={search}

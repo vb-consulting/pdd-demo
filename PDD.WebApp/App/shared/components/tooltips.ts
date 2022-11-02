@@ -10,7 +10,6 @@ export const hideTooltips = () => {
     run((instance, e) => {
         if (instance) {
             instance.hide();
-            //instance.dispose();
         }
     });
 }
