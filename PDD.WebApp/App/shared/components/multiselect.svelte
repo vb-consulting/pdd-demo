@@ -2,7 +2,7 @@
     import { fly } from "svelte/transition";
     import Placeholder from "./placeholder.svelte";
     import { hideTooltips } from "./tooltips"
-    import { mark, generateId } from "./strings";
+    import { mark, generateId } from "./utils";
 
     interface $$Slots {
         token: { item: IValueName };
@@ -375,23 +375,27 @@
 {/if}
 
 <style lang="scss">
-    @import "../../scss/colors";
+    @import "./styles";
+    @if variable-exists(search-mark-class) {
+        @include search-mark-partial;
+    }
 
-    $multiselect-dark-theme-input-color: $white;
+    $multiselect-dark-theme-input-color: var(--bs-white);
     $multiselect-option-item-background-color: var(--bs-body-bg);
-    $multiselect-option-selected-item-background-color: $primary;
+    $multiselect-option-selected-item-background-color: var(--bs-primary);
     $multiselect-option-selected-item-color: var(--bs-body-bg);
     
     .multiselect {
         position: relative;
         z-index: 1;
+        display: flex;
 
         & > .multiselect-icon {
             position: absolute;
             cursor: pointer;
             margin-left: 8px;
-            top: 10px;
             z-index: 2;
+            align-self: center;
         }
         & > .spinner-border {
             width: 16px;

@@ -213,3 +213,6 @@
         <slot name="bottomRow" {grid}></slot>
     </tbody>
 </table>
+
+<style lang="scss">
+</style>

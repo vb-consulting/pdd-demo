@@ -9,16 +9,6 @@
 // https://icons.getbootstrap.com/
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 
-.search-mark {
-    padding: 0;
-    background-color: var(--bs-highlight-bg);
-}
-.search-mark.active,
-body.dark .search-mark:not(.active) {
-    padding: 0;
-    color: $black;
-}
-
 .image-15px {
     background-size: 15px;
     background-repeat: no-repeat;

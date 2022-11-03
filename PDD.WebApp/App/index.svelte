@@ -5,7 +5,7 @@
     import Placeholder from "./shared/components/placeholder.svelte";
     import { urls } from "./shared/config";
     import { get } from "./shared/fetch";
-    import { flagUrl } from "./shared/strings";
+    import { flagUrl } from "./shared/utils";
 
     const getTopCompanies = () => get<{
         id: string;

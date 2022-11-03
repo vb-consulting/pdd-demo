@@ -132,7 +132,8 @@
 {/if}
 
 <style lang="scss">
-    @import "../../scss/colors";
+    $chart-spinner-border-color: var(--bs-primary);
+
     .chart-fixed-size {
         display: inline-block; 
         position: relative;
@@ -153,7 +154,7 @@
     .spinner-small {
         width: 1rem;
         height: 1rem;
-        border: 0.1em solid $primary;
+        border: 0.1em solid $chart-spinner-border-color;
         border-right-color: transparent;
     }
 </style>

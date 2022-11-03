@@ -19,3 +19,6 @@
         style="{height ? `height: ${height};` : ""}{width ? `width: ${width};` : ""}">
     </span>
 </div>
+
+<style lang="scss">
+</style>

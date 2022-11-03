@@ -8,8 +8,8 @@
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
     import { get, getCached } from "./shared/fetch";
-    import { mark } from "./shared/components/strings";
-    import { urlToHandle, take, flagUrl } from "./shared/strings";
+    import { mark } from "./shared/components/utils";
+    import { urlToHandle, take, flagUrl } from "./shared/utils";
 
     interface ICompanyItem {
         id: string,
@@ -55,7 +55,7 @@
     let selectedCountires: IValueName[];
 
     $: {
-        //console.log(selectedCountires?.map(c => c.value));
+        console.log(selectedCountires?.map(c => c.value));
     }
 </script>
 
@@ -182,4 +182,8 @@
 </Layout>
 
 <style lang="scss">
+    @import "./shared/components/styles";
+    @if variable-exists(search-mark-class) {
+        @include search-mark-partial;
+    }
 </style>
