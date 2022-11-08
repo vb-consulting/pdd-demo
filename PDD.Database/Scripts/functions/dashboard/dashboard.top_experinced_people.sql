@@ -38,7 +38,7 @@ from
     left outer join business_roles br on br.id = pr.role_id
     left outer join countries country on p.country = country.code
 where
-    es.name_normalized in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
+    lower(es.name) in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
 group by
     p.id,
     country.name,

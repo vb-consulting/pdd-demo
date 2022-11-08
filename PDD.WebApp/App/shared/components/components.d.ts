@@ -61,10 +61,13 @@ interface IValueName {
     name: string
 };
 
-interface IMultiselectResponse {
+
+interface IPagedResponse<T> {
     count: number, 
-    page: IOption[]
+    page: T[]
 };
+
+interface IMultiselectResponse extends IPagedResponse<IValueName> { };
 
 interface IMultiselectRequest {
     search: string, 

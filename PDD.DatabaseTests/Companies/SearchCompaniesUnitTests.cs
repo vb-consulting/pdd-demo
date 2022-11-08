@@ -15,12 +15,14 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     public void SearchCompanies_Empty_Json_Test()
     {
         // Arrange
-        string search = null;
-        int? skip = 0;
-        int? take = 10;
+        string? search = default;
+        short[]? countries = default;
+        short[]? areas = default;
+        int? skip = default;
+        int? take = default;
 
         // Act
-        var result = Connection.SearchCompanies(search, skip, take);
+        var result = Connection.SearchCompanies(search, countries, areas, skip, take);
         dynamic data = JsonConvert.DeserializeObject(result);
 
         // Assert
@@ -36,13 +38,15 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         string search = null;
+        short[]? countries = default;
+        short[]? areas = default;
         int? skip = 0;
         int? take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
         {
             count = default(int),
             page = new[]
@@ -59,6 +63,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 }
             }
         });
+
 
         // Assert
         result.count.Should().Be(6);
@@ -102,13 +107,15 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         string search = null;
+        short[]? countries = default;
+        short[]? areas = default;
         int? skip = 3;
         int? take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
         {
             count = default(int),
             page = new[]
@@ -168,13 +175,15 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         string search = "company6";
+        short[]? countries = default;
+        short[]? areas = default;
         int? skip = 0;
         int? take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
         {
             count = default(int),
             page = new[]
@@ -227,11 +236,11 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         Connection.Execute(@"
             insert into company_areas (company_id, area_id) values 
             
-            (@company[2], (select id from business_areas where name_normalized = lower(@area[1]) limit 1)),
+            (@company[2], (select id from business_areas where lower(name) = lower(@area[1]) limit 1)),
 
-            (@company[3], (select id from business_areas where name_normalized = lower(@area[1]) limit 1)),
-            (@company[3], (select id from business_areas where name_normalized = lower(@area[2]) limit 1)),
-            (@company[3], (select id from business_areas where name_normalized = lower(@area[3]) limit 1))",
+            (@company[3], (select id from business_areas where lower(name) = lower(@area[1]) limit 1)),
+            (@company[3], (select id from business_areas where lower(name) = lower(@area[2]) limit 1)),
+            (@company[3], (select id from business_areas where lower(name) = lower(@area[3]) limit 1))",
             new
             {
                 company = companyIds,

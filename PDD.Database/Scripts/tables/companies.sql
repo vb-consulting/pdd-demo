@@ -1,7 +1,6 @@
 CREATE TABLE public.companies (
     id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL UNIQUE,
     web character varying,
     linkedin character varying,
     twitter character varying,
@@ -17,8 +16,6 @@ CREATE TABLE public.companies (
     CONSTRAINT fk_modified_by FOREIGN KEY (modified_by) REFERENCES public.users(id) DEFERRABLE
 );
 
-COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased, trigram index';
 COMMENT ON COLUMN public.companies.company_line IS 'company moto';
 COMMENT ON COLUMN public.companies.country IS 'headquaters country';
 CREATE INDEX idx_companies_country ON public.companies USING btree (country);
-CREATE INDEX idx_companies_name_normalized ON public.companies USING gist (name_normalized public.gist_trgm_ops);

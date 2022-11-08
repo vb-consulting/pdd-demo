@@ -41,7 +41,7 @@ group by
 order by
     avg(rev.score) desc nulls last,
     comp.created_at desc,
-    comp.name_normalized
+    comp.name
 limit _limit;
 $$;
 

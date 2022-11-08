@@ -57,7 +57,7 @@ var usCode = 840;
 var euCodes = connection.Read<short>("select code from countries where iso2 in ('AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE')").ToArray();
 var areas = connection.Read<short>("select id from business_areas").ToArray();
 
-const int peopleCount = 50000;
+const int peopleCount = 100000;
 const int companyCount = 5000;
 
 List<Guid> companyIds = new();
@@ -71,7 +71,6 @@ connection.Execute("begin");
 foreach (var company in new Faker<Company>()
     .StrictMode(true)
     .RuleFor(c => c.Name, f => f.Company.CompanyName())
-    .RuleFor(c => c.NameNormalized, (f, c) => c?.Name?.ToLower())
     .RuleFor(c => c.Web, (f, c) => $"https://{sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()}.com/")
     .RuleFor(c => c.Twitter, (f, c) => string.Concat("https://twitter.com/", sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()).OrNull(f, .4f))
     .RuleFor(c => c.Linkedin, (f, c) => string.Concat("https://linkedin.com/", sanitizeNameRegex.Replace(c?.Name ?? "", "").ToLower()).OrNull(f, .8f))
@@ -81,7 +80,7 @@ foreach (var company in new Faker<Company>()
     .RuleFor(c => c.Areas, f => f.PickRandom(areas, f.Random.Int(1, 5)).ToArray())
     .Generate(companyCount))
 {
-    var companyId = connection.Read<Guid?>(@"select id from companies where name_normalized = @name", company.NameNormalized).FirstOrDefault();
+    var companyId = connection.Read<Guid?>(@"select id from companies where name = lower(@name)", company.Name?.ToLower()).FirstOrDefault();
     if (companyId == null)
     {
         companyId = connection.Read<Guid>(@"
@@ -104,31 +103,31 @@ foreach (var company in new Faker<Company>()
     companyNames.Add(company?.Name ?? "");
 }
 
-var employed = connection.Read<short>("select id from employee_status where name_normalized = 'employed'").Single();
-var unemployed = connection.Read<short>("select id from employee_status where name_normalized = 'unemployed'").Single();
-var opentoopportunity = connection.Read<short>("select id from employee_status where name_normalized = 'open to opportunity'").Single();
-var activlyapplying = connection.Read<short>("select id from employee_status where name_normalized = 'actively applying'").Single();
-var retired = connection.Read<short>("select id from employee_status where name_normalized = 'retired'").Single();
-var unemployable = connection.Read<short>("select id from employee_status where name_normalized = 'unemployable'").Single();
+var employed = connection.Read<short>("select id from employee_status where lower(name) = 'employed'").Single();
+var unemployed = connection.Read<short>("select id from employee_status where lower(name) = 'unemployed'").Single();
+var opentoopportunity = connection.Read<short>("select id from employee_status where lower(name) = 'open to opportunity'").Single();
+var activlyapplying = connection.Read<short>("select id from employee_status where lower(name) = 'actively applying'").Single();
+var retired = connection.Read<short>("select id from employee_status where lower(name) = 'retired'").Single();
+var unemployable = connection.Read<short>("select id from employee_status where lower(name) = 'unemployable'").Single();
 
-var productowner = connection.Read<short>("select id from business_roles where name_normalized = 'product owner'").Single();
-var projectmanager = connection.Read<short>("select id from business_roles where name_normalized = 'project manager'").Single();
-var uxdesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ux designer'").Single();
-var uidesigner = connection.Read<short>("select id from business_roles where name_normalized = 'ui designer'").Single();
-var businessanalyst = connection.Read<short>("select id from business_roles where name_normalized = 'business analyst'").Single();
-var softwaredeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'software developer'").Single();
-var softwarearchitect = connection.Read<short>("select id from business_roles where name_normalized = 'software architect'").Single();
-var devops = connection.Read<short>("select id from business_roles where name_normalized = 'devops'").Single();
-var devopsengineer = connection.Read<short>("select id from business_roles where name_normalized = 'devops engineer'").Single();
-var devopslead = connection.Read<short>("select id from business_roles where name_normalized = 'devops lead'").Single();
-var tester = connection.Read<short>("select id from business_roles where name_normalized = 'tester'").Single();
-var qalead = connection.Read<short>("select id from business_roles where name_normalized = 'qa lead'").Single();
-var qaengineer = connection.Read<short>("select id from business_roles where name_normalized = 'qa engineer'").Single();
-var techlead = connection.Read<short>("select id from business_roles where name_normalized = 'tech lead'").Single();
-var scrummaster = connection.Read<short>("select id from business_roles where name_normalized = 'scrum master'").Single();
-var softwaredevelopmentmanager = connection.Read<short>("select id from business_roles where name_normalized = 'software development manager'").Single();
-var databaseadministrator = connection.Read<short>("select id from business_roles where name_normalized = 'database administrator'").Single();
-var databasedeveloper = connection.Read<short>("select id from business_roles where name_normalized = 'database developer'").Single();
+var productowner = connection.Read<short>("select id from business_roles where lower(name) = 'product owner'").Single();
+var projectmanager = connection.Read<short>("select id from business_roles where lower(name) = 'project manager'").Single();
+var uxdesigner = connection.Read<short>("select id from business_roles where lower(name) = 'ux designer'").Single();
+var uidesigner = connection.Read<short>("select id from business_roles where lower(name) = 'ui designer'").Single();
+var businessanalyst = connection.Read<short>("select id from business_roles where lower(name) = 'business analyst'").Single();
+var softwaredeveloper = connection.Read<short>("select id from business_roles where lower(name) = 'software developer'").Single();
+var softwarearchitect = connection.Read<short>("select id from business_roles where lower(name) = 'software architect'").Single();
+var devops = connection.Read<short>("select id from business_roles where lower(name) = 'devops'").Single();
+var devopsengineer = connection.Read<short>("select id from business_roles where lower(name) = 'devops engineer'").Single();
+var devopslead = connection.Read<short>("select id from business_roles where lower(name) = 'devops lead'").Single();
+var tester = connection.Read<short>("select id from business_roles where lower(name) = 'tester'").Single();
+var qalead = connection.Read<short>("select id from business_roles where lower(name) = 'qa lead'").Single();
+var qaengineer = connection.Read<short>("select id from business_roles where lower(name) = 'qa engineer'").Single();
+var techlead = connection.Read<short>("select id from business_roles where lower(name) = 'tech lead'").Single();
+var scrummaster = connection.Read<short>("select id from business_roles where lower(name) = 'scrum master'").Single();
+var softwaredevelopmentmanager = connection.Read<short>("select id from business_roles where lower(name) = 'software development manager'").Single();
+var databaseadministrator = connection.Read<short>("select id from business_roles where lower(name) = 'database administrator'").Single();
+var databasedeveloper = connection.Read<short>("select id from business_roles where lower(name) = 'database developer'").Single();
 
 var managerRoles1 = new short[] { productowner, projectmanager, businessanalyst, scrummaster, softwaredevelopmentmanager };
 var managerRoles2 = new short[] { projectmanager, businessanalyst };
@@ -321,8 +320,10 @@ foreach (var person in new Faker<Person>()
         }
     }
 
-    var normalized = $"{person.FirstName} {person.LastName}\n{person.LastName} {person.FirstName}".ToLower();
-    var personId = connection.Read<Guid?>(@"select id from people where name_normalized = @name", normalized).FirstOrDefault();
+    var personId = connection.Read<Guid?>(@"select id from people where lower(first_name) = @first_name and lower(last_name) = @last_name", new { 
+        first_name = person.FirstName?.ToLower(),
+        last_name = person.LastName?.ToLower()
+    }).FirstOrDefault();
     if (personId == null)
     {
         personId = connection.Read<Guid>(@"
@@ -334,7 +335,6 @@ foreach (var person in new Faker<Person>()
         {
             firstName = person.FirstName,
             lastName = person.LastName,
-            normalized = normalized,
             status,
             gender = person.Gender.ToString().First().ToString(),
             person.Email,
@@ -378,7 +378,6 @@ connection.Execute("commit");
 public class Company
 {
     public string? Name { get; set; }
-    public string? NameNormalized { get; set; }
     public string? Web { get; set; }
     public string? Linkedin { get; set; }
     public string? Twitter { get; set; }

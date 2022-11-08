@@ -9,14 +9,14 @@ using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
 
-namespace PDD.Database.Extensions;
+namespace PDD.Database.Extensions.Companies;
 
 public static class PgRoutineSearchCountries
 {
-    public const string Name = "public.search_countries";
+    public const string Name = "companies.search_countries";
 
     /// <summary>
-    /// Executes plpgsql function public.search_countries(character varying, integer, integer)
+    /// Executes plpgsql function companies.search_countries(character varying, integer, integer)
     /// </summary>
     /// <param name="search">_search character varying</param>
     /// <param name="skip">_skip integer</param>
@@ -36,7 +36,7 @@ public static class PgRoutineSearchCountries
     }
 
     /// <summary>
-    /// Asynchronously executes plpgsql function public.search_countries(character varying, integer, integer)
+    /// Asynchronously executes plpgsql function companies.search_countries(character varying, integer, integer)
     /// </summary>
     /// <param name="search">_search character varying</param>
     /// <param name="skip">_skip integer</param>

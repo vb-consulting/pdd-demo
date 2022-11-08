@@ -17,7 +17,19 @@ namespace PDD.WebApp.Endpoints
                 HttpResponse response) =>
             {
                 response.ContentType = MediaTypeNames.Application.Json;
-                return await connection.SearchCompaniesAsync(search, skip, take);
+                return await connection.SearchCompaniesAsync(search, null, null, skip, take);
+            });
+
+            app.MapGet(Urls.CompaniesCountriesSearchUrl, [AllowAnonymous] async (
+                [FromQuery] string? search,
+                [FromQuery] int? skip,
+                [FromQuery] int? take,
+                NpgsqlConnection connection,
+                HttpResponse response) =>
+            {
+                response.ContentType = MediaTypeNames.Application.Json;
+                response.Headers.CacheControl = new[] { "public", "max-age=31536000" };
+                return await connection.SearchCountriesAsync(search, skip, take);
             });
         }
     }

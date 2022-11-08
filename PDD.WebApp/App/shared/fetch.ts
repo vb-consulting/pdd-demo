@@ -34,16 +34,18 @@ const _fetch = async <T> (url: string, method: string, func: "json" | "text", co
     document.location.assign(urls.errorUrl);
 }
 
+type TContent = Record<any, any> | null | any;
+
 export const parseQuery = (query: Record<any, any>) => 
     Object.keys(query).map(key => `${key}=${encodeURIComponent(query[key])}`).join('&');
 
-export const  parseUrl = (url: string, query: Record<any, any> | null = null) => 
+export const  parseUrl = (url: string, query: TContent = null) => 
     query ? `${url}?${parseQuery(query)}` : url;
 
-export const get = async <T> (url: string, query: Record<any, any> | null = null) => 
+export const get = async <T> (url: string, query: TContent = null) => 
     _fetch<T>(parseUrl(url, query), "GET", "json") as Promise<T>;
 
-export const getCached = async <T> (url: string, query: Record<any, any> | null = null) => {
+export const getCached = async <T> (url: string, query: TContent = null) => {
     if (cacheVersion) {
         if (!query) {
             query = {"_v": cacheVersion}
@@ -53,5 +55,5 @@ export const getCached = async <T> (url: string, query: Record<any, any> | null 
     }
     return _fetch<T>(parseUrl(url, query), "GET", "json") as Promise<T>;
 }
-export const post = async <T> (url: string, query: Record<any, any> | null = null, content: Record<any, any> | null = null) => 
+export const post = async <T> (url: string, query: TContent = null, content: TContent = null) => 
     _fetch<T>(parseUrl(url, query), "POST", "json", content) as Promise<T>;

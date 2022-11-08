@@ -31,28 +31,18 @@
         page: ICompanyItem[]
     }>(urls.companiesSearchUrl, {search, skip: grid.skip, take: grid.take});
 
-    const getCountries = (request: IMultiselectRequest) => getCached<IMultiselectResponse>(urls.countriesSearchUrl, request);
-
+    type TCountry = IValueName & {iso2: string, iso3: string};
+    const getCountries = (request: any) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
 
     let grid: IDataGrid;
     let search = "";
 
-    const rowTooltip = (data: ICompanyItem) => `
-    <div class="text-start">
-        ${data.name}
-        <div class="text-muted">
-            ${data.companyline}
-        </div>
-        <div class="fs-smaller text-muted">
-            ${data.country}
-        </div>
-    </div>`;
 
     function onsearch() {
         grid.setPage(1);
     }
 
-    let selectedCountires: IValueName[];
+    let selectedCountires: TCountry[];
 
     $: {
         console.log(selectedCountires?.map(c => c.value));
@@ -84,6 +74,7 @@
                         </div>
                         <span slot="option" let:item class="image-15px" style="background-position-y: center; background-image: url({flagUrl(item.value)});" let:markup>
                             {@html markup}
+                            <span class="float-end fs-smaller text-muted">{item.iso3}</span>
                         </span>
                     </Multiselect>
             </div>
@@ -122,7 +113,7 @@
                     <Placeholder height="70vh" />
                 </td>
             </tr>
-            <tr slot="row" let:data let:grid data-bs-toggle="tooltip" data-bs-html="true" title={rowTooltip(data)}>
+            <tr slot="row" let:data let:grid>
                 <td class="" class:text-muted={grid.working}>
                     <div>{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
@@ -182,8 +173,4 @@
 </Layout>
 
 <style lang="scss">
-    @import "./shared/components/styles";
-    @if variable-exists(search-mark-class) {
-        @include search-mark-partial;
-    }
 </style>

@@ -17,12 +17,12 @@ public class TopExperincedPeopleUnitTests : PostgreSqlConfigurationFixture
 
         var personIds = Connection.Read<Guid>(@"
             insert into people (first_name, last_name, employee_status) values
-            (@name[1], 'last ' || @name[1], (select id from employee_status where name_normalized = @status[3] limit 1)),
-            (@name[2], 'last ' || @name[2], (select id from employee_status where name_normalized = @status[4] limit 1)),
-            (@name[3], 'last ' || @name[3], (select id from employee_status where name_normalized = @status[5] limit 1)),
-            (@name[4], 'last ' || @name[4], (select id from employee_status where name_normalized = @status[6] limit 1)),
-            (@name[5], 'last ' || @name[5], (select id from employee_status where name_normalized = @status[2] limit 1)),
-            (@name[6], 'last ' || @name[6], (select id from employee_status where name_normalized = @status[1] limit 1))
+            (@name[1], 'last ' || @name[1], (select id from employee_status where lower(name) = @status[3] limit 1)),
+            (@name[2], 'last ' || @name[2], (select id from employee_status where lower(name) = @status[4] limit 1)),
+            (@name[3], 'last ' || @name[3], (select id from employee_status where lower(name) = @status[5] limit 1)),
+            (@name[4], 'last ' || @name[4], (select id from employee_status where lower(name) = @status[6] limit 1)),
+            (@name[5], 'last ' || @name[5], (select id from employee_status where lower(name) = @status[2] limit 1)),
+            (@name[6], 'last ' || @name[6], (select id from employee_status where lower(name) = @status[1] limit 1))
             returning id;", new
         {
             name = new string[] { "name1", "name2", "name3", "name4", "name5", "name6" },

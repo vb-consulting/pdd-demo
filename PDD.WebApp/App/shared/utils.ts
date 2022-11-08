@@ -15,5 +15,8 @@ export function take(source: string, n: number, extra = "...") {
 }
 
 export function flagUrl(value: any) {
+    if (!value) {
+        return value;
+    }
     return `https://countryflagsapi.com/svg/${value.toString().padStart(3, "0")}`;
 }

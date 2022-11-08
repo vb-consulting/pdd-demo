@@ -58,17 +58,17 @@ public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
 
         Connection.Execute(@"
             insert into company_areas (company_id, area_id) values 
-            (@company[1], (select id from business_areas where name_normalized = lower(@area[1]) limit 1)),
-            (@company[1], (select id from business_areas where name_normalized = lower(@area[2]) limit 1)),
+            (@company[1], (select id from business_areas where lower(name) = lower(@area[1]) limit 1)),
+            (@company[1], (select id from business_areas where lower(name) = lower(@area[2]) limit 1)),
             
-            (@company[2], (select id from business_areas where name_normalized = lower(@area[3]) limit 1)),
-            (@company[2], (select id from business_areas where name_normalized = lower(@area[4]) limit 1)),
+            (@company[2], (select id from business_areas where lower(name) = lower(@area[3]) limit 1)),
+            (@company[2], (select id from business_areas where lower(name) = lower(@area[4]) limit 1)),
 
-            (@company[3], (select id from business_areas where name_normalized = lower(@area[5]) limit 1)),
-            (@company[3], (select id from business_areas where name_normalized = lower(@area[6]) limit 1)),
+            (@company[3], (select id from business_areas where lower(name) = lower(@area[5]) limit 1)),
+            (@company[3], (select id from business_areas where lower(name) = lower(@area[6]) limit 1)),
 
-            (@company[4], (select id from business_areas where name_normalized = lower(@area[7]) limit 1)),
-            (@company[4], (select id from business_areas where name_normalized = lower(@area[8]) limit 1))", new
+            (@company[4], (select id from business_areas where lower(name) = lower(@area[7]) limit 1)),
+            (@company[4], (select id from business_areas where lower(name) = lower(@area[8]) limit 1))", new
         {
             company = companyIds,
             area = new string[] { "General", "AI", "Hardware", "Enterprise", "Edtech", "Consumer", "Mobility", "AI" }

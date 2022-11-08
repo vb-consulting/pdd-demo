@@ -1,13 +1,9 @@
-﻿@mixin search-mark-partial {
-    $search-mark-class: 1;
-
-    :global(.search-mark) {
-        padding: 0;
-        background-color: var(--bs-highlight-bg);
-    }
-    :global(.search-mark.active),
-    :global(body.dark .search-mark:not(.active)) {
-        padding: 0;
-        color: var(--bs-black);
-    }
+﻿:global(.search-mark) {
+    padding: 0;
+    background-color: var(--bs-highlight-bg);
+}
+:global(.search-mark.active),
+:global(body.dark .search-mark:not(.active)) {
+    padding: 0;
+    color: var(--bs-black);
 }

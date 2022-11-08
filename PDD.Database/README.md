@@ -1,20 +1,20 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5434`, version `15.0 (Ubuntu 15.0-1.pgdg20.04+1)`
-- Local time stamp: `2022-10-29T13:06:25.3587343+02:00`
+- Local time stamp: `2022-11-08T12:57:41.4373330+01:00`
 - Schema's: `public`, `dashboard`, `companies`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
 
 ## Table of Contents
 
-- Function [`public.search_countries(character varying, integer, integer)`](#function-publicsearch_countriescharacter-varying-integer-integer)
 - Function [`dashboard.chart_companies_by_country(integer)`](#function-dashboardchart_companies_by_countryinteger)
 - Function [`dashboard.chart_employee_counts_by_area(integer)`](#function-dashboardchart_employee_counts_by_areainteger)
 - Function [`dashboard.chart_employee_counts_by_year(integer)`](#function-dashboardchart_employee_counts_by_yearinteger)
 - Function [`dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out smallint, out integer, out bigint, out character varying, out varchar[])`](#function-dashboardtop_experinced_peopleinteger-out-uuid-out-character-varying-out-character-varying-out-integer-out-character-varying-out-smallint-out-integer-out-bigint-out-character-varying-out-varchar)
 - Function [`dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out smallint, out varchar[], out numeric, out bigint)`](#function-dashboardtop_rated_companiesinteger-out-uuid-out-character-varying-out-character-varying-out-character-varying-out-smallint-out-varchar-out-numeric-out-bigint)
-- Function [`companies.search_companies(character varying, integer, integer)`](#function-companiessearch_companiescharacter-varying-integer-integer)
+- Function [`companies.search_companies(character varying, int2[], int2[], integer, integer)`](#function-companiessearch_companiescharacter-varying-int2-int2-integer-integer)
+- Function [`companies.search_countries(character varying, integer, integer)`](#function-companiessearch_countriescharacter-varying-integer-integer)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_role_types`](#table-publicbusiness_role_types)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
@@ -28,25 +28,6 @@
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
 - Enum [`public.valid_genders`](#enum-public-valid_genders)
-
-## Routines
-
-### Function `public.search_countries(character varying, integer, integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/search_countries.sql](/PDD.Database/Scripts/functions/search_countries.sql)
-
-- Data Access Extension: [/PDD.Database/Extensions/SearchCountries.cs](/PDD.Database/Extensions/SearchCountries.cs)
-
-- Unit Test: [/PDD.DatabaseTests/SearchCountriesUnitTests.cs](/PDD.DatabaseTests/SearchCountriesUnitTests.cs)
-
-<!-- comment on function "public"."search_countries"(character varying, integer, integer) is @until-end-tag; -->
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
 ## Routines
 
@@ -152,7 +133,7 @@ Top rated companies by the user score.
 
 ## Routines
 
-### Function `companies.search_companies(character varying, integer, integer)`
+### Function `companies.search_companies(character varying, int2[], int2[], integer, integer)`
 
 - Returns `json`
 
@@ -164,7 +145,24 @@ Top rated companies by the user score.
 
 - Unit Test: [/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs)
 
-<!-- comment on function "companies"."search_companies"(character varying, integer, integer) is @until-end-tag; -->
+<!-- comment on function "companies"."search_companies"(character varying, int2[], int2[], integer, integer) is @until-end-tag; -->
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `companies.search_countries(character varying, integer, integer)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/PDD.Database/Scripts/functions/companies/companies.search_countries.sql](/PDD.Database/Scripts/functions/companies/companies.search_countries.sql)
+
+- Data Access Extension: [/PDD.Database/Extensions/Companies/SearchCountries.cs](/PDD.Database/Extensions/Companies/SearchCountries.cs)
+
+- Unit Test: [/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs)
+
+<!-- comment on function "companies"."search_countries"(character varying, integer, integer) is @until-end-tag; -->
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -182,14 +180,13 @@ Business areas that companies may be invloved.
 | ------ | ----------- | -----| :------: | ------- | ------- |
 | <a id="user-content-public-business_areas-id" href="#public-business_areas-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_areas"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_areas-name" href="#public-business_areas-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_areas"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_areas-name_normalized" href="#public-business_areas-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_areas"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 - Stats for `public.business_areas`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`7`** | count=**`599.434`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`91`** | rows=**`599.434`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`30.855`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`30.855`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -206,7 +203,6 @@ Types or groups of business roles.
 | ------ | ----------- | -----| :------: | ------- | ------- |
 | <a id="user-content-public-business_role_types-id" href="#public-business_role_types-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_role_types"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_role_types-name" href="#public-business_role_types-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_role_types"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_role_types-name_normalized" href="#public-business_role_types-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_role_types"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 - Stats for `public.business_role_types`:
 
@@ -230,15 +226,14 @@ Roles in a team that employees are specialized working with.
 | ------ | ----------- | -----| :------: | ------- | ------- |
 | <a id="user-content-public-business_roles-id" href="#public-business_roles-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."business_roles"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-business_roles-name" href="#public-business_roles-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."business_roles"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-business_roles-name_normalized" href="#public-business_roles-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."business_roles"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-business_roles-type" href="#public-business_roles-type">#</a>`type` | **FK [➝](#public-business_role_types-id) `business_role_types.id`** | `smallint`| **NO** |  | <!-- comment on column "public"."business_roles"."type" is @until-end-tag; --><!-- end --> |
 
 - Stats for `public.business_roles`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`40`** | count=**`720`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`720`** | rows=**`720`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`2`** | count=**`36`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`36`** | rows=**`36`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -247,14 +242,13 @@ Roles in a team that employees are specialized working with.
 
 <!-- comment on table "public"."companies" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **4.457**
+- Count estimate: **5.000**
 - Source: [/PDD.Database/Scripts/tables/companies.sql](/PDD.Database/Scripts/tables/companies.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
 | ------ | ----------- | -----| :------: | ------- | ------- |
 | <a id="user-content-public-companies-id" href="#public-companies-id">#</a>**`id`** | **PK** | `uuid`| **NO** | `gen_random_uuid()` | <!-- comment on column "public"."companies"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-name" href="#public-companies-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."companies"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-companies-name_normalized" href="#public-companies-name_normalized">#</a>`name_normalized` | **IDX**, UNIQUE | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."companies"."name_normalized" is @until-end-tag; -->lowercased, trigram index<!-- end --> |
 | <a id="user-content-public-companies-web" href="#public-companies-web">#</a>`web` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."web" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-linkedin" href="#public-companies-linkedin">#</a>`linkedin` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."linkedin" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-companies-twitter" href="#public-companies-twitter">#</a>`twitter` |  | `character varying`| YES |  | <!-- comment on column "public"."companies"."twitter" is @until-end-tag; --><!-- end --> |
@@ -270,8 +264,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`106`** | count=**`2.880`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`472.442`** | rows=**`2.909.660`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`89`** | count=**`433`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`445.000`** | rows=**`385.000`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -281,7 +275,7 @@ Roles in a team that employees are specialized working with.
 <!-- comment on table "public"."company_areas" is @until-end-tag; -->
 Companies - business areas.
 <!-- end -->
-- Count estimate: **14.458**
+- Count estimate: **14.940**
 - Source: [/PDD.Database/Scripts/tables/company_areas.sql](/PDD.Database/Scripts/tables/company_areas.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -297,8 +291,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`7`** | count=**`180.216`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`101.206`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`10.235`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -308,7 +302,7 @@ Companies - business areas.
 <!-- comment on table "public"."company_reviews" is @until-end-tag; -->
 Company reviews made by people.
 <!-- end -->
-- Count estimate: **68.374**
+- Count estimate: **137.716**
 - Source: [/PDD.Database/Scripts/tables/company_reviews.sql](/PDD.Database/Scripts/tables/company_reviews.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -326,8 +320,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`2.700.992`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`44.167.469`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`375.006`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`10.604.132`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -345,15 +339,14 @@ Company reviews made by people.
 | <a id="user-content-public-countries-iso2" href="#public-countries-iso2">#</a>`iso2` | **IDX** | `character(2)`| **NO** |  | <!-- comment on column "public"."countries"."iso2" is @until-end-tag; -->Contry ISO 3166 alpha-2 code.<!-- end --> |
 | <a id="user-content-public-countries-iso3" href="#public-countries-iso3">#</a>`iso3` | **IDX** | `character(3)`| **NO** |  | <!-- comment on column "public"."countries"."iso3" is @until-end-tag; -->Contry ISO 3166 alpha-3 code.<!-- end --> |
 | <a id="user-content-public-countries-name" href="#public-countries-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."countries"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-countries-name_normalized" href="#public-countries-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."countries"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 | <a id="user-content-public-countries-culture" href="#public-countries-culture">#</a>`culture` |  | `character varying`| YES |  | <!-- comment on column "public"."countries"."culture" is @until-end-tag; -->The CultureInfo class specifies a unique name for each culture, based on RFC 4646. The name is a combination of an ISO 639 two-letter lowercase culture code associated with a language and an ISO 3166 two-letter uppercase subculture code associated with a country or region. <!-- end --> |
 
 - Stats for `public.countries`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`271`** | count=**`69.546`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`67.479`** | rows=**`69.546`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`261`** | count=**`7.983`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`64.989`** | rows=**`7.983`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -363,7 +356,7 @@ Company reviews made by people.
 <!-- comment on table "public"."employee_records" is @until-end-tag; -->
 History of employment in companies by people.
 <!-- end -->
-- Count estimate: **120.057**
+- Count estimate: **241.097**
 - Source: [/PDD.Database/Scripts/tables/employee_records.sql](/PDD.Database/Scripts/tables/employee_records.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -380,8 +373,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2.160`** | count=**`560.000`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`259.323.120`** | rows=**`820.560`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`108`** | count=**`54.732`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`26.038.476`** | rows=**`82.598`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -398,14 +391,13 @@ List of possible statuses in regards to employment.
 | ------ | ----------- | -----| :------: | ------- | ------- |
 | <a id="user-content-public-employee_status-id" href="#public-employee_status-id">#</a>**`id`** | **PK** | `smallint`| **NO** | `GENERATED ALWAYS AS IDENTITY` | <!-- comment on column "public"."employee_status"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-employee_status-name" href="#public-employee_status-name">#</a>`name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."employee_status"."name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-employee_status-name_normalized" href="#public-employee_status-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS lower((name)::text)` | <!-- comment on column "public"."employee_status"."name_normalized" is @until-end-tag; -->lowercased<!-- end --> |
 
 - Stats for `public.employee_status`:
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`160`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`160`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`2`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`12`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -414,7 +406,7 @@ List of possible statuses in regards to employment.
 
 <!-- comment on table "public"."people" is @until-end-tag; -->
 <!-- end -->
-- Count estimate: **50.000**
+- Count estimate: **97.996**
 - Source: [/PDD.Database/Scripts/tables/people.sql](/PDD.Database/Scripts/tables/people.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -422,7 +414,6 @@ List of possible statuses in regards to employment.
 | <a id="user-content-public-people-id" href="#public-people-id">#</a>**`id`** | **PK** | `uuid`| **NO** | `gen_random_uuid()` | <!-- comment on column "public"."people"."id" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-first_name" href="#public-people-first_name">#</a>`first_name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."people"."first_name" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-last_name" href="#public-people-last_name">#</a>`last_name` |  | `character varying`| **NO** |  | <!-- comment on column "public"."people"."last_name" is @until-end-tag; --><!-- end --> |
-| <a id="user-content-public-people-name_normalized" href="#public-people-name_normalized">#</a>`name_normalized` | **IDX** | `character varying`| **NO** | `GENERATED ALWAYS AS ((lower((first_name)::text) || ' '::text) || lower((last_name)::text))` | <!-- comment on column "public"."people"."name_normalized" is @until-end-tag; -->first namer + last name, trigram index<!-- end --> |
 | <a id="user-content-public-people-employee_status" href="#public-people-employee_status">#</a>`employee_status` | **FK [➝](#public-employee_status-id) `employee_status.id`**, **IDX** | `smallint`| YES |  | <!-- comment on column "public"."people"."employee_status" is @until-end-tag; --><!-- end --> |
 | <a id="user-content-public-people-gender" href="#public-people-gender">#</a>`gender` | **IDX** | `valid_genders` <sub>user definded `AS ENUM ('M', 'F')` [➝](#enum-public-valid_genders)</sub>| YES |  | <!-- comment on column "public"."people"."gender" is @until-end-tag; -->M or F<!-- end --> |
 | <a id="user-content-public-people-email" href="#public-people-email">#</a>`email` |  | `character varying`| YES |  | <!-- comment on column "public"."people"."email" is @until-end-tag; --><!-- end --> |
@@ -439,8 +430,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`40`** | count=**`80`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`2.000.000`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`2`** | count=**`4`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`195.992`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -450,7 +441,7 @@ List of possible statuses in regards to employment.
 <!-- comment on table "public"."person_roles" is @until-end-tag; -->
 Person - business roles
 <!-- end -->
-- Count estimate: **128.420**
+- Count estimate: **255.223**
 - Source: [/PDD.Database/Scripts/tables/person_roles.sql](/PDD.Database/Scripts/tables/person_roles.sql)
 
 | Column |             | Type | Nullable | Default | Comment |
@@ -466,7 +457,7 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`675.600`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| count=**`0`** | count=**`58.574`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
 | rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 

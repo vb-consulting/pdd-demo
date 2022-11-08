@@ -73,14 +73,14 @@ public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlConfigurationFixture
 
         Connection.Execute(@"
             insert into person_roles (person_id, role_id) values
-            (@person[1], (select id from business_roles where name_normalized = @roles[1])),
-            (@person[2], (select id from business_roles where name_normalized = @roles[1])),
-            (@person[3], (select id from business_roles where name_normalized = @roles[2])),
+            (@person[1], (select id from business_roles where lower(name) = @roles[1])),
+            (@person[2], (select id from business_roles where lower(name) = @roles[1])),
+            (@person[3], (select id from business_roles where lower(name) = @roles[2])),
 
-            (@person[4], (select id from business_roles where name_normalized = @roles[3])),
-            (@person[5], (select id from business_roles where name_normalized = @roles[4])),
+            (@person[4], (select id from business_roles where lower(name) = @roles[3])),
+            (@person[5], (select id from business_roles where lower(name) = @roles[4])),
             
-            (@person[6], (select id from business_roles where name_normalized = @roles[5]))", new
+            (@person[6], (select id from business_roles where lower(name) = @roles[5]))", new
         {
             person = personIds,
             roles = new string[] { "tester", "devops", "ux designer", "ui designer", "qa lead" },

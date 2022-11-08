@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION companies.search_companies(_search character varying, _skip integer, _take integer) RETURNS json
+CREATE OR REPLACE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) RETURNS json
 LANGUAGE plpgsql
 AS $$
 declare
@@ -11,7 +11,7 @@ begin
     end if;
     
     if _search is not null then
-        _search = '%' || lower(_search) || '%';
+        _search = '%' || _search || '%';
     end if;
     
     create temp table _tmp on commit drop as
@@ -21,7 +21,7 @@ begin
         companies c
     where (
         _search is null 
-        or name_normalized like _search
+        or name ilike _search
         or company_line ilike _search
     );
     get diagnostics _count = row_count;
@@ -60,7 +60,7 @@ begin
                 group by
                     cm.id, cn.code, reviews.count, reviews.score
                 order by 
-                    cm.name_normalized
+                    cm.name
                 limit _take 
                 offset _skip
             ) sub

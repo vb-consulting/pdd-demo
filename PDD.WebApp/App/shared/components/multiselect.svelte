@@ -4,15 +4,18 @@
     import { hideTooltips } from "./tooltips"
     import { mark, generateId } from "./utils";
 
+    type T = $$Generic;
+    type TItem = T & IValueName;
+
     interface $$Slots {
-        token: { item: IValueName };
-        option: { item: IValueName, markup: string };
+        token: { item: TItem };
+        option: { item: TItem, markup: string };
     }
 
     export let id: string = "ms-" + generateId().toLowerCase();
     export let placeholder = "";
-    export let searchFunc: (request: IMultiselectRequest) => Promise<IMultiselectResponse>;
-    export let selected: IValueName[] = [];
+    export let searchFunc: (request: IMultiselectRequest) => Promise<IPagedResponse<T>>;
+    export let selected: TItem[] = [];
     export let autoShow = true;
     export let limit = 200;
     export let page = 50;
@@ -41,7 +44,7 @@
     let list: HTMLUListElement;
 
     let activeIdx: number | undefined; 
-    let options: IValueName[];
+    let options: TItem[];
     let showOptions = false;
     let focused: boolean;
     let lastQuery: string;
@@ -68,7 +71,7 @@
         searching = true;
         options = [];
         const response = await searchFunc({search: query, limit, offset});
-        options = response.page;
+        options = response.page as TItem[];
         count = response.count;
         searching = false;
         activeIdx = undefined;
@@ -95,14 +98,14 @@
 
     function addSelected(token: IValueName) {
         if (token) {
-            selected = [...selected, token];
+            selected = [...selected, token as TItem];
             selectedKeys[token.value] = true;
             hideTooltips();
         }
     }
 
     function removeSelectedByValue(value: any) {
-        selected = selected.filter(s => s.value != value);
+        selected = selected.filter(s => (s as IValueName).value != value);
         delete selectedKeys[value];
         selectedKeys = selectedKeys;
         hideTooltips();
@@ -114,6 +117,7 @@
     }
 
     function optionsVisibility(show: boolean) {
+        //if (!show) return;
         showOptions = show;
         if (show && !options && !searching) {
             load();
@@ -133,7 +137,7 @@
         }
 
         if (e.code == "Backspace" && !inputValue && hasSelected) {
-            removeSelectedByValue(selected[selected.length-1].value);
+            removeSelectedByValue((selected[selected.length-1] as IValueName).value);
             return;
         }
 
@@ -142,11 +146,11 @@
             return;
         }
 
-        if (e.code == "Enter") {
+        if (e.code == "Enter" || e.code == "Space") {
             if (activeIdx != undefined) {
-                let activeOption = options[activeIdx];
+                let activeOption = options[activeIdx] as IValueName;
                 if (activeOption) {
-                    if (selected[activeOption.value]) {
+                    if (selectedKeys[activeOption.value]) {
                         removeSelectedByValue(activeOption.value);
                     } else {
                         addSelected(activeOption);
@@ -212,7 +216,7 @@
         if (selectedKeys[value]) {
             removeSelectedByValue(value);
         } else {
-            addSelected(options.filter(o => o.value == value)[0]);
+            addSelected((options as IValueName[]).filter(o => o.value == value)[0]);
             input.focus();
         }
     }
@@ -221,8 +225,7 @@
         focused = false;
         setTimeout(() => {
             optionsVisibility(false);
-            console.log(document.activeElement?.id);
-        }, 100);
+        }, 250);
     }
 
     function inputFocus() {
@@ -241,13 +244,13 @@
         const higherTreshold = (itemsOnScreen / 2) * itemHeight;
         const lowerTreshold = (options.length * itemHeight) - listHeight - higherTreshold;
 
-        const doScroll = async (offsetFunc: () => number, optionsFunc: (response: IMultiselectResponse) => IValueName[]) => {
+        const doScroll = async (offsetFunc: () => number, optionsFunc: (response: IPagedResponse<T>) => T[]) => {
             const scroll = async () => {
                 offset = offsetFunc();
                 const query = inputValue ?? "";
                 searching = true;
                 const response = await searchFunc({search: query, limit, offset});
-                options = optionsFunc(response);
+                options = optionsFunc(response) as TItem[];
                 searching = false;
             };
             if (immidiate) {
@@ -267,14 +270,14 @@
         if (list.scrollTop < higherTreshold && offset > 0) {
             await doScroll(
                 () => offset - page < 0 ? 0 : offset - page, 
-                response => [...response.page, ...options.slice(0, options.length - page)]
+                response => [...response.page, ...options.slice(0, options.length - page) as T[]]
             );
         }
 
         if (list.scrollTop >= lowerTreshold && (offset + limit <= count)) {
             await doScroll(
                 () => offset + page, 
-                response => [...options.slice(page, options.length), ...response.page]
+                response => [...options.slice(page, options.length) as T[], ...response.page]
             );
         }
     }
@@ -295,7 +298,6 @@
         if (showOptions) {
             optionsVisibility(false);
         } else {
-            optionsVisibility(true);
             input.focus();
         }
     }
@@ -322,7 +324,7 @@
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="token badge rounded-pill text-bg-secondary" 
                     data-bs-toggle="tooltip"
-                    title="click to remove '{item.name}'" 
+                    title="click to remove '{item["name"]}'" 
                     style="{i == 0 ? "margin-left: 15px" : ""}"
                     on:click={e => handleTokenClick(e, item)}>
                     {#if $$slots.token}
@@ -361,13 +363,19 @@
                 on:mousedown|preventDefault={handleOptionMousedown}
                 on:scroll={() => listScroll()}>
                 {#each options as option, index}
-                    <li id="{listItemId(index)}" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
+                    {#if option.value == null || option.name == null}
+                    <li>
+                        <hr />
+                    </li>
+                    {:else}
+                    <li id="{listItemId(index)}" class="option" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
                         {#if $$slots.option}
                             <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
                         {:else}
                             {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
                         {/if}
                     </li>
+                    {/if}
                 {/each}
             </ul>
         {/if}
@@ -375,15 +383,13 @@
 {/if}
 
 <style lang="scss">
-    @import "./styles";
-    @if variable-exists(search-mark-class) {
-        @include search-mark-partial;
-    }
+    @use "./styles";
 
     $multiselect-dark-theme-input-color: var(--bs-white);
     $multiselect-option-item-background-color: var(--bs-body-bg);
     $multiselect-option-selected-item-background-color: var(--bs-primary);
     $multiselect-option-selected-item-color: var(--bs-body-bg);
+    $multiselect-option-active-item-border-color: var(--bs-primary);
     
     .multiselect {
         position: relative;
@@ -447,20 +453,26 @@
             padding-inline-start: 0;
             position: absolute;
             top: calc(100% + 1px);
-            filter: brightness(93%);
+            //filter: brightness(93%);
             width: 100%;
+            background-color: $multiselect-option-item-background-color;
             & > li {
                 background-color: $multiselect-option-item-background-color;
+                & > hr {
+                    margin: initial;
+                }
+            }
+            & > li.option {
                 cursor: pointer;
                 padding: .5rem;
             }
-            & > li:hover {
+            & > li.option:hover {
                 filter: brightness(90%);
             }
-            & > li.active {
-                filter: brightness(75%);
+            & > li.option.active {
+                border: 1px dotted $multiselect-option-active-item-border-color;
             }
-            & > li.selected {
+            & > li.option.selected {
                 background-color: $multiselect-option-selected-item-background-color;
                 color: $multiselect-option-selected-item-color;
             }

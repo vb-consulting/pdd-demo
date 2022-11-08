@@ -39,21 +39,14 @@ ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS fk_are
 DROP INDEX IF EXISTS public.idx_users_email;
 DROP INDEX IF EXISTS public.idx_person_roles_role_id;
 DROP INDEX IF EXISTS public.idx_person_roles_person_id;
-DROP INDEX IF EXISTS public.idx_people_name_normalized;
 DROP INDEX IF EXISTS public.idx_people_gender;
 DROP INDEX IF EXISTS public.idx_people_employee_status;
-DROP INDEX IF EXISTS public.idx_employee_status_name_normalized;
 DROP INDEX IF EXISTS public.idx_employee_records_person_id;
-DROP INDEX IF EXISTS public.idx_countries_name_normalized;
 DROP INDEX IF EXISTS public.idx_countries_iso3;
 DROP INDEX IF EXISTS public.idx_countries_iso2;
 DROP INDEX IF EXISTS public.idx_company_reviews_company_id;
 DROP INDEX IF EXISTS public.idx_company_areas_company_id;
-DROP INDEX IF EXISTS public.idx_companies_name_normalized;
 DROP INDEX IF EXISTS public.idx_companies_country;
-DROP INDEX IF EXISTS public.idx_business_roles_name_normalized;
-DROP INDEX IF EXISTS public.idx_business_role_types_name_normalized;
-DROP INDEX IF EXISTS public.idx_business_areas_name_normalized;
 ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_pkey;
 ALTER TABLE IF EXISTS ONLY public.person_roles DROP CONSTRAINT IF EXISTS person_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.people DROP CONSTRAINT IF EXISTS people_pkey;
@@ -63,7 +56,6 @@ ALTER TABLE IF EXISTS ONLY public.countries DROP CONSTRAINT IF EXISTS countries_
 ALTER TABLE IF EXISTS ONLY public.company_reviews DROP CONSTRAINT IF EXISTS company_reviews_pkey;
 ALTER TABLE IF EXISTS ONLY public.company_areas DROP CONSTRAINT IF EXISTS company_areas_pkey;
 ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_pkey;
-ALTER TABLE IF EXISTS ONLY public.companies DROP CONSTRAINT IF EXISTS companies_name_normalized_key;
 ALTER TABLE IF EXISTS ONLY public.business_roles DROP CONSTRAINT IF EXISTS business_roles_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_role_types DROP CONSTRAINT IF EXISTS business_role_types_pkey;
 ALTER TABLE IF EXISTS ONLY public.business_areas DROP CONSTRAINT IF EXISTS business_areas_pkey;
@@ -79,13 +71,13 @@ DROP TABLE IF EXISTS public.companies;
 DROP TABLE IF EXISTS public.business_roles;
 DROP TABLE IF EXISTS public.business_role_types;
 DROP TABLE IF EXISTS public.business_areas;
-DROP FUNCTION IF EXISTS public.search_countries(_search character varying, _skip integer, _take integer);
 DROP FUNCTION IF EXISTS dashboard.top_rated_companies(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.top_experinced_people(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_year(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
-DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _skip integer, _take integer);
+DROP FUNCTION IF EXISTS companies.search_countries(_search character varying, _skip integer, _take integer);
+DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer);
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS dashboard;
@@ -118,9 +110,9 @@ CREATE TYPE public.valid_genders AS ENUM (
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
 --
--- Name: search_companies(character varying, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
+-- Name: search_companies(character varying, smallint[], smallint[], integer, integer); Type: FUNCTION; Schema: companies; Owner: -
 --
-CREATE FUNCTION companies.search_companies(_search character varying, _skip integer, _take integer) RETURNS json
+CREATE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -133,7 +125,7 @@ begin
     end if;
     
     if _search is not null then
-        _search = '%' || lower(_search) || '%';
+        _search = '%' || _search || '%';
     end if;
     
     create temp table _tmp on commit drop as
@@ -143,7 +135,7 @@ begin
         companies c
     where (
         _search is null 
-        or name_normalized like _search
+        or name ilike _search
         or company_line ilike _search
     );
     get diagnostics _count = row_count;
@@ -182,7 +174,87 @@ begin
                 group by
                     cm.id, cn.code, reviews.count, reviews.score
                 order by 
-                    cm.name_normalized
+                    cm.name
+                limit _take 
+                offset _skip
+            ) sub
+        )
+    );
+end
+$$;
+--
+-- Name: search_countries(character varying, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
+--
+CREATE FUNCTION companies.search_countries(_search character varying, _skip integer, _take integer) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+declare
+    _count bigint;
+    _row_count bigint;
+begin    
+    _search = trim(_search);
+    
+    if _search = '' then
+        _search = null;
+    end if;
+    
+    if _search is not null then
+        _search = '%' || _search || '%';
+    end if;
+    
+    create temp table _tmp on commit drop as
+    select 
+        a.code
+    from
+        countries a
+        inner join companies b on a.code = b.country
+    where (
+        _search is null 
+        or a.name ilike _search
+        or a.iso2 ilike _search
+        or a.iso3 ilike _search
+    )
+    group by 
+        a.code
+    order by 
+        a.name;
+        
+    get diagnostics _count = row_count;
+    
+    insert into _tmp values (null);
+    
+    insert into _tmp
+    select 
+        a.code
+    from
+        countries a
+        left outer join companies b on a.code = b.country
+    where
+        b.id is null
+        and (
+            _search is null 
+            or a.name ilike _search
+            or a.iso2 ilike _search
+            or a.iso3 ilike _search
+        )
+    order by a.name;
+    
+    get diagnostics _row_count = row_count;
+    _count = _count + _row_count;
+    
+    return json_build_object(
+        'count', _count,
+        'page', (
+            select json_agg(sub)
+            from ( 
+                select 
+                    c.code as value, 
+                    c.name,
+                    c.iso2,
+                    c.iso3
+                from 
+                    _tmp tmp
+                    left outer join countries c on tmp.code = c.code
                 limit _take 
                 offset _skip
             ) sub
@@ -414,7 +486,7 @@ from
     left outer join business_roles br on br.id = pr.role_id
     left outer join countries country on p.country = country.code
 where
-    es.name_normalized in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
+    lower(es.name) in ('open to opportunity', 'actively applying', 'employed', 'unemployed')
 group by
     p.id,
     country.name,
@@ -469,62 +541,13 @@ group by
 order by
     avg(rev.score) desc nulls last,
     comp.created_at desc,
-    comp.name_normalized
+    comp.name
 limit _limit;
 $$;
 --
 -- Name: FUNCTION top_rated_companies(_limit integer); Type: COMMENT; Schema: dashboard; Owner: -
 --
 COMMENT ON FUNCTION dashboard.top_rated_companies(_limit integer) IS 'Top rated companies by the user score.';
---
--- Name: search_countries(character varying, integer, integer); Type: FUNCTION; Schema: public; Owner: -
---
-CREATE FUNCTION public.search_countries(_search character varying, _skip integer, _take integer) RETURNS json
-    LANGUAGE plpgsql
-    AS $$
-declare
-    _count bigint;
-begin    
-    _search = trim(_search);
-    
-    if _search = '' then
-        _search = null;
-    end if;
-    
-    if _search is not null then
-        _search = '%' || lower(_search) || '%';
-    end if;
-    
-    create temp table _tmp on commit drop as
-    select 
-        c.code
-    from 
-        countries c
-    where (
-        _search is null 
-        or name_normalized like _search
-    );
-    get diagnostics _count = row_count;
-    
-    return json_build_object(
-        'count', _count,
-        'page', (
-            select json_agg(sub)
-            from ( 
-                select 
-                    c.code as value, 
-                    c.name
-                from 
-                    _tmp tmp
-                    inner join countries c on tmp.code = c.code
-                order by c.name_normalized
-                limit _take 
-                offset _skip
-            ) sub
-        )
-    );
-end
-$$;
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 --
@@ -532,17 +555,12 @@ SET default_table_access_method = heap;
 --
 CREATE TABLE public.business_areas (
     id smallint NOT NULL,
-    name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
+    name character varying NOT NULL
 );
 --
 -- Name: TABLE business_areas; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be invloved.';
---
--- Name: COLUMN business_areas.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.business_areas.name_normalized IS 'lowercased';
 --
 -- Name: business_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
@@ -559,17 +577,12 @@ ALTER TABLE public.business_areas ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTI
 --
 CREATE TABLE public.business_role_types (
     id smallint NOT NULL,
-    name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
+    name character varying NOT NULL
 );
 --
 -- Name: TABLE business_role_types; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.business_role_types IS 'Types or groups of business roles.';
---
--- Name: COLUMN business_role_types.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.business_role_types.name_normalized IS 'lowercased';
 --
 -- Name: business_role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
@@ -587,17 +600,12 @@ ALTER TABLE public.business_role_types ALTER COLUMN id ADD GENERATED ALWAYS AS I
 CREATE TABLE public.business_roles (
     id smallint NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     type smallint NOT NULL
 );
 --
 -- Name: TABLE business_roles; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.business_roles IS 'Roles in a team that employees are specialized working with.';
---
--- Name: COLUMN business_roles.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.business_roles.name_normalized IS 'lowercased';
 --
 -- Name: business_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
@@ -615,7 +623,6 @@ ALTER TABLE public.business_roles ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTI
 CREATE TABLE public.companies (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     web character varying,
     linkedin character varying,
     twitter character varying,
@@ -627,10 +634,6 @@ CREATE TABLE public.companies (
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     modified_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
---
--- Name: COLUMN companies.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.companies.name_normalized IS 'lowercased, trigram index';
 --
 -- Name: COLUMN companies.company_line; Type: COMMENT; Schema: public; Owner: -
 --
@@ -695,7 +698,6 @@ CREATE TABLE public.countries (
     iso2 character(2) NOT NULL,
     iso3 character(3) NOT NULL,
     name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL,
     culture character varying
 );
 --
@@ -710,10 +712,6 @@ COMMENT ON COLUMN public.countries.iso2 IS 'Contry ISO 3166 alpha-2 code.';
 -- Name: COLUMN countries.iso3; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON COLUMN public.countries.iso3 IS 'Contry ISO 3166 alpha-3 code.';
---
--- Name: COLUMN countries.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.countries.name_normalized IS 'lowercased';
 --
 -- Name: COLUMN countries.culture; Type: COMMENT; Schema: public; Owner: -
 --
@@ -743,17 +741,12 @@ COMMENT ON COLUMN public.employee_records.employment_ended_at IS 'if this is nul
 --
 CREATE TABLE public.employee_status (
     id smallint NOT NULL,
-    name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (lower((name)::text)) STORED NOT NULL
+    name character varying NOT NULL
 );
 --
 -- Name: TABLE employee_status; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TABLE public.employee_status IS 'List of possible statuses in regards to employment.';
---
--- Name: COLUMN employee_status.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.employee_status.name_normalized IS 'lowercased';
 --
 -- Name: employee_status_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
@@ -772,7 +765,6 @@ CREATE TABLE public.people (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
-    name_normalized character varying GENERATED ALWAYS AS (((lower((first_name)::text) || ' '::text) || lower((last_name)::text))) STORED NOT NULL,
     employee_status smallint,
     gender public.valid_genders,
     email character varying,
@@ -785,10 +777,6 @@ CREATE TABLE public.people (
     created_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL,
     modified_by uuid DEFAULT '00000000-0000-0000-0000-000000000000'::uuid NOT NULL
 );
---
--- Name: COLUMN people.name_normalized; Type: COMMENT; Schema: public; Owner: -
---
-COMMENT ON COLUMN public.people.name_normalized IS 'first namer + last name, trigram index';
 --
 -- Name: COLUMN people.gender; Type: COMMENT; Schema: public; Owner: -
 --
@@ -861,11 +849,6 @@ ALTER TABLE ONLY public.business_role_types
 ALTER TABLE ONLY public.business_roles
     ADD CONSTRAINT business_roles_pkey PRIMARY KEY (id);
 --
--- Name: companies companies_name_normalized_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-ALTER TABLE ONLY public.companies
-    ADD CONSTRAINT companies_name_normalized_key UNIQUE (name_normalized);
---
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 ALTER TABLE ONLY public.companies
@@ -911,25 +894,9 @@ ALTER TABLE ONLY public.person_roles
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 --
--- Name: idx_business_areas_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE UNIQUE INDEX idx_business_areas_name_normalized ON public.business_areas USING btree (name_normalized);
---
--- Name: idx_business_role_types_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE UNIQUE INDEX idx_business_role_types_name_normalized ON public.business_role_types USING btree (name_normalized);
---
--- Name: idx_business_roles_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE UNIQUE INDEX idx_business_roles_name_normalized ON public.business_roles USING btree (name_normalized);
---
 -- Name: idx_companies_country; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_companies_country ON public.companies USING btree (country);
---
--- Name: idx_companies_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE INDEX idx_companies_name_normalized ON public.companies USING gist (name_normalized public.gist_trgm_ops);
 --
 -- Name: idx_company_areas_company_id; Type: INDEX; Schema: public; Owner: -
 --
@@ -947,17 +914,9 @@ CREATE INDEX idx_countries_iso2 ON public.countries USING btree (iso2);
 --
 CREATE INDEX idx_countries_iso3 ON public.countries USING btree (iso3);
 --
--- Name: idx_countries_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE INDEX idx_countries_name_normalized ON public.countries USING btree (name_normalized);
---
 -- Name: idx_employee_records_person_id; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_employee_records_person_id ON public.employee_records USING btree (person_id);
---
--- Name: idx_employee_status_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE UNIQUE INDEX idx_employee_status_name_normalized ON public.employee_status USING btree (name_normalized);
 --
 -- Name: idx_people_employee_status; Type: INDEX; Schema: public; Owner: -
 --
@@ -966,10 +925,6 @@ CREATE INDEX idx_people_employee_status ON public.people USING btree (employee_s
 -- Name: idx_people_gender; Type: INDEX; Schema: public; Owner: -
 --
 CREATE INDEX idx_people_gender ON public.people USING btree (gender);
---
--- Name: idx_people_name_normalized; Type: INDEX; Schema: public; Owner: -
---
-CREATE INDEX idx_people_name_normalized ON public.people USING gist (name_normalized public.gist_trgm_ops);
 --
 -- Name: idx_person_roles_person_id; Type: INDEX; Schema: public; Owner: -
 --
