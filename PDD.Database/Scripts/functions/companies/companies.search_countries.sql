@@ -75,3 +75,8 @@ begin
     );
 end
 $$;
+
+COMMENT ON FUNCTION companies.search_countries(_search character varying, _skip integer, _take integer) IS 'Search countries by name or iso2 or iso3.
+Result is pageable JSON response `{count, data: [...]}`
+Data record has value and name suitable for select type controls.
+Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.';

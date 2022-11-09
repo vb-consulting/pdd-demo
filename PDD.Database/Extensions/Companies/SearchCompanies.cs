@@ -17,6 +17,9 @@ public static class PgRoutineSearchCompanies
 
     /// <summary>
     /// Executes plpgsql function companies.search_companies(character varying, ARRAY, ARRAY, integer, integer)
+    /// Search companies by search string (name or company line), or by countries or areas selection.
+    /// 
+    /// Result is pageable JSON response `{count, data: [...]}`
     /// </summary>
     /// <param name="search">_search character varying</param>
     /// <param name="countries">_countries ARRAY</param>
@@ -41,6 +44,9 @@ public static class PgRoutineSearchCompanies
 
     /// <summary>
     /// Asynchronously executes plpgsql function companies.search_companies(character varying, ARRAY, ARRAY, integer, integer)
+    /// Search companies by search string (name or company line), or by countries or areas selection.
+    /// 
+    /// Result is pageable JSON response `{count, data: [...]}`
     /// </summary>
     /// <param name="search">_search character varying</param>
     /// <param name="countries">_countries ARRAY</param>

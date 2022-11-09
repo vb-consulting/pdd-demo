@@ -6,6 +6,10 @@ namespace PDD.DatabaseTests.Companies;
 
 ///<summary>
 /// Test method for plpgsql function companies.search_companies
+///
+/// Search companies by search string (name or company line), or by countries or areas selection.
+/// 
+/// Result is pageable JSON response `{count, data: [...]}`
 ///</summary>
 public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
 {
@@ -249,3 +253,4 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         return companyIds;
     }
 }
+

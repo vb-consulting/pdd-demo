@@ -32,20 +32,28 @@
     }>(urls.companiesSearchUrl, {search, skip: grid.skip, take: grid.take});
 
     type TCountry = IValueName & {iso2: string, iso3: string};
-    const getCountries = (request: any) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
+    const getCountries = (request: IMultiselectRequest) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
+    const getAreas = async () => { 
+        const result = await getCached<IValueName[]>(urls.businessAreasUrl);
+        return {
+            count: result.length,
+            page: result
+        };
+    };
 
     let grid: IDataGrid;
     let search = "";
-
 
     function onsearch() {
         grid.setPage(1);
     }
 
     let selectedCountires: TCountry[];
+    let selectedAreas: IValueName[];
 
     $: {
         console.log(selectedCountires?.map(c => c.value));
+        console.log(selectedAreas?.map(c => c.value));
     }
 </script>
 
@@ -54,6 +62,7 @@
 
         <div style="display: grid; grid-template-columns: 60% auto;">
             <div class="filter">
+
                 <Search 
                     placeholder="Search by Company Name or by Company Line" 
                     class="mb-1"
@@ -63,6 +72,7 @@
                     initialized={grid?.initialized} />
 
                     <Multiselect
+                        class="mb-1"
                         bind:selected={selectedCountires}
                         searchFunc={getCountries} 
                         searchTimeoutMs={0}
@@ -77,6 +87,16 @@
                             <span class="float-end fs-smaller text-muted">{item.iso3}</span>
                         </span>
                     </Multiselect>
+
+                    <Multiselect
+                        bind:selected={selectedAreas}
+                        searchFunc={getAreas}
+                        searchTimeoutMs={0}
+                        searching={grid?.working}
+                        placeholder="Search Areas"
+                        initialized={grid?.initialized}>
+                    </Multiselect>
+
             </div>
             <div style="align-self: end;">
                 <Pager small {grid} class="float-end" />

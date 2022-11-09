@@ -12,4 +12,5 @@ public partial class Urls
     
     [JsonProperty] public const string CompaniesSearchUrl = "api/companies/search";
     [JsonProperty] public const string CompaniesCountriesSearchUrl = "api/companies/countries-search";
+    [JsonProperty] public const string BusinessAreasUrl = "api/companies/business-areas";
 }

@@ -28,8 +28,15 @@ namespace PDD.WebApp.Endpoints
                 HttpResponse response) =>
             {
                 response.ContentType = MediaTypeNames.Application.Json;
-                response.Headers.CacheControl = new[] { "public", "max-age=31536000" };
+                response.Headers.AddCacheHeader();
                 return await connection.SearchCountriesAsync(search, skip, take);
+            });
+
+            app.MapGet(Urls.BusinessAreasUrl, [AllowAnonymous] (NpgsqlConnection connection, HttpResponse response) =>
+            {
+                response.ContentType = MediaTypeNames.Application.Json;
+                response.Headers.AddCacheHeader();
+                return connection.BusinessAreasAsync();
             });
         }
     }

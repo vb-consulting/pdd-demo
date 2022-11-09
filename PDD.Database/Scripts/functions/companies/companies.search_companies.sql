@@ -68,3 +68,6 @@ begin
     );
 end
 $$;
+
+COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
+Result is pageable JSON response `{count, data: [...]}`';

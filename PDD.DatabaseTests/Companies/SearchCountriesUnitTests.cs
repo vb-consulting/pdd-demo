@@ -6,6 +6,11 @@ namespace PDD.DatabaseTests.Companies;
 
 ///<summary>
 /// Test method for plpgsql function companies.search_countries
+///
+/// Search countries by name or iso2 or iso3.
+/// Result is pageable JSON response `{count, data: [...]}`
+/// 
+/// Data record has value and name suitable for select type controls./// /// Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
 ///</summary>
 public class SearchCountriesUnitTests : PostgreSqlConfigurationFixture
 {
@@ -73,6 +78,6 @@ public class SearchCountriesUnitTests : PostgreSqlConfigurationFixture
                 iso3 = "HRV",
             }
         });
-        
+
     }
 }

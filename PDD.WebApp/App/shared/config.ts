@@ -42,4 +42,5 @@ export const urls = getValueFromJson<{
     topExperincedPeopleUrl: string;
     companiesSearchUrl: string;
     companiesCountriesSearchUrl: string;
+    businessAreasUrl: string;
 }>("urls");

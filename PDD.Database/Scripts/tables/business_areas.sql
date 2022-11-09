@@ -3,4 +3,4 @@ CREATE TABLE public.business_areas (
     name character varying NOT NULL
 );
 
-COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be invloved.';
+COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be involved.';

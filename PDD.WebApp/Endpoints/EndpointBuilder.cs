@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PDD.Database.Extensions;
@@ -33,5 +34,10 @@ public static class EndpointBuilder
                 method.Invoke(null, new[] { app });
             }
         }
+    }
+
+    public static void AddCacheHeader(this IHeaderDictionary headers)
+    {
+        headers.CacheControl = new[] { "public", "max-age=31536000" };
     }
 }

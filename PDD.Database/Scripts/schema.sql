@@ -78,6 +78,7 @@ DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
 DROP FUNCTION IF EXISTS companies.search_countries(_search character varying, _skip integer, _take integer);
 DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer);
+DROP FUNCTION IF EXISTS companies.business_areas();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
 DROP SCHEMA IF EXISTS dashboard;
@@ -109,6 +110,18 @@ CREATE TYPE public.valid_genders AS ENUM (
 -- Name: TYPE valid_genders; Type: COMMENT; Schema: public; Owner: -
 --
 COMMENT ON TYPE public.valid_genders IS 'There are only two genders.';
+--
+-- Name: business_areas(); Type: FUNCTION; Schema: companies; Owner: -
+--
+CREATE FUNCTION companies.business_areas() RETURNS TABLE(value smallint, name character varying)
+    LANGUAGE sql
+    AS $$
+select id as value, name from business_areas;
+$$;
+--
+-- Name: FUNCTION business_areas(); Type: COMMENT; Schema: companies; Owner: -
+--
+COMMENT ON FUNCTION companies.business_areas() IS 'select value and name from business_areas';
 --
 -- Name: search_companies(character varying, smallint[], smallint[], integer, integer); Type: FUNCTION; Schema: companies; Owner: -
 --
@@ -182,6 +195,11 @@ begin
     );
 end
 $$;
+--
+-- Name: FUNCTION search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer); Type: COMMENT; Schema: companies; Owner: -
+--
+COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
+Result is pageable JSON response `{count, data: [...]}`';
 --
 -- Name: search_countries(character varying, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
 --
@@ -262,6 +280,13 @@ begin
     );
 end
 $$;
+--
+-- Name: FUNCTION search_countries(_search character varying, _skip integer, _take integer); Type: COMMENT; Schema: companies; Owner: -
+--
+COMMENT ON FUNCTION companies.search_countries(_search character varying, _skip integer, _take integer) IS 'Search countries by name or iso2 or iso3.
+Result is pageable JSON response `{count, data: [...]}`
+Data record has value and name suitable for select type controls.
+Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.';
 --
 -- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
@@ -560,7 +585,7 @@ CREATE TABLE public.business_areas (
 --
 -- Name: TABLE business_areas; Type: COMMENT; Schema: public; Owner: -
 --
-COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be invloved.';
+COMMENT ON TABLE public.business_areas IS 'Business areas that companies may be involved.';
 --
 -- Name: business_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --

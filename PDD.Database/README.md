@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5434`, version `15.0 (Ubuntu 15.0-1.pgdg20.04+1)`
-- Local time stamp: `2022-11-08T12:57:41.4373330+01:00`
+- Local time stamp: `2022-11-09T10:48:09.3722335+01:00`
 - Schema's: `public`, `dashboard`, `companies`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
@@ -13,6 +13,7 @@
 - Function [`dashboard.chart_employee_counts_by_year(integer)`](#function-dashboardchart_employee_counts_by_yearinteger)
 - Function [`dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out smallint, out integer, out bigint, out character varying, out varchar[])`](#function-dashboardtop_experinced_peopleinteger-out-uuid-out-character-varying-out-character-varying-out-integer-out-character-varying-out-smallint-out-integer-out-bigint-out-character-varying-out-varchar)
 - Function [`dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out smallint, out varchar[], out numeric, out bigint)`](#function-dashboardtop_rated_companiesinteger-out-uuid-out-character-varying-out-character-varying-out-character-varying-out-smallint-out-varchar-out-numeric-out-bigint)
+- Function [`companies.business_areas(out smallint, out character varying)`](#function-companiesbusiness_areasout-smallint-out-character-varying)
 - Function [`companies.search_companies(character varying, int2[], int2[], integer, integer)`](#function-companiessearch_companiescharacter-varying-int2-int2-integer-integer)
 - Function [`companies.search_countries(character varying, integer, integer)`](#function-companiessearch_countriescharacter-varying-integer-integer)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
@@ -133,6 +134,24 @@ Top rated companies by the user score.
 
 ## Routines
 
+### Function `companies.business_areas(out smallint, out character varying)`
+
+- Returns `record`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/companies/companies.business_areas.sql](/PDD.Database/Scripts/functions/companies/companies.business_areas.sql)
+
+- Data Access Extension: [/PDD.Database/Extensions/Companies/BusinessAreas.cs](/PDD.Database/Extensions/Companies/BusinessAreas.cs)
+
+- Unit Test: [/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs](/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs)
+
+<!-- comment on function "companies"."business_areas"(out smallint, out character varying) is @until-end-tag; -->
+select value and name from business_areas
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
 ### Function `companies.search_companies(character varying, int2[], int2[], integer, integer)`
 
 - Returns `json`
@@ -146,6 +165,9 @@ Top rated companies by the user score.
 - Unit Test: [/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs)
 
 <!-- comment on function "companies"."search_companies"(character varying, int2[], int2[], integer, integer) is @until-end-tag; -->
+Search companies by search string (name or company line), or by countries or areas selection.
+
+Result is pageable JSON response `{count, data: [...]}`
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -163,6 +185,13 @@ Top rated companies by the user score.
 - Unit Test: [/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs)
 
 <!-- comment on function "companies"."search_countries"(character varying, integer, integer) is @until-end-tag; -->
+Search countries by name or iso2 or iso3.
+
+Result is pageable JSON response `{count, data: [...]}`
+
+Data record has value and name suitable for select type controls.
+
+Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -171,7 +200,7 @@ Top rated companies by the user score.
 ### Table `public.business_areas`
 
 <!-- comment on table "public"."business_areas" is @until-end-tag; -->
-Business areas that companies may be invloved.
+Business areas that companies may be involved.
 <!-- end -->
 - Count estimate: **-1**
 - Source: [/PDD.Database/Scripts/tables/business_areas.sql](/PDD.Database/Scripts/tables/business_areas.sql)
@@ -185,8 +214,8 @@ Business areas that companies may be invloved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`30.855`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`30.855`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`14.953`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`14.953`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -232,8 +261,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`36`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`36`** | rows=**`36`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`1`** | count=**`18`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`18`** | rows=**`18`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -264,8 +293,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`89`** | count=**`433`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`445.000`** | rows=**`385.000`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`2`** | count=**`12`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`10.000`** | rows=**`10.000`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -291,7 +320,7 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`10.235`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| count=**`0`** | count=**`5.003`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
 | rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
@@ -320,8 +349,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`375.006`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`10.604.132`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`5.003`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`275.432`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -345,8 +374,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`261`** | count=**`7.983`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`64.989`** | rows=**`7.983`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`1`** | count=**`305`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`249`** | rows=**`305`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -373,8 +402,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`108`** | count=**`54.732`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`26.038.476`** | rows=**`82.598`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`54`** | count=**`27.366`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`13.019.238`** | rows=**`41.299`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -396,8 +425,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`12`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`1`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`6`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -430,8 +459,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`4`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`195.992`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`1`** | count=**`2`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`97.996`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -457,7 +486,7 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`58.574`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| count=**`0`** | count=**`29.287`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
 | rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 

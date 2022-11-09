@@ -117,7 +117,6 @@
     }
 
     function optionsVisibility(show: boolean) {
-        //if (!show) return;
         showOptions = show;
         if (show && !options && !searching) {
             load();
@@ -155,6 +154,7 @@
                     } else {
                         addSelected(activeOption);
                     }
+                    e.preventDefault();
                 }
             }
             return;
@@ -303,6 +303,11 @@
     }
 
     $: hasSelected = selected.length;
+
+    $: {
+        optionsVisibility(false);
+        hideTooltips();
+    }
 </script>
 
 {#if !initialized}
@@ -356,28 +361,29 @@
         </div>
 
         {#if options}
-            <ul class="options shadow-lg" 
-                bind:this={list} 
-                class:d-none={!showOptions} 
-                transition:fly="{{duration: 200, y: 5}}" 
-                on:mousedown|preventDefault={handleOptionMousedown}
-                on:scroll={() => listScroll()}>
-                {#each options as option, index}
-                    {#if option.value == null || option.name == null}
-                    <li>
-                        <hr />
-                    </li>
-                    {:else}
-                    <li id="{listItemId(index)}" class="option" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
-                        {#if $$slots.option}
-                            <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
+            <div class="options shadow-lg">
+                <ul bind:this={list} 
+                    class:d-none={!showOptions} 
+                    transition:fly="{{duration: 200, y: 5}}" 
+                    on:mousedown|preventDefault={handleOptionMousedown}
+                    on:scroll={() => listScroll()}>
+                    {#each options as option, index}
+                        {#if option.value == null || option.name == null}
+                        <li>
+                            <hr />
+                        </li>
                         {:else}
-                            {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
+                        <li id="{listItemId(index)}" class="option" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
+                            {#if $$slots.option}
+                                <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
+                            {:else}
+                                {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
+                            {/if}
+                        </li>
                         {/if}
-                    </li>
-                    {/if}
-                {/each}
-            </ul>
+                    {/each}
+                </ul>
+            </div>
         {/if}
     </div>
 {/if}
@@ -393,14 +399,13 @@
     
     .multiselect {
         position: relative;
-        z-index: 1;
         display: flex;
 
         & > .multiselect-icon {
             position: absolute;
             cursor: pointer;
             margin-left: 8px;
-            z-index: 2;
+            z-index: 1;
             align-self: center;
         }
         & > .spinner-border {
@@ -443,38 +448,42 @@
             width: 100%;
             background-color: transparent;
         }
+
         & .options {
             left: 0;
-            list-style: none;
-            margin-block-end: 0;
-            margin-block-start: 0;
             max-height: 70vh;
-            overflow: auto;
-            padding-inline-start: 0;
             position: absolute;
             top: calc(100% + 1px);
-            //filter: brightness(93%);
             width: 100%;
-            background-color: $multiselect-option-item-background-color;
-            & > li {
-                background-color: $multiselect-option-item-background-color;
-                & > hr {
-                    margin: initial;
+
+            & > ul {
+                z-index: 3;
+                position: relative;
+                list-style: none;
+                padding-inline-start: 0;
+                overflow: auto;
+                height: 60vh;
+                & > li {
+                    background-color: $multiselect-option-item-background-color;
+                    filter: brightness(98%);
+                    & > hr {
+                        margin: initial;
+                    }
                 }
-            }
-            & > li.option {
-                cursor: pointer;
-                padding: .5rem;
-            }
-            & > li.option:hover {
-                filter: brightness(90%);
-            }
-            & > li.option.active {
-                border: 1px dotted $multiselect-option-active-item-border-color;
-            }
-            & > li.option.selected {
-                background-color: $multiselect-option-selected-item-background-color;
-                color: $multiselect-option-selected-item-color;
+                & > li.option {
+                    cursor: pointer;
+                    padding: .5rem;
+                }
+                & > li.option:hover {
+                    filter: brightness(90%);
+                }
+                & > li.option.active {
+                    border: 1px dotted $multiselect-option-active-item-border-color;
+                }
+                & > li.option.selected {
+                    background-color: $multiselect-option-selected-item-background-color;
+                    color: $multiselect-option-selected-item-color;
+                }
             }
         }
     }
