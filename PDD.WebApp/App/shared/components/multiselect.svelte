@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
     import { fly } from "svelte/transition";
     import Placeholder from "./placeholder.svelte";
     import { hideTooltips } from "./tooltips"
@@ -53,6 +54,7 @@
     let searchTimeout: NodeJS.Timeout | undefined;
     let scrollTimeout: NodeJS.Timeout | undefined;
     const scrollTimeoutMs = 500;
+    const dispatch = createEventDispatcher();
 
     const listItemId = (index: number) => `${id}-option-${index}`;
 
@@ -101,6 +103,7 @@
             selected = [...selected, token as TItem];
             selectedKeys[token.value] = true;
             hideTooltips();
+            dispatch("change", {keys: Object.keys(selectedKeys), values: selected});
         }
     }
 
@@ -109,11 +112,14 @@
         delete selectedKeys[value];
         selectedKeys = selectedKeys;
         hideTooltips();
+        dispatch("change", {keys: Object.keys(selectedKeys), values: selected});
     }
 
     function clearAllSelected() {
         selected = [];
         selectedKeys = {};
+        hideTooltips();
+        dispatch("change", {keys: Object.keys(selectedKeys), values: selected});
     }
 
     function optionsVisibility(show: boolean) {
@@ -295,6 +301,7 @@
     }
 
     function handleCaretClick() {
+        console.log("handleCaretClick", document.activeElement, showOptions);
         if (showOptions) {
             optionsVisibility(false);
         } else {
@@ -303,11 +310,6 @@
     }
 
     $: hasSelected = selected.length;
-
-    $: {
-        optionsVisibility(false);
-        hideTooltips();
-    }
 </script>
 
 {#if !initialized}
@@ -396,6 +398,7 @@
     $multiselect-option-selected-item-background-color: var(--bs-primary);
     $multiselect-option-selected-item-color: var(--bs-body-bg);
     $multiselect-option-active-item-border-color: var(--bs-primary);
+    $multiselect-option-active-selected-item-border-color: var(--bs-body-bg);
     
     .multiselect {
         position: relative;
@@ -462,7 +465,8 @@
                 list-style: none;
                 padding-inline-start: 0;
                 overflow: auto;
-                height: 60vh;
+                max-height: 60vh;
+                margin-bottom: 0;
                 & > li {
                     background-color: $multiselect-option-item-background-color;
                     filter: brightness(98%);
@@ -479,6 +483,9 @@
                 }
                 & > li.option.active {
                     border: 1px dotted $multiselect-option-active-item-border-color;
+                }
+                & > li.option.active.selected {
+                    border: 1px dotted $multiselect-option-active-selected-item-border-color;
                 }
                 & > li.option.selected {
                     background-color: $multiselect-option-selected-item-background-color;

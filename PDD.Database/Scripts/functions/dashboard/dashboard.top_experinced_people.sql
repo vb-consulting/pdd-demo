@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION dashboard.top_experinced_people(_limit integer) RETUR
     last_name character varying,
     age integer,
     country character varying,
-    country_code smallint,
+    country_code character varying,
     years_of_experience integer,
     number_of_companies bigint,
     employee_status character varying,
@@ -18,7 +18,7 @@ select
     p.last_name,
     date_part('year', now()) - date_part('year', p.birth) as age,
     country.name as country,
-    country.code as country_code,
+    country.iso2 as country_code,
     years_of_experience,
     number_of_companies,
     es.name as employee_status,
@@ -42,7 +42,7 @@ where
 group by
     p.id,
     country.name,
-    country.code,
+    country.iso2,
     years_of_experience,
     number_of_companies,
     es.name

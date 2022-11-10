@@ -12,7 +12,7 @@ public class TopRatedCompaniesResult
     public string? Name { get; set; }
     public string? CompanyLine { get; set; }
     public string? Country { get; set; }
-    public short? CountryCode { get; set; }
+    public string? CountryCode { get; set; }
     public string[]? Areas { get; set; }
     public decimal? Score { get; set; }
     public long? Reviews { get; set; }

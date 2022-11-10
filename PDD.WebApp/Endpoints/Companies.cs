@@ -11,13 +11,15 @@ namespace PDD.WebApp.Endpoints
         {
             app.MapGet(Urls.CompaniesSearchUrl, [AllowAnonymous] async (
                 [FromQuery] string? search,
+                [FromQuery] short[] countries,
+                [FromQuery] short[] areas,
                 [FromQuery] int? skip,
                 [FromQuery] int? take,
                 NpgsqlConnection connection,
                 HttpResponse response) =>
             {
                 response.ContentType = MediaTypeNames.Application.Json;
-                return await connection.SearchCompaniesAsync(search, null, null, skip, take);
+                return await connection.SearchCompaniesAsync(search, countries, areas, skip, take);
             });
 
             app.MapGet(Urls.CompaniesCountriesSearchUrl, [AllowAnonymous] async (

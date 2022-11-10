@@ -3,6 +3,7 @@ LANGUAGE plpgsql
 AS $$
 declare
     _count bigint;
+    _companies uuid[];
 begin    
     _search = trim(_search);
     
@@ -14,15 +15,21 @@ begin
         _search = '%' || _search || '%';
     end if;
     
+    if array_length(_areas, 1) is not null then
+        _companies = (select distinct array_agg(company_id) from company_areas where area_id = any(_areas));
+    end if;
+    
     create temp table _tmp on commit drop as
     select 
         c.id
     from 
         companies c
     where (
-        _search is null 
-        or name ilike _search
-        or company_line ilike _search
+        (_search is null or name ilike _search or company_line ilike _search)
+        and
+        (array_length(_countries, 1) is null or country = any(_countries))
+        and
+        (array_length(_companies, 1) is null or id = any(_companies))
     );
     get diagnostics _count = row_count;
     
@@ -36,7 +43,7 @@ begin
                     cm.name, 
                     company_line as companyLine, 
                     about,
-                    cn.code as countryCode,
+                    cn.iso2 as countryCode,
                     cn.name as country,
                     cm.web,
                     cm.twitter,

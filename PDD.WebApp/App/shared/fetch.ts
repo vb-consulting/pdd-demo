@@ -27,17 +27,31 @@ const _fetch = async <T> (url: string, method: string, func: "json" | "text", co
     if (response.ok) {
         return await response[func]() as T
     }
+    /*
     try {
         const error = (await response.text()).split("\n")[0];
         sessionStorage.setItem(errorKey, error);
     } catch {}
     document.location.assign(urls.errorUrl);
+    */
+    const error = (await response.text()).split("\n")[0];
+    throw error;
 }
 
 type TContent = Record<any, any> | null | any;
 
 export const parseQuery = (query: Record<any, any>) => 
-    Object.keys(query).map(key => `${key}=${encodeURIComponent(query[key])}`).join('&');
+    Object
+    .keys(query)
+    .map(key => {
+        const value = query[key];
+        if (Array.isArray(value)) {
+            return value.map(s => `${key}=${encodeURIComponent(s)}`).join('&');
+        }
+        return `${key}=${encodeURIComponent(query[key])}`;
+    })
+    .filter(p => p)
+    .join('&');
 
 export const  parseUrl = (url: string, query: TContent = null) => 
     query ? `${url}?${parseQuery(query)}` : url;

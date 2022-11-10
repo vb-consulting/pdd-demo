@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS
     name character varying,
     company_line character varying,
     country character varying,
-    country_code smallint,
+    country_code character varying,
     areas character varying[],
     score numeric,
     reviews bigint
@@ -15,7 +15,7 @@ select
     comp.name,
     company_line,
     country.name as country,
-    country.code as country_code,
+    country.iso2 as country_code,
     ca.areas,
     avg(rev.score) filter (where rev.score is not null)::numeric(3,2) as score,
     count(rev.id) as reviews
@@ -36,7 +36,7 @@ group by
     comp.name,
     company_line,
     country.name,
-    country.code,
+    country.iso2,
     ca.areas
 order by
     avg(rev.score) desc nulls last,

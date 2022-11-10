@@ -1,7 +1,7 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5434`, version `15.0 (Ubuntu 15.0-1.pgdg20.04+1)`
-- Local time stamp: `2022-11-09T10:48:09.3722335+01:00`
+- Local time stamp: `2022-11-10T14:12:10.1592521+01:00`
 - Schema's: `public`, `dashboard`, `companies`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
@@ -11,8 +11,8 @@
 - Function [`dashboard.chart_companies_by_country(integer)`](#function-dashboardchart_companies_by_countryinteger)
 - Function [`dashboard.chart_employee_counts_by_area(integer)`](#function-dashboardchart_employee_counts_by_areainteger)
 - Function [`dashboard.chart_employee_counts_by_year(integer)`](#function-dashboardchart_employee_counts_by_yearinteger)
-- Function [`dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out smallint, out integer, out bigint, out character varying, out varchar[])`](#function-dashboardtop_experinced_peopleinteger-out-uuid-out-character-varying-out-character-varying-out-integer-out-character-varying-out-smallint-out-integer-out-bigint-out-character-varying-out-varchar)
-- Function [`dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out smallint, out varchar[], out numeric, out bigint)`](#function-dashboardtop_rated_companiesinteger-out-uuid-out-character-varying-out-character-varying-out-character-varying-out-smallint-out-varchar-out-numeric-out-bigint)
+- Function [`dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out character varying, out integer, out bigint, out character varying, out varchar[])`](#function-dashboardtop_experinced_peopleinteger-out-uuid-out-character-varying-out-character-varying-out-integer-out-character-varying-out-character-varying-out-integer-out-bigint-out-character-varying-out-varchar)
+- Function [`dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out character varying, out varchar[], out numeric, out bigint)`](#function-dashboardtop_rated_companiesinteger-out-uuid-out-character-varying-out-character-varying-out-character-varying-out-character-varying-out-varchar-out-numeric-out-bigint)
 - Function [`companies.business_areas(out smallint, out character varying)`](#function-companiesbusiness_areasout-smallint-out-character-varying)
 - Function [`companies.search_companies(character varying, int2[], int2[], integer, integer)`](#function-companiessearch_companiescharacter-varying-int2-int2-integer-integer)
 - Function [`companies.search_countries(character varying, integer, integer)`](#function-companiessearch_countriescharacter-varying-integer-integer)
@@ -96,7 +96,7 @@ JSON object with only one series where labels are last ten years names and value
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out smallint, out integer, out bigint, out character varying, out varchar[])`
+### Function `dashboard.top_experinced_people(integer, out uuid, out character varying, out character varying, out integer, out character varying, out character varying, out integer, out bigint, out character varying, out varchar[])`
 
 - Returns `record`
 
@@ -108,13 +108,13 @@ JSON object with only one series where labels are last ten years names and value
 
 - Unit Test: [/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs)
 
-<!-- comment on function "dashboard"."top_experinced_people"(integer, out uuid, out character varying, out character varying, out integer, out character varying, out smallint, out integer, out bigint, out character varying, out varchar[]) is @until-end-tag; -->
+<!-- comment on function "dashboard"."top_experinced_people"(integer, out uuid, out character varying, out character varying, out integer, out character varying, out character varying, out integer, out bigint, out character varying, out varchar[]) is @until-end-tag; -->
 Top experienced people by the years of the working experience.
 <!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 
-### Function `dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out smallint, out varchar[], out numeric, out bigint)`
+### Function `dashboard.top_rated_companies(integer, out uuid, out character varying, out character varying, out character varying, out character varying, out varchar[], out numeric, out bigint)`
 
 - Returns `record`
 
@@ -126,7 +126,7 @@ Top experienced people by the years of the working experience.
 
 - Unit Test: [/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs)
 
-<!-- comment on function "dashboard"."top_rated_companies"(integer, out uuid, out character varying, out character varying, out character varying, out smallint, out varchar[], out numeric, out bigint) is @until-end-tag; -->
+<!-- comment on function "dashboard"."top_rated_companies"(integer, out uuid, out character varying, out character varying, out character varying, out character varying, out varchar[], out numeric, out bigint) is @until-end-tag; -->
 Top rated companies by the user score.
 <!-- end -->
 
@@ -166,7 +166,6 @@ select value and name from business_areas
 
 <!-- comment on function "companies"."search_companies"(character varying, int2[], int2[], integer, integer) is @until-end-tag; -->
 Search companies by search string (name or company line), or by countries or areas selection.
-
 Result is pageable JSON response `{count, data: [...]}`
 <!-- end -->
 
@@ -214,8 +213,8 @@ Business areas that companies may be involved.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`14.953`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`14.953`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`66`** | count=**`321.635`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`858`** | rows=**`321.635`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -261,8 +260,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`1`** | count=**`18`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`18`** | rows=**`18`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`13`** | count=**`234`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`234`** | rows=**`234`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -293,8 +292,8 @@ Roles in a team that employees are specialized working with.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`2`** | count=**`12`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`10.000`** | rows=**`10.000`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`177`** | count=**`2.574`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`885.000`** | rows=**`2.541.488`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -320,8 +319,8 @@ Companies - business areas.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`5.003`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`20`** | count=**`66.573`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`298.800`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -349,8 +348,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`5.003`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`0`** | rows=**`275.432`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`1.783.138`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`50.906.313`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -374,8 +373,8 @@ Company reviews made by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`1`** | count=**`305`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`249`** | rows=**`305`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`433`** | count=**`39.179`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`107.817`** | rows=**`39.179`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -402,8 +401,8 @@ History of employment in companies by people.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`54`** | count=**`27.366`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`13.019.238`** | rows=**`41.299`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`702`** | count=**`355.758`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`169.250.094`** | rows=**`536.887`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -425,8 +424,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`1`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`6`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`13`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`78`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -459,8 +458,8 @@ List of possible statuses in regards to employment.
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`1`** | count=**`2`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`97.996`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`13`** | count=**`26`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`1.273.948`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -486,7 +485,7 @@ Person - business roles
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`0`** | count=**`29.287`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| count=**`0`** | count=**`380.731`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
 | rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 

@@ -27,7 +27,7 @@
     }
 
     $: {
-        if (grid && (!numbers || lastPage != grid.page)) {
+        if (grid) {
             let index = !numbers ? -1 : numbers.indexOf(grid.page);
             if (numbers && index != -1 && index > 0 && index < numbers.length - 1) {
                 lastPage = grid.page;
@@ -37,7 +37,7 @@
                 let to: number;
                 if (from + numberCount > grid.pageCount) {
                     to = grid.pageCount;
-                    from = grid.pageCount - numberCount;
+                    from = grid.pageCount - numberCount < 1 ? 1 : grid.pageCount - numberCount;
                 }
                 else {
                     to = from + numberCount;

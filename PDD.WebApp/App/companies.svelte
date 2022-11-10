@@ -9,7 +9,7 @@
     import { urls } from "./shared/config";
     import { get, getCached } from "./shared/fetch";
     import { mark } from "./shared/components/utils";
-    import { urlToHandle, take, flagUrl } from "./shared/utils";
+    import { urlToHandle, take, flagBackgroundImageStyle } from "./shared/utils";
 
     interface ICompanyItem {
         id: string,
@@ -29,32 +29,32 @@
     const getCompanies = (grid: IDataGrid) => get<{
         count: number,
         page: ICompanyItem[]
-    }>(urls.companiesSearchUrl, {search, skip: grid.skip, take: grid.take});
+    }>(urls.companiesSearchUrl, {
+        search, 
+        countries: selectedCountires ? selectedCountires.map(c => c.value) : [], 
+        areas: selectedAreas ? selectedAreas.map(c => c.value) : [], 
+        skip: grid.skip, 
+        take: grid.take
+    });
 
     type TCountry = IValueName & {iso2: string, iso3: string};
     const getCountries = (request: IMultiselectRequest) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
-    const getAreas = async () => { 
-        const result = await getCached<IValueName[]>(urls.businessAreasUrl);
+    
+    let areas: IValueName[];
+    const getAreas = async () => {
+        if (!areas) {
+            areas = await getCached<IValueName[]>(urls.businessAreasUrl);
+        }
         return {
-            count: result.length,
-            page: result
+            count: areas.length,
+            page: areas
         };
     };
 
     let grid: IDataGrid;
     let search = "";
-
-    function onsearch() {
-        grid.setPage(1);
-    }
-
     let selectedCountires: TCountry[];
     let selectedAreas: IValueName[];
-
-    $: {
-        console.log(selectedCountires?.map(c => c.value));
-        console.log(selectedAreas?.map(c => c.value));
-    }
 </script>
 
 <Layout>
@@ -67,35 +67,38 @@
                     placeholder="Search by Company Name or by Company Line" 
                     class="mb-1"
                     bind:value={search} 
-                    on:search={onsearch} 
+                    on:search={() => grid.setPage(1)} 
                     searching={grid?.working}
-                    initialized={grid?.initialized} />
+                    initialized={grid?.initialized}>
+                </Search>
 
-                    <Multiselect
-                        class="mb-1"
-                        bind:selected={selectedCountires}
-                        searchFunc={getCountries} 
-                        searchTimeoutMs={0}
-                        searching={grid?.working}
-                        placeholder="Search Countries"
-                        initialized={grid?.initialized}>
-                        <div slot="token" let:item class="image-15px" style="background-position-y: center; background-image: url({flagUrl(item.value)});">
-                            {item.name}
-                        </div>
-                        <span slot="option" let:item class="image-15px" style="background-position-y: center; background-image: url({flagUrl(item.value)});" let:markup>
-                            {@html markup}
-                            <span class="float-end fs-smaller text-muted">{item.iso3}</span>
-                        </span>
-                    </Multiselect>
+                <Multiselect
+                    class="mb-1"
+                    bind:selected={selectedCountires}
+                    on:change={() => grid.setPage(1)}
+                    searchFunc={getCountries} 
+                    searchTimeoutMs={0}
+                    searching={grid?.working}
+                    placeholder="Search Countries"
+                    initialized={grid?.initialized}>
+                    <div slot="token" let:item class="image-15px" style="background-position-y: center; {flagBackgroundImageStyle(item.iso2)};">
+                        {item.name}
+                    </div>
+                    <span slot="option" let:item class="image-15px" style="background-position-y: center; {flagBackgroundImageStyle(item.iso2)};" let:markup>
+                        {@html markup}
+                        <span class="float-end fs-smaller text-muted">{item.iso3}</span>
+                    </span>
+                </Multiselect>
 
-                    <Multiselect
-                        bind:selected={selectedAreas}
-                        searchFunc={getAreas}
-                        searchTimeoutMs={0}
-                        searching={grid?.working}
-                        placeholder="Search Areas"
-                        initialized={grid?.initialized}>
-                    </Multiselect>
+                <Multiselect
+                    bind:selected={selectedAreas}
+                    on:change={() => grid.setPage(1)}
+                    searchFunc={getAreas}
+                    searchTimeoutMs={0}
+                    searching={grid?.working}
+                    placeholder="Search Areas"
+                    initialized={grid?.initialized}>
+                </Multiselect>
 
             </div>
             <div style="align-self: end;">
@@ -137,7 +140,7 @@
                 <td class="" class:text-muted={grid.working}>
                     <div>{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
-                    <div class="fs-smaller text-muted image-15px" style="background-position-y: center; background-image: url({flagUrl(data.countrycode)});" data-bs-toggle="tooltip" title={data.country}>
+                    <div class="fs-smaller text-muted image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countrycode)};" data-bs-toggle="tooltip" title={data.country}>
                         {data.country}
                     </div>
                 </td>

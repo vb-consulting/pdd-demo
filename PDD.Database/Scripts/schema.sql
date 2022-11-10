@@ -130,6 +130,7 @@ CREATE FUNCTION companies.search_companies(_search character varying, _countries
     AS $$
 declare
     _count bigint;
+    _companies uuid[];
 begin    
     _search = trim(_search);
     
@@ -141,15 +142,21 @@ begin
         _search = '%' || _search || '%';
     end if;
     
+    if array_length(_areas, 1) is not null then
+        _companies = (select distinct array_agg(company_id) from company_areas where area_id = any(_areas));
+    end if;
+    
     create temp table _tmp on commit drop as
     select 
         c.id
     from 
         companies c
     where (
-        _search is null 
-        or name ilike _search
-        or company_line ilike _search
+        (_search is null or name ilike _search or company_line ilike _search)
+        and
+        (array_length(_countries, 1) is null or country = any(_countries))
+        and
+        (array_length(_companies, 1) is null or id = any(_companies))
     );
     get diagnostics _count = row_count;
     
@@ -163,7 +170,7 @@ begin
                     cm.name, 
                     company_line as companyLine, 
                     about,
-                    cn.code as countryCode,
+                    cn.iso2 as countryCode,
                     cn.name as country,
                     cm.web,
                     cm.twitter,
@@ -482,7 +489,7 @@ JSON object with only one series where labels are last ten years names and value
 --
 -- Name: top_experinced_people(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, country_code smallint, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
+CREATE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, country_code character varying, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
     LANGUAGE sql
     AS $$
 select
@@ -491,7 +498,7 @@ select
     p.last_name,
     date_part('year', now()) - date_part('year', p.birth) as age,
     country.name as country,
-    country.code as country_code,
+    country.iso2 as country_code,
     years_of_experience,
     number_of_companies,
     es.name as employee_status,
@@ -515,7 +522,7 @@ where
 group by
     p.id,
     country.name,
-    country.code,
+    country.iso2,
     years_of_experience,
     number_of_companies,
     es.name
@@ -532,7 +539,7 @@ COMMENT ON FUNCTION dashboard.top_experinced_people(_limit integer) IS 'Top expe
 --
 -- Name: top_rated_companies(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, country_code smallint, areas character varying[], score numeric, reviews bigint)
+CREATE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS TABLE(id uuid, name character varying, company_line character varying, country character varying, country_code character varying, areas character varying[], score numeric, reviews bigint)
     LANGUAGE sql
     AS $$
 select 
@@ -540,7 +547,7 @@ select
     comp.name,
     company_line,
     country.name as country,
-    country.code as country_code,
+    country.iso2 as country_code,
     ca.areas,
     avg(rev.score) filter (where rev.score is not null)::numeric(3,2) as score,
     count(rev.id) as reviews
@@ -561,7 +568,7 @@ group by
     comp.name,
     company_line,
     country.name,
-    country.code,
+    country.iso2,
     ca.areas
 order by
     avg(rev.score) desc nulls last,

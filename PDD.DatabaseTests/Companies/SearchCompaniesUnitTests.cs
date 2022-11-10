@@ -61,7 +61,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(int),
+                    countrycode = default(string),
                     country = default(string),
                     areas = Array.Empty<string>()
                 }
@@ -79,7 +79,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company1",
                 companyline = "company1 line",
                 about = "company1 about",
-                countrycode = 840,
+                countrycode = "US",
                 country = "United States",
                 areas = new string[] { }
             },
@@ -89,7 +89,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company2",
                 companyline = "company2 line",
                 about = "company2 about",
-                countrycode = 300,
+                countrycode = "GR",
                 country = "Greece",
                 areas = new string[] { "General" }
             },
@@ -99,7 +99,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company3",
                 companyline = "company3 line",
                 about = "company3 about",
-                countrycode = 380,
+                countrycode = "IT",
                 country = "Italy",
                 areas = new string[] { "General", "AI", "Hardware" }
             },
@@ -130,7 +130,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(int),
+                    countrycode = default(string),
                     country = default(string),
                     areas = Array.Empty<string>()
                 }
@@ -147,7 +147,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company4",
                 companyline = "company4 line",
                 about = "company4 about",
-                countrycode = 191,
+                countrycode = "HR",
                 country = "Croatia",
                 areas = new string[] { }
             },
@@ -157,7 +157,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company5",
                 companyline = "company5 line",
                 about = "company5 about",
-                countrycode = 528,
+                countrycode = "NL",
                 country = "Netherlands",
                 areas = new string[] { }
             },
@@ -167,7 +167,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company6",
                 companyline = "company6 line",
                 about = "company6 about",
-                countrycode = 860,
+                countrycode = "UZ",
                 country = "Uzbekistan",
                 areas = new string[] { }
             },
@@ -198,7 +198,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(int),
+                    countrycode = default(string),
                     country = default(string),
                     areas = Array.Empty<string>()
                 }
@@ -215,7 +215,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company6",
                 companyline = "company6 line",
                 about = "company6 about",
-                countrycode = 860,
+                countrycode = "UZ",
                 country = "Uzbekistan",
                 areas = new string[] { }
             },

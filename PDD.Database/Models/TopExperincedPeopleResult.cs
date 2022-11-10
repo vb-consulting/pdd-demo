@@ -13,7 +13,7 @@ public class TopExperincedPeopleResult
     public string? LastName { get; set; }
     public int? Age { get; set; }
     public string? Country { get; set; }
-    public short? CountryCode { get; set; }
+    public string? CountryCode { get; set; }
     public int? YearsOfExperience { get; set; }
     public long? NumberOfCompanies { get; set; }
     public string? EmployeeStatus { get; set; }
