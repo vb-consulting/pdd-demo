@@ -17,7 +17,7 @@ public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlConfigurationFixture
     public void ChartEmployeeCountsByArea_Empty_Json_Test()
     {
         // Arrange
-        int? limit = 3;
+        int limit = 3;
 
         // Act
         var result = Connection.ChartEmployeeCountsByArea(limit);
@@ -35,7 +35,7 @@ public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlConfigurationFixture
     public void ChartEmployeeCountsByArea_Report_Test()
     {
         // Arrange
-        int? limit = 3;
+        int limit = 3;
 
         var companyIds = Connection.Read<Guid>(@"
             insert into companies (name, country) values

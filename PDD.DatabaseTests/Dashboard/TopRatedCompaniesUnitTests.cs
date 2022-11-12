@@ -16,7 +16,7 @@ public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
     public void TopRatedCompanies_Test()
     {
         // Arrange
-        int? limit = 3;
+        int limit = 3;
         var personId = Guid.NewGuid();
 
         var companyIds = Connection.Read<Guid>(@"

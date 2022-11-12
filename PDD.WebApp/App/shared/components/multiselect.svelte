@@ -26,6 +26,19 @@
     export let searching: boolean = false;
     export let initialized: boolean = true;
     export let searchTimeoutMs = 500;
+    export const instance: IMultiselect<TItem> = {
+        selected,
+        getSelectedKeys: () => Object.keys(selectedKeys),
+        toggleItem: (item: TItem) => {
+            if (selectedKeys[item.value]) {
+                removeSelectedByValue(item.value);
+                return false;
+            }
+            addSelected(item);
+            return true;
+        },
+        containsKey: (key: any) => !!selectedKeys[key]
+    }
     /**
      * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
      */
@@ -326,20 +339,19 @@
         </span>
 
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="tokens form-control" class:focused class:showOptions>
-            {#each selected as item, i}
+        <div class="tokens form-control" class:focused class:showOptions style="{hasSelected ? "padding-left: 25px" : ""}">
+            {#each selected as item}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="token badge rounded-pill text-bg-secondary" 
+                <button class="clickable-token" 
                     data-bs-toggle="tooltip"
                     title="click to remove '{item["name"]}'" 
-                    style="{i == 0 ? "margin-left: 15px" : ""}"
                     on:click={e => handleTokenClick(e, item)}>
                     {#if $$slots.token}
                         <slot name="token" {item}></slot>
                     {:else}
                         <span>{item.name}</span>
                     {/if}
-                </div>
+                </button>
             {/each}
             <div class="actions">
                 <input 
@@ -391,8 +403,6 @@
 {/if}
 
 <style lang="scss">
-    @use "./styles";
-
     $multiselect-dark-theme-input-color: var(--bs-white);
     $multiselect-option-item-background-color: var(--bs-body-bg);
     $multiselect-option-selected-item-background-color: var(--bs-primary);
@@ -422,18 +432,6 @@
             flex-wrap: wrap;
             position: relative;
         }
-        & .token {
-            align-items: center;
-            display: flex;
-            transition: background-color .3s;
-            white-space: nowrap;
-            cursor: pointer;
-            font-weight: normal;
-        }
-        & .token:hover {
-            filter: brightness(60%);
-        }
-
         & .actions {
             align-items: center;
             display: flex;

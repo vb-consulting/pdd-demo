@@ -20,7 +20,7 @@ public class SearchCountriesUnitTests : PostgreSqlConfigurationFixture
     public void SearchCountries_Empty_Json_Test()
     {
         // Arrange
-        string? search = default;
+        string search = default;
         int? skip = default;
         int? take = default;
 
@@ -39,7 +39,7 @@ public class SearchCountriesUnitTests : PostgreSqlConfigurationFixture
     public void SearchCountries_Search_Test()
     {
         // Arrange
-        string? search = "hrv";
+        string search = "hrv";
         int? skip = default;
         int? take = default;
 

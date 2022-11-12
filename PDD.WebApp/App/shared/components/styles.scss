@@ -1,9 +1,33 @@
-﻿:global(.search-mark) {
+﻿.search-mark {
     padding: 0;
     background-color: var(--bs-highlight-bg);
 }
-:global(.search-mark.active),
-:global(body.dark .search-mark:not(.active)) {
+.search-mark.active,
+body.dark .search-mark:not(.active) {
     padding: 0;
     color: var(--bs-black);
+}
+
+.token {
+    @extend .badge;
+    @extend .rounded-pill; 
+    @extend .text-bg-primary; 
+
+    align-items: center;
+    display: flex;
+    transition: background-color .3s;
+    white-space: nowrap;
+    font-weight: normal;
+}
+.clickable-token {
+    @extend .token;
+    cursor: pointer;
+}
+.clickable-token:hover {
+    filter: brightness(60%);
+}
+a.clickable-token {
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
 }

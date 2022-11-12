@@ -69,20 +69,26 @@
                         </td>
                     </tr>
                     <tr slot="row" let:index let:data>
-                        <th scope="row">{index+1}</th>
+                        <th scope="row" class="fw-bold">{index+1}</th>
                         <td>
-                            <div class="grid-name-wrap">
-                                <div class="">{data.name}</div>
-                                <div class="text-muted fs-smaller">{data.companyLine}</div>
-                                <div class="image-15px" style="{flagBackgroundImageStyle(data.countryCode)};">
-                                    {data.country}
-                                </div>
+                            <div class="fw-bold">{data.name}</div>
+                            <div class="text-muted fs-smaller">{data.companyLine}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <a class="clickable-token" href="{urls.companiesUrl}">
+                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryCode)};">
+                                        {data.country}
+                                    </div>
+                                </a>
                             </div>
                         </td>
                         <td>
-                            {#each data.areas as area}
-                                <span class="badge rounded-pill text-bg-secondary ms-1 mb-1">{area}</span>
-                            {/each}
+                            <div class="d-flex flex-wrap">
+                                {#each data.areas as area}
+                                    <a class="clickable-token mb-1" href="{urls.companiesUrl}">{area}</a>
+                                {/each}
+                            </div>
                         </td>
                         <td class="fs-smaller grid-info">
                             <div class="float-end">
@@ -105,20 +111,26 @@
                         </td>
                     </tr>
                     <tr slot="row" let:index let:data>
-                        <th scope="row">{index+1}</th>
+                        <th scope="row" class="fw-bold">{index+1}</th>
                         <td>
-                            <div class="grid-name-wrap">
-                                <div>{data.firstName} {data.lastName}</div>
-                                <div class="text-muted fs-smaller">{data.employeeStatus}</div>
-                                <div class="image-15px" style="{flagBackgroundImageStyle(data.countryCode)};">
-                                    {data.country}
-                                </div>
+                            <div class="fw-bold">{data.firstName} {data.lastName}</div>
+                            <div class="text-muted fs-smaller">{data.employeeStatus}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap">
+                                <a class="clickable-token" href="{urls.companiesUrl}">
+                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryCode)};">
+                                        {data.country}
+                                    </div>
+                                </a>
                             </div>
                         </td>
                         <td>
-                            {#each data.roles as role}
-                                <span class="badge rounded-pill text-bg-secondary ms-1 mb-1">{role}</span>
-                            {/each}
+                            <div class="d-flex flex-wrap">
+                                {#each data.roles as role}
+                                    <a class="clickable-token mb-1" href="{urls.companiesUrl}">{role}</a>
+                                {/each}
+                            </div>
                         </td>
                         <td class="fs-smaller grid-info">
                             <div class="float-end"><span class="text-muted">Years Of Experience: </span><span class="font-monospace">{data.yearsOfExperience}</span></div>
@@ -143,28 +155,6 @@
     .chart-row {
         & > div {
             padding: 25px;
-        }
-    }
-    .grid-name-wrap {
-        display: grid;
-        & > div:nth-child(1) {
-            grid-column: 1/2;
-            grid-row: 1;
-        }
-        & > div:nth-child(2) {
-            grid-column: 1/2;
-            grid-row: 2;
-        }
-        & > div:nth-child(3) {
-            grid-column: 2;
-            grid-row: 1;
-            width: fit-content;
-            margin-left: auto;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            font-size: x-small;
-            font-weight: bold;
-            white-space: nowrap;
         }
     }
     .grid-info {

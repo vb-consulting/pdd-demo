@@ -74,3 +74,10 @@ interface IMultiselectRequest {
     limit: number, 
     offset: number
 }
+
+interface IMultiselect<TItem> {
+    selected: TItem[];
+    getSelectedKeys: () => any[];
+    toggleItem: (item: TItem) => boolean;
+    containsKey: (key: any) => boolean;
+}

@@ -170,12 +170,13 @@ begin
                     cm.name, 
                     company_line as companyLine, 
                     about,
-                    cn.iso2 as countryCode,
+                    cn.code as countryCode,
+                    cn.iso2 as countryIso2,
                     cn.name as country,
                     cm.web,
                     cm.twitter,
                     cm.linkedin,
-                    coalesce(array_agg(ba.name) filter (where ba.name is not null), array[]::varchar[]) as areas,
+                    coalesce(array_agg(json_build_object('id', ba.id, 'name', ba.name)) filter (where ba.name is not null), array[]::json[]) as areas,
                     reviews.count as reviews,
                     reviews.score
                 from 

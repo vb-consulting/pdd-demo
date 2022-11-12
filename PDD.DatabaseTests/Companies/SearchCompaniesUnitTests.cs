@@ -19,11 +19,11 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     public void SearchCompanies_Empty_Json_Test()
     {
         // Arrange
-        string? search = default;
-        short[]? countries = default;
-        short[]? areas = default;
-        int? skip = default;
-        int? take = default;
+        string search = default;
+        short[] countries = default;
+        short[] areas = default;
+        int skip = default;
+        int take = default;
 
         // Act
         var result = Connection.SearchCompanies(search, countries, areas, skip, take);
@@ -37,15 +37,17 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         ((object)data.page.Value).Should().Be(null);
     }
 
+    record Area(short id, string name);
+
     [Fact]
     public void SearchCompanies_First_Page_Test()
     {
         // Arrange
         string search = null;
-        short[]? countries = default;
-        short[]? areas = default;
-        int? skip = 0;
-        int? take = 3;
+        short[] countries = default;
+        short[] areas = default;
+        int skip = 0;
+        int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
@@ -61,9 +63,9 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(string),
+                    countryiso2 = default(string),
                     country = default(string),
-                    areas = Array.Empty<string>()
+                    areas = new Area[] { }
                 }
             }
         });
@@ -79,9 +81,9 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company1",
                 companyline = "company1 line",
                 about = "company1 about",
-                countrycode = "US",
+                countryiso2 = "US",
                 country = "United States",
-                areas = new string[] { }
+                areas = new Area[] { }
             },
             new
             {
@@ -89,9 +91,9 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company2",
                 companyline = "company2 line",
                 about = "company2 about",
-                countrycode = "GR",
+                countryiso2 = "GR",
                 country = "Greece",
-                areas = new string[] { "General" }
+                areas = new Area[] { new (1, "General") }
             },
             new
             {
@@ -99,9 +101,10 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company3",
                 companyline = "company3 line",
                 about = "company3 about",
-                countrycode = "IT",
+                countryiso2 = "IT",
                 country = "Italy",
-                areas = new string[] { "General", "AI", "Hardware" }
+                //areas = new string[] { "General", "AI", "Hardware" }
+                areas = new Area[] { new (1, "General"), new(11, "AI"), new(9, "Hardware") }
             },
         });
     }
@@ -111,10 +114,10 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         string search = null;
-        short[]? countries = default;
-        short[]? areas = default;
-        int? skip = 3;
-        int? take = 3;
+        short[] countries = default;
+        short[] areas = default;
+        int skip = 3;
+        int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
@@ -130,7 +133,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(string),
+                    countryiso2 = default(string),
                     country = default(string),
                     areas = Array.Empty<string>()
                 }
@@ -147,7 +150,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company4",
                 companyline = "company4 line",
                 about = "company4 about",
-                countrycode = "HR",
+                countryiso2 = "HR",
                 country = "Croatia",
                 areas = new string[] { }
             },
@@ -157,7 +160,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company5",
                 companyline = "company5 line",
                 about = "company5 about",
-                countrycode = "NL",
+                countryiso2 = "NL",
                 country = "Netherlands",
                 areas = new string[] { }
             },
@@ -167,7 +170,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company6",
                 companyline = "company6 line",
                 about = "company6 about",
-                countrycode = "UZ",
+                countryiso2 = "UZ",
                 country = "Uzbekistan",
                 areas = new string[] { }
             },
@@ -179,10 +182,10 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
     {
         // Arrange
         string search = "company6";
-        short[]? countries = default;
-        short[]? areas = default;
-        int? skip = 0;
-        int? take = 3;
+        short[] countries = default;
+        short[] areas = default;
+        int skip = 0;
+        int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
@@ -198,7 +201,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     name = default(string),
                     companyline = default(string),
                     about = default(string),
-                    countrycode = default(string),
+                    countryiso2 = default(string),
                     country = default(string),
                     areas = Array.Empty<string>()
                 }
@@ -215,7 +218,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 name = "company6",
                 companyline = "company6 line",
                 about = "company6 about",
-                countrycode = "UZ",
+                countryiso2 = "UZ",
                 country = "Uzbekistan",
                 areas = new string[] { }
             },

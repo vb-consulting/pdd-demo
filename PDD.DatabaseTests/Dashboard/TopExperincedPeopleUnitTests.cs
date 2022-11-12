@@ -13,7 +13,7 @@ public class TopExperincedPeopleUnitTests : PostgreSqlConfigurationFixture
     public void TopExperincedPeople_Test1()
     {
         // Arrange
-        int? limit = 4;
+        int limit = 4;
 
         var personIds = Connection.Read<Guid>(@"
             insert into people (first_name, last_name, employee_status) values

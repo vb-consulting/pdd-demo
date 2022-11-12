@@ -17,11 +17,12 @@
         companyline: string,
         about: string,
         countrycode: number,
+        countryiso2: string,
         country: string,
         web: string,
         twitter?: string,
         linkedin?: string,
-        areas: string[],
+        areas: {id: number, name: string}[],
         reviews: number,
         score: number
     }
@@ -31,8 +32,8 @@
         page: ICompanyItem[]
     }>(urls.companiesSearchUrl, {
         search, 
-        countries: selectedCountires ? selectedCountires.map(c => c.value) : [], 
-        areas: selectedAreas ? selectedAreas.map(c => c.value) : [], 
+        countries: countires?.getSelectedKeys() ?? [], 
+        areas: areas?.getSelectedKeys() ?? [], 
         skip: grid.skip, 
         take: grid.take
     });
@@ -40,21 +41,38 @@
     type TCountry = IValueName & {iso2: string, iso3: string};
     const getCountries = (request: IMultiselectRequest) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
     
-    let areas: IValueName[];
+    let cachedAreas: IValueName[];
     const getAreas = async () => {
-        if (!areas) {
-            areas = await getCached<IValueName[]>(urls.businessAreasUrl);
+        if (!cachedAreas) {
+            cachedAreas = await getCached<IValueName[]>(urls.businessAreasUrl);
         }
         return {
-            count: areas.length,
-            page: areas
+            count: cachedAreas.length,
+            page: cachedAreas
         };
     };
 
     let grid: IDataGrid;
     let search = "";
-    let selectedCountires: TCountry[];
-    let selectedAreas: IValueName[];
+
+    let countires: IMultiselect<TCountry>;
+    let areas: IMultiselect<IValueName>;
+
+    function countryTokenClick(country: {code: number, iso2: string, name: string}) {
+        countires.toggleItem({value: country.code, name: country.name, iso2: country.iso2, iso3: ""})
+    }
+    function areaTokenClick(area: {id: number, name: string}) {
+        areas.toggleItem({value: area.id, name: area.name});
+    }
+    function onSearch() {
+        grid.setPage(1);
+    }
+    function countryTooltip(item: ICompanyItem) {
+        return countires.containsKey(item.countrycode) ? `Remove filter by ${item.country}` : `Add filter by ${item.country}`;
+    }
+    function areaTooltip(area: {id: number, name: string}) {
+        return areas.containsKey(area.id) ? `Remove filter by ${area.name}` : `Add filter by ${area.name}`;
+    }
 </script>
 
 <Layout>
@@ -67,15 +85,15 @@
                     placeholder="Search by Company Name or by Company Line" 
                     class="mb-1"
                     bind:value={search} 
-                    on:search={() => grid.setPage(1)} 
+                    on:search={onSearch} 
                     searching={grid?.working}
                     initialized={grid?.initialized}>
                 </Search>
 
                 <Multiselect
                     class="mb-1"
-                    bind:selected={selectedCountires}
-                    on:change={() => grid.setPage(1)}
+                    bind:instance={countires}
+                    on:change={onSearch}
                     searchFunc={getCountries} 
                     searchTimeoutMs={0}
                     searching={grid?.working}
@@ -91,8 +109,8 @@
                 </Multiselect>
 
                 <Multiselect
-                    bind:selected={selectedAreas}
-                    on:change={() => grid.setPage(1)}
+                    bind:instance={areas}
+                    on:change={onSearch}
                     searchFunc={getAreas}
                     searchTimeoutMs={0}
                     searching={grid?.working}
@@ -138,10 +156,17 @@
             </tr>
             <tr slot="row" let:data let:grid>
                 <td class="" class:text-muted={grid.working}>
-                    <div>{@html mark(data.name, search)}</div>
+                    <div class="fw-bold">{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
-                    <div class="fs-smaller text-muted image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countrycode)};" data-bs-toggle="tooltip" title={data.country}>
-                        {data.country}
+                    <div class="d-flex mt-1">
+                        <button class="clickable-token" on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
+                            <div class="image-15px" 
+                                style="background-position-y: center;{flagBackgroundImageStyle(data.countryiso2)};" 
+                                data-bs-toggle="tooltip" 
+                                title={countryTooltip(data)}>
+                                {data.country}
+                            </div>
+                        </button>
                     </div>
                 </td>
                 <td class="fs-smaller text-nowrap" class:text-muted={grid.working}>
@@ -162,9 +187,17 @@
                     {/if}
                 </td>
                 <td class:text-muted={grid.working}>
-                    {#each data.areas as area}
-                        <span class="badge rounded-pill text-bg-secondary ms-1 mb-1">{area}</span>
-                    {/each}
+                    <div class="d-flex flex-wrap">
+                        {#each data.areas as area}
+                            <button 
+                                class="clickable-token mb-1" 
+                                on:click={() => areaTokenClick(area)}
+                                data-bs-toggle="tooltip" 
+                                title={areaTooltip(area)}>
+                                {area.name}
+                            </button>
+                        {/each}
+                    </div>
                 </td>
                 <td class:text-muted={grid.working}>
                     {take(data.about, 200)}

@@ -15,7 +15,7 @@ public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
     public void ChartCompaniesByCountry_Empty_Json_Test()
     {
         // Arrange
-        int? limit = 3;
+        int limit = 3;
 
         // Act
         var result = Connection.ChartCompaniesByCountry(limit);
@@ -38,7 +38,7 @@ public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
     public void ChartCompaniesByCountry_Report_Test()
     {
         // Arrange
-        int? limit = 3;
+        int limit = 3;
 
         Connection.Execute(@"
             insert into companies (name, country) values
