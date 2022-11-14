@@ -52,6 +52,7 @@ interface IDataGrid {
     count: number;
     page:  number;
     pageCount: number;
+    error: any;
     setPage: (number) => Promise<void>;
     refresh: () => Promise<void>;
 }
@@ -81,3 +82,5 @@ interface IMultiselect<TItem> {
     toggleItem: (item: TItem) => boolean;
     containsKey: (key: any) => boolean;
 }
+
+type ReadBehaviorType = "immediate"|"onMount"|"custom";

@@ -30,14 +30,14 @@
         selected,
         getSelectedKeys: () => Object.keys(selectedKeys),
         toggleItem: (item: TItem) => {
-            if (selectedKeys[item.value]) {
+            if (containsKey(item.value)) {
                 removeSelectedByValue(item.value);
                 return false;
             }
             addSelected(item);
             return true;
         },
-        containsKey: (key: any) => !!selectedKeys[key]
+        containsKey: (key: any) => containsKey(key)
     }
     /**
      * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
@@ -47,11 +47,13 @@
     * Contains CSS styling declarations to be applied to the element. Note that it is recommended for styles to be defined in a separate file or files. This attribute and the style element have mainly the purpose of allowing for quick styling, for example for testing purposes.
     */
     export { styles as style };
-    
+
     let classes: string = "";
     let styles: string = "";
 
-    let selectedKeys: Record<any, boolean> = {};
+    let selectedKeys: Record<any, boolean> = 
+        !selected || !selected.lastIndexOf ? {} : 
+        Object.assign({}, ...selected.map(s => ({[s.value]: true})));
 
     let input: HTMLInputElement;
     let inputValue: string;
@@ -135,6 +137,10 @@
         dispatch("change", {keys: Object.keys(selectedKeys), values: selected});
     }
 
+    function containsKey(key: any) {
+        return !!selectedKeys[key];
+    }
+
     function optionsVisibility(show: boolean) {
         showOptions = show;
         if (show && !options && !searching) {
@@ -168,7 +174,7 @@
             if (activeIdx != undefined) {
                 let activeOption = options[activeIdx] as IValueName;
                 if (activeOption) {
-                    if (selectedKeys[activeOption.value]) {
+                    if (containsKey(activeOption.value)) {
                         removeSelectedByValue(activeOption.value);
                     } else {
                         addSelected(activeOption);
@@ -232,7 +238,7 @@
         if (!value) {
             return
         }
-        if (selectedKeys[value]) {
+        if (containsKey(value)) {
             removeSelectedByValue(value);
         } else {
             addSelected((options as IValueName[]).filter(o => o.value == value)[0]);
@@ -314,7 +320,6 @@
     }
 
     function handleCaretClick() {
-        console.log("handleCaretClick", document.activeElement, showOptions);
         if (showOptions) {
             optionsVisibility(false);
         } else {
@@ -338,10 +343,8 @@
             title="{searching ? "Loading..." : (hasSelected ? "Clear All" : (placeholder || "Search"))}">
         </span>
 
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="tokens form-control" class:focused class:showOptions style="{hasSelected ? "padding-left: 25px" : ""}">
             {#each selected as item}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <button class="clickable-token" 
                     data-bs-toggle="tooltip"
                     title="click to remove '{item["name"]}'" 
@@ -370,6 +373,7 @@
                     on:focus={inputFocus} 
                     on:input={search}
                     placeholder={placeholder} />
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <span class="dropdown-arrow {showOptions ? "bi-caret-up" : "bi-caret-down"}" on:click={handleCaretClick}></span>
             </div>
         </div>
@@ -387,11 +391,11 @@
                             <hr />
                         </li>
                         {:else}
-                        <li id="{listItemId(index)}" class="option" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
+                        <li id="{listItemId(index)}" class="option" class:selected={containsKey(option.value)} class:active={activeIdx == index} data-value="{option.value}">
                             {#if $$slots.option}
-                                <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
+                                <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${containsKey(option.value) ? "active" : ""}">`, "</span>")}></slot>
                             {:else}
-                                {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
+                                {@html mark(option.name, lastQuery, `<span class="search-mark ${containsKey(option.value) ? "active" : ""}">`, "</span>")}
                             {/if}
                         </li>
                         {/if}

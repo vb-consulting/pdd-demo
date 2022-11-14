@@ -2,6 +2,7 @@
 
 using static System.Formats.Asn1.AsnWriter;
 using System.ComponentModel.Design;
+using System.Xml.Linq;
 
 namespace PDD.DatabaseTests.Dashboard;
 
@@ -72,17 +73,32 @@ public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
         {
             company = companyIds,
             area = new string[] { "General", "AI", "Hardware", "Enterprise", "Edtech", "Consumer", "Mobility", "AI" }
-        }); 
+        });
 
         // Act
-        var result = Connection.TopRatedCompanies(limit).ToList();
+        var result = JsonConvert.DeserializeAnonymousType(Connection.TopRatedCompanies(limit), new[]
+        {
+            new
+            {
+                name = default(string),
+                areas = new[]
+                {
+                    new
+                    {
+                        id = default(int),
+                        name = default(string)
+                    }
+                },
+                score = default(decimal)
+            }
+        });
 
         // Assert
-        result.Select(r => new { r.Name, r.Areas, r.Score }).Should().BeEquivalentTo(new[]
+        result.Should().BeEquivalentTo(new[]
         {
-            new { Name = "company1", Areas = new string[]{ "General", "AI" }, Score = 4.67m },
-            new { Name = "company2", Areas = new string[]{ "Hardware", "Enterprise" }, Score = 3.67m },
-            new { Name = "company3", Areas = new string[]{ "Edtech", "Consumer" }, Score = 2.67m }
+            new { name = "company1", areas = new[]{new { id = 1, name = "General" }, new { id = 11, name = "AI" }}, score = 4.67m },
+            new { name = "company2", areas = new[]{new { id = 2, name = "Enterprise" }, new { id = 9, name = "Hardware" }}, score = 3.67m },
+            new { name = "company3", areas = new[]{ new { id = 12, name = "Edtech" }, new { id = 13, name = "Consumer" }}, score = 2.67m }
         });
     }
 }

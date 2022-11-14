@@ -8,7 +8,6 @@ using Norm;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
-using PDD.Database.Models;
 
 namespace PDD.Database.Extensions.Dashboard;
 
@@ -21,13 +20,16 @@ public static class PgRoutineTopRatedCompanies
     /// Top rated companies by the user score.
     /// </summary>
     /// <param name="limit">_limit integer</param>
-    /// <returns>IEnumerable of TopRatedCompaniesResult instances</returns>
-    public static IEnumerable<TopRatedCompaniesResult> TopRatedCompanies(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    /// <returns>string?</returns>
+    public static string? TopRatedCompanies(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
         return connection
+            .WithUnknownResultType()
+            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
             .WithParameters(
                 (limit, NpgsqlDbType.Integer))
-            .Read<TopRatedCompaniesResult>($"select id, name, company_line, country, country_code, areas, score, reviews from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+            .Read<string?>($"select {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
+            .SingleOrDefault();
     }
 
     /// <summary>
@@ -35,12 +37,15 @@ public static class PgRoutineTopRatedCompanies
     /// Top rated companies by the user score.
     /// </summary>
     /// <param name="limit">_limit integer</param>
-    /// <returns>IAsyncEnumerable of TopRatedCompaniesResult instances</returns>
-    public static IAsyncEnumerable<TopRatedCompaniesResult> TopRatedCompaniesAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    /// <returns>ValueTask whose Result property is string?</returns>
+    public static async ValueTask<string?> TopRatedCompaniesAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
+        return await connection
+            .WithUnknownResultType()
+            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
             .WithParameters(
                 (limit, NpgsqlDbType.Integer))
-            .ReadAsync<TopRatedCompaniesResult>($"select id, name, company_line, country, country_code, areas, score, reviews from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+            .ReadAsync<string?>($"select {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
+            .SingleOrDefaultAsync();
     }
 }

@@ -1,5 +1,6 @@
 // pgroutiner auto-generated code
 
+using System.Xml.Linq;
 using PDD.Database.Extensions.Companies;
 
 namespace PDD.DatabaseTests.Companies;
@@ -37,8 +38,6 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         ((object)data.page.Value).Should().Be(null);
     }
 
-    record Area(short id, string name);
-
     [Fact]
     public void SearchCompanies_First_Page_Test()
     {
@@ -65,7 +64,14 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     about = default(string),
                     countryiso2 = default(string),
                     country = default(string),
-                    areas = new Area[] { }
+                    areas = new[]
+                    {
+                        new
+                        {
+                            id = default(int),
+                            name = default(string)
+                        }
+                    },
                 }
             }
         });
@@ -83,7 +89,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company1 about",
                 countryiso2 = "US",
                 country = "United States",
-                areas = new Area[] { }
+                areas = Array.Empty<object>()
             },
             new
             {
@@ -93,7 +99,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company2 about",
                 countryiso2 = "GR",
                 country = "Greece",
-                areas = new Area[] { new (1, "General") }
+                areas = new object [] { new { id = 1, name = "General" } }
             },
             new
             {
@@ -103,8 +109,8 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company3 about",
                 countryiso2 = "IT",
                 country = "Italy",
-                //areas = new string[] { "General", "AI", "Hardware" }
-                areas = new Area[] { new (1, "General"), new(11, "AI"), new(9, "Hardware") }
+
+                areas = new object [] { new { id = 11, name = "AI" }, new { id = 1, name = "General" }, new { id = 9, name = "Hardware" } }
             },
         });
     }
@@ -135,7 +141,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                     about = default(string),
                     countryiso2 = default(string),
                     country = default(string),
-                    areas = Array.Empty<string>()
+                    areas = new [] { new {id = default(int),name = default(string)} }
                 }
             }
         });
@@ -152,7 +158,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company4 about",
                 countryiso2 = "HR",
                 country = "Croatia",
-                areas = new string[] { }
+                areas = new string [0]
             },
             new
             {
@@ -162,7 +168,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company5 about",
                 countryiso2 = "NL",
                 country = "Netherlands",
-                areas = new string[] { }
+                areas = new string [0]
             },
             new
             {
@@ -172,7 +178,7 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
                 about = "company6 about",
                 countryiso2 = "UZ",
                 country = "Uzbekistan",
-                areas = new string[] { }
+                areas = new string [0]
             },
         });
     }

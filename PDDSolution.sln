@@ -6,8 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__Shared", "__Shared", "{ED7EAB47-025C-40AD-B97A-04C2634F7E57}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		.config\dotnet-tools.json = .config\dotnet-tools.json
 		.github\workflows\build-test-publish.yml = .github\workflows\build-test-publish.yml
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -21,6 +21,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseSeeder", "PDD.Shared\DatabaseSeeder\DatabaseSeeder.csproj", "{ABBA00AB-37E1-4C18-BA90-554BE1BF3685}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseShared", "PDD.Shared\DatabaseShared\DatabaseShared.csproj", "{C3514402-261E-4E55-9255-52A21281A8C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2760E7D5-78B1-4009-8F47-CD2A6796DD02}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

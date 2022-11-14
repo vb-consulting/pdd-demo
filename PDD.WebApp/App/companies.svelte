@@ -27,28 +27,34 @@
         score: number
     }
 
-    const getCompanies = (grid: IDataGrid) => get<{
-        count: number,
-        page: ICompanyItem[]
-    }>(urls.companiesSearchUrl, {
-        search, 
-        countries: countires?.getSelectedKeys() ?? [], 
-        areas: areas?.getSelectedKeys() ?? [], 
-        skip: grid.skip, 
-        take: grid.take
-    });
+    const getCompanies = (grid: IDataGrid) => {
+        console.log(countires);
+        return get<{
+            count: number,
+            page: ICompanyItem[]
+        }>(urls.companiesSearchUrl, {
+            search, 
+            countries: countires?.getSelectedKeys() ?? [], 
+            areas: areas?.getSelectedKeys() ?? [], 
+            skip: grid.skip, 
+            take: grid.take
+        });
+    };
+    
+
 
     type TCountry = IValueName & {iso2: string, iso3: string};
     const getCountries = (request: IMultiselectRequest) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
     
     let cachedAreas: IValueName[];
-    const getAreas = async () => {
+    const getAreas = async (request: IMultiselectRequest) => {
         if (!cachedAreas) {
             cachedAreas = await getCached<IValueName[]>(urls.businessAreasUrl);
         }
+        const lower = request.search.toLowerCase();
         return {
             count: cachedAreas.length,
-            page: cachedAreas
+            page: cachedAreas.filter(a => a.name.toLowerCase().indexOf(lower) > -1)
         };
     };
 
@@ -56,7 +62,17 @@
     let search = "";
 
     let countires: IMultiselect<TCountry>;
+    const selectedCountires: TCountry[] = [];
     let areas: IMultiselect<IValueName>;
+    const selectedAreas: IValueName[] = [];
+
+    const query = new URLSearchParams(window.location.search);
+    if (query.has("country")) {
+        selectedCountires.push(JSON.parse(query.get("country") as string) as TCountry)
+    }
+    if (query.has("area")) {
+        selectedAreas.push(JSON.parse(query.get("area") as string) as IValueName)
+    }
 
     function countryTokenClick(country: {code: number, iso2: string, name: string}) {
         countires.toggleItem({value: country.code, name: country.name, iso2: country.iso2, iso3: ""})
@@ -92,6 +108,7 @@
 
                 <Multiselect
                     class="mb-1"
+                    selected={selectedCountires}
                     bind:instance={countires}
                     on:change={onSearch}
                     searchFunc={getCountries} 
@@ -109,6 +126,7 @@
                 </Multiselect>
 
                 <Multiselect
+                    selected={selectedAreas}
                     bind:instance={areas}
                     on:change={onSearch}
                     searchFunc={getAreas}
@@ -120,14 +138,19 @@
 
             </div>
             <div style="align-self: end;">
-                <Pager small {grid} class="float-end" />
+                <Pager small {grid} class="float-end">
+                    <span slot="message">
+                        Total <b>{grid.count}</b> companies found. Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>.
+                    </span>
+                </Pager>
             </div>
         </div>
         <hr />
         <DataGrid 
             hover 
             striped
-            bind:grid={grid}
+            bind:instance={grid}
+            readBehavior={"onMount"}
             on:render={hideTooltips}
             on:rendered={createTooltips}
             dataPageFunc={getCompanies} 
@@ -159,7 +182,9 @@
                     <div class="fw-bold">{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
                     <div class="d-flex mt-1">
-                        <button class="clickable-token" on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
+                        <button class="clickable-token" 
+                            class:selected={countires.containsKey(data.countrycode)}
+                            on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
                             <div class="image-15px" 
                                 style="background-position-y: center;{flagBackgroundImageStyle(data.countryiso2)};" 
                                 data-bs-toggle="tooltip" 
@@ -190,7 +215,7 @@
                     <div class="d-flex flex-wrap">
                         {#each data.areas as area}
                             <button 
-                                class="clickable-token mb-1" 
+                                class="clickable-token mb-1" class:selected={areas.containsKey(area.id)}
                                 on:click={() => areaTokenClick(area)}
                                 data-bs-toggle="tooltip" 
                                 title={areaTooltip(area)}>
@@ -222,7 +247,11 @@
         <div class="mb-5" style="display: grid; grid-template-columns: auto min-content;">
             <div></div>
             <div>
-                <Pager small {grid} class="float-end" />
+                <Pager small {grid} class="float-end">
+                    <span slot="message">
+                        Total <b>{grid.count}</b> companies found. Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>.
+                    </span>
+                </Pager>
             </div>
         </div>
     </div>

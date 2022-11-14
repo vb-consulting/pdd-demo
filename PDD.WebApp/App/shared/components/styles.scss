@@ -31,3 +31,8 @@ a.clickable-token {
     border-style: outset;
     border-color: buttonborder;
 }
+.token.selected,
+.clickable-token.selected {
+    background-color: var(--bs-highlight-bg) !important;
+    color: var(--bs-dark) !important;
+}

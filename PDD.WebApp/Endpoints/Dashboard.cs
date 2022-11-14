@@ -31,10 +31,12 @@ namespace PDD.WebApp.Endpoints
                 return await connection.ChartEmployeeCountsByYearAsync(5);
             });
 
-            app.MapGet(Urls.TopRatedCompaniesUrl, [AllowAnonymous] (
-                NpgsqlConnection connection) =>
+            app.MapGet(Urls.TopRatedCompaniesUrl, [AllowAnonymous] async (
+                NpgsqlConnection connection,
+                HttpResponse response) =>
             {
-                return connection.TopRatedCompaniesAsync(5);
+                response.ContentType = MediaTypeNames.Application.Json;
+                return await connection.TopRatedCompaniesAsync(5);
             });
 
             app.MapGet(Urls.TopExperincedPeopleUrl, [AllowAnonymous] (

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
+    import Placeholder from "./placeholder.svelte";
 
     type T = $$Generic;
 
@@ -11,6 +12,7 @@
         topRow: { grid: IDataGrid };
         bottomRow: { grid: IDataGrid };
         noResultsRow: { grid: IDataGrid };
+        errorRow: { grid: IDataGrid, error: any };
     }
     
     export let headers: boolean | string[] | IGridHeader[] = [];
@@ -43,8 +45,9 @@
     export let headerGroupDivider = false;
 
     export let take: number = 50;
+    export let readBehavior: ReadBehaviorType = "immediate";
 
-    export const grid: IDataGrid = {
+    export const instance: IDataGrid = {
         initialized: false,
         working: false,
         skip: 0,
@@ -52,6 +55,7 @@
         take,
         page: 0,
         pageCount: 0,
+        error: null,
         setPage: async function (page: number) {
             if (page == 1) {
                 this.skip = 0;
@@ -82,6 +86,7 @@
 
     let data: T[];
     let _headers: string[];
+
     const dispatch = createEventDispatcher();
 
     function instanceOfIGridHeader(value: any): value is IGridHeader {
@@ -92,47 +97,66 @@
     }
 
     async function readData() {
-        if (!dataFunc || grid.working) {
+        if (!dataFunc || instance.working) {
             return;
         }
-        dispatch("render", {grid});
-        grid.working = true;
+        dispatch("render", {grid: instance});
+        instance.working = true;
         const result = await dataFunc();
-        grid.count = result.length;
-        grid.working = false;
-        if (!grid.initialized) {
-            grid.initialized = true;
+        instance.count = result.length;
+        instance.working = false;
+        if (!instance.initialized) {
+            instance.initialized = true;
         }
         if (typeof headers == "boolean" && headers == true && result.length) {
             _headers = Object.keys(result[0] as any);
         }
         data = result;
-        setTimeout(() => dispatch("rendered", {grid, data}));
+        setTimeout(() => dispatch("rendered", {grid: instance, data}));
     }
 
     async function readDataPage() {
-        if (!dataPageFunc || grid.working) {
+        if (!dataPageFunc || instance.working) {
             return;
         }
-        dispatch("render", {grid});
-        grid.working = true;
-        // await one second
-        //await new Promise(resolve => setTimeout(resolve, 5000));
-        const result = await dataPageFunc(grid);
-        grid.count = result.count;
-        grid.page = grid.skip == 0 ? 1 : Math.round(grid.skip / grid.take) + 1;
-        grid.pageCount = Math.ceil(grid.count / grid.take);
-        grid.working = false;
-        if (!grid.initialized) {
-            grid.initialized = true;
+        dispatch("render", {grid: instance});
+        instance.working = true;
+        const result = await dataPageFunc(instance);
+        instance.count = result.count;
+        instance.page = instance.skip == 0 ? 1 : Math.round(instance.skip / instance.take) + 1;
+        instance.pageCount = Math.ceil(instance.count / instance.take);
+        instance.working = false;
+        if (!instance.initialized) {
+            instance.initialized = true;
         }
         if (typeof headers == "boolean" && headers == true && result.page.length) {
             _headers = Object.keys(result.page[0] as any);
         }
         data = result.page;
-        setTimeout(() => dispatch("rendered", {grid, data}));
+        setTimeout(() => dispatch("rendered", {grid: instance, data}));
     }
 
+    async function read() {
+        instance.error = null;
+        try {
+            if (dataFunc) {
+                await readData();
+            } else {
+                await readDataPage();
+            }
+        } catch (e: any) {
+            instance.error = e;
+        }
+    }
+
+    if (readBehavior == "immediate") {
+        read();
+    }
+    onMount(() => {
+        if (readBehavior == "onMount") {
+            read();
+        }
+    });
 </script>
 <table class="table {classes || ''}" style="{styles || ''}"
     class:table-primary={primary}
@@ -159,11 +183,11 @@
     {#if caption || $$slots.caption}
         <caption>
             {caption}
-            <slot name="caption" {grid}></slot>
+            <slot name="caption" grid={instance}></slot>
         </caption>
     {/if}
     <thead>
-        <slot name="headerRow" {grid}></slot>
+        <slot name="headerRow" grid={instance}></slot>
         {#if (typeof headers != "boolean" && headers.length)}
             <tr>
                 {#each headers as row}
@@ -187,30 +211,43 @@
         {/if}
     </thead>
     <tbody class:table-group-divider={headerGroupDivider}>
-        <slot name="topRow" {grid}></slot>
-        {#if dataFunc}
-            {#await readData()}
-            <slot name="placeholderRow" {grid}></slot>
-            {:then}
+        <slot name="topRow" grid={instance}></slot>
+        {#if instance.error}
+            {#if $$slots.errorRow}
+                <slot name="errorRow" grid={instance} error={instance.error}></slot>
+            {:else}
+                <tr>
+                    <td colspan=99999 class="text-center">
+                        <div class="text-danger fw-bold">
+                            <i class="bi bi-bug-fill"></i>
+                            Error :(
+                        </div>
+                        <div class="">
+                            Here is what we know so far: <div class="text-danger">{instance.error}</div>
+                        </div>
+                    </td>
+                </tr>
+            {/if}
+        {:else if !instance.initialized}
+            {#if $$slots.placeholderRow}
+                <slot name="placeholderRow" grid={instance}></slot>
+            {:else}
+                <tr>
+                    <td colspan=99999>
+                        <Placeholder />
+                    </td>
+                </tr>
+            {/if}
+        {:else}
+            {#if data && data.length}
                 {#each data as data, index}
-                    <slot name="row" {data} {index} {grid}></slot>
+                    <slot name="row" {data} {index} grid={instance}></slot>
                 {/each}
-            {/await}
+            {:else}
+                <slot name="noResultsRow" grid={instance}></slot>
+            {/if}
         {/if}
-        {#if dataPageFunc}
-            {#await readDataPage()}
-            <slot name="placeholderRow" {grid}></slot>
-            {:then}
-                {#if data && data.length}
-                    {#each data as data, index}
-                        <slot name="row" {data} {index} {grid}></slot>
-                    {/each}
-                {:else}
-                    <slot name="noResultsRow" {grid}></slot>
-                {/if}
-            {/await}
-        {/if}
-        <slot name="bottomRow" {grid}></slot>
+        <slot name="bottomRow" grid={instance}></slot>
     </tbody>
 </table>
 

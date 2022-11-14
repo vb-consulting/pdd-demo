@@ -1,5 +1,10 @@
 <script lang="ts">
     import Placeholder from "./placeholder.svelte";
+
+    interface $$Slots {
+        message: { grid: IDataGrid };
+    }
+
     export let grid: IDataGrid;
     export let numberCount: number = 3;
     export let small: boolean = false;
@@ -86,7 +91,11 @@
         </nav>
         <div class="text-primary info text-center" class:text-muted={grid.working} style="{small ? "font-size: 0.75rem;" : ""}">
             {#if grid.working}<div class="spinner-border"></div>{/if}
-            Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
+            {#if  $$slots.message}
+                <slot name="message" {grid}></slot>
+            {:else}
+                Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
+            {/if}
         </div>
     </div>
 {/if}
@@ -110,5 +119,9 @@
     }
     .pagination {
         margin-bottom: 0px;
+    }
+    button {
+        border-style: outset;
+        border-color: buttonborder;
     }
 </style>

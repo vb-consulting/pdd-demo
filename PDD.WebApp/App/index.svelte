@@ -3,8 +3,9 @@
     import ChartBox from "./shared/components/chart-box.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
     import Placeholder from "./shared/components/placeholder.svelte";
+    import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
-    import { get } from "./shared/fetch";
+    import { get, parseUrl } from "./shared/fetch";
     import { flagBackgroundImageStyle } from "./shared/utils";
 
     const getTopCompanies = () => get<{
@@ -13,7 +14,8 @@
         companyLine: string;
         country: string;
         countryCode: number;
-        areas: string[];
+        countryIso2: string;
+        areas: {id: number, name: string}[];
         score: number;
         reviews: number;
     }[]>(urls.topRatedCompaniesUrl);
@@ -62,7 +64,12 @@
         <div class="row">
             <div class="col">
                 <div class="text-secondary fw-bolder text-center fs-4 my-2">Top rated companies</div>
-                <DataGrid dataFunc={getTopCompanies} hover small>
+                <DataGrid 
+                    dataFunc={getTopCompanies} 
+                    hover 
+                    small 
+                    on:render={hideTooltips} 
+                    on:rendered={createTooltips}>
                     <tr slot="placeholderRow">
                         <td colspan=99999>
                             <Placeholder height="30vh" />
@@ -76,8 +83,11 @@
                         </td>
                         <td>
                             <div class="d-flex flex-wrap">
-                                <a class="clickable-token" href="{urls.companiesUrl}">
-                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryCode)};">
+                                <a class="clickable-token" 
+                                    data-bs-toggle="tooltip" 
+                                    title="Filter companies by {data.country}"
+                                    href="{parseUrl(urls.companiesUrl, {country: JSON.stringify({value: data.countryCode, name: data.country, iso2: data.countryIso2, iso3: ""})})}">
+                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryIso2)};">
                                         {data.country}
                                     </div>
                                 </a>
@@ -86,7 +96,12 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 {#each data.areas as area}
-                                    <a class="clickable-token mb-1" href="{urls.companiesUrl}">{area}</a>
+                                    <a class="clickable-token mb-1" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Filter companies by {area.name}"
+                                        href="{parseUrl(urls.companiesUrl, {area: JSON.stringify({value: area.id, name: area.name})})}">
+                                        {area.name}
+                                    </a>
                                 {/each}
                             </div>
                         </td>
