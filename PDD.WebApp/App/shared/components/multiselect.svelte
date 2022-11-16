@@ -71,7 +71,7 @@
     const scrollTimeoutMs = 500;
     const dispatch = createEventDispatcher();
 
-    const listItemId = (index: number) => `${id}-option-${index}`;
+    const listItemId = (index: number) => `${id}-opt-${index}`;
 
     const getListDimensions = () => {
         const itemHeight = (list.firstChild as Element).clientHeight;
@@ -346,6 +346,7 @@
         <div class="tokens form-control" class:focused class:showOptions style="{hasSelected ? "padding-left: 25px" : ""}">
             {#each selected as item}
                 <button class="clickable-token" 
+                    disabled={searching}
                     data-bs-toggle="tooltip"
                     title="click to remove '{item["name"]}'" 
                     on:click={e => handleTokenClick(e, item)}>
@@ -391,11 +392,11 @@
                             <hr />
                         </li>
                         {:else}
-                        <li id="{listItemId(index)}" class="option" class:selected={containsKey(option.value)} class:active={activeIdx == index} data-value="{option.value}">
+                        <li id="{listItemId(index)}" class="option" class:selected={selectedKeys[option.value]} class:active={activeIdx == index} data-value="{option.value}">
                             {#if $$slots.option}
-                                <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${containsKey(option.value) ? "active" : ""}">`, "</span>")}></slot>
+                                <slot name="option" item={option} markup={mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}></slot>
                             {:else}
-                                {@html mark(option.name, lastQuery, `<span class="search-mark ${containsKey(option.value) ? "active" : ""}">`, "</span>")}
+                                {@html mark(option.name, lastQuery, `<span class="search-mark ${selectedKeys[option.value] ? "active" : ""}">`, "</span>")}
                             {/if}
                         </li>
                         {/if}

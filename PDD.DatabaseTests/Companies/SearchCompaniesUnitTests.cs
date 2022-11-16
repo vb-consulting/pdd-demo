@@ -23,11 +23,12 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         string search = default;
         short[] countries = default;
         short[] areas = default;
+        bool sortAsc = true;
         int skip = default;
         int take = default;
 
         // Act
-        var result = Connection.SearchCompanies(search, countries, areas, skip, take);
+        var result = Connection.SearchCompanies(search, countries, areas, sortAsc, skip, take);
         dynamic data = JsonConvert.DeserializeObject(result);
 
         // Assert
@@ -45,13 +46,14 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         string search = null;
         short[] countries = default;
         short[] areas = default;
+        bool sortAsc = true;
         int skip = 0;
         int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, sortAsc, skip, take), new
         {
             count = default(int),
             page = new[]
@@ -122,13 +124,14 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         string search = null;
         short[] countries = default;
         short[] areas = default;
+        bool sortAsc = true;
         int skip = 3;
         int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, sortAsc, skip, take), new
         {
             count = default(int),
             page = new[]
@@ -190,13 +193,14 @@ public class SearchCompaniesUnitTests : PostgreSqlConfigurationFixture
         string search = "company6";
         short[] countries = default;
         short[] areas = default;
+        bool sortAsc = true;
         int skip = 0;
         int take = 3;
 
         Guid[] companyIds = AddCompanyData();
 
         // Act
-        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, skip, take), new
+        var result = JsonConvert.DeserializeAnonymousType(Connection.SearchCompanies(search, countries, areas, sortAsc, skip, take), new
         {
             count = default(int),
             page = new[]

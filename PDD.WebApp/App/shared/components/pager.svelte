@@ -89,12 +89,12 @@
                 {/if}
             </ul>
         </nav>
-        <div class="text-primary info text-center" class:text-muted={grid.working} style="{small ? "font-size: 0.75rem;" : ""}">
+        <div class="text-primary info" class:text-muted={grid.working} style="{small ? "font-size: 0.75rem;" : ""}">
             {#if grid.working}<div class="spinner-border"></div>{/if}
             {#if  $$slots.message}
                 <slot name="message" {grid}></slot>
             {:else}
-                Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>. Total <b>{grid.count}</b> items.
+                Page <b>{grid.page.toLocaleString()}</b> of <b>{grid.pageCount.toLocaleString()}</b>. Total <b>{grid.count.toLocaleString()}</b>.
             {/if}
         </div>
     </div>

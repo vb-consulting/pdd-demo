@@ -21,7 +21,6 @@ body.dark .search-mark:not(.active) {
 }
 .clickable-token {
     @extend .token;
-    cursor: pointer;
 }
 .clickable-token:hover {
     filter: brightness(60%);
@@ -35,4 +34,8 @@ a.clickable-token {
 .clickable-token.selected {
     background-color: var(--bs-highlight-bg) !important;
     color: var(--bs-dark) !important;
+}
+.token[disabled],
+.clickable-token[disabled] {
+    @extend .text-muted;
 }

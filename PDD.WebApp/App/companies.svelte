@@ -27,22 +27,26 @@
         score: number
     }
 
-    const getCompanies = (grid: IDataGrid) => {
-        console.log(countires);
-        return get<{
+    let grid: IDataGrid;
+    let search = "";
+    let sortAsc = true;
+    let countires: IMultiselect<TCountry>;
+    const selectedCountires: TCountry[] = [];
+    let areas: IMultiselect<IValueName>;
+    const selectedAreas: IValueName[] = [];
+
+    const getCompanies = (grid: IDataGrid) => get<{
             count: number,
             page: ICompanyItem[]
         }>(urls.companiesSearchUrl, {
             search, 
             countries: countires?.getSelectedKeys() ?? [], 
             areas: areas?.getSelectedKeys() ?? [], 
+            sortAsc,
             skip: grid.skip, 
             take: grid.take
         });
-    };
     
-
-
     type TCountry = IValueName & {iso2: string, iso3: string};
     const getCountries = (request: IMultiselectRequest) => getCached<IPagedResponse<TCountry>>(urls.companiesCountriesSearchUrl, request);
     
@@ -57,14 +61,6 @@
             page: cachedAreas.filter(a => a.name.toLowerCase().indexOf(lower) > -1)
         };
     };
-
-    let grid: IDataGrid;
-    let search = "";
-
-    let countires: IMultiselect<TCountry>;
-    const selectedCountires: TCountry[] = [];
-    let areas: IMultiselect<IValueName>;
-    const selectedAreas: IValueName[] = [];
 
     const query = new URLSearchParams(window.location.search);
     if (query.has("country")) {
@@ -138,11 +134,7 @@
 
             </div>
             <div style="align-self: end;">
-                <Pager small {grid} class="float-end">
-                    <span slot="message">
-                        Total <b>{grid.count}</b> companies found. Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>.
-                    </span>
-                </Pager>
+                <Pager small {grid} class="float-end text-end" />
             </div>
         </div>
         <hr />
@@ -157,19 +149,37 @@
             take={10}>
             <tr slot="headerRow" let:grid class:text-muted={grid.working && grid.initialized}>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}Company{/if}
+                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    <span class="header">
+                        Company
+                    </span>
+                    <button class="btn btn-sm btn-outline-primary float-end" 
+                        on:click={() => {sortAsc = !sortAsc; grid.setPage(1)}}
+                        data-bs-toggle="tooltip" 
+                        title={sortAsc ? "Sort by Company Name Descending" : "Sort by Company Name Ascending"}>
+                        <i class:bi-arrow-up={!sortAsc} class:bi-arrow-down={sortAsc}></i>
+                    </button>
+                    {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}Web{/if}
+                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    <span class="header">Info</span>
+                    {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}Areas{/if}
+                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    <span class="header">Areas</span>
+                    {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}About{/if}
+                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    <span class="header">About</span>
+                    {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}<span class="float-end">Stats</span>{/if}
+                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    <span class="float-end header">Stats</span>
+                    {/if}
                 </th>
             </tr> 
             <tr slot="placeholderRow">
@@ -181,18 +191,6 @@
                 <td class="" class:text-muted={grid.working}>
                     <div class="fw-bold">{@html mark(data.name, search)}</div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
-                    <div class="d-flex mt-1">
-                        <button class="clickable-token" 
-                            class:selected={countires.containsKey(data.countrycode)}
-                            on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
-                            <div class="image-15px" 
-                                style="background-position-y: center;{flagBackgroundImageStyle(data.countryiso2)};" 
-                                data-bs-toggle="tooltip" 
-                                title={countryTooltip(data)}>
-                                {data.country}
-                            </div>
-                        </button>
-                    </div>
                 </td>
                 <td class="fs-smaller text-nowrap" class:text-muted={grid.working}>
                     {#if data.web}
@@ -210,12 +208,24 @@
                     {:else}
                         <div class="text-muted"><i class="me-1 bi-linkedin"></i>-</div>
                     {/if}
+                    <div class="d-flex mt-1">
+                        <button class="clickable-token" disabled={grid.working}
+                            class:selected={countires.containsKey(data.countrycode)}
+                            on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
+                            <div class="image-15px" 
+                                style="background-position-y: center;{flagBackgroundImageStyle(data.countryiso2)};" 
+                                data-bs-toggle="tooltip" 
+                                title={countryTooltip(data)}>
+                                {data.country}
+                            </div>
+                        </button>
+                    </div>
                 </td>
                 <td class:text-muted={grid.working}>
                     <div class="d-flex flex-wrap">
                         {#each data.areas as area}
                             <button 
-                                class="clickable-token mb-1" class:selected={areas.containsKey(area.id)}
+                                class="clickable-token mb-1" disabled={grid.working} class:selected={areas.containsKey(area.id)}
                                 on:click={() => areaTokenClick(area)}
                                 data-bs-toggle="tooltip" 
                                 title={areaTooltip(area)}>
@@ -247,15 +257,14 @@
         <div class="mb-5" style="display: grid; grid-template-columns: auto min-content;">
             <div></div>
             <div>
-                <Pager small {grid} class="float-end">
-                    <span slot="message">
-                        Total <b>{grid.count}</b> companies found. Page <b>{grid.page}</b> of <b>{grid.pageCount}</b>.
-                    </span>
-                </Pager>
+                <Pager small {grid} class="float-end text-end" />
             </div>
         </div>
     </div>
 </Layout>
 
 <style lang="scss">
+    .header {
+        text-decoration: underline;
+    }
 </style>

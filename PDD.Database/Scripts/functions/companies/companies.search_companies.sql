@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) RETURNS json
+CREATE OR REPLACE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer) RETURNS json
 LANGUAGE plpgsql
 AS $$
 declare
@@ -68,7 +68,8 @@ begin
                 group by
                     cm.id, cn.code, reviews.count, reviews.score
                 order by 
-                    cm.name
+                    case when _sort_asc is true then cm.name end asc,
+                    case when _sort_asc is false then cm.name end desc
                 limit _take 
                 offset _skip
             ) sub
@@ -77,5 +78,5 @@ begin
 end
 $$;
 
-COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
+COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
 Result is pageable JSON response `{count, data: [...]}`';

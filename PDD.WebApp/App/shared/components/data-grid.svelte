@@ -194,7 +194,8 @@
                     {#if (instanceOfIGridHeader(row))}
                         <th 
                             scope="col" 
-                            style="{(row.width ? "width: " + row.width +"; " : "")}{(row.minWidth ? "min-width: " + row.minWidth +"; " : "")}">
+                            class="{row.class}"
+                            style="{(row.width ? "width: " + row.width +";" : "")}{(row.minWidth ? "min-width: " + row.minWidth +";" : "")}{row.style ?? ""}">
                             {row.text}
                         </th>
                     {:else if typeof row == "string"}

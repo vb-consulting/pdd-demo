@@ -39,9 +39,10 @@ type ChartType = "line" | "bar" | "pie" | "doughnut";
 
 interface IGridHeader {
     text: string; 
-    width?: 
-    string; 
-    minWidth?: string
+    width?: string; 
+    minWidth?: string;
+    class?: string;
+    style?: string;
 }
 
 interface IDataGrid {

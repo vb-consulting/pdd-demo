@@ -77,7 +77,7 @@ DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_year(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
 DROP FUNCTION IF EXISTS companies.search_countries(_search character varying, _skip integer, _take integer);
-DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer);
+DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer);
 DROP FUNCTION IF EXISTS companies.business_areas();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
@@ -123,9 +123,9 @@ $$;
 --
 COMMENT ON FUNCTION companies.business_areas() IS 'select value and name from business_areas';
 --
--- Name: search_companies(character varying, smallint[], smallint[], integer, integer); Type: FUNCTION; Schema: companies; Owner: -
+-- Name: search_companies(character varying, smallint[], smallint[], boolean, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
 --
-CREATE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) RETURNS json
+CREATE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer) RETURNS json
     LANGUAGE plpgsql
     AS $$
 declare
@@ -195,7 +195,8 @@ begin
                 group by
                     cm.id, cn.code, reviews.count, reviews.score
                 order by 
-                    cm.name
+                    case when _sort_asc is true then cm.name end asc,
+                    case when _sort_asc is false then cm.name end desc
                 limit _take 
                 offset _skip
             ) sub
@@ -204,9 +205,9 @@ begin
 end
 $$;
 --
--- Name: FUNCTION search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer); Type: COMMENT; Schema: companies; Owner: -
+-- Name: FUNCTION search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer); Type: COMMENT; Schema: companies; Owner: -
 --
-COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
+COMMENT ON FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer) IS 'Search companies by search string (name or company line), or by countries or areas selection.
 Result is pageable JSON response `{count, data: [...]}`';
 --
 -- Name: search_countries(character varying, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
