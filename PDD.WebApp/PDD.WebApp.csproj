@@ -19,6 +19,12 @@
 	</ItemGroup>
 
 	<ItemGroup Label="nesting">
+		<None Update="Pages\Company.rollup.config.js">
+			<DependentUpon>Company.cshtml</DependentUpon>
+		</None >
+		<None Update="Pages\Company.entry.ts">
+			<DependentUpon>Company.cshtml</DependentUpon>
+		</None>
 		<None Update="Pages\Index.rollup.config.js">
 			<DependentUpon>Index.cshtml</DependentUpon>
 		</None>

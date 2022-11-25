@@ -10,14 +10,12 @@
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
 @import "../shared/components/styles";
 
-.image-15px {
-    background-size: 15px;
-    background-repeat: no-repeat;
-    background-position-x: left;
-    background-position-y: 3px;
-    padding-left: 18px;
-}
 .fs-smaller {
     font-size: smaller;
 }
-
+.btn-xsm {
+    --bs-btn-padding-y: 0.02rem;
+    --bs-btn-padding-x: 0.2rem;
+    --bs-btn-font-size: 0.75rem;
+    --bs-btn-border-radius: 0.25rem;
+}

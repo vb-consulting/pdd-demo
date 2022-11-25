@@ -3,34 +3,33 @@
     import ChartBox from "./shared/components/chart-box.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
     import Placeholder from "./shared/components/placeholder.svelte";
+    import CountryLabel from "./shared/country-label.svelte";
+    import Tokens from "./shared/tokens.svelte";
+
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
     import { get, parseUrl } from "./shared/fetch";
-    import { flagBackgroundImageStyle } from "./shared/utils";
-
-    const getTopCompanies = () => get<{
+    
+    interface ITopCpmpanies extends ICountry {
         id: string;
         name: string;
         companyLine: string;
-        country: string;
-        countryCode: number;
-        countryIso2: string;
-        areas: {id: number, name: string}[];
+        areas: IToken[];
         score: number;
         reviews: number;
-    }[]>(urls.topRatedCompaniesUrl);
-
-    const getTopEmployees = () => get<{
+    }
+    interface ITopEmployees extends ICountry {
         id: string;
         firstName: string;
         lastName: string;
-        country: string;
-        countryCode: number;
         yearsOfExperience: number;
         numberOfCompanies: number;
         employeeStatus: string;
         roles: string[];
-    }[]>(urls.topExperincedPeopleUrl);
+    }
+
+    const getTopCompanies = () => get<ITopCpmpanies[]>(urls.topRatedCompaniesUrl);
+    const getTopEmployees = () => get<ITopEmployees[]>(urls.topExperincedPeopleUrl);
 
 </script>
 
@@ -78,7 +77,7 @@
                     <tr slot="row" let:index let:data>
                         <th scope="row" class="fw-bold">{index+1}</th>
                         <td>
-                            <div class="fw-bold">{data.name}</div>
+                            <a class="fw-bold" href="{urls.companyUrl + "/" + data.id}">{data.name}</a>
                             <div class="text-muted fs-smaller">{data.companyLine}</div>
                         </td>
                         <td>
@@ -86,24 +85,17 @@
                                 <a class="clickable-token" 
                                     data-bs-toggle="tooltip" 
                                     title="Filter companies by {data.country}"
-                                    href="{parseUrl(urls.companiesUrl, {country: JSON.stringify({value: data.countryCode, name: data.country, iso2: data.countryIso2, iso3: ""})})}">
-                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryIso2)};">
-                                        {data.country}
-                                    </div>
+                                    href="{parseUrl(urls.companiesUrl, {country: JSON.stringify({value: data.countrycode, name: data.country, iso2: data.countryiso2, iso3: ""})})}">
+                                    <CountryLabel data={data} />
                                 </a>
                             </div>
                         </td>
                         <td>
-                            <div class="d-flex flex-wrap">
-                                {#each data.areas as area}
-                                    <a class="clickable-token mb-1" 
-                                        data-bs-toggle="tooltip" 
-                                        title="Filter companies by {area.name}"
-                                        href="{parseUrl(urls.companiesUrl, {area: JSON.stringify({value: area.id, name: area.name})})}">
-                                        {area.name}
-                                    </a>
-                                {/each}
-                            </div>
+                            <Tokens 
+                                tokens={data.areas} 
+                                tooltip={token => `Filter companies by ${token.name}`}
+                                href={token => parseUrl(urls.companiesUrl, {area: JSON.stringify({value: token.id, name: token.name})})} 
+                            />
                         </td>
                         <td class="fs-smaller grid-info">
                             <div class="float-end">
@@ -134,9 +126,7 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a class="clickable-token" href="{urls.companiesUrl}">
-                                    <div class="image-15px" style="background-position-y: center;{flagBackgroundImageStyle(data.countryCode)};">
-                                        {data.country}
-                                    </div>
+                                    <CountryLabel data={data} />
                                 </a>
                             </div>
                         </td>

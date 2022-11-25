@@ -1,4 +1,7 @@
-CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(_limit integer) RETURNS json
+CREATE OR REPLACE FUNCTION dashboard.top_rated_companies(
+    _limit integer
+)
+RETURNS json
 LANGUAGE sql
 AS $$
 select json_agg(sub)
@@ -8,8 +11,8 @@ from (
         comp.name,
         company_line as "companyLine",
         country.name as "country",
-        country.code as "countryCode",
-        country.iso2 as "countryIso2",
+        country.code as "countrycode",
+        country.iso2 as "countryiso2",
         (
             select array_agg(json_build_object('id', id, 'name', name))
             from (

@@ -78,6 +78,7 @@ DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
 DROP FUNCTION IF EXISTS companies.search_countries(_search character varying, _skip integer, _take integer);
 DROP FUNCTION IF EXISTS companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer);
+DROP FUNCTION IF EXISTS companies.company_details(_id uuid);
 DROP FUNCTION IF EXISTS companies.business_areas();
 DROP TYPE IF EXISTS public.valid_genders;
 DROP EXTENSION IF EXISTS pg_trgm;
@@ -122,6 +123,43 @@ $$;
 -- Name: FUNCTION business_areas(); Type: COMMENT; Schema: companies; Owner: -
 --
 COMMENT ON FUNCTION companies.business_areas() IS 'select value and name from business_areas';
+--
+-- Name: company_details(uuid); Type: FUNCTION; Schema: companies; Owner: -
+--
+CREATE FUNCTION companies.company_details(_id uuid) RETURNS json
+    LANGUAGE sql
+    AS $$
+select row_to_json(row)
+from (
+    select
+        a.id,
+        a.name,
+        a.web,
+        a.linkedin,
+        a.twitter,
+        a.company_line as companyLine,
+        a.about,
+        a.country as countryCode,
+        b.iso2 as countryIso2,
+        b.name as country,
+        coalesce(array_agg(json_build_object('id', f.id, 'name',f.name)) filter (where f.name is not null), array[]::json[]) as areas,
+        a.created_at as createdAt,
+        c.name as createdBy,
+        a.modified_at as modifiedAt,
+        d.name as modifiedBy
+    from
+        companies a
+        inner join countries b on a.country = b.code
+        inner join users c on a.created_by = c.id
+        inner join users d on a.modified_by = d.id
+        left outer join company_areas e on a.id = e.company_id
+        left outer join business_areas f on e.area_id = f.id
+    where
+        a.id = _id
+    group by
+        a.id, b.iso2, b.name, c.name, d.name
+) row
+$$;
 --
 -- Name: search_companies(character varying, smallint[], smallint[], boolean, integer, integer); Type: FUNCTION; Schema: companies; Owner: -
 --
@@ -491,7 +529,7 @@ JSON object with only one series where labels are last ten years names and value
 --
 -- Name: top_experinced_people(integer); Type: FUNCTION; Schema: dashboard; Owner: -
 --
-CREATE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, country_code character varying, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
+CREATE FUNCTION dashboard.top_experinced_people(_limit integer) RETURNS TABLE(id uuid, first_name character varying, last_name character varying, age integer, country character varying, countrycode smallint, countryiso2 character varying, years_of_experience integer, number_of_companies bigint, employee_status character varying, roles character varying[])
     LANGUAGE sql
     AS $$
 select
@@ -500,7 +538,8 @@ select
     p.last_name,
     date_part('year', now()) - date_part('year', p.birth) as age,
     country.name as country,
-    country.iso2 as country_code,
+    country.code as countrycode,
+    country.iso2 as countryiso2,
     years_of_experience,
     number_of_companies,
     es.name as employee_status,
@@ -524,6 +563,7 @@ where
 group by
     p.id,
     country.name,
+    country.code,
     country.iso2,
     years_of_experience,
     number_of_companies,
@@ -551,8 +591,8 @@ from (
         comp.name,
         company_line as "companyLine",
         country.name as "country",
-        country.code as "countryCode",
-        country.iso2 as "countryIso2",
+        country.code as "countrycode",
+        country.iso2 as "countryiso2",
         (
             select array_agg(json_build_object('id', id, 'name', name))
             from (

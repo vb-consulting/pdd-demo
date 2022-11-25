@@ -1,4 +1,12 @@
-CREATE OR REPLACE FUNCTION companies.search_companies(_search character varying, _countries smallint[], _areas smallint[], _sort_asc boolean, _skip integer, _take integer) RETURNS json
+CREATE OR REPLACE FUNCTION companies.search_companies(
+    _search character varying,
+    _countries smallint[],
+    _areas smallint[],
+    _sort_asc boolean,
+    _skip integer,
+    _take integer
+)
+RETURNS json
 LANGUAGE plpgsql
 AS $$
 declare

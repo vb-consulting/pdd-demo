@@ -1,4 +1,9 @@
-CREATE OR REPLACE FUNCTION companies.search_countries(_search character varying, _skip integer, _take integer) RETURNS json
+CREATE OR REPLACE FUNCTION companies.search_countries(
+    _search character varying,
+    _skip integer,
+    _take integer
+)
+RETURNS json
 LANGUAGE plpgsql
 AS $$
 declare

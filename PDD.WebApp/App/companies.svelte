@@ -5,27 +5,13 @@
     import Placeholder from "./shared/components/placeholder.svelte";
     import Search from "./shared/components/search-input.svelte";
     import Multiselect from "./shared/components/multiselect.svelte";
+    import CountryLabel from "./shared/country-label.svelte";
+    import Tokens from "./shared/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
     import { get, getCached } from "./shared/fetch";
     import { mark } from "./shared/components/utils";
-    import { urlToHandle, take, flagBackgroundImageStyle } from "./shared/utils";
-
-    interface ICompanyItem {
-        id: string,
-        name: string,
-        companyline: string,
-        about: string,
-        countrycode: number,
-        countryiso2: string,
-        country: string,
-        web: string,
-        twitter?: string,
-        linkedin?: string,
-        areas: {id: number, name: string}[],
-        reviews: number,
-        score: number
-    }
+    import { urlToHandle, take } from "./shared/utils";
 
     let grid: IDataGrid;
     let search = "";
@@ -37,7 +23,7 @@
 
     const getCompanies = (grid: IDataGrid) => get<{
             count: number,
-            page: ICompanyItem[]
+            page: ICompanyGridItem[]
         }>(urls.companiesSearchUrl, {
             search, 
             countries: countires?.getSelectedKeys() ?? [], 
@@ -73,17 +59,20 @@
     function countryTokenClick(country: {code: number, iso2: string, name: string}) {
         countires.toggleItem({value: country.code, name: country.name, iso2: country.iso2, iso3: ""})
     }
-    function areaTokenClick(area: {id: number, name: string}) {
+    function areaTokenClick(area: IToken) {
         areas.toggleItem({value: area.id, name: area.name});
     }
     function onSearch() {
         grid.setPage(1);
     }
-    function countryTooltip(item: ICompanyItem) {
+    function countryTooltip(item: ICompanyGridItem) {
         return countires.containsKey(item.countrycode) ? `Remove filter by ${item.country}` : `Add filter by ${item.country}`;
     }
-    function areaTooltip(area: {id: number, name: string}) {
+    function areaTooltip(area: IToken) {
         return areas.containsKey(area.id) ? `Remove filter by ${area.name}` : `Add filter by ${area.name}`;
+    }
+    function countryFlag(code: string) {
+        return (code ? `background-image: url(https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/flags/4x3/${code.toLowerCase()}.svg)` : "")
     }
 </script>
 
@@ -112,13 +101,13 @@
                     searching={grid?.working}
                     placeholder="Search Countries"
                     initialized={grid?.initialized}>
-                    <div slot="token" let:item class="image-15px" style="background-position-y: center; {flagBackgroundImageStyle(item.iso2)};">
+                    <div slot="token" let:item class="image-15px" style="background-position-y: center;{countryFlag(item.iso2)}">
                         {item.name}
                     </div>
-                    <span slot="option" let:item class="image-15px" style="background-position-y: center; {flagBackgroundImageStyle(item.iso2)};" let:markup>
+                    <div slot="option" let:item class="image-15px" style="background-position-y: center;{countryFlag(item.iso2)};" let:markup>
                         {@html markup}
                         <span class="float-end fs-smaller text-muted">{item.iso3}</span>
-                    </span>
+                    </div>
                 </Multiselect>
 
                 <Multiselect
@@ -189,7 +178,10 @@
             </tr>
             <tr slot="row" let:data let:grid>
                 <td class="" class:text-muted={grid.working}>
-                    <div class="fw-bold">{@html mark(data.name, search)}</div>
+                    <div class="fw-bold">
+                        <a href="{urls.companyUrl}/{data.id}">{@html mark(data.name, search)}</a>
+                        <button class="btn btn-xsm btn-outline-primary float-end">edit</button>
+                    </div>
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
                 </td>
                 <td class="fs-smaller text-nowrap" class:text-muted={grid.working}>
@@ -212,27 +204,18 @@
                         <button class="clickable-token" disabled={grid.working}
                             class:selected={countires.containsKey(data.countrycode)}
                             on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
-                            <div class="image-15px" 
-                                style="background-position-y: center;{flagBackgroundImageStyle(data.countryiso2)};" 
-                                data-bs-toggle="tooltip" 
-                                title={countryTooltip(data)}>
-                                {data.country}
-                            </div>
+                            <CountryLabel data={data} tooltip={countryTooltip(data)} />
                         </button>
                     </div>
                 </td>
                 <td class:text-muted={grid.working}>
-                    <div class="d-flex flex-wrap">
-                        {#each data.areas as area}
-                            <button 
-                                class="clickable-token mb-1" disabled={grid.working} class:selected={areas.containsKey(area.id)}
-                                on:click={() => areaTokenClick(area)}
-                                data-bs-toggle="tooltip" 
-                                title={areaTooltip(area)}>
-                                {area.name}
-                            </button>
-                        {/each}
-                    </div>
+                    <Tokens 
+                        tokens={data.areas} 
+                        disabled={grid.working}
+                        selected={token => areas.containsKey(token.id)} 
+                        click={areaTokenClick} 
+                        tooltip={areaTooltip}
+                    />
                 </td>
                 <td class:text-muted={grid.working}>
                     {take(data.about, 200)}
@@ -266,5 +249,12 @@
 <style lang="scss">
     .header {
         text-decoration: underline;
+    }
+    .image-15px {
+        background-size: 15px;
+        background-repeat: no-repeat;
+        background-position-x: left;
+        background-position-y: 3px;
+        padding-left: 18px;
     }
 </style>

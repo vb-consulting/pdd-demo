@@ -29,6 +29,8 @@ export const urls = getValueFromJson<{
     peopleUrl: string;
     
     errorUrl: string;
+    notFoundUrl: string;
+    unathorizedUrl: string;
     loginUrl: string;
     logoutUrl: string;
     signInGoogleUrl: string;
@@ -43,4 +45,6 @@ export const urls = getValueFromJson<{
     companiesSearchUrl: string;
     companiesCountriesSearchUrl: string;
     businessAreasUrl: string;
+    companyUrl: string;
+    companyDetailsUrl: string;
 }>("urls");

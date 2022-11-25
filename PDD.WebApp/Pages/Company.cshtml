@@ -1,0 +1,14 @@
+@page
+@attribute [RazorCompiledItemMetadata("RouteTemplate", $"{Urls.CompanyUrl}/{{id:Guid}}")]
+
+@model CompanyModel
+@{
+    ViewData["Title"] = "Company Title";
+}
+
+<input id="id" type="hidden" value='@Html.Raw(RouteData.Values["id"])' />
+
+@section HeadSection {
+    <link href="~/build/company.css" asp-append-version="true" rel="stylesheet" />
+    <script defer src="~/build/company.js" asp-append-version="true"></script>
+}

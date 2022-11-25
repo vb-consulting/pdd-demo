@@ -1,14 +1,10 @@
 ﻿const fs = require(`fs`);
 
-const removeFiles = (dir) => {
-    if (fs.existsSync(dir)) {
-        console.log(`Removing files from ${dir} ...`);
-        fs.readdirSync(dir).forEach(f => fs.rmSync(`${dir}/${f}`));
-    }
-}
-
 let dir =`./wwwroot/fonts/`;
-removeFiles(dir);
+if (fs.existsSync(dir)) {
+    console.log(`Removing files from ${dir} ...`);
+    fs.readdirSync(dir).forEach(f => fs.rmSync(`${dir}/${f}`));
+}
 
 if (!fs.existsSync(dir) || !fs.existsSync(`${dir}bootstrap-icons.woff2`) || !fs.existsSync(`${dir}bootstrap-icons.woff`)) {
     if(!fs.existsSync(dir)){

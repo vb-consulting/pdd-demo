@@ -1,10 +1,4 @@
-﻿using System.Net.Mime;
-using System.Reflection.PortableExecutable;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PDD.Database.Extensions;
-
-namespace PDD.WebApp.Endpoints;
+﻿namespace PDD.WebApp.Endpoints;
 
 public class Cache { public string? Version { get; set; } }
 

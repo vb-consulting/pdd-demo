@@ -35,11 +35,28 @@ public partial class Endpoints
             return await connection.SearchCountriesAsync(search, skip, take);
         });
 
-        app.MapGet(Urls.BusinessAreasUrl, [AllowAnonymous] (NpgsqlConnection connection, HttpResponse response) =>
+        app.MapGet(Urls.BusinessAreasUrl, [AllowAnonymous] (
+            NpgsqlConnection connection, 
+            HttpResponse response) =>
         {
             response.ContentType = MediaTypeNames.Application.Json;
             response.Headers.AddCacheHeader();
             return connection.BusinessAreasAsync();
+        });
+
+        app.MapGet(Urls.CompanyDetailsUrl, [AllowAnonymous] async (
+            [FromQuery] Guid id,
+            NpgsqlConnection connection, 
+            HttpResponse response) =>
+        {
+            var result = await connection.CompanyDetailsAsync(id);
+            if (result == null)
+            {
+                response.StatusCode = 404;
+                return $"Company id {id} not found!";
+            }
+            response.ContentType = MediaTypeNames.Application.Json;
+            return result;
         });
     }
 }

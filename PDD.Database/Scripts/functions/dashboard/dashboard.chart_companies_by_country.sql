@@ -1,4 +1,7 @@
-CREATE OR REPLACE FUNCTION dashboard.chart_companies_by_country(_limit integer) RETURNS json
+CREATE OR REPLACE FUNCTION dashboard.chart_companies_by_country(
+    _limit integer
+)
+RETURNS json
 LANGUAGE sql
 AS $$
 with cte as (

@@ -1,4 +1,7 @@
-CREATE OR REPLACE FUNCTION dashboard.chart_employee_counts_by_year(_limit integer) RETURNS json
+CREATE OR REPLACE FUNCTION dashboard.chart_employee_counts_by_year(
+    _limit integer
+)
+RETURNS json
 LANGUAGE plpgsql
 AS $$
 declare

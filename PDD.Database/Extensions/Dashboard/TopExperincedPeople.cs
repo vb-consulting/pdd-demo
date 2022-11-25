@@ -27,7 +27,7 @@ public static class PgRoutineTopExperincedPeople
         return connection
             .WithParameters(
                 (limit, NpgsqlDbType.Integer))
-            .Read<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, country_code, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+            .Read<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, countrycode, countryiso2, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 
     /// <summary>
@@ -41,6 +41,6 @@ public static class PgRoutineTopExperincedPeople
         return connection
             .WithParameters(
                 (limit, NpgsqlDbType.Integer))
-            .ReadAsync<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, country_code, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+            .ReadAsync<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, countrycode, countryiso2, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
     }
 }
