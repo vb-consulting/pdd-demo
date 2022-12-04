@@ -1,10 +1,6 @@
 #pragma warning disable CS8632
 // pgroutiner auto-generated code
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Norm;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
@@ -14,6 +10,7 @@ namespace PDD.Database.Extensions.Companies;
 public static class PgRoutineSearchCountries
 {
     public const string Name = "companies.search_countries";
+    public const string Query = $"select {Name}($1, $2, $3)";
 
     /// <summary>
     /// Executes plpgsql function companies.search_countries(character varying, integer, integer)
@@ -31,15 +28,24 @@ public static class PgRoutineSearchCountries
     /// <returns>string?</returns>
     public static string? SearchCountries(this NpgsqlConnection connection, string? search, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (search, NpgsqlDbType.Varchar),
-                (skip, NpgsqlDbType.Integer),
-                (take, NpgsqlDbType.Integer))
-            .Read<string?>($"select {Name}($1, $2, $3)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefault();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
+        if (reader.Read())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 
     /// <summary>
@@ -56,16 +62,25 @@ public static class PgRoutineSearchCountries
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> SearchCountriesAsync(this NpgsqlConnection connection, string? search, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> SearchCountriesAsync(this NpgsqlConnection connection, string? search, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return await connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (search, NpgsqlDbType.Varchar),
-                (skip, NpgsqlDbType.Integer),
-                (take, NpgsqlDbType.Integer))
-            .ReadAsync<string?>($"select {Name}($1, $2, $3)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefaultAsync();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
+        if (await reader.ReadAsync())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace PDD.WebApp.Database;
+﻿using Newtonsoft.Json.Linq;
+using System;
+
+namespace PDD.WebApp.Database;
 
 public static class ConnectionBuilder
 {
@@ -25,33 +28,37 @@ public static class ConnectionBuilder
     {
         logger = app.Logger;
         var connectionName = GetConnectionName(app.Configuration);
-        connectionString =
+        var connectionString =
             app.Configuration.GetConnectionString(connectionName) ??
             app.Configuration.GetValue<string>($"POSTGRESQLCONNSTR_{connectionName}");
 
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
         builder.ApplicationName ??= Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar).LastOrDefault() ?? Consts.Title;
+        ConnectionBuilder.connectionString = builder.ToString();
+
+
+        AppContext.SetSwitch("Npgsql.EnableSqlRewriting", false);
         
-        if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool?>(LogDatabaseCallsKey) == true)
-        {
-            NormOptions.Configure(options =>
-            {
-                options.NpgsqlEnableSqlRewriting = false;
-                options.CommandCommentHeader.Enabled = true;
-                options.CommandCommentHeader.IncludeCallerInfo = true;
-                options.CommandCommentHeader.IncludeCommandAttributes = false;
-                options.CommandCommentHeader.IncludeTimestamp = false;
-                options.CommandCommentHeader.IncludeParameters = true;
-                options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
-            });
-        }
-        else
-        {
-            NormOptions.Configure(options =>
-            {
-                options.NpgsqlEnableSqlRewriting = false;
-            });
-        }
+        //if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool?>(LogDatabaseCallsKey) == true)
+        //{
+        //    NormOptions.Configure(options =>
+        //    {
+        //        options.NpgsqlEnableSqlRewriting = false;
+        //        options.CommandCommentHeader.Enabled = true;
+        //        options.CommandCommentHeader.IncludeCallerInfo = true;
+        //        options.CommandCommentHeader.IncludeCommandAttributes = false;
+        //        options.CommandCommentHeader.IncludeTimestamp = false;
+        //        options.CommandCommentHeader.IncludeParameters = true;
+        //        options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
+        //    });
+        //}
+        //else
+        //{
+        //    NormOptions.Configure(options =>
+        //    {
+        //        options.NpgsqlEnableSqlRewriting = false;
+        //    });
+        //}
     }
 
     private static string GetConnectionName(IConfiguration config)
@@ -98,6 +105,7 @@ public static class ConnectionBuilder
                 logger.LogTrace(msg);
             }
         };
+        connection.Open();
         return connection;
     }
 }

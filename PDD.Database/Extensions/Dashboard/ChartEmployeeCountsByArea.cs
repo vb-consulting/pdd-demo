@@ -1,10 +1,6 @@
 #pragma warning disable CS8632
 // pgroutiner auto-generated code
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Norm;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
@@ -14,6 +10,7 @@ namespace PDD.Database.Extensions.Dashboard;
 public static class PgRoutineChartEmployeeCountsByArea
 {
     public const string Name = "dashboard.chart_employee_counts_by_area";
+    public const string Query = $"select {Name}($1)";
 
     /// <summary>
     /// Executes sql function dashboard.chart_employee_counts_by_area(integer)
@@ -25,13 +22,22 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// <returns>string?</returns>
     public static string? ChartEmployeeCountsByArea(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (limit, NpgsqlDbType.Integer))
-            .Read<string?>($"select {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefault();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
+        if (reader.Read())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 
     /// <summary>
@@ -42,14 +48,23 @@ public static class PgRoutineChartEmployeeCountsByArea
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> ChartEmployeeCountsByAreaAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> ChartEmployeeCountsByAreaAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return await connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (limit, NpgsqlDbType.Integer))
-            .ReadAsync<string?>($"select {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefaultAsync();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
+        if (await reader.ReadAsync())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 }

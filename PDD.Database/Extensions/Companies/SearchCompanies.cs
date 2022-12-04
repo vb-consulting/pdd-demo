@@ -1,10 +1,6 @@
 #pragma warning disable CS8632
 // pgroutiner auto-generated code
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Norm;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
@@ -14,6 +10,7 @@ namespace PDD.Database.Extensions.Companies;
 public static class PgRoutineSearchCompanies
 {
     public const string Name = "companies.search_companies";
+    public const string Query = $"select {Name}($1, $2, $3, $4, $5, $6)";
 
     /// <summary>
     /// Executes plpgsql function companies.search_companies(character varying, ARRAY, ARRAY, boolean, integer, integer)
@@ -29,18 +26,27 @@ public static class PgRoutineSearchCompanies
     /// <returns>string?</returns>
     public static string? SearchCompanies(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (search, NpgsqlDbType.Varchar),
-                (countries, NpgsqlDbType.Array | NpgsqlDbType.Smallint),
-                (areas, NpgsqlDbType.Array | NpgsqlDbType.Smallint),
-                (sortAsc, NpgsqlDbType.Boolean),
-                (skip, NpgsqlDbType.Integer),
-                (take, NpgsqlDbType.Integer))
-            .Read<string?>($"select {Name}($1, $2, $3, $4, $5, $6)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefault();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)countries ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)areas ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = (object)sortAsc ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
+        if (reader.Read())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 
     /// <summary>
@@ -55,19 +61,28 @@ public static class PgRoutineSearchCompanies
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async ValueTask<string?> SearchCompaniesAsync(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> SearchCompaniesAsync(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return await connection
-            .WithUnknownResultType()
-            .WithCommandBehavior(System.Data.CommandBehavior.SingleResult)
-            .WithParameters(
-                (search, NpgsqlDbType.Varchar),
-                (countries, NpgsqlDbType.Array | NpgsqlDbType.Smallint),
-                (areas, NpgsqlDbType.Array | NpgsqlDbType.Smallint),
-                (sortAsc, NpgsqlDbType.Boolean),
-                (skip, NpgsqlDbType.Integer),
-                (take, NpgsqlDbType.Integer))
-            .ReadAsync<string?>($"select {Name}($1, $2, $3, $4, $5, $6)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber)
-            .SingleOrDefaultAsync();
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)countries ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)areas ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = (object)sortAsc ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+            },
+            AllResultTypesAreUnknown = true
+        };
+        using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
+        if (await reader.ReadAsync())
+        {
+            var value = reader.GetProviderSpecificValue(0);
+            return value == DBNull.Value ? null : (string)value;
+        }
+        return default;
     }
 }

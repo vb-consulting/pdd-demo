@@ -1,10 +1,6 @@
 #pragma warning disable CS8632
 // pgroutiner auto-generated code
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Norm;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
@@ -15,6 +11,7 @@ namespace PDD.Database.Extensions.Dashboard;
 public static class PgRoutineTopExperincedPeople
 {
     public const string Name = "dashboard.top_experinced_people";
+    public const string Query = $"select id, first_name, last_name, age, country, countrycode, countryiso2, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)";
 
     /// <summary>
     /// Executes sql function dashboard.top_experinced_people(integer)
@@ -24,10 +21,35 @@ public static class PgRoutineTopExperincedPeople
     /// <returns>IEnumerable of TopExperincedPeopleResult instances</returns>
     public static IEnumerable<TopExperincedPeopleResult> TopExperincedPeople(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
-            .WithParameters(
-                (limit, NpgsqlDbType.Integer))
-            .Read<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, countrycode, countryiso2, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+            },
+            UnknownResultTypeList = new bool[] { false, true, true, false, true, false, true, false, false, true, false }
+        };
+        using var reader = command.ExecuteReader(System.Data.CommandBehavior.Default);
+        while (reader.Read())
+        {
+            object[] values = new object[11];
+            reader.GetProviderSpecificValues(values);
+            yield return new TopExperincedPeopleResult
+            {
+                Id = values[0] == DBNull.Value ? null : (Guid)values[0],
+                FirstName = values[1] == DBNull.Value ? null : (string)values[1],
+                LastName = values[2] == DBNull.Value ? null : (string)values[2],
+                Age = values[3] == DBNull.Value ? null : (int)values[3],
+                Country = values[4] == DBNull.Value ? null : (string)values[4],
+                Countrycode = values[5] == DBNull.Value ? null : (short)values[5],
+                Countryiso2 = values[6] == DBNull.Value ? null : (string)values[6],
+                YearsOfExperience = values[7] == DBNull.Value ? null : (int)values[7],
+                NumberOfCompanies = values[8] == DBNull.Value ? null : (long)values[8],
+                EmployeeStatus = values[9] == DBNull.Value ? null : (string)values[9],
+                Roles = values[10] == DBNull.Value ? null : (string[])values[10]
+            };
+        }
     }
 
     /// <summary>
@@ -36,11 +58,36 @@ public static class PgRoutineTopExperincedPeople
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>IAsyncEnumerable of TopExperincedPeopleResult instances</returns>
-    public static IAsyncEnumerable<TopExperincedPeopleResult> TopExperincedPeopleAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async IAsyncEnumerable<TopExperincedPeopleResult> TopExperincedPeopleAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
     {
-        return connection
-            .WithParameters(
-                (limit, NpgsqlDbType.Integer))
-            .ReadAsync<TopExperincedPeopleResult>($"select id, first_name, last_name, age, country, countrycode, countryiso2, years_of_experience, number_of_companies, employee_status, roles from {Name}($1)", memberName: memberName, sourceFilePath: sourceFilePath, sourceLineNumber: sourceLineNumber);
+        using var command = new NpgsqlCommand(Query, connection)
+        {
+            CommandType = System.Data.CommandType.Text,
+            Parameters =
+            {
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+            },
+            UnknownResultTypeList = new bool[] { false, true, true, false, true, false, true, false, false, true, false }
+        };
+        using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.Default);
+        while (await reader.ReadAsync())
+        {
+            object[] values = new object[11];
+            reader.GetProviderSpecificValues(values);
+            yield return new TopExperincedPeopleResult
+            {
+                Id = values[0] == DBNull.Value ? null : (Guid)values[0],
+                FirstName = values[1] == DBNull.Value ? null : (string)values[1],
+                LastName = values[2] == DBNull.Value ? null : (string)values[2],
+                Age = values[3] == DBNull.Value ? null : (int)values[3],
+                Country = values[4] == DBNull.Value ? null : (string)values[4],
+                Countrycode = values[5] == DBNull.Value ? null : (short)values[5],
+                Countryiso2 = values[6] == DBNull.Value ? null : (string)values[6],
+                YearsOfExperience = values[7] == DBNull.Value ? null : (int)values[7],
+                NumberOfCompanies = values[8] == DBNull.Value ? null : (long)values[8],
+                EmployeeStatus = values[9] == DBNull.Value ? null : (string)values[9],
+                Roles = values[10] == DBNull.Value ? null : (string[])values[10]
+            };
+        }
     }
 }

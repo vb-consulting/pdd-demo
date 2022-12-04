@@ -4,6 +4,8 @@ namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
 /// Test method for sql function dashboard.top_experinced_people
+///
+/// Top experienced people by the years of the working experience.
 ///</summary>
 public class TopExperincedPeopleUnitTests : PostgreSqlConfigurationFixture
 {

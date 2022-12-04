@@ -1,1 +1,1 @@
-
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;

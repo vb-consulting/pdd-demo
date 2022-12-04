@@ -5,7 +5,8 @@ namespace PDD.DatabaseTests.Dashboard;
 ///<summary>
 /// Test method for sql function dashboard.chart_companies_by_country
 ///
-/// Number of companies by country./// JSON object where labels are country names and it only have one series with the number of companies for each country./// It show only first 9 countries and 10th is summed together as other. /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`/// 
+/// Number of companies by country./// JSON object where labels are country names and it only have one series with the number of companies for each country.
+/// It show only first 9 countries and 10th is summed together as other. /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`/// 
 ///</summary>
 public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
 {

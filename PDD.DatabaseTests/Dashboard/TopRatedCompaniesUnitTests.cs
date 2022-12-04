@@ -1,13 +1,11 @@
 // pgroutiner auto-generated code
 
-using static System.Formats.Asn1.AsnWriter;
-using System.ComponentModel.Design;
-using System.Xml.Linq;
-
 namespace PDD.DatabaseTests.Dashboard;
 
 ///<summary>
 /// Test method for sql function dashboard.top_rated_companies
+///
+/// Top rated companies by the user score.
 ///</summary>
 public class TopRatedCompaniesUnitTests : PostgreSqlConfigurationFixture
 {
