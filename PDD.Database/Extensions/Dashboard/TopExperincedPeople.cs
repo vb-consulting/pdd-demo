@@ -4,9 +4,23 @@ using System.Threading.Tasks;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
-using PDD.Database.Models;
 
 namespace PDD.Database.Extensions.Dashboard;
+
+public class TopExperincedPeopleResult
+{
+    public Guid? Id { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public int? Age { get; set; }
+    public string? Country { get; set; }
+    public short? Countrycode { get; set; }
+    public string? Countryiso2 { get; set; }
+    public int? YearsOfExperience { get; set; }
+    public long? NumberOfCompanies { get; set; }
+    public string? EmployeeStatus { get; set; }
+    public string[]? Roles { get; set; }
+}
 
 public static class PgRoutineTopExperincedPeople
 {
@@ -19,17 +33,25 @@ public static class PgRoutineTopExperincedPeople
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>IEnumerable of TopExperincedPeopleResult instances</returns>
-    public static IEnumerable<TopExperincedPeopleResult> TopExperincedPeople(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static IEnumerable<TopExperincedPeopleResult> TopExperincedPeople(this NpgsqlConnection connection, int? limit,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = limit == null ? DBNull.Value : limit }
             },
             UnknownResultTypeList = new bool[] { false, true, true, false, true, false, true, false, false, true, false }
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            connection.Open();
+        }
         using var reader = command.ExecuteReader(System.Data.CommandBehavior.Default);
         while (reader.Read())
         {
@@ -58,17 +80,25 @@ public static class PgRoutineTopExperincedPeople
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>IAsyncEnumerable of TopExperincedPeopleResult instances</returns>
-    public static async IAsyncEnumerable<TopExperincedPeopleResult> TopExperincedPeopleAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async IAsyncEnumerable<TopExperincedPeopleResult> TopExperincedPeopleAsync(this NpgsqlConnection connection, int? limit,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = limit == null ? DBNull.Value : limit }
             },
             UnknownResultTypeList = new bool[] { false, true, true, false, true, false, true, false, false, true, false }
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
         using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.Default);
         while (await reader.ReadAsync())
         {

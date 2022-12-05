@@ -11,11 +11,11 @@
 </div>
 
 <style lang="scss">
-  .image-15px {
-      background-size: 15px;
-      background-repeat: no-repeat;
-      background-position-x: left;
-      background-position-y: 3px;
-      padding-left: 18px;
-  }
+    .image-15px {
+        background-size: 15px;
+        background-repeat: no-repeat;
+        background-position-x: left;
+        background-position-y: 3px;
+        padding-left: 18px;
+    }
 </style> 

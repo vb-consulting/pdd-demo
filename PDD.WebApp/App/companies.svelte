@@ -6,6 +6,7 @@
     import Search from "./shared/components/search-input.svelte";
     import Multiselect from "./shared/components/multiselect.svelte";
     import CountryLabel from "./shared/country-label.svelte";
+    import CompanyUrl from "./shared/company-url.svelte";
     import Tokens from "./shared/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
@@ -185,21 +186,11 @@
                     <div class="text-muted">{@html mark(data.companyline, search)}</div>
                 </td>
                 <td class="fs-smaller text-nowrap" class:text-muted={grid.working}>
-                    {#if data.web}
-                        <a class="d-block" href={data.web}><i class="me-1 bi-globe"></i>{data.web}</a>
-                    {:else}
-                        <div><i class="me-1 bi-globe"></i>-</div>
-                    {/if}
-                    {#if data.twitter}
-                        <a class="d-block" href={data.twitter}><i class="me-1 bi-twitter"></i>{urlToHandle(data.twitter)}</a>
-                    {:else}
-                        <div class="text-muted"><i class="me-1 bi-twitter"></i>-</div>
-                    {/if}
-                    {#if data.linkedin}
-                        <a class="d-block" href={data.linkedin}><i class="me-1 bi-linkedin"></i>{urlToHandle(data.linkedin)}</a>
-                    {:else}
-                        <div class="text-muted"><i class="me-1 bi-linkedin"></i>-</div>
-                    {/if}
+                    
+                    <CompanyUrl company={data} type="web" />
+                    <CompanyUrl company={data} type="twitter" />
+                    <CompanyUrl company={data} type="linkedin" />
+
                     <div class="d-flex mt-1">
                         <button class="clickable-token" disabled={grid.working}
                             class:selected={countires.containsKey(data.countrycode)}

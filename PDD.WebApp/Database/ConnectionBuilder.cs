@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using PDD.Database;
+using System.Text;
 
 namespace PDD.WebApp.Database;
 
@@ -36,29 +36,86 @@ public static class ConnectionBuilder
         builder.ApplicationName ??= Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar).LastOrDefault() ?? Consts.Title;
         ConnectionBuilder.connectionString = builder.ToString();
 
-
         AppContext.SetSwitch("Npgsql.EnableSqlRewriting", false);
-        
-        //if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool?>(LogDatabaseCallsKey) == true)
-        //{
-        //    NormOptions.Configure(options =>
-        //    {
-        //        options.NpgsqlEnableSqlRewriting = false;
-        //        options.CommandCommentHeader.Enabled = true;
-        //        options.CommandCommentHeader.IncludeCallerInfo = true;
-        //        options.CommandCommentHeader.IncludeCommandAttributes = false;
-        //        options.CommandCommentHeader.IncludeTimestamp = false;
-        //        options.CommandCommentHeader.IncludeParameters = true;
-        //        options.DbCommandCallback = cmd => logger.LogInformation(cmd.CommandText);
-        //    });
-        //}
-        //else
-        //{
-        //    NormOptions.Configure(options =>
-        //    {
-        //        options.NpgsqlEnableSqlRewriting = false;
-        //    });
-        //}
+
+        var appendCommandHeaders = app.Configuration.GetValue<bool>("AppendCommandHeaders");
+        var logCommands = app.Configuration.GetValue<bool>("LogCommands");
+        if (!appendCommandHeaders && !logCommands)
+        {
+            return;
+        }
+        CommandCallback.Callback = (command, memberName, sourceFilePath, sourceLineNumber) =>
+        {
+            if (appendCommandHeaders)
+            {
+                AppendCommandHeaders(command, memberName, sourceFilePath, sourceLineNumber);
+            }
+            if (logCommands)
+            {
+                logger.LogInformation(command.CommandText);
+            }
+        };
+    }
+
+    public static void AppendCommandHeaders(NpgsqlCommand command, string memberName, string sourceFilePath, int sourceLineNumber)
+    {
+        var sb = new StringBuilder();
+        sb.Append("at ");
+        sb.Append(memberName);
+        sb.Append(" in ");
+        sb.Append(sourceFilePath);
+        sb.Append("#");
+        sb.Append(sourceLineNumber);
+        sb.Append("\n");
+
+        int paramIndex = 0;
+        foreach (NpgsqlParameter p in command.Parameters)
+        {
+            paramIndex++;
+            string paramType = p.DataTypeName?.ToString() ?? "";
+            
+            object? value = p.Value is DateTime time ? time.ToString("o") : p.Value;
+            if (value == DBNull.Value)
+            {
+                value = "null";
+            }
+            else if (value is string)
+            {
+                value = string.Concat("\"", value, "\"").Replace("/*", "??").Replace("*/", "??");
+            }
+            else if (value is bool)
+            {
+                value = value?.ToString()?.ToLowerInvariant();
+            }
+            else if (value is System.Collections.ICollection)
+            {
+                var array = new List<string?>();
+                var enumerator = (value as System.Collections.IEnumerable)?.GetEnumerator();
+
+                if (enumerator != null)
+                    while (enumerator.MoveNext())
+                    {
+                        array.Add(enumerator.Current.ToString());
+                    }
+                
+                value = string.Concat("{", string.Join(", ", array), "}");
+            }
+            var name = string.IsNullOrEmpty(p.ParameterName) ?
+                string.Concat("$", paramIndex.ToString()) :
+                string.Concat("@", p.ParameterName);
+            
+            sb.Append(name);
+            sb.Append(" ");
+            sb.Append(paramType);
+            sb.Append(" = ");
+            sb.Append(value);
+            sb.Append("\n");
+        }
+
+        if (sb.Length > 0)
+        {
+            command.CommandText = string.Concat(string.Concat("/*\n", sb.ToString(), "*/\n"), command.CommandText);
+        }
     }
 
     private static string GetConnectionName(IConfiguration config)
@@ -105,7 +162,7 @@ public static class ConnectionBuilder
                 logger.LogTrace(msg);
             }
         };
-        connection.Open();
+
         return connection;
     }
 }

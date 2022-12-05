@@ -4,9 +4,14 @@ using System.Threading.Tasks;
 using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
-using PDD.Database.Models;
 
 namespace PDD.Database.Extensions.Companies;
+
+public class BusinessAreasResult
+{
+    public short? Value { get; set; }
+    public string? Name { get; set; }
+}
 
 public static class PgRoutineBusinessAreas
 {
@@ -18,13 +23,21 @@ public static class PgRoutineBusinessAreas
     /// select value and name from business_areas
     /// </summary>
     /// <returns>IEnumerable of BusinessAreasResult instances</returns>
-    public static IEnumerable<BusinessAreasResult> BusinessAreas(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static IEnumerable<BusinessAreasResult> BusinessAreas(this NpgsqlConnection connection,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             UnknownResultTypeList = new bool[] { false, true }
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            connection.Open();
+        }
         using var reader = command.ExecuteReader(System.Data.CommandBehavior.Default);
         while (reader.Read())
         {
@@ -43,13 +56,21 @@ public static class PgRoutineBusinessAreas
     /// select value and name from business_areas
     /// </summary>
     /// <returns>IAsyncEnumerable of BusinessAreasResult instances</returns>
-    public static async IAsyncEnumerable<BusinessAreasResult> BusinessAreasAsync(this NpgsqlConnection connection, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async IAsyncEnumerable<BusinessAreasResult> BusinessAreasAsync(this NpgsqlConnection connection,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             UnknownResultTypeList = new bool[] { false, true }
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
         using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.Default);
         while (await reader.ReadAsync())
         {

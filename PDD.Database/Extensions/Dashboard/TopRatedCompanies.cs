@@ -18,17 +18,25 @@ public static class PgRoutineTopRatedCompanies
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>string?</returns>
-    public static string? TopRatedCompanies(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? TopRatedCompanies(this NpgsqlConnection connection, int? limit,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = limit == null ? DBNull.Value : limit }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            connection.Open();
+        }
         using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
         if (reader.Read())
         {
@@ -44,17 +52,25 @@ public static class PgRoutineTopRatedCompanies
     /// </summary>
     /// <param name="limit">_limit integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async Task<string?> TopRatedCompaniesAsync(this NpgsqlConnection connection, int? limit, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> TopRatedCompaniesAsync(this NpgsqlConnection connection, int? limit,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)limit ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = limit == null ? DBNull.Value : limit }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
         using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
         if (await reader.ReadAsync())
         {

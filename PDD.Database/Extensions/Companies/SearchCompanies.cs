@@ -24,22 +24,30 @@ public static class PgRoutineSearchCompanies
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>string?</returns>
-    public static string? SearchCompanies(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? SearchCompanies(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)countries ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)areas ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = (object)sortAsc ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = search == null ? DBNull.Value : search },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = countries == null ? DBNull.Value : countries },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = areas == null ? DBNull.Value : areas },
+                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = sortAsc == null ? DBNull.Value : sortAsc },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = skip == null ? DBNull.Value : skip },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = take == null ? DBNull.Value : take }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            connection.Open();
+        }
         using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
         if (reader.Read())
         {
@@ -61,22 +69,30 @@ public static class PgRoutineSearchCompanies
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async Task<string?> SearchCompaniesAsync(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> SearchCompaniesAsync(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)countries ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = (object)areas ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = (object)sortAsc ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = search == null ? DBNull.Value : search },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = countries == null ? DBNull.Value : countries },
+                new() { NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Smallint, Value = areas == null ? DBNull.Value : areas },
+                new() { NpgsqlDbType = NpgsqlDbType.Boolean, Value = sortAsc == null ? DBNull.Value : sortAsc },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = skip == null ? DBNull.Value : skip },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = take == null ? DBNull.Value : take }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
         using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
         if (await reader.ReadAsync())
         {

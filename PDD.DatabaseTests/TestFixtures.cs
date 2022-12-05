@@ -7,7 +7,6 @@ global using Xunit;
 global using Norm;
 global using FluentAssertions;
 global using PDD.Database.Extensions.Dashboard;
-global using PDD.Database.Models;
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Linq;
 using System.IO;

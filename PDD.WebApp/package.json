@@ -39,7 +39,7 @@
     "bootstrap-icons": "^1.10.2",
     "chart.js": "^4.0.1",
     "npm-check-updates": "^16.4.3",
-    "rollup": "^3.5.1",
+    "rollup": "^3.6.0",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-svelte": "^7.1.0",
     "sass": "^1.56.1",

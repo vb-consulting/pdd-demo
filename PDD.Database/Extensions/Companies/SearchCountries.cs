@@ -26,19 +26,27 @@ public static class PgRoutineSearchCountries
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>string?</returns>
-    public static string? SearchCountries(this NpgsqlConnection connection, string? search, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static string? SearchCountries(this NpgsqlConnection connection, string? search, int? skip, int? take,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = search == null ? DBNull.Value : search },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = skip == null ? DBNull.Value : skip },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = take == null ? DBNull.Value : take }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            connection.Open();
+        }
         using var reader = command.ExecuteReader(System.Data.CommandBehavior.SingleResult);
         if (reader.Read())
         {
@@ -62,19 +70,27 @@ public static class PgRoutineSearchCountries
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
     /// <returns>ValueTask whose Result property is string?</returns>
-    public static async Task<string?> SearchCountriesAsync(this NpgsqlConnection connection, string? search, int? skip, int? take, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+    public static async Task<string?> SearchCountriesAsync(this NpgsqlConnection connection, string? search, int? skip, int? take,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
     {
         using var command = new NpgsqlCommand(Query, connection)
         {
             CommandType = System.Data.CommandType.Text,
             Parameters =
             {
-                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = (object)search ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)skip ?? DBNull.Value },
-                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = (object)take ?? DBNull.Value }
+                new() { NpgsqlDbType = NpgsqlDbType.Varchar, Value = search == null ? DBNull.Value : search },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = skip == null ? DBNull.Value : skip },
+                new() { NpgsqlDbType = NpgsqlDbType.Integer, Value = take == null ? DBNull.Value : take }
             },
             AllResultTypesAreUnknown = true
         };
+        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        if (connection.State != System.Data.ConnectionState.Open)
+        {
+            await connection.OpenAsync();
+        }
         using var reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SingleResult);
         if (await reader.ReadAsync())
         {
