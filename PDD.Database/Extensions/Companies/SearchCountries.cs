@@ -15,11 +15,8 @@ public static class PgRoutineSearchCountries
     /// <summary>
     /// Executes plpgsql function companies.search_countries(character varying, integer, integer)
     /// Search countries by name or iso2 or iso3.
-    /// 
     /// Result is pageable JSON response `{count, data: [...]}`
-    /// 
     /// Data record has value and name suitable for select type controls.
-    /// 
     /// Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
     /// </summary>
     /// <param name="search">_search character varying</param>
@@ -59,11 +56,8 @@ public static class PgRoutineSearchCountries
     /// <summary>
     /// Asynchronously executes plpgsql function companies.search_countries(character varying, integer, integer)
     /// Search countries by name or iso2 or iso3.
-    /// 
     /// Result is pageable JSON response `{count, data: [...]}`
-    /// 
     /// Data record has value and name suitable for select type controls.
-    /// 
     /// Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
     /// </summary>
     /// <param name="search">_search character varying</param>

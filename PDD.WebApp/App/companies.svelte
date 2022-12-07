@@ -5,14 +5,14 @@
     import Placeholder from "./shared/components/placeholder.svelte";
     import Search from "./shared/components/search-input.svelte";
     import Multiselect from "./shared/components/multiselect.svelte";
-    import CountryLabel from "./shared/country-label.svelte";
-    import CompanyUrl from "./shared/company-url.svelte";
-    import Tokens from "./shared/tokens.svelte";
+    import Tokens from "./shared/components/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
     import { get, getCached } from "./shared/fetch";
     import { mark } from "./shared/components/utils";
-    import { urlToHandle, take } from "./shared/utils";
+
+    import CompanyUrl from "./components/company-url.svelte";
+    import CountryLabel, { countryFlagBackground } from "./components/country-label.svelte";
 
     let grid: IDataGrid;
     let search = "";
@@ -72,8 +72,15 @@
     function areaTooltip(area: IToken) {
         return areas.containsKey(area.id) ? `Remove filter by ${area.name}` : `Add filter by ${area.name}`;
     }
-    function countryFlag(code: string) {
-        return (code ? `background-image: url(https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/flags/4x3/${code.toLowerCase()}.svg)` : "")
+    function take(source: string, n: number, extra = "...") {
+        if (!source) {
+            return source;
+        }
+        let len = source.length;
+        if (len <= n) {
+            return source;
+        }
+        return source.substring(0, n) + extra;
     }
 </script>
 
@@ -102,10 +109,10 @@
                     searching={grid?.working}
                     placeholder="Search Countries"
                     initialized={grid?.initialized}>
-                    <div slot="token" let:item class="image-15px" style="background-position-y: center;{countryFlag(item.iso2)}">
+                    <div slot="token" let:item class="image-15px" style="background-position-y: center;{countryFlagBackground(item.iso2)}">
                         {item.name}
                     </div>
-                    <div slot="option" let:item class="image-15px" style="background-position-y: center;{countryFlag(item.iso2)};" let:markup>
+                    <div slot="option" let:item class="image-15px" style="background-position-y: center;{countryFlagBackground(item.iso2)};" let:markup>
                         {@html markup}
                         <span class="float-end fs-smaller text-muted">{item.iso3}</span>
                     </div>
@@ -132,7 +139,7 @@
             hover 
             striped
             bind:instance={grid}
-            readBehavior={"onMount"}
+            readBehavior="onMount"
             on:render={hideTooltips}
             on:rendered={createTooltips}
             dataPageFunc={getCompanies} 
@@ -140,7 +147,7 @@
             <tr slot="headerRow" let:grid class:text-muted={grid.working && grid.initialized}>
                 <th scope="col">
                     {#if !grid.initialized}<Placeholder height="25px" />{:else}
-                    <span class="header">
+                    <span class="header text-muted">
                         Company
                     </span>
                     <button class="btn btn-sm btn-outline-primary float-end" 
@@ -153,22 +160,22 @@
                 </th>
                 <th scope="col">
                     {#if !grid.initialized}<Placeholder height="25px" />{:else}
-                    <span class="header">Info</span>
+                    <span class="header text-muted">Info</span>
                     {/if}
                 </th>
                 <th scope="col">
                     {#if !grid.initialized}<Placeholder height="25px" />{:else}
-                    <span class="header">Areas</span>
+                    <span class="header text-muted">Areas</span>
                     {/if}
                 </th>
                 <th scope="col">
                     {#if !grid.initialized}<Placeholder height="25px" />{:else}
-                    <span class="header">About</span>
+                    <span class="header text-muted">About</span>
                     {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
-                    <span class="float-end header">Stats</span>
+                    {#if !grid.initialized}
+                        <Placeholder height="25px" />
                     {/if}
                 </th>
             </tr> 
@@ -240,12 +247,5 @@
 <style lang="scss">
     .header {
         text-decoration: underline;
-    }
-    .image-15px {
-        background-size: 15px;
-        background-repeat: no-repeat;
-        background-position-x: left;
-        background-position-y: 3px;
-        padding-left: 18px;
     }
 </style>

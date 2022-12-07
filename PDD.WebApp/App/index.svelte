@@ -3,12 +3,12 @@
     import ChartBox from "./shared/components/chart-box.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
     import Placeholder from "./shared/components/placeholder.svelte";
-    import CountryLabel from "./shared/country-label.svelte";
-    import Tokens from "./shared/tokens.svelte";
-
+    import Tokens from "./shared/components/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
     import { urls } from "./shared/config";
     import { get, parseUrl } from "./shared/fetch";
+
+    import CountryLabel from "./components/country-label.svelte";
     
     interface ITopCpmpanies extends ICountry {
         id: string;

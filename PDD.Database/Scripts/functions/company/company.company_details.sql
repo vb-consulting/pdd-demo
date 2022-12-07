@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION companies.company_details(
+CREATE OR REPLACE FUNCTION company.company_details(
     _id uuid
 )
 RETURNS json

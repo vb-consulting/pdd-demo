@@ -11,8 +11,6 @@ interface ICountry {
     country: string,
 }
 
-interface IToken {id: number, name: string}
-
 interface ICompany extends ICountry {
     id: string,
     name: string,
@@ -32,3 +30,11 @@ interface ICompanyGridItem extends ICompany {
 interface ICompanyRecord extends ICompany, IRecord {
 }
 
+interface ICompanyEmployee extends ICountry {
+    firstname: string,
+    lastname: string,
+    age: number,
+    years: number,
+    roles: string[],
+    types: string[]
+}

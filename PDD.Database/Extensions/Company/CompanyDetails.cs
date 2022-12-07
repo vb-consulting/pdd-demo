@@ -5,15 +5,15 @@ using NpgsqlTypes;
 using Npgsql;
 using System.Runtime.CompilerServices;
 
-namespace PDD.Database.Extensions.Companies;
+namespace PDD.Database.Extensions.Company;
 
 public static class PgRoutineCompanyDetails
 {
-    public const string Name = "companies.company_details";
+    public const string Name = "company.company_details";
     public const string Query = $"select {Name}($1)";
 
     /// <summary>
-    /// Executes sql function companies.company_details(uuid)
+    /// Executes sql function company.company_details(uuid)
     /// </summary>
     /// <param name="id">_id uuid</param>
     /// <returns>string?</returns>
@@ -46,7 +46,7 @@ public static class PgRoutineCompanyDetails
     }
 
     /// <summary>
-    /// Asynchronously executes sql function companies.company_details(uuid)
+    /// Asynchronously executes sql function company.company_details(uuid)
     /// </summary>
     /// <param name="id">_id uuid</param>
     /// <returns>ValueTask whose Result property is string?</returns>

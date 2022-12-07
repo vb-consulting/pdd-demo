@@ -46,5 +46,7 @@ export const urls = getValueFromJson<{
     companiesCountriesSearchUrl: string;
     businessAreasUrl: string;
     companyUrl: string;
+
     companyDetailsUrl: string;
+    companyEmployeesUrl: string;
 }>("urls");

@@ -1,11 +1,11 @@
 // pgroutiner auto-generated code
 
-using PDD.Database.Extensions.Companies;
+using PDD.Database.Extensions.Company;
 
-namespace PDD.DatabaseTests.Companies;
+namespace PDD.DatabaseTests.Company;
 
 ///<summary>
-/// Test method for sql function companies.company_details
+/// Test method for sql function company.company_details
 ///</summary>
 public class CompanyDetailsUnitTests : PostgreSqlConfigurationFixture
 {

@@ -27,10 +27,10 @@ var config = new ConfigurationBuilder()
     .AddJsonFile(Path.Combine(currentDir, relativePath, "appsettings.Development.json"), optional: true, reloadOnChange: false)
     .Build();
 
-var schema = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile")));
-var data = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile")));
+var schema = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile") ?? ""));
+var data = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile") ?? ""));
 
-var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey));
+var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey) ?? "");
 
 Console.WriteLine(".................................START.................................................................");
 
@@ -224,7 +224,10 @@ foreach (var person in new Faker<Person>()
     .RuleFor(p => p.Gender, f => f.PickRandom<Gender>())
     .RuleFor(p => p.FirstName, (f, p) => FakeFirstName(f, p))
     .RuleFor(p => p.LastName, (f, p) => f.Name.LastName(p.Gender))
-    .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName).ToLower())
+    .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName).ToLower()
+        .Replace("@yahoo.com", "@zzzahoo.kom")
+        .Replace("@hotmail.com", "@shotmejl.kom")
+        .Replace("@gmail.com", "@dzmejl.kom"))
     .RuleFor(c => c.Twitter, (f, p) => string.Concat("https://twitter.com/", p?.Email?.Split("@").First().Split(".").First().ToLower()).OrNull(f, .25f))
     .RuleFor(c => c.Linkedin, (f, p) => string.Concat("https://www.linkedin.com/", p?.Email?.Split("@").First().Split(".").First().ToLower()).OrNull(f, .6f))
     .RuleFor(p => p.Birth, f => f.Date.Between(DateTime.Now.AddYears(-80), DateTime.Now.AddYears(-15)))
@@ -299,20 +302,20 @@ foreach (var person in new Faker<Person>()
     {
         status = randomizer.ArrayElement(new short[] { unemployed, activlyapplying, unemployable });
     }
-    else if (DateTime.Now.Year - person.Birth.Year > 65)
-    {
-        status = retired;
-    }
-    else if (DateTime.Now.Year - person.Birth.Year > randomizer.Int(45, 65) && onetothree == 1 || onetothree == 2)
+    //else if (DateTime.Now.Year - person.Birth.Year > 65)
+    //{
+    //    status = retired;
+    //}
+    else if (DateTime.Now.Year - person.Birth.Year > randomizer.Int(60, 100) && onetothree == 1 || onetothree == 2)
     {
         status = randomizer.ArrayElement(new short[] { retired, unemployable });
     }
     else
     {
         var last = attr.EmployeeRecord.Last();
-        if (last.ended == null)
+        if (last.ended == null | last.ended > DateTime.Now)
         {
-            status = randomizer.ArrayElement(new short[] { retired, activlyapplying });
+            status = employed; //randomizer.ArrayElement(new short[] { retired, activlyapplying });
         }
         else
         {

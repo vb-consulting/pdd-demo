@@ -43,20 +43,5 @@ public partial class Endpoints
             response.Headers.AddCacheHeader();
             return connection.BusinessAreasAsync();
         });
-
-        app.MapGet(Urls.CompanyDetailsUrl, [AllowAnonymous] async (
-            [FromQuery] Guid id,
-            NpgsqlConnection connection, 
-            HttpResponse response) =>
-        {
-            var result = await connection.CompanyDetailsAsync(id);
-            if (result == null)
-            {
-                response.StatusCode = 404;
-                return $"Company id {id} not found!";
-            }
-            response.ContentType = MediaTypeNames.Application.Json;
-            return result;
-        });
     }
 }
