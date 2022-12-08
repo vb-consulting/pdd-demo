@@ -44,7 +44,7 @@ public static class ConnectionBuilder
         {
             return;
         }
-        CommandCallback.Callback = (command, memberName, sourceFilePath, sourceLineNumber) =>
+        DatabaseShared.CommandCallback.Callback = (command, memberName, sourceFilePath, sourceLineNumber) =>
         {
             if (appendCommandHeaders)
             {

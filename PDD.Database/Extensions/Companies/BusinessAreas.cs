@@ -33,7 +33,7 @@ public static class PgRoutineBusinessAreas
             CommandType = System.Data.CommandType.Text,
             UnknownResultTypeList = new bool[] { false, true }
         };
-        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        DatabaseShared.CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
         if (connection.State != System.Data.ConnectionState.Open)
         {
             connection.Open();
@@ -66,7 +66,7 @@ public static class PgRoutineBusinessAreas
             CommandType = System.Data.CommandType.Text,
             UnknownResultTypeList = new bool[] { false, true }
         };
-        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        DatabaseShared.CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
         if (connection.State != System.Data.ConnectionState.Open)
         {
             await connection.OpenAsync();

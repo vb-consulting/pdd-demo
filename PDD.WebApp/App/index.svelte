@@ -10,7 +10,7 @@
 
     import CountryLabel from "./components/country-label.svelte";
     
-    interface ITopCpmpanies extends ICountry {
+    interface ITopCompanies extends ICountry {
         id: string;
         name: string;
         companyLine: string;
@@ -28,12 +28,11 @@
         roles: string[];
     }
 
-    const getTopCompanies = () => get<ITopCpmpanies[]>(urls.topRatedCompaniesUrl);
+    const getTopCompanies = () => get<ITopCompanies[]>(urls.topRatedCompaniesUrl);
     const getTopEmployees = () => get<ITopEmployees[]>(urls.topExperincedPeopleUrl);
-
 </script>
 
-<Layout>
+<Layout title="PDD Dashboard">
 
     <div class="main container-fluid pt-4">
         
@@ -82,7 +81,7 @@
                         </td>
                         <td>
                             <div class="d-flex flex-wrap">
-                                <a class="clickable-token" 
+                                <a class="clickable-token text-bg-primary" 
                                     data-bs-toggle="tooltip" 
                                     title="Filter companies by {data.country}"
                                     href="{parseUrl(urls.companiesUrl, {country: JSON.stringify({value: data.countrycode, name: data.country, iso2: data.countryiso2, iso3: ""})})}">

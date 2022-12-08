@@ -8,8 +8,24 @@ using NpgsqlTypes;
 using PDD.WebApp.Database;
 using static Bogus.DataSets.Name;
 
+int peopleCount = 100000;
+int companyCount = 5000;
+
+if (args.Length > 0)
+{
+    peopleCount = int.Parse(args[0]);
+}
+if (args.Length > 1)
+{
+    companyCount = int.Parse(args[1]);
+}
+
 Console.WriteLine("Hello, World!");
 Console.WriteLine("This program will RECREATE the entire database schema and populate it with fake, bogus data.");
+Console.WriteLine($"People count = {peopleCount} and companies count = {companyCount}");
+Console.WriteLine("To set the number of people and companies, edit the source code or set first argument for people count and second argument for companies count.");
+Console.WriteLine();
+Console.WriteLine();
 Console.WriteLine("Hit enter to continue or any other key to abort...");
 var c = Console.ReadKey();
 if (c.Key != ConsoleKey.Enter)
@@ -31,6 +47,7 @@ var schema = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.Ge
 var data = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile") ?? ""));
 
 var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey) ?? "");
+
 
 Console.WriteLine(".................................START.................................................................");
 
@@ -57,8 +74,6 @@ var usCode = 840;
 var euCodes = connection.Read<short>("select code from countries where iso2 in ('AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE')").ToArray();
 var areas = connection.Read<short>("select id from business_areas").ToArray();
 
-const int peopleCount = 100000;
-const int companyCount = 5000;
 
 List<Guid> companyIds = new();
 List<string> companyNames = new();

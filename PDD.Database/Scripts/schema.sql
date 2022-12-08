@@ -346,7 +346,7 @@ $$;
 CREATE FUNCTION company.company_employees(_id uuid) RETURNS json
     LANGUAGE sql
     AS $$
-select json_agg(sub)
+select coalesce(json_agg(sub), '[]'::json)
 from ( 
     select 
         b.first_name as firstName,
@@ -356,7 +356,7 @@ from (
         b.country as countryCode,
         d.iso2 as countryIso2,
         d.name as country,
-        array_agg(f.name) as roles,
+        array_agg(distinct f.name) as roles,
         array_agg(distinct g.name) as types
     from 
         employee_records a
@@ -379,6 +379,8 @@ from (
         b.country,
         d.iso2,
         d.name
+    order by 
+        b.last_name, b.first_name
 ) sub  
 $$;
 --

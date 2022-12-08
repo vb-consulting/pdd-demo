@@ -12,70 +12,103 @@
     import CompanyUrl from "./components/company-url.svelte";
 
     let id = getValue<string>("id");
-    const getCompany = () => get<ICompanyRecord>(urls.companyDetailsUrl, {id});
-    const getCompanyEmloyees = () => get<ICompanyEmployee[]>(urls.companyEmployeesUrl, {id});
+    let title = "PDD Company";
+
+    const getCompany = async () => { 
+        const company = await get<ICompanyRecord>(urls.companyDetailsUrl, {id});
+        title = "PDD " + company.name;
+        return company;
+    };
+    const getCompanyEmloyeesGroups = async () => {
+        const data = await get<ICompanyEmployee[]>(urls.companyEmployeesUrl, {id});
+        const result: Record<string, ICompanyEmployee[]> = {};
+        for(let company of data) {
+            for(let type of company.types) {
+                if (result[type]) {
+                    result[type].push(company);
+                } else {
+                    result[type] = [company];
+                }
+            }
+        }
+        return result;
+    };
 </script>
 
-<Layout>
+<Layout {title}>
     <div class="main container pt-4">
-
-      {#await getCompany()}
+        {#await getCompany()}
         <Card label="Company Info">
-          <Placeholder height="300px" />
+            <Placeholder height="300px" />
         </Card>
-      {:then company}
+        {:then company}
         <Card 
-          label="Company Info"
-          title={company.name}
-          subtitle={company.companyline}>
-          
-          <Tokens tokens={company.areas} />
-          <CountryLabel data={company} />
+            label="Company Info"
+            title={company.name}
+            subtitle={company.companyline}>
 
-          <CompanyUrl {company} type="web" />
-          <CompanyUrl {company} type="twitter" />
-          <CompanyUrl {company} type="linkedin" />
+            <Tokens tokens={company.areas} />
+            <CountryLabel data={company} />
 
-          <Card label="About" class="mt-3">
-            {company.about}
-          </Card>
+            <CompanyUrl {company} type="web" />
+            <CompanyUrl {company} type="twitter" />
+            <CompanyUrl {company} type="linkedin" />
 
-          <div slot="footer">
-            <button class="btn btn-sm btn-primary">
-              <i class="bi-pencil"></i>
-              Edit
-            </button>
-          </div>
+            <Card label="About" class="mt-3">
+                {company.about}
+            </Card>
+
+            <div slot="footer">
+                <button class="btn btn-sm btn-primary">
+                    <i class="bi-pencil"></i>Edit</button>
+            </div>
         </Card>
-      {:catch error}
+        {:catch error}
         <Card label="Company Info">
-          <div class="text-danger fw-bold">
-            <i class="bi bi-bug-fill"></i>
-            Could not load this company due to an error. :(
-          </div>
-          <div class="">
-              Here is what we know so far: <div class="text-danger">{error}</div>
-          </div>
+            <div class="text-danger fw-bold">
+                <i class="bi bi-bug-fill"></i>Could not load this company due to an error. :(
+            </div>
+            <div class="">
+                Here is what we know so far: <div class="text-danger">{error}</div>
+            </div>
         </Card>
-      {/await}
+        {/await}
 
-      <Tabs tabs={["Employees", "Reviews", "Stats"]} class="mt-3" let:active>
+        <Tabs tabs={["Employees", "Reviews", "Stats"]} class="mt-3" let:active>
         {#if active == "Employees"}
 
-          <DataGrid hover striped dataFunc={getCompanyEmloyees}>
-            <tr slot="row" let:data>
-              <td>{data.firstname} {data.lastname}</td>
-              <td><CountryLabel {data} /></td>
-              <td><Tokens tokens={data.roles} /></td>
-              <td>{data.age}</td>
-              <td>{data.years}</td>
-            </tr>
-          </DataGrid>
+            <DataGrid hover striped dataGroupFunc={getCompanyEmloyeesGroups}>
+                <tr slot="groupRow" let:key let:group>
+                    <td>
+                        <table class="table table-sm caption-top mb-0">
+                            <caption class="h5">{key}</caption>
+                            <thead>
+                            <tr>
+                                <th scope="col">Employee</th>
+                                <th scope="col">Country</th>
+                                <th scope="col">Roles</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Years</th>
+                            </tr>
+                            </thead>
+                            {#each group as data}
+                            <tr>
+                                <td>{data.firstname} {data.lastname}</td>
+                                <td><CountryLabel {data} /></td>
+                                <td><Tokens tokens={data.roles} /></td>
+                                <td>{data.age}</td>
+                                <td>{data.years}</td>
+                            </tr>
+                            {/each}
+                        </table>
+                    </td>
+                </tr>
+            </DataGrid>
 
         {:else if active == "Reviews"}
-          Reviews
+            Reviews
         {/if}
-      </Tabs>
+        </Tabs>
 
     </div>
 </Layout>

@@ -7,12 +7,13 @@
     import { isDarkTheme } from "./theme";
 
     export let title: string = configTitle;
-    
+
     const pinnedKey = "sidebar-pinned";
     let pinned = localStorage.getItem(pinnedKey) == null ? true : localStorage.getItem(pinnedKey) == "true";
     
     $: {
         localStorage.setItem(pinnedKey, pinned.toString());
+        document.title = title;
     }
 
     let offcanvas = {open: false};

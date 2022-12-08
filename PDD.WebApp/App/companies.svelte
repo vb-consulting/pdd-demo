@@ -84,7 +84,7 @@
     }
 </script>
 
-<Layout>
+<Layout title="PDD Companies">
     <div class="main container-fluid pt-4">
 
         <div style="display: grid; grid-template-columns: 60% auto;">
@@ -199,7 +199,7 @@
                     <CompanyUrl company={data} type="linkedin" />
 
                     <div class="d-flex mt-1">
-                        <button class="clickable-token" disabled={grid.working}
+                        <button class="clickable-token text-bg-primary" disabled={grid.working}
                             class:selected={countires.containsKey(data.countrycode)}
                             on:click={() => countryTokenClick({code: data.countrycode, iso2: data.countryiso2, name: data.country})}>
                             <CountryLabel data={data} tooltip={countryTooltip(data)} />

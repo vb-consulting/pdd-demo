@@ -11,7 +11,6 @@ body.dark .search-mark:not(.active) {
 .token {
     @extend .badge;
     @extend .rounded-pill; 
-    @extend .text-bg-primary; 
 
     align-items: center;
     display: flex;

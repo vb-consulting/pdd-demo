@@ -35,7 +35,7 @@ public static class PgRoutineChartCompaniesByCountry
             },
             AllResultTypesAreUnknown = true
         };
-        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        DatabaseShared.CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
         if (connection.State != System.Data.ConnectionState.Open)
         {
             connection.Open();
@@ -72,7 +72,7 @@ public static class PgRoutineChartCompaniesByCountry
             },
             AllResultTypesAreUnknown = true
         };
-        CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
+        DatabaseShared.CommandCallback.Run(command, memberName, sourceFilePath, sourceLineNumber);
         if (connection.State != System.Data.ConnectionState.Open)
         {
             await connection.OpenAsync();

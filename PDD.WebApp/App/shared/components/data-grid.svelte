@@ -6,6 +6,7 @@
 
     interface $$Slots {
         row: { data: T, index: number, grid: IDataGrid };
+        groupRow: { key: string, group: T[], index: number, grid: IDataGrid };
         caption: { grid: IDataGrid };
         placeholderRow: { grid: IDataGrid };
         headerRow: { grid: IDataGrid };
@@ -17,6 +18,7 @@
     
     export let headers: boolean | string[] | IGridHeader[] = [];
     export let dataFunc: (() => Promise<T[]>) | undefined = undefined;
+    export let dataGroupFunc: (() => Promise<Record<string, T[]>>) | undefined = undefined;
     export let dataPageFunc: ((grid: IDataGrid) => Promise<{count: number; page: T[]}>) | undefined = undefined;
 
     export let primary = false;
@@ -46,6 +48,8 @@
 
     export let take: number = 50;
     export let readBehavior: LifeCycleType = "immediate";
+
+    export let placeHolderHeight: string = "100px";
 
     export const instance: IDataGrid = {
         initialized: false,
@@ -85,6 +89,7 @@
     let styles: string = "";
 
     let data: T[];
+    let group: Record<string, T[]>;
     let _headers: string[];
 
     const dispatch = createEventDispatcher();
@@ -94,6 +99,25 @@
             return false;
         }
         return "text" in value;
+    }
+
+    async function readGroupData() {
+        if (!dataGroupFunc || instance.working) {
+            return;
+        }
+        dispatch("render", {grid: instance});
+        instance.working = true;
+        const result = await dataGroupFunc();
+        instance.count = Object.keys(result).length;
+        instance.working = false;
+        if (!instance.initialized) {
+            instance.initialized = true;
+        }
+        if (typeof headers == "boolean" && headers == true && result.length) {
+            _headers = Object.keys(Object.values(result)[0] as any);
+        }
+        group = result;
+        setTimeout(() => dispatch("rendered", {grid: instance, data: group}));
     }
 
     async function readData() {
@@ -139,13 +163,16 @@
     async function read() {
         instance.error = null;
         try {
-            if (dataFunc) {
+            if (dataGroupFunc) {
+                await readGroupData();
+            } else if (dataFunc) {
                 await readData();
             } else {
                 await readDataPage();
             }
         } catch (e: any) {
             instance.error = e;
+            throw e;
         }
     }
 
@@ -235,12 +262,19 @@
             {:else}
                 <tr>
                     <td colspan=99999>
-                        <Placeholder />
+                        <Placeholder height={placeHolderHeight} />
                     </td>
                 </tr>
             {/if}
         {:else}
-            {#if data && data.length}
+            {#if group}
+                {#each Object.entries(group) as data, index}
+                    <slot name="groupRow" key={data[0]} group={data[1]} {index} grid={instance}></slot>
+                    {#each data[1] as groupData, index}
+                        <slot name="row" data={groupData} {index} grid={instance}></slot>
+                    {/each}
+                {/each}
+            {:else if data && data.length}
                 {#each data as data, index}
                     <slot name="row" {data} {index} grid={instance}></slot>
                 {/each}
