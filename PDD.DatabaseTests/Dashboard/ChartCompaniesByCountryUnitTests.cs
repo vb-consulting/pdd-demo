@@ -20,9 +20,9 @@ public class ChartCompaniesByCountryUnitTests : PostgreSqlConfigurationFixture
 
         // Act
         var result = Connection.ChartCompaniesByCountry(limit);
-        dynamic data = JsonConvert.DeserializeObject(result);
 
         // Assert
+        dynamic data = JsonConvert.DeserializeObject(result);
         (data.labels is JArray).Should().BeTrue();
         ((int)data.labels.Count).Should().Be(1);
         ((string)data.labels[0].Value).Should().Be("Other");

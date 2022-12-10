@@ -2,7 +2,7 @@
 
     type T = $$Generic;
 
-    export let tokens: T[];//IToken[] | string[];
+    export let tokens: T[];
     export let disabled: boolean | undefined = undefined;
     export let selected: (area: T) => boolean = () => false;
     export let click: ((area: T) => void) | undefined = undefined;

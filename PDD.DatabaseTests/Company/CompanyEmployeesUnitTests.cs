@@ -1,5 +1,4 @@
 // pgroutiner auto-generated code
-using PDD.Database.Extensions.Company;
 
 namespace PDD.DatabaseTests.Company;
 
@@ -78,6 +77,7 @@ public class CompanyEmployeesUnitTests : PostgreSqlConfigurationFixture
         {
             new
             {
+                personid = default(string),
                 firstname = default(string),
                 lastname = default(string),
                 years = default(int?),
@@ -95,6 +95,7 @@ public class CompanyEmployeesUnitTests : PostgreSqlConfigurationFixture
         {
             new
             {
+                personid = personIds[0].ToString(),
                 firstname = "name1",
                 lastname = "last name1",
                 years = 0,

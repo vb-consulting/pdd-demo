@@ -9,21 +9,27 @@
 <script lang="ts">
     export let data: ICountry;
     export let tooltip: string = "";
+        /**
+     * A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
+     */
+    export { classes as class };
+    /*
+    * Contains CSS styling declarations to be applied to the element. Note that it is recommended for styles to be defined in a separate file or files. This attribute and the style element have mainly the purpose of allowing for quick styling, for example for testing purposes.
+    */
+    export { styles as style };
+
+    export let colorTheme: ColorThemeType = "none" ;
+    
+    let classes: string = "";
+    let styles: string = "";
 </script>
 
-<div class="image-15px" 
-    style="background-position-y: center;{(data.countryiso2 ? `${backgroundImage}${data.countryiso2.toLowerCase()}.svg)` : "")}"
+<div class="image-15px {classes || ''} {colorTheme == "none" ? "" : "text-bg-" + colorTheme}" 
+    style="background-position-y: center;{(data.countryiso2 ? `${backgroundImage}${data.countryiso2.toLowerCase()}.svg)` : "")} {styles || ''}"
     data-bs-toggle="{tooltip ? "tooltip" : ""}" 
     title={tooltip}>
     {data.country}
 </div>
 
 <style lang="scss">
-    .image-15px {
-        background-size: 15px;
-        background-repeat: no-repeat;
-        background-position-x: left;
-        background-position-y: 3px;
-        padding-left: 18px;
-    }
 </style> 

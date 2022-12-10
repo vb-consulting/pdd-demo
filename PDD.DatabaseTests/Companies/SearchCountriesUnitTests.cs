@@ -1,7 +1,5 @@
 // pgroutiner auto-generated code
 
-using PDD.Database.Extensions.Companies;
-
 namespace PDD.DatabaseTests.Companies;
 
 ///<summary>
@@ -25,9 +23,9 @@ public class SearchCountriesUnitTests : PostgreSqlConfigurationFixture
 
         // Act
         var result = Connection.SearchCountries(search, skip, take);
-        dynamic data = JsonConvert.DeserializeObject(result);
 
         // Assert
+        dynamic data = JsonConvert.DeserializeObject(result);
         (data.count is JValue).Should().BeTrue();
         (data.page is JArray).Should().BeTrue();
 

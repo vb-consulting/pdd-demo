@@ -30,11 +30,21 @@ interface ICompanyGridItem extends ICompany {
 interface ICompanyRecord extends ICompany, IRecord {
 }
 
-interface ICompanyEmployee extends ICountry {
+interface IPerson {
+    id: string,
     firstname: string,
     lastname: string,
+}
+
+interface ICompanyEmployee extends IPerson, ICountry {
     age: number,
     years: number,
     roles: string[],
     types: string[]
+}
+
+interface ICompanyReview extends IPerson {
+    review: string,
+    score: number,
+    at: string
 }

@@ -7,6 +7,7 @@ AS $$
 select coalesce(json_agg(sub), '[]'::json)
 from ( 
     select 
+        a.person_id as personid,
         b.first_name as firstName,
         b.last_name  as lastName,
         date_part('y', now()) - date_part('y', employment_started_at)  as years,
@@ -30,6 +31,7 @@ from (
         and b.employee_status = 1
         and (employment_ended_at is null or employment_ended_at > now())
     group by
+        a.person_id,
         b.first_name,
         b.last_name,
         employment_started_at,

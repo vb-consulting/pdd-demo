@@ -20,9 +20,9 @@ public class ChartEmployeeCountsByAreaUnitTests : PostgreSqlConfigurationFixture
 
         // Act
         var result = Connection.ChartEmployeeCountsByArea(limit);
-        dynamic data = JsonConvert.DeserializeObject(result);
-
+        
         // Assert
+        dynamic data = JsonConvert.DeserializeObject(result);
         (data.labels is JArray).Should().BeTrue();
         ((int)data.labels.Count).Should().Be(0);
 

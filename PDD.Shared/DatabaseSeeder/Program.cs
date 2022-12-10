@@ -8,30 +8,13 @@ using NpgsqlTypes;
 using PDD.WebApp.Database;
 using static Bogus.DataSets.Name;
 
-int peopleCount = 100000;
-int companyCount = 5000;
+var configValue = new Config();
+var configBuilder = new ConfigurationBuilder().AddCommandLine(args);
+var configRoot = configBuilder.Build();
+configRoot.Bind(configValue);
 
-if (args.Length > 0)
-{
-    peopleCount = int.Parse(args[0]);
-}
-if (args.Length > 1)
-{
-    companyCount = int.Parse(args[1]);
-}
-
-Console.WriteLine("Hello, World!");
 Console.WriteLine("This program will RECREATE the entire database schema and populate it with fake, bogus data.");
-Console.WriteLine($"People count = {peopleCount} and companies count = {companyCount}");
-Console.WriteLine("To set the number of people and companies, edit the source code or set first argument for people count and second argument for companies count.");
 Console.WriteLine();
-Console.WriteLine();
-Console.WriteLine("Hit enter to continue or any other key to abort...");
-var c = Console.ReadKey();
-if (c.Key != ConsoleKey.Enter)
-{
-    return;
-}
 
 var currentDir = Directory.GetCurrentDirectory();
 var relativePath = currentDir.EndsWith("net6.0") ? Path.Combine(currentDir, "../../../../../PDD.WebApp") : Path.Combine(currentDir, "../../PDD.WebApp");
@@ -43,13 +26,19 @@ var config = new ConfigurationBuilder()
     .AddJsonFile(Path.Combine(currentDir, relativePath, "appsettings.Development.json"), optional: true, reloadOnChange: false)
     .Build();
 
-var schema = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile") ?? ""));
-var data = File.ReadAllText(Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile") ?? ""));
+Console.WriteLine("People: {0}", configValue.PeopleCount);
+Console.WriteLine("Companies: {0}", configValue.CompanyCount);
+Console.WriteLine("Schema: {0}", configValue.Schema ?? Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile") ?? ""));
+Console.WriteLine("Data: {0}", configValue.Data ?? Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile") ?? ""));
+Console.WriteLine("Connection: {0}", configValue.Connection ?? config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey) ?? ""));
 
-var connectionString = config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey) ?? "");
+var schema = File.ReadAllText(configValue.Schema ?? Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:SchemaDumpFile") ?? ""));
+var data = File.ReadAllText(configValue.Data ?? Path.Combine(currentDir, pgRoutinerPath, config.GetValue<string>("PgRoutiner:DataDumpFile") ?? ""));
+
+var connectionString = configValue.Connection ?? config.GetConnectionString(config.GetValue<string>(ConnectionBuilder.NameKey) ?? "");
 
 
-Console.WriteLine(".................................START.................................................................");
+Console.WriteLine("RUNNING... press CTR-C to abort!");
 
 Console.WriteLine("Recreating schema...");
 using (var recreateSchema = new NpgsqlConnection(connectionString))
@@ -93,7 +82,7 @@ foreach (var company in new Faker<Company>()
     .RuleFor(c => c.About, f => string.Join(" ", Enumerable.Range(1, f.Random.Int(1, 20)).Select(i => f.Company.Bs()))) // f.Company.Bs())
     .RuleFor(c => c.Country, f => f.Random.Number(1, 3) switch { 1 => usCode, 2 => f.Random.ArrayElement(euCodes), 3 => f.Random.ArrayElement(countries), _ => usCode })
     .RuleFor(c => c.Areas, f => f.PickRandom(areas, f.Random.Int(1, 5)).ToArray())
-    .Generate(companyCount))
+    .Generate(configValue.CompanyCount))
 {
     var companyId = connection.Read<Guid?>(@"select id from companies where name = lower(@name)", company.Name?.ToLower()).FirstOrDefault();
     if (companyId == null)
@@ -247,7 +236,7 @@ foreach (var person in new Faker<Person>()
     .RuleFor(c => c.Linkedin, (f, p) => string.Concat("https://www.linkedin.com/", p?.Email?.Split("@").First().Split(".").First().ToLower()).OrNull(f, .6f))
     .RuleFor(p => p.Birth, f => f.Date.Between(DateTime.Now.AddYears(-80), DateTime.Now.AddYears(-15)))
     .RuleFor(p => p.Country, f => f.Random.Number(1, 3) switch { 1 => usCode, 2 => f.Random.ArrayElement(euCodes), 3 => f.Random.ArrayElement(countries), _ => usCode })
-    .Generate(peopleCount))
+    .Generate(configValue.PeopleCount))
 {
     var attr = new Faker<PersonAttributes>()
         .RuleFor(a => a.Reviews, (f, a) =>
@@ -426,4 +415,13 @@ public class PersonAttributes
         Array.Empty<(Guid companyId, DateTime started, DateTime? ended)>();
 
     public short[] Roles { get; set; } = Array.Empty<short>();
+}
+
+public class Config
+{
+    public int PeopleCount { get; set; } = 100000;
+    public int CompanyCount { get; set; } = 5000;
+    public string? Data { get; set; } = null;
+    public string? Schema { get; set; } = null;
+    public string? Connection { get; set; } = null;
 }

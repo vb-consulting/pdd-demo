@@ -16,4 +16,5 @@ public partial class Urls
     
     [JsonProperty] public const string CompanyDetailsUrl = "/api/company/details";
     [JsonProperty] public const string CompanyEmployeesUrl = "/api/company/employees";
+    [JsonProperty] public const string CompanyReviewsUrl = "/api/company/reviews";
 }

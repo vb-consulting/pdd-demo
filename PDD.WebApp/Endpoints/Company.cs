@@ -32,5 +32,16 @@ public partial class Endpoints
             response.ContentType = MediaTypeNames.Application.Json;
             return await connection.CompanyEmployeesAsync(id);
         });
+
+        app.MapGet(Urls.CompanyReviewsUrl, [AllowAnonymous] async (
+            [FromQuery] Guid id,
+            [FromQuery] int? skip,
+            [FromQuery] int? take,
+            NpgsqlConnection connection,
+            HttpResponse response) =>
+        {
+            response.ContentType = MediaTypeNames.Application.Json;
+            return await connection.CompanyReviewsAsync(id, skip, take);
+        });
     }
 }

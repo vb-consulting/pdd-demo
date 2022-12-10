@@ -6,9 +6,13 @@ global using System.Threading.Tasks;
 global using Xunit;
 global using Norm;
 global using FluentAssertions;
-global using PDD.Database.Extensions.Dashboard;
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Linq;
+
+global using PDD.Database.Extensions.Companies;
+global using PDD.Database.Extensions.Company;
+global using PDD.Database.Extensions.Dashboard;
+
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Npgsql;

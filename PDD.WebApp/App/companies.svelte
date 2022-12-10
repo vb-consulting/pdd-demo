@@ -144,9 +144,9 @@
             on:rendered={createTooltips}
             dataPageFunc={getCompanies} 
             take={10}>
-            <tr slot="headerRow" let:grid class:text-muted={grid.working && grid.initialized}>
+            <tr slot="headerRow" let:instance class:text-muted={instance.working && instance.initialized}>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    {#if !instance.initialized}<Placeholder height="25px" />{:else}
                     <span class="header text-muted">
                         Company
                     </span>
@@ -159,22 +159,22 @@
                     {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    {#if !instance.initialized}<Placeholder height="25px" />{:else}
                     <span class="header text-muted">Info</span>
                     {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    {#if !instance.initialized}<Placeholder height="25px" />{:else}
                     <span class="header text-muted">Areas</span>
                     {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}<Placeholder height="25px" />{:else}
+                    {#if !instance.initialized}<Placeholder height="25px" />{:else}
                     <span class="header text-muted">About</span>
                     {/if}
                 </th>
                 <th scope="col">
-                    {#if !grid.initialized}
+                    {#if !instance.initialized}
                         <Placeholder height="25px" />
                     {/if}
                 </th>
@@ -184,7 +184,7 @@
                     <Placeholder height="70vh" />
                 </td>
             </tr>
-            <tr slot="row" let:data let:grid>
+            <tr slot="row" let:data>
                 <td class="" class:text-muted={grid.working}>
                     <div class="fw-bold">
                         <a href="{urls.companyUrl}/{data.id}">{@html mark(data.name, search)}</a>

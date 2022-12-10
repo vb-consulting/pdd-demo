@@ -28,26 +28,26 @@
     "pg-readme-commit": "cd ../PDD.Database/ && dotnet tool run pgroutiner --commit-md"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",
-    "@rollup/plugin-terser": "^0.1.0",
+    "@rollup/plugin-terser": "^0.2.0",
     "@rollup/plugin-typescript": "^10.0.1",
     "@tsconfig/svelte": "^3.0.0",
     "@types/bootstrap": "^5.2.6",
     "bootstrap": "5.2.3",
     "bootstrap-icons": "^1.10.2",
     "chart.js": "^4.0.1",
-    "npm-check-updates": "^16.4.3",
-    "rollup": "^3.6.0",
+    "npm-check-updates": "^16.5.6",
+    "rollup": "^3.7.2",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-svelte": "^7.1.0",
-    "sass": "^1.56.1",
-    "svelte": "^3.53.1",
-    "svelte-check": "^2.10.0",
+    "sass": "^1.56.2",
+    "svelte": "^3.54.0",
+    "svelte-check": "^2.10.2",
     "svelte-preprocess": "^4.10.7",
     "svelte-spa-router": "^3.3.0",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.4"
   }
 }

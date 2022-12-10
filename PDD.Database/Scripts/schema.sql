@@ -76,6 +76,7 @@ DROP FUNCTION IF EXISTS dashboard.top_experinced_people(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_year(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_employee_counts_by_area(_limit integer);
 DROP FUNCTION IF EXISTS dashboard.chart_companies_by_country(_limit integer);
+DROP FUNCTION IF EXISTS company.company_reviews(_id uuid, _skip integer, _take integer);
 DROP FUNCTION IF EXISTS company.company_employees(_id uuid);
 DROP FUNCTION IF EXISTS company.company_details(_id uuid);
 DROP FUNCTION IF EXISTS companies.search_countries(_search character varying, _skip integer, _take integer);
@@ -349,6 +350,7 @@ CREATE FUNCTION company.company_employees(_id uuid) RETURNS json
 select coalesce(json_agg(sub), '[]'::json)
 from ( 
     select 
+        a.person_id as personid,
         b.first_name as firstName,
         b.last_name  as lastName,
         date_part('y', now()) - date_part('y', employment_started_at)  as years,
@@ -372,6 +374,7 @@ from (
         and b.employee_status = 1
         and (employment_ended_at is null or employment_ended_at > now())
     group by
+        a.person_id,
         b.first_name,
         b.last_name,
         employment_started_at,
@@ -382,6 +385,51 @@ from (
     order by 
         b.last_name, b.first_name
 ) sub  
+$$;
+--
+-- Name: company_reviews(uuid, integer, integer); Type: FUNCTION; Schema: company; Owner: -
+--
+CREATE FUNCTION company.company_reviews(_id uuid, _skip integer, _take integer) RETURNS json
+    LANGUAGE plpgsql
+    AS $$
+declare
+    _count bigint;
+begin
+    create temp table _tmp on commit drop as
+    select 
+        c.id
+    from 
+        company_reviews c
+    where (
+        company_id = _id
+    );
+    get diagnostics _count = row_count;
+    
+    return json_build_object(
+        'count', _count,
+        'page', (
+            select coalesce(json_agg(sub), '[]'::json)
+            from ( 
+                 select 
+                    a.person_id as personId,
+                    b.first_name as firstName,
+                    b.last_name  as lastName,
+                    a.review,
+                    a.score,
+                    a.modified_at as at
+                from 
+                    company_reviews a
+                    inner join people b on a.person_id = b.id
+                where 
+                    company_id = _id
+                order by 
+                    a.modified_at desc
+                limit _take 
+                offset _skip
+            ) sub
+        )
+    );
+end
 $$;
 --
 -- Name: chart_companies_by_country(integer); Type: FUNCTION; Schema: dashboard; Owner: -

@@ -1,7 +1,5 @@
 // pgroutiner auto-generated code
 
-using PDD.Database.Extensions.Company;
-
 namespace PDD.DatabaseTests.Company;
 
 ///<summary>
