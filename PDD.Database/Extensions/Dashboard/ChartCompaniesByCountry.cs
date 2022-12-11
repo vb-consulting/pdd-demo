@@ -57,7 +57,7 @@ public static class PgRoutineChartCompaniesByCountry
     /// - Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> ChartCompaniesByCountryAsync(this NpgsqlConnection connection, int? limit,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PDD.WebApp;
 
@@ -19,6 +20,8 @@ public partial class Urls
 
     static Urls()
     {
-        Json = JsonConvert.SerializeObject(new Urls());
+        var jObject = JObject.FromObject(new Urls());
+        jObject.Merge(Endpoints.Urls.JObject);
+        Json = JsonConvert.SerializeObject(jObject);
     }
 }

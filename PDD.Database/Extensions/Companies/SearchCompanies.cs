@@ -68,7 +68,7 @@ public static class PgRoutineSearchCompanies
     /// <param name="sortAsc">_sort_asc boolean</param>
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> SearchCompaniesAsync(this NpgsqlConnection connection, string? search, short[]? countries, short[]? areas, bool? sortAsc, int? skip, int? take,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

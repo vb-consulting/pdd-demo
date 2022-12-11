@@ -49,7 +49,7 @@ public static class PgRoutineCompanyDetails
     /// Asynchronously executes sql function company.company_details(uuid)
     /// </summary>
     /// <param name="id">_id uuid</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> CompanyDetailsAsync(this NpgsqlConnection connection, Guid? id,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

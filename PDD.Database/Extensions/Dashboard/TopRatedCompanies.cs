@@ -51,7 +51,7 @@ public static class PgRoutineTopRatedCompanies
     /// Top rated companies by the user score.
     /// </summary>
     /// <param name="limit">_limit integer</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> TopRatedCompaniesAsync(this NpgsqlConnection connection, int? limit,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

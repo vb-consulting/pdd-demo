@@ -55,7 +55,7 @@ public static class PgRoutineChartEmployeeCountsByYear
     /// - Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
     /// </summary>
     /// <param name="limit">_limit integer</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> ChartEmployeeCountsByYearAsync(this NpgsqlConnection connection, int? limit,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",

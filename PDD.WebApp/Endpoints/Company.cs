@@ -1,9 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PDD.Database.Extensions.Company;
 using System.Net.Mime;
 
 namespace PDD.WebApp.Endpoints;
+
+public partial class Urls
+{
+    [JsonProperty] public const string CompanyDetailsUrl = "/api/company/details";
+    [JsonProperty] public const string CompanyEmployeesUrl = "/api/company/employees";
+    [JsonProperty] public const string CompanyReviewsUrl = "/api/company/reviews";
+}
 
 public partial class Endpoints
 {

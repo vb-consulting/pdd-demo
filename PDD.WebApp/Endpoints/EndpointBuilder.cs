@@ -1,4 +1,16 @@
-﻿namespace PDD.WebApp.Endpoints;
+﻿using Newtonsoft.Json.Linq;
+
+namespace PDD.WebApp.Endpoints;
+
+public partial class Urls
+{    
+    public static JObject JObject { get; private set; }
+
+    static Urls()
+    {
+        JObject = JObject.FromObject(new Urls());
+    }
+}
 
 public class Cache { public string? Version { get; set; } }
 

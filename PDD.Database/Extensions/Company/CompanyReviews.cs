@@ -55,7 +55,7 @@ public static class PgRoutineCompanyReviews
     /// <param name="id">_id uuid</param>
     /// <param name="skip">_skip integer</param>
     /// <param name="take">_take integer</param>
-    /// <returns>ValueTask whose Result property is string?</returns>
+    /// <returns>Task whose Result property is string?</returns>
     public static async Task<string?> CompanyReviewsAsync(this NpgsqlConnection connection, Guid? id, int? skip, int? take,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
