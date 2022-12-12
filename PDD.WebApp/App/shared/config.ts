@@ -23,31 +23,3 @@ export const errorKey = getValue<string>("error-key");
 export const themeKey = getValue<string>("theme-key");
 export const title = getValue<string>("title");
 export const cacheVersion = getValue<string>("cache-version");
-export const urls = getValueFromJson<{
-    indexUrl: string;
-    companiesUrl: string;
-    peopleUrl: string;
-    
-    errorUrl: string;
-    notFoundUrl: string;
-    unathorizedUrl: string;
-    loginUrl: string;
-    logoutUrl: string;
-    signInGoogleUrl: string;
-    signInLinkedInUrl: string;
-    signInGitHubUrl: string;
-
-    chartCompaniesByCountryUrl: string;
-    chartEmployeeCountsByAreaUrl: string;
-    chartEmployeeCountsByYearUrl: string;
-    topRatedCompaniesUrl: string;
-    topExperincedPeopleUrl: string;
-    companiesSearchUrl: string;
-    companiesCountriesSearchUrl: string;
-    businessAreasUrl: string;
-    companyUrl: string;
-
-    companyDetailsUrl: string;
-    companyEmployeesUrl: string;
-    companyReviewsUrl: string;
-}>("urls");

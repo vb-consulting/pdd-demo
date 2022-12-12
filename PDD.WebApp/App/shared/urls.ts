@@ -1,0 +1,26 @@
+/*auto generated*/
+export default {
+    signInGitHubUrl: "/signin-github",
+    signInGoogleUrl: "/signin-google",
+    signInLinkedInUrl: "/signin-linkedin",
+    companiesUrl: "/companies",
+    companyUrl: "/company",
+    errorUrl: "/error",
+    indexUrl: "/",
+    loginUrl: "/login",
+    logoutUrl: "/logout",
+    notFoundUrl: "/404",
+    unathorizedUrl: "/401",
+
+    companiesSearchUrl: "/api/companies/search",
+    companiesCountriesSearchUrl: "/api/companies/countries-search",
+    businessAreasUrl: "/api/companies/business-areas",
+    companyDetailsUrl: "/api/company/details",
+    companyEmployeesUrl: "/api/company/employees",
+    companyReviewsUrl: "/api/company/reviews",
+    chartCompaniesByCountryUrl: "/api/dashboard/companies-by-country",
+    chartEmployeeCountsByAreaUrl: "/api/dashboard/employee-counts-by-area",
+    chartEmployeeCountsByYearUrl: "/api/dashboard/employee-counts-by-year",
+    topRatedCompaniesUrl: "/api/dashboard/top-rated-companies",
+    topExperincedPeopleUrl: "/api/top-experinced-people",
+}

@@ -15,13 +15,18 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Label="nesting">
+		<None Update="Pages\Login.rollup.config.js">
+			<DependentUpon>Login.cshtml</DependentUpon>
+		</None>
+		<None Update="Pages\Login.entry.ts">
+			<DependentUpon>Login.cshtml</DependentUpon>
+		</None>
 		<None Update="Pages\Company.rollup.config.js">
 			<DependentUpon>Company.cshtml</DependentUpon>
-		</None >
+		</None>
 		<None Update="Pages\Company.entry.ts">
 			<DependentUpon>Company.cshtml</DependentUpon>
 		</None>
@@ -49,7 +54,6 @@
 		<None Update="Pages\NotFound.entry.ts">
 			<DependentUpon>NotFound.cshtml</DependentUpon>
 		</None>
-
 		<None Update="Pages\Unauthorized.rollup.config.js">
 			<DependentUpon>Unauthorized.cshtml</DependentUpon>
 		</None>

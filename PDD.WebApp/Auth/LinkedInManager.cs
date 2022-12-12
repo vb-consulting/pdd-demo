@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace PDD.WebApp.Auth;
+﻿namespace PDD.WebApp.Auth;
 
 public class LinkedInManager : ExternalLoginManager
 {
@@ -12,7 +9,7 @@ public class LinkedInManager : ExternalLoginManager
 
     public override async ValueTask<ExternalLoginResponse> ProcessAsync(IDictionary<string, string> parameters, HttpRequest webRequest)
     {
-        var (json, _) = await GetAuthProfileAsync(parameters, webRequest);
+        var (json, jsonContent) = await GetAuthProfileAsync(parameters, webRequest);
         var name = $"{json["localizedFirstName"]} {json["localizedLastName"]}".Trim();
 
         if (Config.EmailUrl is null)
@@ -20,30 +17,18 @@ public class LinkedInManager : ExternalLoginManager
             return EmailError();
         }
 
-        var (emailJson, _) = await ApiGetRequest(Config.EmailUrl);
-
-        var token = emailJson.SelectToken("$.elements[0].handle~")?["emailAddress"];
-        if (token is null)
-        {
-            return EmailError();
-        }
-        var email = (string?)token;
+        var (emailJson, emailJsonContent) = await ApiGetRequest(Config.EmailUrl);
+        var email = emailJson?["elements"]?[0]?["handle~"]?["emailAddress"]?.ToString();
         if (string.IsNullOrEmpty(email))
         {
             return EmailError();
         }
-
-        json.Merge(emailJson, new JsonMergeSettings
-        {
-            MergeArrayHandling = MergeArrayHandling.Union
-        });
-
         return new ExternalLoginResponse
         {
             Email = email,
             Name = name,
             Type = ExternalType.LinkedIn,
-            Data = JsonConvert.SerializeObject(json),
+            Data = $"{{\"data\":{jsonContent},\"email\":{emailJsonContent}}}",
             Timezone = parameters["timezone"]
         };
 

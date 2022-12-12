@@ -1,0 +1,12 @@
+@page
+@attribute [RazorCompiledItemMetadata("RouteTemplate", Urls.LoginUrl)]
+
+@model LoginModel
+@{
+    ViewData["Title"] = "Login Title";
+}
+
+@section HeadSection {
+    <link href="~/build/login.css" asp-append-version="true" rel="stylesheet" />
+    <script defer src="~/build/login.js" asp-append-version="true"></script>
+}

@@ -1,5 +1,10 @@
 using PDD.WebApp;
 
+if (PDD.WebApp.Scripts.UrlBuilder.Build(args))
+{
+    return;
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();

@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 using System.Net.Mime;
 
 namespace PDD.WebApp.Endpoints;
 
 public partial class Urls
 {
-    [JsonProperty] public const string ChartCompaniesByCountryUrl = "/api/dashboard/companies-by-country";
-    [JsonProperty] public const string ChartEmployeeCountsByAreaUrl = "/api/dashboard/employee-counts-by-area";
-    [JsonProperty] public const string ChartEmployeeCountsByYearUrl = "/api/dashboard/employee-counts-by-year";
-    [JsonProperty] public const string TopRatedCompaniesUrl = "/api/dashboard/top-rated-companies";
-    [JsonProperty] public const string TopExperincedPeopleUrl = "/api/top-experinced-people";
+    public const string ChartCompaniesByCountryUrl = $"{Consts.ApiSegment}/dashboard/companies-by-country";
+    public const string ChartEmployeeCountsByAreaUrl = $"{Consts.ApiSegment}/dashboard/employee-counts-by-area";
+    public const string ChartEmployeeCountsByYearUrl = $"{Consts.ApiSegment}/dashboard/employee-counts-by-year";
+    public const string TopRatedCompaniesUrl = $"{Consts.ApiSegment}/dashboard/top-rated-companies";
+    public const string TopExperincedPeopleUrl = $"{Consts.ApiSegment}/top-experinced-people";
 }
 
 public partial class Endpoints

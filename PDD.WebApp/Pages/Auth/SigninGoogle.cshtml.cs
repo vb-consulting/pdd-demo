@@ -1,4 +1,9 @@
-namespace PDD.WebApp.Auth.Pages;
+namespace PDD.WebApp.Pages;
+
+public partial class Urls
+{
+    public const string SignInGoogleUrl = "/signin-google";
+}
 
 public class SigninGoogle : ExternalLoginPartial
 {

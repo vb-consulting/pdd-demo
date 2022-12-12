@@ -1,5 +1,10 @@
 namespace PDD.WebApp.Pages;
 
+public partial class Urls
+{
+    public const string LogoutUrl = "/logout";
+}
+
 public class LogoutModel : PageModel
 {
     private readonly JwtConfig jwtConfig;

@@ -7,7 +7,7 @@
     import Multiselect from "./shared/components/multiselect.svelte";
     import Tokens from "./shared/components/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
-    import { urls } from "./shared/config";
+    import urls from "./shared/urls";
     import { get, getCached } from "./shared/fetch";
     import { mark } from "./shared/components/utils";
 

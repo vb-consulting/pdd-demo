@@ -5,7 +5,8 @@
     import Tokens from "./shared/components/tokens.svelte";
     import Tabs from "./shared/components/tabs.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
-    import { getValue, urls } from "./shared/config";
+    import { getValue } from "./shared/config";
+    import urls from "./shared/urls";
     import { get } from "./shared/fetch";
 
     import CountryLabel from "./components/country-label.svelte";

@@ -5,7 +5,7 @@
     import Placeholder from "./shared/components/placeholder.svelte";
     import Tokens from "./shared/components/tokens.svelte";
     import { createTooltips, hideTooltips } from "./shared/components/tooltips";
-    import { urls } from "./shared/config";
+    import urls from "./shared/urls";
     import { get, parseUrl } from "./shared/fetch";
 
     import CountryLabel from "./components/country-label.svelte";

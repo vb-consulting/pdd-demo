@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Localization;
+﻿using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using System.Net;
 
@@ -13,7 +11,6 @@ public static class AppBuilder
 {
     public static void ConfigureApp(this WebApplicationBuilder builder)
     {
-        JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
         builder.ConfigureLocalization();
         builder.ConfigureAuth();
         builder.ConfigureDatabase();
@@ -33,7 +30,7 @@ public static class AppBuilder
                 !path.StartsWith($"{Consts.ApiSegment}/") &&
                 !path.EndsWith(".js"))
             {
-                response.Redirect(Urls.UnathorizedUrl);
+                response.Redirect(Pages.Urls.UnathorizedUrl);
             }
             return Task.CompletedTask;
         });
@@ -49,7 +46,7 @@ public static class AppBuilder
         {
             if (!context.Request.Path.StartsWithSegments(Consts.ApiSegment))
             {
-                context.Response.Redirect(Urls.NotFoundUrl);
+                context.Response.Redirect(Pages.Urls.NotFoundUrl);
             }
             return Task.CompletedTask;
         });

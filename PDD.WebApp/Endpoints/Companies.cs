@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PDD.Database.Extensions.Companies;
 using System.Net.Mime;
 
@@ -8,9 +7,9 @@ namespace PDD.WebApp.Endpoints;
 
 public partial class Urls
 {
-    [JsonProperty] public const string CompaniesSearchUrl = "/api/companies/search";
-    [JsonProperty] public const string CompaniesCountriesSearchUrl = "/api/companies/countries-search";
-    [JsonProperty] public const string BusinessAreasUrl = "/api/companies/business-areas";
+    public const string CompaniesSearchUrl = $"{Consts.ApiSegment}/companies/search";
+    public const string CompaniesCountriesSearchUrl = $"{Consts.ApiSegment}/companies/countries-search";
+    public const string BusinessAreasUrl = $"{Consts.ApiSegment}/companies/business-areas";
 }
 
 public partial class Endpoints
