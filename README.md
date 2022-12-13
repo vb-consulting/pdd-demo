@@ -15,7 +15,7 @@ This is a **proof-of-concept** demo application with a made-up, fictional domain
 - [`/PDD.Database`](/PDD.Database) - shared library that contains all data access code and all database scripts as well as `PgRoutiner` configuration. All code in this project is automatically generated on command.
 - [`/PDD.DatabaseTests`](/PDD.DatabaseTests) - unit tests project.
 - [`/PDD.Shared/DatabaseSeeder`](/PDD.Shared/DatabaseSeeder) - database seeder console application project that will generate fake and random data in the database on command.
-- - [`/PDD.Shared/DatabaseShared`](/PDD.Shared/DatabaseShared) - database access shared references.
+- [`/PDD.Shared/DatabaseShared`](/PDD.Shared/DatabaseShared) - database access shared references.
 - [`/PDD.WebApp`](/PDD.WebApp) - web application project.
 
 ## Installation
