@@ -7,17 +7,10 @@ public static class ConnectionBuilder
 {
     public const string NameKey = "ConnectionName";
     public const string LogDatabaseCallsKey = "LogDatabaseCalls";
-
-    private const string info = "INFO";
-    private const string notice = "NOTICE";
-    private const string log = "LOG";
-    private const string warning = "WARNING";
-    private const string debug = "DEBUG";
-    private const string error = "ERROR";
-    private const string panic = "PANIC";
-
+    
     private static ILogger? logger;
     private static string? connectionString;
+    private static bool logCommandNotifications;
 
     public static void ConfigureDatabase(this WebApplicationBuilder builder)
     {
@@ -40,6 +33,8 @@ public static class ConnectionBuilder
 
         var appendCommandHeaders = app.Configuration.GetValue<bool>("AppendCommandHeaders");
         var logCommands = app.Configuration.GetValue<bool>("LogCommands");
+        logCommandNotifications = app.Configuration.GetValue<bool>("LogCommandNotifications");
+
         if (!appendCommandHeaders && !logCommands)
         {
             return;
@@ -57,7 +52,7 @@ public static class ConnectionBuilder
         };
     }
 
-    public static void AppendCommandHeaders(NpgsqlCommand command, string memberName, string sourceFilePath, int sourceLineNumber)
+    private static void AppendCommandHeaders(NpgsqlCommand command, string memberName, string sourceFilePath, int sourceLineNumber)
     {
         var sb = new StringBuilder();
         sb.Append("at ");
@@ -129,9 +124,21 @@ public static class ConnectionBuilder
         return result;
     }
 
+    private const string info = "INFO";
+    private const string notice = "NOTICE";
+    private const string log = "LOG";
+    private const string warning = "WARNING";
+    private const string debug = "DEBUG";
+    private const string error = "ERROR";
+    private const string panic = "PANIC";
+    
     private static NpgsqlConnection Create()
     {
         var connection = new NpgsqlConnection(connectionString);
+        if (!logCommandNotifications)
+        {
+            return connection;
+        }
         connection.Notice += (sender, args) =>
         {
             if (logger is null)
@@ -162,7 +169,6 @@ public static class ConnectionBuilder
                 logger.LogTrace(msg);
             }
         };
-
         return connection;
     }
 }
