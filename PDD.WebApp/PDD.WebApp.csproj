@@ -65,6 +65,7 @@
 	<ItemGroup>
 		<Folder Include="App\" />
 		<Folder Include="wwwroot\" />
+		<Folder Include="wwwroot\build\" />
 	</ItemGroup>
 
 	<ItemGroup>

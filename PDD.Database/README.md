@@ -1,24 +1,13 @@
 # Dictionary for database `pdd`
 
 - Server: PostgreSQL `localhost:5434`, version `15.0 (Ubuntu 15.0-1.pgdg20.04+1)`
-- Local time stamp: `2022-12-11T15:06:27.8453232+01:00`
+- Local time stamp: `2022-12-30T11:49:09.4476337+01:00`
 - Schema's: `public`, `company`, `dashboard`, `companies`
 - Schema file: [/PDD.Database/Scripts/schema.sql](/PDD.Database/Scripts/schema.sql)
 - Data file: [/PDD.Database/Scripts/data.sql](/PDD.Database/Scripts/data.sql) for tables [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types), [business_areas](#table-publicbusiness_areas), [business_roles](#table-publicbusiness_roles), [countries](#table-publiccountries), [users](#table-publicusers), [employee_status](#table-publicemployee_status), [business_role_types](#table-publicbusiness_role_types)
 
 ## Table of Contents
 
-- Function [`company.company_details(_id uuid)`](#function-companycompany_details_id-uuid)
-- Function [`company.company_employees(_id uuid)`](#function-companycompany_employees_id-uuid)
-- Function [`company.company_reviews(_id uuid, _skip integer, _take integer)`](#function-companycompany_reviews_id-uuid-_skip-integer-_take-integer)
-- Function [`dashboard.chart_companies_by_country(_limit integer)`](#function-dashboardchart_companies_by_country_limit-integer)
-- Function [`dashboard.chart_employee_counts_by_area(_limit integer)`](#function-dashboardchart_employee_counts_by_area_limit-integer)
-- Function [`dashboard.chart_employee_counts_by_year(_limit integer)`](#function-dashboardchart_employee_counts_by_year_limit-integer)
-- Function [`dashboard.top_experinced_people(_limit integer)`](#function-dashboardtop_experinced_people_limit-integer)
-- Function [`dashboard.top_rated_companies(_limit integer)`](#function-dashboardtop_rated_companies_limit-integer)
-- Function [`companies.business_areas()`](#function-companiesbusiness_areas)
-- Function [`companies.search_companies(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer)`](#function-companiessearch_companies_search-character-varying-_countries-int2-_areas-int2-_sort_asc-boolean-_skip-integer-_take-integer)
-- Function [`companies.search_countries(_search character varying, _skip integer, _take integer)`](#function-companiessearch_countries_search-character-varying-_skip-integer-_take-integer)
 - Table [`public.business_areas`](#table-publicbusiness_areas)
 - Table [`public.business_role_types`](#table-publicbusiness_role_types)
 - Table [`public.business_roles`](#table-publicbusiness_roles)
@@ -32,245 +21,18 @@
 - Table [`public.person_roles`](#table-publicperson_roles)
 - Table [`public.users`](#table-publicusers)
 - Enum [`public.valid_genders`](#enum-public-valid_genders)
+- Function [`company.company_details(_id uuid)`](#function-companycompany_details_id-uuid)
+- Function [`company.company_employees(_id uuid)`](#function-companycompany_employees_id-uuid)
+- Function [`company.company_reviews(_id uuid, _skip integer, _take integer)`](#function-companycompany_reviews_id-uuid-_skip-integer-_take-integer)
+- Function [`dashboard.chart_companies_by_country(_limit integer)`](#function-dashboardchart_companies_by_country_limit-integer)
+- Function [`dashboard.chart_employee_counts_by_area(_limit integer)`](#function-dashboardchart_employee_counts_by_area_limit-integer)
+- Function [`dashboard.chart_employee_counts_by_year(_limit integer)`](#function-dashboardchart_employee_counts_by_year_limit-integer)
+- Function [`dashboard.top_experinced_people(_limit integer)`](#function-dashboardtop_experinced_people_limit-integer)
+- Function [`dashboard.top_rated_companies(_limit integer)`](#function-dashboardtop_rated_companies_limit-integer)
+- Function [`companies.business_areas()`](#function-companiesbusiness_areas)
+- Function [`companies.search_companies(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer)`](#function-companiessearch_companies_search-character-varying-_countries-int2-_areas-int2-_sort_asc-boolean-_skip-integer-_take-integer)
+- Function [`companies.search_countries(_search character varying, _skip integer, _take integer)`](#function-companiessearch_countries_search-character-varying-_skip-integer-_take-integer)
 
-
-## Routines
-
-### Function `company.company_details(_id uuid)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/company/company.company_details.sql](/PDD.Database/Scripts/functions/company/company.company_details.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Company/CompanyDetails.cs](/PDD.Database/Extensions/Company/CompanyDetails.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Company/CompanyDetailsUnitTests.cs](/PDD.DatabaseTests/Company/CompanyDetailsUnitTests.cs)
-
-<!-- comment on function "company"."company_details"(_id uuid) is @until-end-tag; -->
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `company.company_employees(_id uuid)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/company/company.company_employees.sql](/PDD.Database/Scripts/functions/company/company.company_employees.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Company/CompanyEmployees.cs](/PDD.Database/Extensions/Company/CompanyEmployees.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Company/CompanyEmployeesUnitTests.cs](/PDD.DatabaseTests/Company/CompanyEmployeesUnitTests.cs)
-
-<!-- comment on function "company"."company_employees"(_id uuid) is @until-end-tag; -->
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `company.company_reviews(_id uuid, _skip integer, _take integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/company/company.company_reviews.sql](/PDD.Database/Scripts/functions/company/company.company_reviews.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Company/CompanyReviews.cs](/PDD.Database/Extensions/Company/CompanyReviews.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Company/CompanyReviewsUnitTests.cs](/PDD.DatabaseTests/Company/CompanyReviewsUnitTests.cs)
-
-<!-- comment on function "company"."company_reviews"(_id uuid, _skip integer, _take integer) is @until-end-tag; -->
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-## Routines
-
-### Function `dashboard.chart_companies_by_country(_limit integer)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_companies_by_country.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_companies_by_country.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartCompaniesByCountry.cs](/PDD.Database/Extensions/Dashboard/ChartCompaniesByCountry.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartCompaniesByCountryUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartCompaniesByCountryUnitTests.cs)
-
-<!-- comment on function "dashboard"."chart_companies_by_country"(_limit integer) is @until-end-tag; -->
-Number of companies by country.
-JSON object where labels are country names and it only have one series with the number of companies for each country.
-It show only first 9 countries and 10th is summed together as other. 
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `dashboard.chart_employee_counts_by_area(_limit integer)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_area.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_area.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByArea.cs](/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByArea.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByAreaUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByAreaUnitTests.cs)
-
-<!-- comment on function "dashboard"."chart_employee_counts_by_area"(_limit integer) is @until-end-tag; -->
-Business areas, the number of employees for top 3 companies by highest number of employees.
-JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
-- Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `dashboard.chart_employee_counts_by_year(_limit integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_year.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_year.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByYear.cs](/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByYear.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByYearUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByYearUnitTests.cs)
-
-<!-- comment on function "dashboard"."chart_employee_counts_by_year"(_limit integer) is @until-end-tag; -->
-Top companies by number of employees for the last ten years.
-JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
-- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
-
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `dashboard.top_experinced_people(_limit integer)`
-
-- Returns `record`
-
-```
-TABLE (
-  id uuid,
-  first_name character varying,
-  last_name character varying,
-  age integer,
-  country character varying,
-  countrycode smallint,
-  countryiso2 character varying,
-  years_of_experience integer,
-  number_of_companies bigint,
-  employee_status character varying,
-  roles character varying[]
-)
-```
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.top_experinced_people.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.top_experinced_people.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Dashboard/TopExperincedPeople.cs](/PDD.Database/Extensions/Dashboard/TopExperincedPeople.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs)
-
-<!-- comment on function "dashboard"."top_experinced_people"(_limit integer) is @until-end-tag; -->
-Top experienced people by the years of the working experience.
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `dashboard.top_rated_companies(_limit integer)`
-
-- Returns `json`
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.top_rated_companies.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.top_rated_companies.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Dashboard/TopRatedCompanies.cs](/PDD.Database/Extensions/Dashboard/TopRatedCompanies.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs)
-
-<!-- comment on function "dashboard"."top_rated_companies"(_limit integer) is @until-end-tag; -->
-Top rated companies by the user score.
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-## Routines
-
-### Function `companies.business_areas()`
-
-- Returns `record`
-
-```
-TABLE (
-  value smallint,
-  name character varying
-)
-```
-
-- Language is `sql`
-
-- Source: [/PDD.Database/Scripts/functions/companies/companies.business_areas.sql](/PDD.Database/Scripts/functions/companies/companies.business_areas.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Companies/BusinessAreas.cs](/PDD.Database/Extensions/Companies/BusinessAreas.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs](/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs)
-
-<!-- comment on function "companies"."business_areas"() is @until-end-tag; -->
-select value and name from business_areas
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `companies.search_companies(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/companies/companies.search_companies.sql](/PDD.Database/Scripts/functions/companies/companies.search_companies.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Companies/SearchCompanies.cs](/PDD.Database/Extensions/Companies/SearchCompanies.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs)
-
-<!-- comment on function "companies"."search_companies"(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer) is @until-end-tag; -->
-Search companies by search string (name or company line), or by countries or areas selection.
-Result is pageable JSON response `{count, data: [...]}`
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
-
-### Function `companies.search_countries(_search character varying, _skip integer, _take integer)`
-
-- Returns `json`
-
-- Language is `plpgsql`
-
-- Source: [/PDD.Database/Scripts/functions/companies/companies.search_countries.sql](/PDD.Database/Scripts/functions/companies/companies.search_countries.sql)
-
-- Data Access Code: [/PDD.Database/Extensions/Companies/SearchCountries.cs](/PDD.Database/Extensions/Companies/SearchCountries.cs)
-
-- Unit Tests: [/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs)
-
-<!-- comment on function "companies"."search_countries"(_search character varying, _skip integer, _take integer) is @until-end-tag; -->
-Search countries by name or iso2 or iso3.
-Result is pageable JSON response `{count, data: [...]}`
-Data record has value and name suitable for select type controls.
-Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
-<!-- end -->
-
-<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
 ## Tables
 
 ### Table `public.business_areas`
@@ -602,8 +364,8 @@ System users. May or may not be a person (in people records).
 
 | **Sequence Scan** | **Index Scan** | **Rows** | **Vaccum** | **Analyze** |
 | ----------------- | -------------- | -------- | ---------- | ----------- |
-| count=**`4`** | count=**`5`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
-| rows=**`4`** | rows=**`4`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
+| count=**`0`** | count=**`0`** | inserted=**`0`**, updated=**`0`**, deleted=**`0`** | last=, count=**`0`** | last=, count=**`0`** |
+| rows=**`0`** | rows=**`0`** | live=**`0`**, dead=**`0`** | last auto=, rows inserted since=**`0`** | last auto=, rows updated since=**`0`** |
 
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
@@ -613,5 +375,243 @@ System users. May or may not be a person (in people records).
 | Type name | Values | Comment | Source |
 | --------- | ------ | --------| ------ |
 | <a id="user-content-enum-public-valid_genders" href="#enum-public-valid_genders">#</a>`public.valid_genders` | `'M', 'F'` | <!-- comment on type "public"."valid_genders" is @until-end-tag; -->There are only two genders.<!-- end --> | [/PDD.Database/Scripts/types/valid_genders.sql](/PDD.Database/Scripts/types/valid_genders.sql) |
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+## Routines
+
+### Function `company.company_details(_id uuid)`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/company/company.company_details.sql](/PDD.Database/Scripts/functions/company/company.company_details.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Company/CompanyDetails.cs](/PDD.Database/Extensions/Company/CompanyDetails.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Company/CompanyDetailsUnitTests.cs](/PDD.DatabaseTests/Company/CompanyDetailsUnitTests.cs)
+
+<!-- comment on function "company"."company_details"(_id uuid) is @until-end-tag; -->
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `company.company_employees(_id uuid)`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/company/company.company_employees.sql](/PDD.Database/Scripts/functions/company/company.company_employees.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Company/CompanyEmployees.cs](/PDD.Database/Extensions/Company/CompanyEmployees.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Company/CompanyEmployeesUnitTests.cs](/PDD.DatabaseTests/Company/CompanyEmployeesUnitTests.cs)
+
+<!-- comment on function "company"."company_employees"(_id uuid) is @until-end-tag; -->
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `company.company_reviews(_id uuid, _skip integer, _take integer)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/PDD.Database/Scripts/functions/company/company.company_reviews.sql](/PDD.Database/Scripts/functions/company/company.company_reviews.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Company/CompanyReviews.cs](/PDD.Database/Extensions/Company/CompanyReviews.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Company/CompanyReviewsUnitTests.cs](/PDD.DatabaseTests/Company/CompanyReviewsUnitTests.cs)
+
+<!-- comment on function "company"."company_reviews"(_id uuid, _skip integer, _take integer) is @until-end-tag; -->
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+## Routines
+
+### Function `dashboard.chart_companies_by_country(_limit integer)`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_companies_by_country.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_companies_by_country.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartCompaniesByCountry.cs](/PDD.Database/Extensions/Dashboard/ChartCompaniesByCountry.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartCompaniesByCountryUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartCompaniesByCountryUnitTests.cs)
+
+<!-- comment on function "dashboard"."chart_companies_by_country"(_limit integer) is @until-end-tag; -->
+Number of companies by country.
+JSON object where labels are country names and it only have one series with the number of companies for each country.
+It show only first 9 countries and 10th is summed together as other. 
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number]}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `dashboard.chart_employee_counts_by_area(_limit integer)`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_area.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_area.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByArea.cs](/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByArea.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByAreaUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByAreaUnitTests.cs)
+
+<!-- comment on function "dashboard"."chart_employee_counts_by_area"(_limit integer) is @until-end-tag; -->
+Business areas, the number of employees for top 3 companies by highest number of employees.
+JSON object where labels are business area names and three series with number of current employees for each area, each searies for one company.
+- Returns JSON schema: `{"labels": [string], "series: [{"data": [number], "label": string}]"}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `dashboard.chart_employee_counts_by_year(_limit integer)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_year.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.chart_employee_counts_by_year.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByYear.cs](/PDD.Database/Extensions/Dashboard/ChartEmployeeCountsByYear.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByYearUnitTests.cs](/PDD.DatabaseTests/Dashboard/ChartEmployeeCountsByYearUnitTests.cs)
+
+<!-- comment on function "dashboard"."chart_employee_counts_by_year"(_limit integer) is @until-end-tag; -->
+Top companies by number of employees for the last ten years.
+JSON object with only one series where labels are last ten years names and values have data for number of employees for each year and label as company name.
+- Returns JSON: `{labels: string[], series: {data: number[], label: string}[]}`
+
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `dashboard.top_experinced_people(_limit integer)`
+
+- Returns `record`
+
+```
+TABLE (
+  id uuid,
+  first_name character varying,
+  last_name character varying,
+  age integer,
+  country character varying,
+  countrycode smallint,
+  countryiso2 character varying,
+  years_of_experience integer,
+  number_of_companies bigint,
+  employee_status character varying,
+  roles character varying[]
+)
+```
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.top_experinced_people.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.top_experinced_people.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Dashboard/TopExperincedPeople.cs](/PDD.Database/Extensions/Dashboard/TopExperincedPeople.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopExperincedPeopleUnitTests.cs)
+
+<!-- comment on function "dashboard"."top_experinced_people"(_limit integer) is @until-end-tag; -->
+Top experienced people by the years of the working experience.
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `dashboard.top_rated_companies(_limit integer)`
+
+- Returns `json`
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/dashboard/dashboard.top_rated_companies.sql](/PDD.Database/Scripts/functions/dashboard/dashboard.top_rated_companies.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Dashboard/TopRatedCompanies.cs](/PDD.Database/Extensions/Dashboard/TopRatedCompanies.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs](/PDD.DatabaseTests/Dashboard/TopRatedCompaniesUnitTests.cs)
+
+<!-- comment on function "dashboard"."top_rated_companies"(_limit integer) is @until-end-tag; -->
+Top rated companies by the user score.
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+## Routines
+
+### Function `companies.business_areas()`
+
+- Returns `record`
+
+```
+TABLE (
+  value smallint,
+  name character varying
+)
+```
+
+- Language is `sql`
+
+- Source: [/PDD.Database/Scripts/functions/companies/companies.business_areas.sql](/PDD.Database/Scripts/functions/companies/companies.business_areas.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Companies/BusinessAreas.cs](/PDD.Database/Extensions/Companies/BusinessAreas.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs](/PDD.DatabaseTests/Companies/BusinessAreasUnitTests.cs)
+
+<!-- comment on function "companies"."business_areas"() is @until-end-tag; -->
+select value and name from business_areas
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `companies.search_companies(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/PDD.Database/Scripts/functions/companies/companies.search_companies.sql](/PDD.Database/Scripts/functions/companies/companies.search_companies.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Companies/SearchCompanies.cs](/PDD.Database/Extensions/Companies/SearchCompanies.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCompaniesUnitTests.cs)
+
+<!-- comment on function "companies"."search_companies"(_search character varying, _countries int2[], _areas int2[], _sort_asc boolean, _skip integer, _take integer) is @until-end-tag; -->
+Search companies by search string (name or company line), or by countries or areas selection.
+Result is pageable JSON response `{count, data: [...]}`
+<!-- end -->
+
+<a href="#table-of-contents" title="Table of Contents">&#8673;</a>
+
+### Function `companies.search_countries(_search character varying, _skip integer, _take integer)`
+
+- Returns `json`
+
+- Language is `plpgsql`
+
+- Source: [/PDD.Database/Scripts/functions/companies/companies.search_countries.sql](/PDD.Database/Scripts/functions/companies/companies.search_countries.sql)
+
+- Data Access Code: [/PDD.Database/Extensions/Companies/SearchCountries.cs](/PDD.Database/Extensions/Companies/SearchCountries.cs)
+
+- Unit Tests: [/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs](/PDD.DatabaseTests/Companies/SearchCountriesUnitTests.cs)
+
+<!-- comment on function "companies"."search_countries"(_search character varying, _skip integer, _take integer) is @until-end-tag; -->
+Search countries by name or iso2 or iso3.
+Result is pageable JSON response `{count, data: [...]}`
+Data record has value and name suitable for select type controls.
+Countries with companies are sorted first by name, followed by null record (separator) and then by countries without companies sorted by name.
+<!-- end -->
 
 <a href="#table-of-contents" title="Table of Contents">&#8673;</a>
