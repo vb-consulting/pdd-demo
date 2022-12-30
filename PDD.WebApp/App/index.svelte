@@ -151,7 +151,7 @@
 </Layout>
 
 <style lang="scss">
-    @import "./scss/colors";
+    @import "./scss/variables";
     .main  {
         padding-left: 50px;
         padding-right: 50px;
