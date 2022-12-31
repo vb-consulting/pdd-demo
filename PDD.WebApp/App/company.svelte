@@ -1,10 +1,13 @@
 <script lang="ts">
+    import moment from "moment";
     import Layout from "./shared/layout/default";
     import Card from "./shared/components/card.svelte";
     import Placeholder from "./shared/components/placeholder.svelte";
     import Tokens from "./shared/components/tokens.svelte";
     import Tabs from "./shared/components/tabs.svelte";
     import DataGrid from "./shared/components/data-grid.svelte";
+    import Pager from "./shared/components/pager.svelte";
+    import Stars from "./shared/components/starred-score.svelte";
     import { getValue } from "./shared/config";
     import urls from "./shared/urls";
     import { get } from "./shared/fetch";
@@ -74,7 +77,9 @@
 
                 <div slot="footer">
                     <button class="btn btn-sm btn-outline-primary">
-                        <i class="bi-pencil"></i>Edit</button>
+                        <i class="bi-pencil"></i>
+                        Edit
+                    </button>
                 </div>
             </Card>
         {:catch error}
@@ -128,9 +133,19 @@
                     borderless
                     dataPageFunc={getReviews} 
                     take={10}>
+                    <tr slot="bottomRow" let:instance>
+                        <td>
+                            <Pager small prevNextButtons={false} grid={instance} />
+                        </td>
+                    </tr>
                     <tr slot="row" let:data>
                         <td>
-                            <Card label={`By ${data.firstname} ${data.lastname} at ${data.at}`}>
+                            <Card label={`By ${data.firstname} ${data.lastname}, ${moment(data.at).fromNow()}`}>
+                                {#if data.score}
+                                    <div class="card-label">
+                                        <Stars score={data.score} />
+                                    </div>
+                                {/if}
                                 {data.review}
                             </Card>
                         </td>
@@ -145,4 +160,8 @@
 </Layout>
 
 <style lang="scss">
+    .card-label {
+        right: 1rem;
+        margin-top: 0.5rem;
+    }
 </style> 
