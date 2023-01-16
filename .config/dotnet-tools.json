@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "dotnet-pgroutiner": {
-      "version": "5.0.7",
+      "version": "5.1.1",
       "commands": [
         "pgroutiner"
       ]

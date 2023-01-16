@@ -1,5 +1,6 @@
-#pragma warning disable CS8632
 // pgroutiner auto-generated code
+#pragma warning disable CS8632
+#pragma warning disable CS8618
 using System.Threading.Tasks;
 using NpgsqlTypes;
 using Npgsql;
