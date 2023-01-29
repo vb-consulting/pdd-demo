@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims
 @using Microsoft.IdentityModel.JsonWebTokens
-@inject IOptionsMonitor<PDD.WebApp.Endpoints.Cache> cacheConfig
+@inject IOptionsMonitor<PDD.WebApp.Cache> cacheConfig
 @{
     var user = JsonSerializer.Serialize(new
     {

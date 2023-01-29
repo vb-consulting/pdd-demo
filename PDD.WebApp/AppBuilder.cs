@@ -3,21 +3,44 @@ using System.Globalization;
 using System.Net;
 
 using PDD.WebApp.Database;
-using PDD.WebApp.Endpoints;
+using System.Reflection;
 
 namespace PDD.WebApp;
 
+public class Cache
+{ 
+    public string? Version { get; set; } 
+}
+
 public static class AppBuilder
 {
+    private static readonly Type[] endpointTypes = Assembly
+        .GetExecutingAssembly()
+        .GetTypes()
+        .Where(t => t.IsClass && t.GetMethods(BindingFlags.Public | BindingFlags.Static).Any(m => m.Name == nameof(UseEndpoints)))
+        .ToArray();
+
+    public static Type[] EndpointTypes => endpointTypes;
+    
     public static void ConfigureApp(this WebApplicationBuilder builder)
     {
         builder.ConfigureLocalization();
         builder.ConfigureAuth();
         builder.ConfigureDatabase();
         builder.ConfigureEndpoints();
+        builder.Services.Configure<Cache>(builder.Configuration.GetSection(nameof(Cache)));
     }
 
     public static void UseApp(this WebApplication app)
+    {
+        app.MapStatusCodePages();
+        app.MapFallback();
+        app.UseAuth();
+        app.UseDatabase();
+        app.UseEndpoints();
+    }
+
+    private static void MapStatusCodePages(this WebApplication app)
     {
         app.UseStatusCodePages(context =>
         {
@@ -34,10 +57,6 @@ public static class AppBuilder
             }
             return Task.CompletedTask;
         });
-        app.MapFallback();
-        app.UseAuth();
-        app.UseDatabase();
-        app.UseEndpoints();
     }
 
     private static void MapFallback(this WebApplication app)
@@ -50,6 +69,36 @@ public static class AppBuilder
             }
             return Task.CompletedTask;
         });
+    }
+
+    private static void ConfigureEndpoints(this WebApplicationBuilder builder)
+    {
+        foreach (var endpointType in endpointTypes)
+        {
+            foreach (var method in endpointType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == nameof(ConfigureEndpoints)))
+            {
+                var p = method.GetParameters();
+                if (p.Length == 1 && p[0].ParameterType == typeof(WebApplicationBuilder))
+                {
+                    method.Invoke(null, new[] { builder });
+                }
+            }
+        }
+    }
+
+    private static void UseEndpoints(this WebApplication app)
+    {
+        foreach (var endpointType in endpointTypes)
+        {
+            foreach (var method in endpointType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(m => m.Name == nameof(UseEndpoints)))
+            {
+                var p = method.GetParameters();
+                if (p.Length == 1 && p[0].ParameterType == typeof(WebApplication))
+                {
+                    method.Invoke(null, new[] { app });
+                }
+            }
+        }
     }
 
     private static void ConfigureLocalization(this WebApplicationBuilder builder)

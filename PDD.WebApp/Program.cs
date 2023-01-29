@@ -7,23 +7,33 @@ if (PDD.WebApp.Scripts.UrlBuilder.Build(args))
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages();
-builder.Services.AddHttpClient().AddOptions();
-builder.ConfigureApp();
+//
+// Add services to the container.
+//
+{
+    builder.Services.AddRazorPages();
+    builder.Services.AddHttpClient().AddOptions();
+    builder.ConfigureApp();
+}
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+//
+// Configure the HTTP request pipeline.
+//
 {
-    app.UseExceptionHandler(Urls.ErrorUrl);
-    app.UseHsts();
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler(Urls.ErrorUrl);
+        app.UseHsts();
+    }
+
+    app.UseApp();
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    app.UseAuthorization();
+    app.MapRazorPages();
+
+    app.Run();
 }
-
-app.UseApp();
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
-app.MapRazorPages();
-
-app.Run();
